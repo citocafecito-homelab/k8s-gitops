@@ -18,19 +18,18 @@ spec:
       containers:
       - name: vault
         image: hashicorp/vault:latest
-        command:
-        - "vault"
-        - "server"
-        - "-config=/vault/config/vault.hcl"
+        command: [ "/bin/sh", "-c", "/vault/scripts/vault-entrypoint.sh" ]
         env:
         - name: SKIP_CHOWN
           value: "true"
         - name: VAULT_ADDR
           value: http://0.0.0.0:8200
+        envFrom:
+        - secretRef:
+            name: vault-bootstrap
         ports:
         - containerPort: 8200
         securityContext:
-          allowPrivilegeEscalation: false
           capabilities:
             add: [ "IPC_LOCK" ]
         livenessProbe:
@@ -53,6 +52,8 @@ spec:
           readOnly: true
         - name: data
           mountPath: /vault/data
+        - name: vault-scripts
+          mountPath: /vault/scripts
         resources:
           requests:
             memory: 256Mi
@@ -76,3 +77,7 @@ spec:
         hostPath:
           path: /mnt/vault/secrets
           type: DirectoryOrCreate
+      - name: vault-scripts
+        configMap:
+          name: vault-entrypoint
+          defaultMode: 493

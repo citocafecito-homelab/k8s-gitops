@@ -76,8 +76,8 @@ spec:
             cpu: 20m
             memory: 128Mi
         volumeMounts:
-        - name: ring-data
-          mountPath: /data/storage
+        - name: ring-state
+          mountPath: /data/ring-state.json
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
@@ -86,9 +86,10 @@ spec:
         operator: "Exists"
         effect: "NoSchedule"
       volumes:
-      - name: ring-data
-        persistentVolumeClaim:
-          claimName: ring-mqtt-pvc
+      - name: ring-state
+        hostPath:
+          path: /mnt/ring-mqtt/ring-state.json
+          type: FileOrCreate
 ---
 apiVersion: v1
 kind: Service
@@ -111,3 +112,18 @@ spec:
     port: 8554
     targetPort: 8554
     name: rtsp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ring-mqtt-local
+spec:
+  selector:
+    app: ring-mqtt
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 55123 # El puerto interno real del contenedor
+    targetPort: 55123 # Puerto expuesto por Ring-MQTT
+    nodePort: 31824 # El puerto accesible desde tu red (puedes mantenerlo)
+    name: web-ui
