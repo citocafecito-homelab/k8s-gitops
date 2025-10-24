@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+# Postgresql
+- database-pv.yaml
+- database-deployment.yaml
+- database-svc.yaml
+
+# Redis
+- cache-deployment.yaml
+- cache-svc.yaml
+
+# Infisical
+- server-deployment.yaml
+- server-svc.yaml

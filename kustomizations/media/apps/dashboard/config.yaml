@@ -1,0 +1,398 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage
+  labels:
+    app.kubernetes.io/name: homepage
+data:
+  kubernetes.yaml: |
+    mode: cluster
+  settings.yaml: |
+    title: Cafetería Tech
+    description: Mi laboratorio casero para mezclar domótica, nube y tecnología con buen café ☕.
+
+    favicon: https://github.com/gethomepage/homepage/raw/main/public/android-chrome-192x192.png
+    language: es
+
+    background:
+      image: https://static.vecteezy.com/system/resources/previews/011/332/525/non_2x/hand-drawn-coffee-concept-background-free-vector.jpg
+      blur: sm # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
+      saturate: 50 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
+      brightness: 50 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
+      opacity: 50 # 0-100
+
+    # Header style: clean, boxed, underlined
+    headerStyle: boxed
+
+    # Layout configuration - Auto-adaptive layout with equal heights and full width
+    layout:
+      # useEqualHeights: true  # Makes all widgets in a row have equal height
+      fullWidth: true        # Utilizes full page width for better space efficiency
+
+    # Search configuration
+    quicklaunch:
+      searchDescriptions: true
+      hideInternetSearch: false
+      hideVisitURL: false
+
+    # Status style: dot, basic
+    statusStyle: dot
+  custom.css: ""
+  custom.js: ""
+  bookmarks.yaml: |
+    - Habid Manzur Network:
+        - Steam:
+            - href: https://steamcommunity.com/profiles/76561198120049216
+              description: Perfil de Steam Habid Manzur
+              icon: https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg
+        - Github:
+            - href: https://github.com/hmanzur
+              icon: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+              description: "Habid Manzur's GitHub"
+        - Linkedin:
+            - href: https://linkedin.com/in/habid-manzur
+              icon: https://cdn.worldvectorlogo.com/logos/linkedin-icon-2.svg
+              description: "Habid Manzur's Linkedin"
+        - HashiCorp Certified - Terraform Associate (003):
+            - href: https://www.credly.com/badges/3958bf13-858b-4293-81f7-e6953b6a8332/public_url
+              icon: https://images.credly.com/size/110x110/images/0dc62494-dc94-469a-83af-e35309f27356/blob
+              description: "Habid Manzur's HashiCorp Certified: Terraform Associate (003)"
+
+    - Julieth Sarmiento Network:
+        - Github:
+            - abbr: GH
+              href: https://github.com/julhSarmiento
+              icon: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+              description: "Julieth Sarmiento's Github"
+        - Linkedin:
+            - abbr: In
+              href: https://linkedin.com/in/julieth-sarmiento
+              icon: https://cdn.worldvectorlogo.com/logos/linkedin-icon-2.svg
+              description: "Julieth Sarmiento's Linkedin"
+
+  services.yaml: |
+    - Global:
+        - La Ceja:
+            icon: mdi-weather-cloudy
+            description: Clima actual en La Ceja, Antioquia
+            widget:
+              type: customapi
+              refreshInterval: 60000
+              url: https://api.open-meteo.com/v1/forecast?latitude=6.03&longitude=-75.43&current=temperature_2m,weather_code,wind_speed_10m&timezone=America%2FBogota&forecast_days=1
+              mappings:
+                - name: 
+                  field: current.time
+                  label: "Actualizado"
+                  format: "time"
+                - name:
+                  field: current.temperature_2m
+                  label: "Temperatura"
+                  format: "number"
+                  suffix: " °C"
+                - name:
+                  field: current.wind_speed_10m
+                  label: "Viento"
+                  format: "number"
+                  suffix: " km/h"
+
+        - Medellín:
+            icon: mdi-weather-cloudy
+            description: Clima actual en Medellín, Antioquia
+            widget:
+              type: customapi
+              refreshInterval: 60000
+              url: https://api.open-meteo.com/v1/forecast?latitude=6.25&longitude=-75.57&current=temperature_2m,weather_code,wind_speed_10m&timezone=America%2FBogota&forecast_days=1
+              mappings:
+                - name: 
+                  field: current.time
+                  label: "Actualizado"
+                  format: "time"
+                - name:
+                  field: current.temperature_2m
+                  label: "Temperatura"
+                  format: "number"
+                  suffix: " °C"
+                - name:
+                  field: current.wind_speed_10m
+                  label: "Viento"
+                  format: "number"
+                  suffix: " km/h"
+        - Barranquilla:
+            icon: mdi-weather-cloudy
+            description: Clima actual en Barranquilla, Atlántico
+            widget:
+              type: customapi
+              refreshInterval: 60000
+              url: https://api.open-meteo.com/v1/forecast?latitude=10.96&longitude=-74.8&current=temperature_2m,weather_code,wind_speed_10m&timezone=America%2FBogota&forecast_days=1
+              mappings:
+                - name: 
+                  field: current.time
+                  label: "Actualizado"
+                  format: "time"
+                - name:
+                  field: current.temperature_2m
+                  label: "Temperatura"
+                  format: "number"
+                  suffix: " °C"
+                - name:
+                  field: current.wind_speed_10m
+                  label: "Viento"
+                  format: "number"
+                  suffix: " km/h"
+        - Bogotá:
+            icon: mdi-weather-cloudy
+            description: Clima actual en Bogotá, D.C.
+            widget:
+              type: customapi
+              url: https://api.open-meteo.com/v1/forecast?latitude=4.61&longitude=-74.08&current=temperature_2m,weather_code,wind_speed_10m&timezone=America%2FBogota&forecast_days=1
+              mappings:
+                - name: 
+                  field: current.time
+                  label: "Actualizado"
+                  format: "time"
+                - name:
+                  field: current.temperature_2m
+                  label: "Temperatura"
+                  format: "number"
+                  suffix: " °C"
+                - name:
+                  field: current.wind_speed_10m
+                  label: "Viento"
+                  format: "number"
+                  suffix: " km/h"
+
+    - Sistema:
+        - CloudFlare Tunnel:
+            href: https://one.dash.cloudflare.com/e19111ae758ecab4a1a6a15d7c74be1b/networks/tunnels/cfd_tunnel/b2b836e5-915c-4227-b280-a8cfe0e445c4/edit?tab=overview
+            icon: https://icon.icepanel.io/Technology/svg/Cloudflare.svg
+            description: "Cloudflare Tunnel (Catuai)"
+            showStats: true
+            widget:
+              type: cloudflared
+              accountid: "{{HOMEPAGE_VAR_CLOUDFLARED_ACCOUNT}}"
+              tunnelid: "{{HOMEPAGE_VAR_CLOUDFLARED_TUNNEL}}"
+              key: "{{HOMEPAGE_VAR_CLOUDFLARED_KEY}}"
+        
+        - Mikrotik:
+            href: http://router.lan
+            icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/mikrotik.webp
+            description: RouterOS Dashboard (Internal)
+            # widget:
+            #   type: mikrotik
+            #   url: http://192.168.1.10:30123
+            #   username: lorem
+            #   password: ipsum
+            #   verify_ssl: false
+
+        - Pi Hole:
+            href: http://pihole.catuai.lan
+            icon: https://wp-cdn.pi-hole.net/wp-content/uploads/2016/12/Vortex-R.png
+            description: Ad Guard y DNS Resolver (Internal)
+            namespace: networking
+            app: pihole
+            showStats: true
+            ping: http://192.168.1.10/api/info/login
+            widget:
+              type: pihole
+              url: http://192.168.1.10
+              version: 6
+              key: "{{HOMEPAGE_VAR_PIHOLE_TOKEN}}"
+              
+        - Red:
+            href: http://192.168.1.10:30880/
+            icon: https://www.svgrepo.com/show/504905/speedtest-by-ookla.svg
+            description: "Velocidad de la red por Speedtest Tracker"
+            namespace: networking
+            app: speedtest-tracker
+            showStats: true
+            ping: http://192.168.1.10:30880/api/healthcheck
+            widget:
+              type: speedtest
+              url: http://speedtest-tracker-service.networking.svc.cluster.local
+              version: 2
+              key: "{{HOMEPAGE_VAR_SPEEDTEST_TOKEN}}"
+              bitratePrecision: 3
+
+        - Recurso del Dashboard:
+            href: https://one.dash.cloudflare.com/e19111ae758ecab4a1a6a15d7c74be1b/networks/tunnels/cfd_tunnel/b2b836e5-915c-4227-b280-a8cfe0e445c4/edit?tab=overview
+            icon: https://github.com/gethomepage/homepage/raw/main/public/android-chrome-192x192.png
+            namespace: media
+            app: homepage
+            showStats: true
+
+    - Core Apps:
+        - Vault:
+            href: https://vault.citocafecito.work/
+            description: Gestión de secretos y claves
+            icon: https://icon.icepanel.io/Technology/svg/HashiCorp-Vault.svg
+            ping: http://192.168.1.10:30200/v1/sys/health
+            namespace: core
+            app: vault
+            showStats: true
+
+        - MiniO:
+            href: https://s3.citocafecito.work/
+            description: Almacenamiento de objetos S3 compatible con AWS
+            icon: https://cdn.worldvectorlogo.com/logos/minio-1.svg
+            ping: http://192.168.1.10:30090/minio/health/live
+            namespace: core
+            app: minio
+            showStats: true
+
+        - Infisical:
+            href: https://infisical.citocafecito.work/
+            description: Gestión de secretos y variables de entorno
+            icon: https://cdn-1.webcatalog.io/catalog/infisical/infisical-icon-unplated.png
+            ping: http://192.168.1.10:30400
+            namespace: storage
+            app: infisical
+            showStats: true
+
+        - Infisical DB:
+            description: Base de datos de la aplicación Infisical
+            icon: https://cdn-icons-png.flaticon.com/512/9850/9850812.png
+            namespace: storage
+            app: infisical-postgresql
+            showStats: true
+
+    - Domótica:
+        - Home Assistant:
+            href: https://home.citocafecito.work
+            description: Plataforma de automatización del hogar
+            icon: https://upload.wikimedia.org/wikipedia/en/thumb/4/49/Home_Assistant_logo_%282023%29.svg/1200px-Home_Assistant_logo_%282023%29.svg.png
+            ping: http://192.168.1.10:30123/api
+            namespace: core
+            app: home-assistant
+            showStats: true
+            widget:
+              type: homeassistant
+              url: http://192.168.1.10:30123
+              key: "{{HOMEPAGE_VAR_HA_TOKEN}}"
+              custom:
+                - template: "{{ states.switch|selectattr('state','equalto','on')|list|length }}"
+                  label: switches on
+                - state: weather.forecast_home
+                  label: wind speed
+                  value: "{attributes.wind_speed} {attributes.wind_speed_unit}"
+        
+        - Mosquitto MTQQ:
+            icon: https://avatars.githubusercontent.com/u/1544528
+            description: Home Assistant MTQQ Broker
+            namespace: core
+            app: mosquitto
+            showStats: true
+
+        - ZwaveJS2MQTT:
+            icon: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzxx1jjnLRtJSpaP9eDeAi1KDWrawKpWKmJg&s
+            description: Home Assistant Z Wave Integration
+            namespace: core
+            app: zwavejs2mqtt
+            showStats: true
+    - Streaming:
+        - Jellyfin:
+            href: https://jellyfin.citocafecito.work/
+            description: Servidor de medios de código abierto
+            icon: https://upload.wikimedia.org/wikipedia/commons/4/41/Jellyfin_-_icon-transparent.svg
+            ping: http://192.168.1.10:30096/health
+            showStats: true
+            namespace: streaming
+            app: jellyfin
+    - Wiki:
+        - "Wiki.js":
+            href: https://wiki.citocafecito.work/
+            description: Plataforma de gestión de conocimiento
+            icon: https://raw.githubusercontent.com/requarks/wiki/refs/heads/main/server/themes/default/thumbnail.png
+            ping: http://192.168.1.10:30300/healthz
+            namespace: media
+            app: wikijs
+            showStats: true
+
+        - "Wiki.js DB":
+            description: Base de datos de la wiki
+            icon: https://cdn-icons-png.flaticon.com/512/9850/9850812.png
+            namespace: media
+            app: wikijs-postgresql
+            showStats: true
+
+    - Multimedia:
+        - Suwayomi:
+            href: https://suwayomi.citocafecito.work
+            description: Lector de Manga
+            icon: https://raw.githubusercontent.com/Suwayomi/Suwayomi-Server/refs/heads/master/server/src/main/resources/icon/faviconlogo.png
+            ping: http://192.168.1.10:30080
+            namespace: media
+            app: suwayomi
+            showStats: true
+            widget:
+              type: suwayomi
+              url: http://192.168.1.10:30080
+              username: "{{HOMEPAGE_VAR_SUWAYOMI_USERNAME}}"
+              password: "{{HOMEPAGE_VAR_SUWAYOMI_PASSWORD}}"
+              category: 1
+
+        - Suwayomi DB:
+            description: Base de datos de Suwayomi
+            icon: https://cdn-icons-png.flaticon.com/512/9850/9850812.png
+            namespace: media
+            app: suwayomi-postgresql
+            showStats: true
+
+    - Documentación:
+        - Kubernetes:
+            description: K8s
+            href: https://kubernetes.io/docs/
+            icon: https://raw.githubusercontent.com/hashicorp/vault/9f7449d93d64015e89b0ede5d0dd30612191656a/ui/public/eco/kubernetes.svg
+        - Terraform:
+            href: https://www.terraform.io/docs/
+            icon: https://icon.icepanel.io/Technology/svg/HashiCorp-Terraform.svg
+        - Homepage:
+            description: Home Page Dev
+            href: https://gethomepage.dev/
+            icon: https://raw.githubusercontent.com/gethomepage/homepage/refs/heads/dev/public/android-chrome-192x192.png
+    - Casa:
+        - Presupuesto 2025:
+            href: https://docs.google.com/spreadsheets/d/1WkQEUSmbAceJsDM3PLn_cwSAMC_PQzjrqVRBOe_alNA/edit?gid=1758594645#gid=1758594645
+            description: Presupuesto para el año 2025
+            icon: https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Google_Drive_icon_%282020%29.svg/1147px-Google_Drive_icon_%282020%29.svg.png
+  widgets.yaml: |
+    - kubernetes:
+        cluster:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+          label: "cluster"
+        nodes:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+          label: "nodes"
+
+    - logo:
+        icon: https://icons.veryicon.com/png/o/food--drinks/minnie-bakery-02/coffee-41.png
+        href: /
+
+    - resources:
+        label: Catuai
+        cpu: true # optional, enabled by default, disable by setting to false
+        mem: true # optional, enabled by default, disable by setting to false
+        cputemp: true # disabled by default
+        disk: 
+          - /
+          - /mnt/multimedia
+        diskUnits: bytes # optional, bytes (default) or bbytes. Only applies to disk
+        network: true 
+        expanded: true # show the expanded view
+
+    - search:
+        provider: [brave, google, duckduckgo]
+        target: _blank
+        focus: false
+        showSearchSuggestions: true
+
+    - logo:
+        icon: https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg
+        href: https://github.com/hmanzur/ansible-cafeteria
+        target: _blank
+  docker.yaml: ""

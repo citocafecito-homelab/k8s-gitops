@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: piper-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes: [ "ReadWriteOnce" ]
+  hostPath:
+    path: /mnt/piper
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: piper-pvc
+spec:
+  accessModes: [ "ReadWriteOnce" ]
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: piper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: piper
+      app.kubernetes.io/name: piper
+  template:
+    metadata:
+      labels:
+        app: piper
+        app.kubernetes.io/name: piper
+    spec:
+      containers:
+      - name: piper
+        image: rhasspy/wyoming-piper:latest
+        args: [ "--voice", "es_MX-ald-medium" ]
+        ports:
+        - containerPort: 10200
+        volumeMounts:
+        - name: piper-data
+          mountPath: /data
+      volumes:
+      - name: piper-data
+        persistentVolumeClaim:
+          claimName: piper-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: piper
+spec:
+  selector:
+    app: piper
+  ports:
+  - name: http
+    port: 10200
+    targetPort: 10200

@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openwakeword-config
+data:
+  config.yaml: |
+    mqtt:
+      broker: mosquitto
+      port: 1883
+      username: ""
+      password: ""
+    udp_ports:
+      base: 12202
+    oww:
+      model_names:
+        - alexa
+        - hey_mycroft
+      activation_samples: 3
+      activation_threshold: 0.7
+      deactivation_threshold: 0.2
+      vad_threshold: 0.5
+      enable_speex_noise_suppression: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openwakeword
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openwakeword
+      app.kubernetes.io/name: openwakeword
+  template:
+    metadata:
+      labels:
+        app: openwakeword
+        app.kubernetes.io/name: openwakeword
+    spec:
+      containers:
+      - name: openwakeword
+        # See https://github.com/rhasspy/wyoming-openwakeword
+        image: rhasspy/wyoming-openwakeword
+        args:
+        - "--uri"
+        - "tcp://0.0.0.0:12202"
+        ports:
+        - containerPort: 12202
+          name: udp-port
+        env:
+        - name: TZ
+          value: America/Bogota
+        - name: OWW_DEVICE
+          value: cpu # Remove if ussing GPU
+        # volumeMounts:
+        # - name: config-volume
+        #   mountPath: /config
+        resources:
+          requests:
+            cpu: 25m
+            memory: 128Mi
+      # volumes:
+      # - name: config-volume
+      #   configMap:
+      #     name: openwakeword-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openwakeword
+spec:
+  selector:
+    app: openwakeword
+  ports:
+  - name: udp
+    # protocol: TCP
+    port: 12202
+    targetPort: 12202

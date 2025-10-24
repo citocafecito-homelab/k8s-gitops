@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: suwayomi-config
+  namespace: media
+data:
+  TZ: America/Bogota
+  BIND_ADDRESS: 0.0.0.0
+  AUTH_MODE: BASIC_AUTH
+  DATABASE_TYPE: POSTGRESQL
+  DATABASE_URL: postgresql://suwayomi-postgresql.media.svc.cluster.local:5432/suwayomi
+  DATABASE_USERNAME: suwayomi
+  DATABASE_PASSWORD: suwayomi123
+  EXTENSION_REPOS: '["https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json"]'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: suwayomi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: suwayomi
+      app.kubernetes.io/name: suwayomi
+  template:
+    metadata:
+      labels:
+        app: suwayomi
+        app.kubernetes.io/name: suwayomi
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: vault
+        vault.hashicorp.com/agent-inject-secret-suwayomi: "secret/data/suwayomi"
+        vault.hashicorp.com/agent-inject-template-suwayomi: |
+          {{- with secret "secret/data/suwayomi" -}}
+          {{ .Data.data.USERNAME | writeToFile "/vault/secrets/AUTH_USERNAME" "vault" "vault" "0644" }}
+          {{ .Data.data.PASSWORD | writeToFile "/vault/secrets/AUTH_PASSWORD" "vault" "vault" "0644" }}
+          {{- end -}}
+    spec:
+      serviceAccountName: suwayomi
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - name: suwayomi
+        image: ghcr.io/suwayomi/suwayomi-server:v2.1.1959
+        command: [ "/bin/sh", "-c" ]
+        args:
+        - |
+          export AUTH_USERNAME=$(cat /vault/secrets/AUTH_USERNAME)
+          export AUTH_PASSWORD=$(cat /vault/secrets/AUTH_PASSWORD)
+
+          /home/suwayomi/startup_script.sh
+        ports:
+        - containerPort: 4567
+        - containerPort: 8181
+        envFrom:
+        - configMapRef:
+            name: suwayomi-config
+        resources:
+          requests:
+            cpu: 20m
+            memory: 1024Mi
+        volumeMounts:
+        - name: suwayomi-storage
+          mountPath: /home/suwayomi/data
+      volumes:
+      - name: suwayomi-storage
+        persistentVolumeClaim:
+          claimName: suwayomi-pvc

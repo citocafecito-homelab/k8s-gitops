@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: streaming-stack-config
+data:
+  LOG_LEVEL: "info"
+
+  # Timezone & UID/GID
+  PUID: "1000"
+  PGID: "1000"
+  TZ: "America/Bogota"
+
+  # Qbittorrent
+  QBITTORRENT_HOST: "qbittorrent"
+  QBITTORRENT_PORT: "8080"
+
+  # Radarr
+  RADARR_HOST: "radarr"
+  RADARR_PORT: "7878"
+
+  # Sonarr
+  SONARR_HOST: "sonarr"
+  SONARR_PORT: "8989"
+
+  # Jellyfin
+  JELLYFIN_HOST: "jellyfin"
+  JELLYFIN_PORT: "8096"
+
+  # Jellyseerr
+  JELLYSEERR_HOST: "Jellyseerr"
+  JELLYSEERR_PORT: "5055"
+
+  # Shared paths
+  DOWNLOADS_PATH: "/downloads"
+  MOVIES_PATH: "/movies"
+  SERIES_PATH: "/series"

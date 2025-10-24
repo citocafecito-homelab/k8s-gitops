@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nextcloud-postgresql
+  labels:
+    app.kubernetes.io/name: nextcloud-postgresql
+spec:
+  serviceName: "nextcloud-postgresql"
+  replicas: 1
+  selector:
+    matchLabels:
+      name: nextcloud-postgresql
+      app.kubernetes.io/name: nextcloud-postgresql
+  template:
+    metadata:
+      labels:
+        name: nextcloud-postgresql
+        app.kubernetes.io/name: nextcloud-postgresql
+    spec:
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      volumes:
+      - name: postgresql-data
+        persistentVolumeClaim:
+          claimName: nextcloud-postgresql-pvc
+      containers:
+      - name: postgresql
+        image: postgres:15-alpine
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: nextcloud
+        - name: POSTGRES_USER
+          value: nextcloud
+        - name: POSTGRES_PASSWORD
+          value: nextcloud
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: 20m
+        livenessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "nextcloud" ]
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "nextcloud" ]
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+        volumeMounts:
+        - name: postgresql-data
+          mountPath: /var/lib/postgresql/data

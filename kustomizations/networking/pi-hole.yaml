@@ -1,0 +1,105 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pihole
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pihole-pv-etc
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  hostPath:
+    path: "/mnt/pihole/etc/pihole"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pihole-pvc-etc
+spec:
+  storageClassName: manual
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pihole-pv-dnsmasq
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 100Mi
+  accessModes:
+  - ReadWriteOnce
+  hostPath:
+    path: "/mnt/pihole/etc/dnsmasq.d"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pihole-pvc-dnsmasq
+spec:
+  storageClassName: manual
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pihole
+      app.kubernetes.io/name: pihole
+  template:
+    metadata:
+      labels:
+        app: pihole
+        app.kubernetes.io/name: pihole
+    spec:
+      serviceAccountName: pihole
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+      - name: pihole
+        image: pihole/pihole:latest
+        env:
+        - name: DNSMASQ_LISTENING
+          value: all
+        - name: TZ
+          value: "America/Bogota"
+        ports:
+        - name: dns-tcp
+          containerPort: 53
+          protocol: TCP
+        - name: dns-udp
+          containerPort: 53
+          protocol: UDP
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        volumeMounts:
+        - name: pihole-volume-etc
+          mountPath: "/etc/pihole"
+        - name: pihole-volume-dnsmasq
+          mountPath: "/etc/dnsmasq.d"
+      volumes:
+      - name: pihole-volume-etc
+        persistentVolumeClaim:
+          claimName: pihole-pvc-etc
+      - name: pihole-volume-dnsmasq
+        persistentVolumeClaim:
+          claimName: pihole-pvc-dnsmasq

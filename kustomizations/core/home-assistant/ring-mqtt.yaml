@@ -1,0 +1,113 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ring-mqtt-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  hostPath:
+    path: /mnt/ring-mqtt
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ring-mqtt-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ring-mqtt
+  labels:
+    app: ring-mqtt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ring-mqtt
+      app.kubernetes.io/name: ring-mqtt
+  template:
+    metadata:
+      labels:
+        app: ring-mqtt
+        app.kubernetes.io/name: ring-mqtt
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: vault
+        vault.hashicorp.com/agent-inject-secret-config.json: "secret/data/ring"
+        vault.hashicorp.com/secret-volume-path: "/data"
+        vault.hashicorp.com/agent-inject-template-config.json: |
+          {{- with secret "secret/data/ring" -}}
+          {
+            "mqtt_url": "mqtt://mosquitto:1883",
+            "mqtt_user": "",
+            "mqtt_pass": "",
+            "ring_username": "{{ .Data.data.USERNAME }}",
+            "ring_password": "{{ .Data.data.PASSWORD }}",
+            "enable_modes": false,
+            "discovery": true,
+            "log_level": "info",
+            "livestream_user": "{{ .Data.data.CAMERA_USERNAME }}",
+            "livestream_pass": "{{ .Data.data.CAMERA_PASSWORD }}",
+            "enable_cameras": true
+          }
+          {{- end }}
+    spec:
+      containers:
+      - name: ring-mqtt
+        image: tsightler/ring-mqtt:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 51824
+          name: web-ui
+        - containerPort: 55123
+          name: auth-ui
+        - containerPort: 8554
+          name: rtsp
+        resources:
+          requests:
+            cpu: 20m
+            memory: 128Mi
+        volumeMounts:
+        - name: ring-data
+          mountPath: /data/storage
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
+      volumes:
+      - name: ring-data
+        persistentVolumeClaim:
+          claimName: ring-mqtt-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ring-mqtt
+spec:
+  selector:
+    app: ring-mqtt
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 51824
+    targetPort: 51824
+    name: web-ui
+  - protocol: TCP
+    port: 55123
+    targetPort: 55123
+    name: auth-ui
+  - protocol: TCP
+    port: 8554
+    targetPort: 8554
+    name: rtsp

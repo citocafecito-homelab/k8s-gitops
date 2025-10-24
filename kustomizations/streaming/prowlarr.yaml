@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prowlarr
+  labels:
+    app: prowlarr
+    app.kubernetes.io/name: prowlarr
+    app.kubernetes.io/part-of: streaming-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prowlarr
+  template:
+    metadata:
+      labels:
+        app: prowlarr
+        app.kubernetes.io/name: prowlarr
+        app.kubernetes.io/part-of: streaming-stack
+    spec:
+      containers:
+      - name: prowlarr
+        image: lscr.io/linuxserver/prowlarr:latest
+        ports:
+        - containerPort: 9696
+        envFrom:
+        - configMapRef:
+            name: streaming-stack-config
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: 10m
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop: [ "ALL" ]
+        volumeMounts:
+        - name: config
+          mountPath: /config
+      volumes:
+      - name: config
+        hostPath:
+          path: /mnt/prowlarr
+          type: DirectoryOrCreate
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prowlarr
+  labels:
+    app: prowlarr
+    app.kubernetes.io/name: prowlarr
+    app.kubernetes.io/part-of: streaming-stack
+spec:
+  selector:
+    app: prowlarr
+  type: NodePort
+  ports:
+  - name: http
+    port: 9696
+    targetPort: 9696
+    nodePort: 30996

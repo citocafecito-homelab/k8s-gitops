@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+# Home Assistant Core
+- config.yaml
+- pvc.yaml
+- deployment.yaml
+- svc.yaml
+# Agents
+- mosquitto.yaml
+- zwave.yaml
+# - zigbee2mqtt.yaml
+- ring-mqtt.yaml
+- rhasspy.yaml
+- whisper.yaml
+- piper.yaml
+- openwakeworld.yaml

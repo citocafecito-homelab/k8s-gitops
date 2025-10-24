@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bazarr
+  labels:
+    app: bazarr
+    app.kubernetes.io/name: bazarr
+    app.kubernetes.io/instance: streaming-stack
+    app.kubernetes.io/part-of: streaming-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bazarr
+      app.kubernetes.io/name: bazarr
+      app.kubernetes.io/instance: streaming-stack
+  template:
+    metadata:
+      labels:
+        app: bazarr
+        app.kubernetes.io/name: bazarr
+        app.kubernetes.io/instance: streaming-stack
+        app.kubernetes.io/part-of: streaming-stack
+    spec:
+      containers:
+      - name: bazarr
+        image: lscr.io/linuxserver/bazarr:latest
+        ports:
+        - containerPort: 6767
+        envFrom:
+        - configMapRef:
+            name: streaming-stack-config
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: 10m
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop: [ "ALL" ]
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: downloads
+          mountPath: /downloads
+        - name: movies
+          mountPath: /movies
+        - name: series
+          mountPath: /series
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
+      volumes:
+      - name: config
+        hostPath:
+          path: /mnt/bazarr
+          type: DirectoryOrCreate
+      - name: downloads
+        hostPath:
+          path: /mnt/multimedia/downloads
+          type: Directory
+      - name: movies
+        hostPath:
+          path: /mnt/multimedia/movies
+          type: Directory
+      - name: series
+        hostPath:
+          path: /mnt/multimedia/series
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bazarr
+  labels:
+    app: bazarr
+    app.kubernetes.io/name: bazarr
+    app.kubernetes.io/instance: streaming-stack
+    app.kubernetes.io/part-of: streaming-stack
+spec:
+  selector:
+    app: bazarr
+    app.kubernetes.io/name: bazarr
+    app.kubernetes.io/instance: streaming-stack
+  ports:
+  - name: http
+    port: 6767
+    targetPort: 6767
+    nodePort: 30677
+  type: NodePort

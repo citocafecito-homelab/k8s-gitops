@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homepage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homepage
+      app.kubernetes.io/name: homepage
+  template:
+    metadata:
+      labels:
+        app: homepage
+        app.kubernetes.io/name: homepage
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: vault
+        vault.hashicorp.com/agent-inject-secret-cloudflared: "secret/data/cloudflared"
+        vault.hashicorp.com/agent-inject-secret-home-assistant: "secret/data/home-assistant"
+        vault.hashicorp.com/agent-inject-secret-pihole: "secret/data/pihole"
+        vault.hashicorp.com/agent-inject-secret-speedtest: "secret/data/speedtest"
+        vault.hashicorp.com/agent-inject-secret-suwayomi: "secret/data/suwayomi"
+        vault.hashicorp.com/agent-inject-template-.env: |
+          {{- with secret "secret/data/cloudflared" -}}
+          HOMEPAGE_VAR_CLOUDFLARED_ACCOUNT="{{ .Data.data.ACCOUNT_ID }}"
+          HOMEPAGE_VAR_CLOUDFLARED_KEY="{{ .Data.data.KEY }}"
+          HOMEPAGE_VAR_CLOUDFLARED_TUNNEL="{{ .Data.data.TUNNEL_ID }}"
+          {{ end }}
+          {{ with secret "secret/data/home-assistant" -}}
+          HOMEPAGE_VAR_HA_TOKEN="{{ .Data.data.TOKEN }}"
+          {{ end }}
+          {{ with secret "secret/data/pihole" -}}
+          HOMEPAGE_VAR_PIHOLE_TOKEN="{{ .Data.data.API_KEY }}"
+          {{ end }}
+          {{ with secret "secret/data/speedtest " -}}
+          HOMEPAGE_VAR_SPEEDTEST_TOKEN="{{ .Data.data.API_KEY }}"
+          {{ end }}
+          {{ with secret "secret/data/suwayomi " -}}
+          HOMEPAGE_VAR_SUWAYOMI_USERNAME="{{ .Data.data.USERNAME }}"
+          HOMEPAGE_VAR_SUWAYOMI_PASSWORD="{{ .Data.data.PASSWORD }}"
+          {{ end }}
+    spec:
+      serviceAccountName: homepage
+      containers:
+      - name: homepage
+        image: ghcr.io/gethomepage/homepage:latest
+        command: [ "/bin/sh", "-c" ]
+        args:
+        - export $(grep -v '^#' /vault/secrets/.env | xargs) && node /app/server.js
+        env:
+        - name: HOMEPAGE_ALLOWED_HOSTS
+          value: "homepage.local,192.168.1.10:30000,127.0.0.1,localhost,citocafecito.work"
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            cpu: 25m
+            memory: 128Mi
+        volumeMounts:
+        - mountPath: /app/config/custom.js
+          name: homepage-config
+          subPath: custom.js
+        - mountPath: /app/config/custom.css
+          name: homepage-config
+          subPath: custom.css
+        - mountPath: /app/config/bookmarks.yaml
+          name: homepage-config
+          subPath: bookmarks.yaml
+        - mountPath: /app/config/docker.yaml
+          name: homepage-config
+          subPath: docker.yaml
+        - mountPath: /app/config/kubernetes.yaml
+          name: homepage-config
+          subPath: kubernetes.yaml
+        - mountPath: /app/config/services.yaml
+          name: homepage-config
+          subPath: services.yaml
+        - mountPath: /app/config/settings.yaml
+          name: homepage-config
+          subPath: settings.yaml
+        - mountPath: /app/config/widgets.yaml
+          name: homepage-config
+          subPath: widgets.yaml
+        - mountPath: /app/config/logs
+          name: logs
+        - name: multimedia
+          mountPath: /mnt/multimedia
+          readOnly: true
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
+      volumes:
+      - name: homepage-config
+        configMap:
+          name: homepage
+      - name: logs
+        emptyDir: {}
+      - name: multimedia
+        hostPath:
+          path: /mnt/multimedia
+          type: Directory

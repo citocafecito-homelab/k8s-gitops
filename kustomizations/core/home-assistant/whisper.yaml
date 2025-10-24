@@ -1,0 +1,86 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: whisper-pv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+  - ReadWriteOnce
+  hostPath:
+    path: /mnt/whisper
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: whisper-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whisper
+  namespace: core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whisper
+      app.kubernetes.io/name: whisper
+  template:
+    metadata:
+      labels:
+        app: whisper
+        app.kubernetes.io/name: whisper
+    spec:
+      containers:
+      - name: whisper
+        image: rhasspy/wyoming-whisper:latest
+        args:
+        - "--model"
+        # - "medium-int8"
+        - "base-int8"
+        - "--threads"
+        - "4"
+        - "--uri"
+        - "tcp://0.0.0.0:9000"
+        - "--data-dir"
+        - "/data"
+        - "--language"
+        - "es"
+        ports:
+        - containerPort: 9000
+        resources:
+          requests:
+            cpu: 1
+            memory: 512Mi
+          limits:
+            cpu: 4
+            memory: 2Gi
+        volumeMounts:
+        - name: whisper-data
+          mountPath: /data
+      priorityClassName: high-priority
+      volumes:
+      - name: whisper-data
+        persistentVolumeClaim:
+          claimName: whisper-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whisper
+  namespace: core
+spec:
+  selector:
+    app: whisper
+  ports:
+  - name: wyoming
+    port: 9000
+    targetPort: 9000
+    protocol: TCP

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: suwayomi-postgresql
+spec:
+  serviceName: suwayomi-postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: suwayomi-postgresql
+      app.kubernetes.io/name: suwayomi-postgresql
+  template:
+    metadata:
+      labels:
+        app: suwayomi-postgresql
+        app.kubernetes.io/name: suwayomi-postgresql
+    spec:
+      serviceAccountName: suwayomi
+      containers:
+      - name: postgres
+        image: postgres:15
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: suwayomi
+        - name: POSTGRES_USER
+          value: suwayomi
+        - name: POSTGRES_PASSWORD
+          value: suwayomi123
+        volumeMounts:
+        - name: suwayomi-postgresql-storage
+          mountPath: /var/lib/postgresql/data
+        livenessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "suwayomi" ]
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "suwayomi" ]
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 25m
+            memory: 512Mi
+      volumes:
+      - name: suwayomi-postgresql-storage
+        persistentVolumeClaim:
+          claimName: suwayomi-postgresql-pvc

@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyseerr
+  labels:
+    app: jellyseerr
+    app.kubernetes.io/name: jellyseerr
+    app.kubernetes.io/part-of: streaming-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyseerr
+      app.kubernetes.io/name: jellyseerr
+  template:
+    metadata:
+      labels:
+        app: jellyseerr
+        app.kubernetes.io/name: jellyseerr
+        app.kubernetes.io/part-of: streaming-stack
+    spec:
+      containers:
+      - name: jellyseerr
+        image: fallenbagel/jellyseerr:latest
+        ports:
+        - containerPort: 5055
+        envFrom:
+        - configMapRef:
+            name: streaming-stack-config
+        env:
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: streaming-stack-config
+              key: JELLYSEERR_PORT
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: 10m
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop: [ "ALL" ]
+        volumeMounts:
+        - name: config
+          mountPath: /app/config
+        - name: movies
+          mountPath: /mnt/multimedia/movies
+        - name: series
+          mountPath: /mnt/multimedia/series
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
+      volumes:
+      - name: config
+        hostPath:
+          path: /mnt/jellyseerr
+          type: DirectoryOrCreate
+      - name: movies
+        hostPath:
+          path: /mnt/multimedia/movies
+          type: Directory
+      - name: series
+        hostPath:
+          path: /mnt/multimedia/series
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellyseerr
+  labels:
+    app: jellyseerr
+    app.kubernetes.io/name: jellyseerr
+    app.kubernetes.io/part-of: streaming-stack
+spec:
+  selector:
+    app: jellyseerr
+  ports:
+  - name: http
+    port: 5055
+    targetPort: 5055
+    nodePort: 30055
+  type: NodePort

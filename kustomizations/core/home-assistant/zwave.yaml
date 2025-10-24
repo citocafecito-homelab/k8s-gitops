@@ -1,0 +1,118 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: zwavejs2mqtt-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /mnt/zwavejs2mqtt
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zwavejs2mqtt-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zwavejs2mqtt
+  labels:
+    app: zwavejs2mqtt
+    app.kubernetes.io/name: zwavejs2mqtt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zwavejs2mqtt
+      app.kubernetes.io/name: zwavejs2mqtt
+  template:
+    metadata:
+      labels:
+        app: zwavejs2mqtt
+        app.kubernetes.io/name: zwavejs2mqtt
+    spec:
+      containers:
+      - name: zwavejs2mqtt
+        image: zwavejs/zwave-js-ui:latest
+        env:
+        - name: SESSION_SECRET
+          value: admin
+        ports:
+        - containerPort: 8091
+        - containerPort: 3000
+        resources:
+          requests:
+            cpu: 20m
+            memory: 128Mi
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /usr/src/app/store
+          name: configuration
+        - mountPath: /dev/zwave
+          name: zwave
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
+      volumes:
+      - name: configuration
+        persistentVolumeClaim:
+          claimName: zwavejs2mqtt-pvc
+      - name: zwave
+        hostPath:
+          path: /dev/ttyUSB0
+          type: CharDevice
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zwavejs2mqtt
+spec:
+  selector:
+    app: zwavejs2mqtt
+  type: ClusterIP
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8091
+    targetPort: 8091
+  - name: ws
+    protocol: TCP
+    port: 3000
+    targetPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zwavejs2mqtt-local
+spec:
+  selector:
+    app: zwavejs2mqtt
+  type: NodePort
+  ports:
+  - name: mqtt
+    protocol: TCP
+    port: 8091
+    targetPort: 8091
+    nodePort: 31891
+  - name: web
+    protocol: TCP
+    port: 3000
+    targetPort: 3000
+    nodePort: 31002

@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+        app.kubernetes.io/part-of: streaming-stack
+    spec:
+      containers:
+      - name: sonarr
+        image: linuxserver/sonarr:latest
+        ports:
+        - containerPort: 8989
+        envFrom:
+        - configMapRef:
+            name: streaming-stack-config
+        volumeMounts:
+        - name: sonarr-config
+          mountPath: /config
+        - name: series
+          mountPath: /tv
+        - name: downloads
+          mountPath: /downloads
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: 10m
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop: [ "ALL" ]
+      volumes:
+      - name: sonarr-config
+        hostPath:
+          path: /mnt/sonarr
+          type: DirectoryOrCreate
+      - name: series
+        hostPath:
+          path: /mnt/multimedia/series
+          type: Directory
+      - name: downloads
+        hostPath:
+          path: /mnt/multimedia/downloads
+          type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr
+spec:
+  selector:
+    app: sonarr
+  ports:
+  - port: 8989
+    targetPort: 8989
+    nodePort: 30989
+  type: NodePort

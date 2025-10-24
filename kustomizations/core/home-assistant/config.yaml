@@ -1,0 +1,61 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: home-assistant-config
+data:
+  configuration.yaml: |
+    homeassistant:
+      name: Madeira
+      latitude: 6.0301755
+      longitude: -75.4229617
+      elevation: 2276 
+      unit_system: metric
+      time_zone: America/Bogota
+
+      allowlist_external_dirs:
+        - "/config/www/records"
+        - "/config/www/timbre"
+
+      media_dirs:
+        timbre: /config/www/timbre
+        records: /config/www/records
+        audios: /config/www/audios
+
+    default_config:
+
+    api:
+      encryption:
+        key: "tsZdGxiayn"
+
+    http:
+      server_host: 0.0.0.0
+      server_port: 8123
+      use_x_forwarded_for: true
+      trusted_proxies:
+        - 0.0.0.0/0
+        - 192.168.1.10 
+
+    logger:
+      default: warning
+      logs:
+        # custom_components.epson_workforce: debug
+        # custom_components.localtuya: debug
+        custom_components.stellantis_vehicles: debug
+
+    frontend:
+      themes: !include_dir_merge_named themes
+
+    automation: !include automations.yaml
+    script: !include scripts.yaml
+    scene: !include scenes.yaml
+
+    tts:
+      - platform: google_translate
+
+    shell_command:
+      limpiar_timbre: "find /config/www/timbre/{thumbs,videos} -type f -mtime +7 -delete"
+      limpiar_grabaciones: "find /config/www/records -type f -mtime +30 -delete"
+---
+
+

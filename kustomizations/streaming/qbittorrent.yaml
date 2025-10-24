@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbittorrent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qbittorrent
+  template:
+    metadata:
+      labels:
+        app: qbittorrent
+        app.kubernetes.io/part-of: streaming-stack
+    spec:
+      containers:
+      - name: qbittorrent
+        image: lscr.io/linuxserver/qbittorrent:latest
+        ports:
+        - containerPort: 8080
+        - containerPort: 6881
+          protocol: TCP
+        - containerPort: 6881
+          protocol: UDP
+        envFrom:
+        - configMapRef:
+            name: streaming-stack-config
+        env:
+        - name: WEBUI_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: streaming-stack-config
+              key: QBITTORRENT_PORT
+        - name: TORRENTING_PORT
+          value: "6881"
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: 10m
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop: [ "ALL" ]
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: downloads
+          mountPath: /downloads
+      volumes:
+      - name: config
+        hostPath:
+          path: /mnt/qbittorrent
+          type: DirectoryOrCreate
+      - name: downloads
+        hostPath:
+          path: /mnt/multimedia/downloads
+          type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qbittorrent
+spec:
+  selector:
+    app: qbittorrent
+  ports:
+  - name: webui
+    port: 8080
+    targetPort: 8080
+    nodePort: 30081
+  - name: bittorrent-tcp
+    port: 6881
+    targetPort: 6881
+    protocol: TCP
+  - name: bittorrent-udp
+    port: 6881
+    targetPort: 6881
+    protocol: UDP
+  type: NodePort
