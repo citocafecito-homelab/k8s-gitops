@@ -18,6 +18,7 @@ spec:
         image: lscr.io/linuxserver/qbittorrent:latest
         ports:
         - containerPort: 8080
+          protocol: TCP
         - containerPort: 6881
           protocol: TCP
         - containerPort: 6881
@@ -40,10 +41,10 @@ spec:
         securityContext:
           runAsUser: 0
           runAsGroup: 0
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: true
           capabilities:
             drop: [ "ALL" ]
+            add: [ "CHOWN", "SETGID", "SETUID" ]
         volumeMounts:
         - name: config
           mountPath: /config
