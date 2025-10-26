@@ -5,7 +5,7 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-  - 192.168.1.225-192.168.1.249
+  - 192.168.1.226-192.168.1.249
   autoAssign: true
 ---
 apiVersion: metallb.io/v1beta1
@@ -18,4 +18,4 @@ spec:
   - default-pool
   interfaces:
   - enp1s0
-  - enp3s0
+  # - enp3s0

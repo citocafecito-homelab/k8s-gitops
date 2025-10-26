@@ -1,0 +1,16 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: k8s-runners
+  namespace: actions
+spec:
+  template:
+    spec:
+      organization: citocafecito-homelab
+      labels: []
+      env: []
+      dockerEnabled: false
+      tolerations:
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"

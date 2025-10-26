@@ -56,6 +56,3 @@ data:
     shell_command:
       limpiar_timbre: "find /config/www/timbre/{thumbs,videos} -type f -mtime +7 -delete"
       limpiar_grabaciones: "find /config/www/records -type f -mtime +30 -delete"
----
-
-

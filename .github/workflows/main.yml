@@ -1,15 +1,23 @@
-name: Deploy namespace
+name: Deploy Kustomizations
+
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "kustomizations/**"
+      - ".github/workflows/deploy-kustomizations.yml"
+
 jobs:
   deploy:
-    runs-on: [self-hosted, citocafecito-runner]
+    runs-on: [self-hosted, k8s, homepage.dev]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v5
-      - name: Check Pods
+
+      - name: Apply Kustomizations
         uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
         with:
-          args: get pods
+          args: apply -k kustomizations
