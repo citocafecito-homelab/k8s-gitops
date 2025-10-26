@@ -10,7 +10,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: [self-hosted, k8s, homepage.dev]
+    runs-on: self-hosted
     steps:
       - name: Checkout Code
         uses: actions/checkout@v5
