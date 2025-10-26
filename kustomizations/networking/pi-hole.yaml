@@ -91,6 +91,10 @@ spec:
         - name: http
           containerPort: 8080
           protocol: TCP
+        resources:
+          requests:
+            cpu: 10m
+            memory: 128Mi
         volumeMounts:
         - name: pihole-volume-etc
           mountPath: "/etc/pihole"
