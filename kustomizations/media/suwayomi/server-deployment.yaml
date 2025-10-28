@@ -8,7 +8,7 @@ data:
   BIND_ADDRESS: 0.0.0.0
   AUTH_MODE: BASIC_AUTH
   DATABASE_TYPE: POSTGRESQL
-  DATABASE_URL: postgresql://suwayomi-postgresql.media.svc.cluster.local:5432/suwayomi
+  DATABASE_URL: postgresql://suwayomi-postgresql:5432/suwayomi
   DATABASE_USERNAME: suwayomi
   DATABASE_PASSWORD: suwayomi123
   EXTENSION_REPOS: '["https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json"]'
@@ -38,7 +38,6 @@ spec:
           {{ .Data.data.PASSWORD | writeToFile "/vault/secrets/AUTH_PASSWORD" "vault" "vault" "0644" }}
           {{- end -}}
     spec:
-      serviceAccountName: suwayomi
       securityContext:
         fsGroup: 1000
       containers:

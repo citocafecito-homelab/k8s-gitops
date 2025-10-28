@@ -23,11 +23,32 @@ spec:
             name: streaming-stack-config
         ports:
         - containerPort: 8096
-
         resources:
           requests:
             memory: 128Mi
             cpu: 10m
+        startupProbe:
+          httpGet:
+            path: /
+            port: 8096
+          failureThreshold: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8096
+          initialDelaySeconds: 30
+          periodSeconds: 20
+          timeoutSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8096
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
         volumeMounts:
         - name: config
           mountPath: /config

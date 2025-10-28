@@ -32,6 +32,20 @@ spec:
           capabilities:
             drop: [ "ALL" ]
             add: [ "CHOWN", "SETGID", "SETUID" ]
+        livenessProbe:
+          tcpSocket:
+            port: 7878
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          tcpSocket:
+            port: 7878
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
         volumeMounts:
         - name: config
           mountPath: /config

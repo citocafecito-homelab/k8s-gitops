@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: suwayomi-postgresql
+  name: wikijs-postgresql
 spec:
-  serviceName: suwayomi-postgresql
+  serviceName: wikijs-postgresql
   replicas: 1
   selector:
     matchLabels:
-      app: suwayomi-postgresql
-      app.kubernetes.io/name: suwayomi-postgresql
+      app: wikijs-postgresql
+      app.kubernetes.io/name: wikijs-postgresql
   template:
     metadata:
       labels:
-        app: suwayomi-postgresql
-        app.kubernetes.io/name: suwayomi-postgresql
+        app: wikijs-postgresql
+        app.kubernetes.io/name: wikijs-postgresql
     spec:
       containers:
       - name: postgres
@@ -22,23 +22,23 @@ spec:
         - containerPort: 5432
         env:
         - name: POSTGRES_DB
-          value: suwayomi
+          value: wikijs
         - name: POSTGRES_USER
-          value: suwayomi
+          value: wikijs
         - name: POSTGRES_PASSWORD
-          value: suwayomi123
+          value: wikijs123
         volumeMounts:
-        - name: suwayomi-postgresql-storage
+        - name: wikijs-postgresql-storage
           mountPath: /var/lib/postgresql/data
         livenessProbe:
           exec:
-            command: [ "pg_isready", "-U", "suwayomi" ]
+            command: [ "pg_isready", "-U", "wikijs" ]
           initialDelaySeconds: 20
           periodSeconds: 30
           failureThreshold: 3
         readinessProbe:
           exec:
-            command: [ "pg_isready", "-U", "suwayomi" ]
+            command: [ "pg_isready", "-U", "wikijs" ]
           initialDelaySeconds: 10
           periodSeconds: 15
           failureThreshold: 3
@@ -47,6 +47,6 @@ spec:
             cpu: 25m
             memory: 512Mi
       volumes:
-      - name: suwayomi-postgresql-storage
+      - name: wikijs-postgresql-storage
         persistentVolumeClaim:
-          claimName: suwayomi-postgresql-pvc
+          claimName: wikijs-postgresql-pvc

@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wikijs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wikijs
+      app.kubernetes.io/name: wikijs
+  template:
+    metadata:
+      labels:
+        app: wikijs
+        app.kubernetes.io/name: wikijs
+    spec:
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      containers:
+      - name: wikijs
+        image: ghcr.io/requarks/wiki:latest
+        env:
+        - name: DB_TYPE
+          value: "postgres"
+        - name: DB_HOST
+          value: "wikijs-postgresql"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_NAME
+          value: "wikijs"
+        - name: DB_USER
+          value: "wikijs"
+        - name: DB_PASS
+          value: "wikijs123"
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            cpu: 25m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+          periodSeconds: 15
+          failureThreshold: 3

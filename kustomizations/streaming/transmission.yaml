@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transmission
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transmission
+      app.kubernetes.io/name: transmission
+  template:
+    metadata:
+      labels:
+        app: transmission
+        app.kubernetes.io/name: transmission
+        app.kubernetes.io/part-of: streaming-stack
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: vault
+        vault.hashicorp.com/agent-inject-secret-creds: 'secret/data/transmission'
+        vault.hashicorp.com/agent-inject-template-creds: |
+          {{- with secret "secret/data/transmission " -}}
+          USER="{{ .Data.data.USERNAME }}"
+          PASS="{{ .Data.data.PASSWORD }}"
+          {{ .Data.data.USERNAME | writeToFile "/vault/secrets/user" "vault" "vault" "0600" }}
+          {{ .Data.data.PASSWORD | writeToFile "/vault/secrets/pass" "vault" "vault" "0600" }}
+          {{- end -}}
+    spec:
+      containers:
+      - name: transmission
+        image: lscr.io/linuxserver/transmission:latest
+        ports:
+        - containerPort: 9091
+          protocol: TCP
+        - containerPort: 51413
+          protocol: TCP
+        - containerPort: 51413
+          protocol: UDP
+        envFrom:
+        - configMapRef:
+            name: streaming-stack-config
+        env:
+        - name: FILE__USER
+          value: /vault/secrets/user
+        - name: FILE__PASS
+          value: /vault/secrets/pass
+        - name: HOST_WHITELIST
+          value: "0.0.0.0,192.168.1.10,192.168.*.*,127.0.0.1"
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: 10m
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          allowPrivilegeEscalation: true
+          capabilities:
+            add:
+            - CHOWN
+            - SETGID
+            - SETUID
+            - DAC_OVERRIDE
+        livenessProbe:
+          httpGet:
+            path: /transmission/rpc
+            port: 9091
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /transmission/rpc
+            port: 9091
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: downloads
+          mountPath: /downloads
+      volumes:
+      - name: config
+        hostPath:
+          path: /mnt/transmission
+          type: DirectoryOrCreate
+      - name: downloads
+        hostPath:
+          path: /mnt/multimedia/downloads
+          type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission
+spec:
+  selector:
+    app: transmission
+  ports:
+  - name: webui
+    port: 9091
+    targetPort: 9091
+    nodePort: 30991
+  - name: torrent-tcp
+    port: 51413
+    targetPort: 51413
+    protocol: TCP
+  - name: torrent-udp
+    port: 51413
+    targetPort: 51413
+    protocol: UDP
+  type: NodePort

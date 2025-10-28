@@ -3,6 +3,6 @@ kind: Kustomization
 
 resources:
 - speedtest.yaml
-- pi-hole.yaml
+# - pi-hole.yaml
 
 namespace: networking
