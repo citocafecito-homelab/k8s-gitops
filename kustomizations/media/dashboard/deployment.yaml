@@ -21,6 +21,8 @@ spec:
         vault.hashicorp.com/agent-inject-secret-pihole: "secret/data/pihole"
         vault.hashicorp.com/agent-inject-secret-speedtest: "secret/data/speedtest"
         vault.hashicorp.com/agent-inject-secret-suwayomi: "secret/data/suwayomi"
+        vault.hashicorp.com/agent-inject-secret-streaming: "secret/data/streaming"
+        vault.hashicorp.com/agent-inject-secret-transmission: "secret/data/transmission"
         vault.hashicorp.com/agent-inject-template-.env: |
           {{- with secret "secret/data/cloudflared" -}}
           HOMEPAGE_VAR_CLOUDFLARED_ACCOUNT="{{ .Data.data.ACCOUNT_ID }}"
@@ -40,6 +42,20 @@ spec:
           HOMEPAGE_VAR_SUWAYOMI_USERNAME="{{ .Data.data.USERNAME }}"
           HOMEPAGE_VAR_SUWAYOMI_PASSWORD="{{ .Data.data.PASSWORD }}"
           {{ end }}
+          {{ with secret "secret/data/streaming " -}}
+          HOMEPAGE_VAR_JELLYFIN_API_KEY="{{ .Data.data.JELLYFIN_KEY }}"
+          HOMEPAGE_VAR_JELLYSEERR_API_KEY="{{ .Data.data.JELLYSEERR_KEY }}"
+          HOMEPAGE_VAR_BAZARR_API_KEY="{{ .Data.data.BAZARR_KEY }}"
+          HOMEPAGE_VAR_RADARR_API_KEY="{{ .Data.data.RADARR_KEY }}"
+          HOMEPAGE_VAR_SONARR_API_KEY="{{ .Data.data.SONARR_KEY }}"
+          HOMEPAGE_VAR_PROWLARR_API_KEY="{{ .Data.data.PROWLARR_KEY }}"
+          HOMEPAGE_VAR_QBITTORRENT_USERNAME="{{ .Data.data.QBITTORRENT_USERNAME }}"
+          HOMEPAGE_VAR_QBITTORRENT_PASSWORD="{{ .Data.data.QBITTORRENT_PASSWORD }}"
+          {{ end }}
+          {{ with secret "secret/data/transmission " -}}
+          HOMEPAGE_VAR_TRANSMISSION_USERNAME="{{ .Data.data.USERNAME }}"
+          HOMEPAGE_VAR_TRANSMISSION_PASSWORD="{{ .Data.data.PASSWORD }}"
+          {{ end }}
     spec:
       serviceAccountName: homepage
       containers:
@@ -55,7 +71,7 @@ spec:
         - containerPort: 3000
         resources:
           requests:
-            cpu: 25m
+            cpu: 100m
             memory: 128Mi
         volumeMounts:
         - mountPath: /app/config/custom.js

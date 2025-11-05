@@ -56,7 +56,8 @@ spec:
             "log_level": "info",
             "livestream_user": "{{ .Data.data.CAMERA_USERNAME }}",
             "livestream_pass": "{{ .Data.data.CAMERA_PASSWORD }}",
-            "enable_cameras": true
+            "enable_cameras": true,
+            "mqtt_client_id": "ringmqtt-mqtt"
           }
           {{- end }}
     spec:
@@ -73,7 +74,7 @@ spec:
           name: rtsp
         resources:
           requests:
-            cpu: 20m
+            cpu: 10m
             memory: 128Mi
         volumeMounts:
         - name: ring-state

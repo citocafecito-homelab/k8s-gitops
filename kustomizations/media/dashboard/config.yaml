@@ -184,19 +184,19 @@ data:
             #   password: ipsum
             #   verify_ssl: false
 
-        - Pi Hole:
-            href: http://pihole.catuai.lan
-            icon: https://wp-cdn.pi-hole.net/wp-content/uploads/2016/12/Vortex-R.png
-            description: Ad Guard y DNS Resolver (Internal)
-            namespace: networking
-            app: pihole
-            showStats: true
-            ping: http://192.168.1.10/api/info/login
-            widget:
-              type: pihole
-              url: http://192.168.1.10
-              version: 6
-              key: "{{HOMEPAGE_VAR_PIHOLE_TOKEN}}"
+        # - Pi Hole:
+        #     href: http://pihole.catuai.lan
+        #     icon: https://wp-cdn.pi-hole.net/wp-content/uploads/2016/12/Vortex-R.png
+        #     description: Ad Guard y DNS Resolver (Internal)
+        #     namespace: networking
+        #     app: pihole
+        #     showStats: true
+        #     ping: http://192.168.1.10/api/info/login
+        #     widget:
+        #       type: pihole
+        #       url: http://192.168.1.10
+        #       version: 6
+        #       key: "{{HOMEPAGE_VAR_PIHOLE_TOKEN}}"
               
         - Red:
             href: http://192.168.1.10:30880/
@@ -213,7 +213,8 @@ data:
               key: "{{HOMEPAGE_VAR_SPEEDTEST_TOKEN}}"
               bitratePrecision: 3
 
-        - Recurso del Dashboard:
+        - Dashboard:
+            description: Recursos usados
             href: https://one.dash.cloudflare.com/e19111ae758ecab4a1a6a15d7c74be1b/networks/tunnels/cfd_tunnel/b2b836e5-915c-4227-b280-a8cfe0e445c4/edit?tab=overview
             icon: https://github.com/gethomepage/homepage/raw/main/public/android-chrome-192x192.png
             namespace: media
@@ -258,7 +259,7 @@ data:
     - Domótica:
         - Home Assistant:
             href: https://home.citocafecito.work
-            description: Plataforma de automatización del hogar
+            description: Centro de mando para la gestión y automatización del hogar
             icon: https://upload.wikimedia.org/wikipedia/en/thumb/4/49/Home_Assistant_logo_%282023%29.svg/1200px-Home_Assistant_logo_%282023%29.svg.png
             ping: http://192.168.1.10:30123/api
             namespace: core
@@ -271,32 +272,53 @@ data:
               custom:
                 - template: "{{ states.switch|selectattr('state','equalto','on')|list|length }}"
                   label: switches on
-                - state: weather.forecast_home
-                  label: wind speed
-                  value: "{attributes.wind_speed} {attributes.wind_speed_unit}"
+                - state: binary_sensor.workday_sensor
+                - state: sensor.backup_backup_manager_state
+                  label: backup status
         
         - Mosquitto MTQQ:
             icon: https://avatars.githubusercontent.com/u/1544528
-            description: Home Assistant MTQQ Broker
+            description: Broker MQTT implementado con Eclipse Mosquitto
             namespace: core
             app: mosquitto
             showStats: true
 
         - ZwaveJS2MQTT:
             icon: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzxx1jjnLRtJSpaP9eDeAi1KDWrawKpWKmJg&s
-            description: Home Assistant Z Wave Integration
+            description: Integrador avanzado de dispositivos Z-Wave
             namespace: core
             app: zwavejs2mqtt
             showStats: true
-    - Streaming:
-        - Jellyfin:
-            href: https://jellyfin.citocafecito.work/
-            description: Servidor de medios de código abierto
-            icon: https://upload.wikimedia.org/wikipedia/commons/4/41/Jellyfin_-_icon-transparent.svg
-            ping: http://192.168.1.10:30096/health
+
+        - Rhasspy:
+            icon: https://play-lh.googleusercontent.com/hzDSG8bVSdrD_oMKHg5FijEMc_2KMH9bUucykpwBlSUvE_7fJZOdBBFJJ03_eNee0A
+            description: Asistente de voz
+            namespace: core
+            app: rhasspy
             showStats: true
-            namespace: streaming
-            app: jellyfin
+
+    - Control de voz:
+        - Wake Word:
+            icon: https://raw.githubusercontent.com/OHF-Voice/piper1-gpl/refs/heads/main/etc/logo.svg
+            description: Convertidor de texto a voz
+            namespace: core
+            app: piper
+            showStats: true
+
+        - Piper:
+            icon: https://raw.githubusercontent.com/OHF-Voice/piper1-gpl/refs/heads/main/etc/logo.svg
+            description: Convertidor de texto a voz
+            namespace: core
+            app: piper
+            showStats: true
+
+        - Whisper:
+            icon: https://avatars.githubusercontent.com/u/59055969?s=200&v=4
+            description: Convertidor de voz a texto
+            namespace: core
+            app: openwakeword
+            showStats: true
+
     - Wiki:
         - "Wiki.js":
             href: https://wiki.citocafecito.work/
@@ -336,6 +358,103 @@ data:
             namespace: media
             app: suwayomi-postgresql
             showStats: true
+
+    - Streaming:
+        - Jellyfin:
+            href: https://jellyfin.citocafecito.work/
+            description: Servidor de medios de código abierto
+            icon: https://upload.wikimedia.org/wikipedia/commons/4/41/Jellyfin_-_icon-transparent.svg
+            ping: http://192.168.1.10:30096/health
+            showStats: true
+            namespace: streaming
+            app: jellyfin
+            widget:
+              type: jellyfin
+              url: http://jellyfin.streaming.svc.cluster.local:8096
+              key: "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}"
+
+        - Jellyseerr:
+            description: Interfaz de solicitud de contenido para Jellyfin o Plex
+            icon: https://raw.githubusercontent.com/Fallenbagel/jellyseerr/develop/public/android-chrome-512x512.png
+            showStats: true
+            namespace: streaming
+            app: jellyseerr
+            widget:
+              type: jellyseerr
+              url: http://jellyseerr.streaming.svc.cluster.local:5055
+              key: "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}"
+
+    - Series & Movies:
+        - Bazarr:
+            description: Descarga y gestiona subtítulos automáticamente
+            icon: https://raw.githubusercontent.com/loganmarchione/homelab-svg-assets/refs/heads/main/assets/bazarr.svg
+            showStats: true
+            namespace: streaming
+            app: bazarr
+            widget:
+              type: bazarr
+              url: http://bazarr.streaming.svc.cluster.local:6767
+              key: "{{HOMEPAGE_VAR_BAZARR_API_KEY}}"
+
+        - Radarr:
+            description: Descarga y gestiona automáticamente películas
+            icon: https://raw.githubusercontent.com/Radarr/Radarr/develop/Logo/512.png
+            showStats: true
+            namespace: streaming
+            app: radarr
+            widget:
+              type: radarr
+              url: http://radarr.streaming.svc.cluster.local:7878
+              key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
+              enableQueue: false
+
+        - Sonarr:
+            description: Descarga y gestiona automáticamente series de TV
+            icon: https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/512.png
+            showStats: true
+            namespace: streaming
+            app: sonarr
+            widget:
+              type: sonarr
+              url: http://sonarr.streaming.svc.cluster.local:8989
+              key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
+              enableQueue: false
+
+    - Torrents:
+        - Prowlarr:
+            description: Indexer manager para aplicaciones como Radarr, Sonarr y Lidarr
+            icon: https://raw.githubusercontent.com/Prowlarr/Prowlarr/develop/Logo/512.png
+            showStats: true
+            namespace: streaming
+            app: prowlarr
+            widget:
+              type: prowlarr
+              url: http://prowlarr.streaming.svc.cluster.local:9696
+              key: "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}"
+
+        - qBittorrent:
+            description: Cliente BitTorrent avanzado y de código abierto
+            icon: https://upload.wikimedia.org/wikipedia/commons/6/66/New_qBittorrent_Logo.svg
+            showStats: true
+            namespace: streaming
+            app: qbittorrent
+            widget:
+              type: qbittorrent
+              url: http://qbittorrent.streaming.svc.cluster.local:8080
+              username: "{{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}"
+              password: "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}"
+
+        - Transmission:
+            description: Cliente BitTorrent ligero y rápido
+            icon: https://raw.githubusercontent.com/loganmarchione/homelab-svg-assets/refs/heads/main/assets/transmission.svg
+            showStats: true
+            namespace: streaming
+            app: transmission
+            widget:
+              type: transmission
+              url: http://transmission.streaming.svc.cluster.local:9091
+              username: "{{HOMEPAGE_VAR_TRANSMISSION_USERNAME}}"
+              password: "{{HOMEPAGE_VAR_TRANSMISSION_PASSWORD}}"
 
     - Documentación:
         - Kubernetes:

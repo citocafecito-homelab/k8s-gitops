@@ -1,14 +1,4 @@
 apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
-metadata:
-  name: default-pool
-  namespace: metallb-system
-spec:
-  addresses:
-  - 192.168.1.226-192.168.1.249
-  autoAssign: true
----
-apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
   name: default-advertisement
@@ -18,4 +8,5 @@ spec:
   - default-pool
   interfaces:
   - enp1s0
+  # - enp1s0
   # - enp3s0

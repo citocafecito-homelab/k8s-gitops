@@ -7,10 +7,12 @@ spec:
   selector:
     matchLabels:
       app: qbittorrent
+      app.kubernetes.io/name: qbittorrent
   template:
     metadata:
       labels:
         app: qbittorrent
+        app.kubernetes.io/name: qbittorrent
         app.kubernetes.io/part-of: streaming-stack
     spec:
       containers:

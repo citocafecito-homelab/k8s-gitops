@@ -7,10 +7,12 @@ spec:
   selector:
     matchLabels:
       app: sonarr
+      app.kubernetes.io/name: sonarr
   template:
     metadata:
       labels:
         app: sonarr
+        app.kubernetes.io/name: sonarr
         app.kubernetes.io/part-of: streaming-stack
     spec:
       containers:

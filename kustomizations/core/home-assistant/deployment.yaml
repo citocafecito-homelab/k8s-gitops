@@ -17,50 +17,8 @@ spec:
         app.kubernetes.io/name: home-assistant
     spec:
       containers:
-      - name: bluez
-        image: ghcr.io/mysticrenji/bluez-service:latest
-        resources:
-          requests:
-            cpu: 10m
-            memory: 64Mi
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - name: dev-bluetooth
-          mountPath: /dev
-        - name: dbus-socket
-          mountPath: /var/run/dbus
-          readOnly: true
-
-      - name: matter-server
-        image: ghcr.io/home-assistant-libs/python-matter-server:stable
-        imagePullPolicy: IfNotPresent
-        args:
-        - --storage-path=/data
-        - --paa-root-cert-dir=/data/credentials
-        - --bluetooth-adapter=0
-        ports:
-        - containerPort: 5580
-        resources:
-          requests:
-            cpu: 10m
-            memory: 256Mi
-        securityContext:
-          allowPrivilegeEscalation: true
-          capabilities:
-            add:
-            - SYS_ADMIN
-        volumeMounts:
-        - name: config
-          mountPath: /data
-        - name: dbus-socket
-          mountPath: /var/run/dbus
-          readOnly: true
-        - name: dev-bluetooth
-          mountPath: /dev
-
       - name: home-assistant
-        image: docker.io/homeassistant/home-assistant:2025.10.0
+        image: docker.io/homeassistant/home-assistant:2025.10
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8123
@@ -85,7 +43,7 @@ spec:
           readOnly: true
         resources:
           requests:
-            cpu: 20m
+            cpu: 10m
             memory: 1024Mi
         readinessProbe:
           httpGet:

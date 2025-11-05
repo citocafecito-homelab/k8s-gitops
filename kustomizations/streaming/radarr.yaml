@@ -7,10 +7,12 @@ spec:
   selector:
     matchLabels:
       app: radarr
+      app.kubernetes.io/name: radarr
   template:
     metadata:
       labels:
         app: radarr
+        app.kubernetes.io/name: radarr
         app.kubernetes.io/part-of: ming-stack
     spec:
       containers:
