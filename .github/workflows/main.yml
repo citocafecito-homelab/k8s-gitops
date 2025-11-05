@@ -29,4 +29,4 @@ jobs:
         run: |
           kubectl  apply -k kustomizations
         env:
-          KUBECONFIG: ${{ secrets.KUBE_CONFIG }}
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
