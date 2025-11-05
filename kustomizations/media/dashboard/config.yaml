@@ -69,7 +69,6 @@ data:
               href: https://linkedin.com/in/julieth-sarmiento
               icon: https://cdn.worldvectorlogo.com/logos/linkedin-icon-2.svg
               description: "Julieth Sarmiento's Linkedin"
-
   services.yaml: |
     - Global:
         - La Ceja:
@@ -290,11 +289,11 @@ data:
             app: zwavejs2mqtt
             showStats: true
 
-        - Rhasspy:
-            icon: https://play-lh.googleusercontent.com/hzDSG8bVSdrD_oMKHg5FijEMc_2KMH9bUucykpwBlSUvE_7fJZOdBBFJJ03_eNee0A
-            description: Asistente de voz
+        - Matter:
+            icon: https://cdn.jsdelivr.net/gh/selfhst/icons/svg/matter-light.svg
+            description: Servidor Matter + Ble
             namespace: core
-            app: rhasspy
+            app: matter-stack
             showStats: true
 
     - Control de voz:
@@ -303,6 +302,13 @@ data:
             description: Convertidor de texto a voz
             namespace: core
             app: piper
+            showStats: true
+
+        - Rhasspy:
+            icon: https://play-lh.googleusercontent.com/hzDSG8bVSdrD_oMKHg5FijEMc_2KMH9bUucykpwBlSUvE_7fJZOdBBFJJ03_eNee0A
+            description: Asistente de voz
+            namespace: core
+            app: rhasspy
             showStats: true
 
         - Piper:
@@ -468,6 +474,10 @@ data:
             description: Home Page Dev
             href: https://gethomepage.dev/
             icon: https://raw.githubusercontent.com/gethomepage/homepage/refs/heads/dev/public/android-chrome-192x192.png
+        - Selfh.st:
+            description: Weekly self-hosted content + news delivered straight to your inbox
+            href: https://selfh.st
+            icon: https://selfh.st/content/images/size/w320/format/webp/2025/04/selfh-st-logo-white-1.svg
     - Casa:
         - Presupuesto 2025:
             href: https://docs.google.com/spreadsheets/d/1WkQEUSmbAceJsDM3PLn_cwSAMC_PQzjrqVRBOe_alNA/edit?gid=1758594645#gid=1758594645
