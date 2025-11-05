@@ -17,7 +17,7 @@ jobs:
 
       - uses: qoomon/actions--setup-git@v1
         with:
-          user: catuai
+          user: actor
 
       - name: Apply Kustomizations
         uses: actions-hub/kubectl@master
