@@ -4,6 +4,7 @@ metadata:
   name: k8s-runner
   namespace: actions
 spec:
+  image: ghcr.io/actions/actions-runner:latest
   ephemeral: false
   organization: citocafecito-homelab
   env: []

@@ -15,6 +15,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v5
 
+      - uses: qoomon/actions--setup-git@v1
+        with:
+          user: catuai
+
       - name: Apply Kustomizations
         uses: actions-hub/kubectl@master
         env:
