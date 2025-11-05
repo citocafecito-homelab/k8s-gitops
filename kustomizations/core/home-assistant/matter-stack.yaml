@@ -66,15 +66,6 @@ spec:
             - CAP_NET_RAW
             - SYS_ADMIN
             - NET_ADMIN
-          sysctls:
-          - name: net.ipv4.conf.all.forwarding
-            value: "1"
-          - name: net.ipv4.conf.all.mc_forwarding
-            value: "1"
-          - name: net.ipv6.conf.all.forwarding
-            value: "1"
-          - name: net.ipv6.conf.all.mc_forwarding
-            value: "1"
           appArmorProfile:
             type: Unconfined
         volumeMounts:
