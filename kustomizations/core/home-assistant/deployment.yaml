@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: home-assistant
-        image: docker.io/homeassistant/home-assistant:2025.10
+        image: docker.io/homeassistant/home-assistant:2025.11
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8123
