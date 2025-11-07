@@ -65,7 +65,7 @@ spec:
         - name: movies
           mountPath: /movies
         - name: series
-          mountPath: /series
+          mountPath: /tv
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
