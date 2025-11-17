@@ -5,8 +5,9 @@ metadata:
   namespace: actions
 spec:
   image: ghcr.io/actions/actions-runner:latest
-  ephemeral: false
+  ephemeral: true
   organization: citocafecito-homelab
+  dockerdWithinRunnerContainer: false
   env: []
   tolerations:
   - key: "node-role.kubernetes.io/control-plane"

@@ -71,21 +71,3 @@ spec:
           type: DirectoryOrCreate
 ---
 
-
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: openthread
-#   labels:
-#     app: openthread
-# spec:
-#   type: NodePort
-#   selector:
-#     app: openthread
-#   ports:
-#   - name: border-agent
-#     port: 5580
-#     targetPort: 5580
-#   - name: rest
-#     port: 8081
-#     targetPort: 8081
