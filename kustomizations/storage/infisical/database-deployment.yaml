@@ -15,10 +15,6 @@ spec:
         app: infisical-postgresql
         app.kubernetes.io/name: infisical-postgresql
     spec:
-      volumes:
-      - name: infisical-postgres
-        persistentVolumeClaim:
-          claimName: infisical-postgres-pvc
       containers:
       - name: postgres
         image: postgres:15-alpine
@@ -52,3 +48,14 @@ spec:
         volumeMounts:
         - name: infisical-postgres
           mountPath: /mnt/infisical-postgresql
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
+      volumes:
+      - name: infisical-postgres
+        persistentVolumeClaim:
+          claimName: infisical-postgres-pvc
