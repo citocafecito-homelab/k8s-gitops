@@ -55,11 +55,6 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
-      volumes:
-      - name: config
-        hostPath:
-          path: /mnt/prowlarr
-          type: DirectoryOrCreate
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
@@ -67,6 +62,11 @@ spec:
       - key: "node-role.kubernetes.io/master"
         operator: "Exists"
         effect: "NoSchedule"
+      volumes:
+      - name: config
+        hostPath:
+          path: /mnt/prowlarr
+          type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: Service
