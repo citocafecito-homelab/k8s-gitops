@@ -183,19 +183,19 @@ data:
             #   password: ipsum
             #   verify_ssl: false
 
-        # - Pi Hole:
-        #     href: http://pihole.catuai.lan
-        #     icon: https://wp-cdn.pi-hole.net/wp-content/uploads/2016/12/Vortex-R.png
-        #     description: Ad Guard y DNS Resolver (Internal)
-        #     namespace: networking
-        #     app: pihole
-        #     showStats: true
-        #     ping: http://192.168.1.10/api/info/login
-        #     widget:
-        #       type: pihole
-        #       url: http://192.168.1.10
-        #       version: 6
-        #       key: "{{HOMEPAGE_VAR_PIHOLE_TOKEN}}"
+        - Pi Hole:
+            href: http://pihole.lan
+            icon: https://wp-cdn.pi-hole.net/wp-content/uploads/2016/12/Vortex-R.png
+            description: Ad Guard y DNS Resolver (Internal)
+            namespace: networking
+            app: pihole
+            showStats: true
+            ping: http://192.168.1.10/api/info/login
+            widget:
+              type: pihole
+              url: http://192.168.1.10
+              version: 6
+              key: "{{HOMEPAGE_VAR_PIHOLE_TOKEN}}"
               
         - Red:
             href: http://192.168.1.10:30880/
