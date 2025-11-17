@@ -178,7 +178,7 @@ data:
             description: RouterOS Dashboard (Internal)
             # widget:
             #   type: mikrotik
-            #   url: http://192.168.1.10:30123
+            #   url: http://192.168.1.10:8123
             #   username: lorem
             #   password: ipsum
             #   verify_ssl: false
@@ -207,7 +207,7 @@ data:
             ping: http://192.168.1.10:30880/api/healthcheck
             widget:
               type: speedtest
-              url: http://speedtest-tracker-service.networking.svc.cluster.local
+              url: http://speedtest-tracker.networking.svc.cluster.local
               version: 2
               key: "{{HOMEPAGE_VAR_SPEEDTEST_TOKEN}}"
               bitratePrecision: 3
@@ -225,7 +225,7 @@ data:
             href: https://vault.citocafecito.work/
             description: Gestión de secretos y claves
             icon: https://icon.icepanel.io/Technology/svg/HashiCorp-Vault.svg
-            ping: http://192.168.1.10:30200/v1/sys/health
+            ping: http://192.168.1.226/v1/sys/health
             namespace: core
             app: vault
             showStats: true
@@ -260,13 +260,13 @@ data:
             href: https://home.citocafecito.work
             description: Centro de mando para la gestión y automatización del hogar
             icon: https://upload.wikimedia.org/wikipedia/en/thumb/4/49/Home_Assistant_logo_%282023%29.svg/1200px-Home_Assistant_logo_%282023%29.svg.png
-            ping: http://192.168.1.10:30123/api
+            ping: http://192.168.1.10:8123/api
             namespace: core
             app: home-assistant
             showStats: true
             widget:
               type: homeassistant
-              url: http://192.168.1.10:30123
+              url: http://192.168.1.10:8123
               key: "{{HOMEPAGE_VAR_HA_TOKEN}}"
               custom:
                 - template: "{{ states.switch|selectattr('state','equalto','on')|list|length }}"
@@ -347,13 +347,13 @@ data:
             href: https://suwayomi.citocafecito.work
             description: Lector de Manga
             icon: https://raw.githubusercontent.com/Suwayomi/Suwayomi-Server/refs/heads/master/server/src/main/resources/icon/faviconlogo.png
-            ping: http://192.168.1.10:30080
+            ping: http://192.168.1.231:30080
             namespace: media
             app: suwayomi
             showStats: true
             widget:
               type: suwayomi
-              url: http://192.168.1.10:30080
+              url: http://suwayomi.media.svc.cluster.local:8181
               username: "{{HOMEPAGE_VAR_SUWAYOMI_USERNAME}}"
               password: "{{HOMEPAGE_VAR_SUWAYOMI_PASSWORD}}"
               category: 1

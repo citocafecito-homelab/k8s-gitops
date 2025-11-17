@@ -69,11 +69,18 @@ spec:
         - containerPort: 12101
         resources:
           requests:
-            cpu: 10m
+            cpu: 5m
             memory: 128Mi
         volumeMounts:
         - name: rhasspy-storage
           mountPath: /data
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
       volumes:
       - name: rhasspy-storage
         persistentVolumeClaim:

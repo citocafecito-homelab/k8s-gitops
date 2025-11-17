@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matter
+  labels:
+    app.kubernetes.io/name: matter
+    app.kubernetes.io/part-of: home-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: matter
+      app.kubernetes.io/name: matter
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: matter
+        app.kubernetes.io/name: matter
+        app.kubernetes.io/part-of: home-assistant
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+      - name: matter
+        image: ghcr.io/matter-js/python-matter-server:stable
+        imagePullPolicy: IfNotPresent
+        args:
+        - --storage-path=/data
+        - --paa-root-cert-dir=/data/credentials
+        - --bluetooth-adapter=0
+        - --primary-interface=enp1s0
+        - --port=5582
+        env:
+        - name: LOG_LEVEL
+          value: "debug"
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        ports:
+        - containerPort: 5582
+        resources:
+          requests:
+            cpu: 5m
+            memory: 256Mi
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5582
+        securityContext:
+          privileged: true
+          allowPrivilegeEscalation: true
+          capabilities:
+            add:
+            - CAP_NET_RAW
+            - NET_ADMIN
+        volumeMounts:
+        - name: matter-config
+          mountPath: /data
+        - name: dbus-socket
+          mountPath: /run/dbusls
+      volumes:
+      - name: matter-config
+        persistentVolumeClaim:
+          claimName: matter-pvc
+      - name: dbus-socket
+        hostPath:
+          path: /run/dbus
+          type: Directory
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: matter
+  labels:
+    app.kubernetes.io/name: matter
+    app.kubernetes.io/part-of: home-assistant
+spec:
+  selector:
+    app: matter
+  ports:
+  - port: 5582
+    targetPort: 5582
+    protocol: TCP
+    name: http

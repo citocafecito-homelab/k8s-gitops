@@ -49,7 +49,7 @@ spec:
         - containerPort: 8095
         resources:
           requests:
-            cpu: 10m
+            cpu: 5m
             memory: 128Mi
         securityContext:
           privileged: true

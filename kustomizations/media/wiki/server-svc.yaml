@@ -4,12 +4,13 @@ metadata:
   name: wikijs
   labels:
     app.kubernetes.io/name: wikijs
+    type: LoadBalancer
 spec:
-  type: NodePort
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.231
   selector:
     app.kubernetes.io/name: wikijs
   ports:
   - name: http
-    port: 3000
+    port: 80
     targetPort: 3000
-    nodePort: 30300

@@ -22,11 +22,20 @@ spec:
         - containerPort: 5432
         env:
         - name: POSTGRES_DB
-          value: wikijs
+          valueFrom:
+            configMapKeyRef:
+              name: wikijs-config
+              key: DB_NAME
         - name: POSTGRES_USER
-          value: wikijs
+          valueFrom:
+            configMapKeyRef:
+              name: wikijs-config
+              key: DB_USER
         - name: POSTGRES_PASSWORD
-          value: wikijs123
+          valueFrom:
+            configMapKeyRef:
+              name: wikijs-config
+              key: DB_PASSWORD
         volumeMounts:
         - name: wikijs-postgresql-storage
           mountPath: /var/lib/postgresql/data
@@ -44,8 +53,15 @@ spec:
           failureThreshold: 3
         resources:
           requests:
-            cpu: 25m
+            cpu: 10m
             memory: 512Mi
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
       volumes:
       - name: wikijs-postgresql-storage
         persistentVolumeClaim:

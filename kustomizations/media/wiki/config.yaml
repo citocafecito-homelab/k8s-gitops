@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wikijs-config
+data:
+  DB_NAME: "wikijs"
+  DB_USER: "wikijs"
+  DB_PASSWORD: "yq=40sGkjbL76-G."

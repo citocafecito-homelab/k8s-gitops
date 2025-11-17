@@ -22,11 +22,20 @@ spec:
         - containerPort: 5432
         env:
         - name: POSTGRES_DB
-          value: suwayomi
+          valueFrom:
+            configMapKeyRef:
+              name: suwayomi-config
+              key: DATABASE_NAME
         - name: POSTGRES_USER
-          value: suwayomi
+          valueFrom:
+            configMapKeyRef:
+              name: suwayomi-config
+              key: DATABASE_USERNAME
         - name: POSTGRES_PASSWORD
-          value: suwayomi123
+          valueFrom:
+            configMapKeyRef:
+              name: suwayomi-config
+              key: DATABASE_PASSWORD
         volumeMounts:
         - name: suwayomi-postgresql-storage
           mountPath: /var/lib/postgresql/data
@@ -44,8 +53,15 @@ spec:
           failureThreshold: 3
         resources:
           requests:
-            cpu: 25m
+            cpu: 10m
             memory: 512Mi
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
       volumes:
       - name: suwayomi-postgresql-storage
         persistentVolumeClaim:

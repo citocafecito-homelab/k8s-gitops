@@ -65,7 +65,7 @@ spec:
           containerPort: 9090
         resources:
           requests:
-            cpu: 25m
+            cpu: 5m
             memory: 256Mi
         livenessProbe:
           httpGet:

@@ -1,18 +1,3 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: suwayomi-config
-  namespace: media
-data:
-  TZ: America/Bogota
-  BIND_ADDRESS: 0.0.0.0
-  AUTH_MODE: BASIC_AUTH
-  DATABASE_TYPE: POSTGRESQL
-  DATABASE_URL: postgresql://suwayomi-postgresql:5432/suwayomi
-  DATABASE_USERNAME: suwayomi
-  DATABASE_PASSWORD: suwayomi123
-  EXTENSION_REPOS: '["https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json"]'
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -58,11 +43,18 @@ spec:
             name: suwayomi-config
         resources:
           requests:
-            cpu: 20m
+            cpu: 10m
             memory: 1024Mi
         volumeMounts:
         - name: suwayomi-storage
-          mountPath: /home/suwayomi/data
+          mountPath: /home/suwayomi/.local/share/Tachidesk
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
       volumes:
       - name: suwayomi-storage
         persistentVolumeClaim:

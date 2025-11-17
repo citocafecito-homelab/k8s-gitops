@@ -5,17 +5,20 @@ resources:
 # Home Assistant Core
 - config.yaml
 - pvc.yaml
-- matter-stack.yaml
+# - matter-stack.yaml
 - deployment.yaml
 - svc.yaml
 
 # Agents
 - mosquitto.yaml
-- zwave.yaml
+- matter.yaml
+- thread.yaml
+# - zwave.yaml
 # - zigbee2mqtt.yaml # Unnecesary if used ZHA 
 - ring-mqtt.yaml
 - rhasspy.yaml
 - whisper.yaml
 - piper.yaml
 - openwakeword.yaml
-- music-assistant.yaml
+
+# - music-assistant.yaml

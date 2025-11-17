@@ -67,7 +67,7 @@ spec:
           value: "true"
         resources:
           requests:
-            cpu: 20m
+            cpu: 5m
             memory: 512Mi
         securityContext:
           privileged: true

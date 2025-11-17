@@ -36,7 +36,7 @@ spec:
         resources:
           requests:
             memory: 128Mi
-            cpu: 10m
+            cpu: 5m
         livenessProbe:
           httpGet:
             path: /api/v1/status
@@ -86,15 +86,14 @@ kind: Service
 metadata:
   name: jellyseerr
   labels:
-    app: jellyseerr
-    app.kubernetes.io/name: jellyseerr
-    app.kubernetes.io/part-of: streaming-stack
+    type: LoadBalancer
 spec:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.243
   selector:
     app: jellyseerr
   ports:
   - name: http
-    port: 5055
+    protocol: TCP
+    port: 80
     targetPort: 5055
-    nodePort: 30055
-  type: NodePort

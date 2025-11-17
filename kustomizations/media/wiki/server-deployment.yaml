@@ -14,10 +14,6 @@ spec:
         app: wikijs
         app.kubernetes.io/name: wikijs
     spec:
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
       containers:
       - name: wikijs
         image: ghcr.io/requarks/wiki:latest
@@ -25,20 +21,29 @@ spec:
         - name: DB_TYPE
           value: "postgres"
         - name: DB_HOST
-          value: "wikijs-postgresql"
+          value: "wikijs-postgresql.media.svc.cluster.local"
         - name: DB_PORT
           value: "5432"
         - name: DB_NAME
-          value: "wikijs"
+          valueFrom:
+            configMapKeyRef:
+              name: wikijs-config
+              key: DB_NAME
         - name: DB_USER
-          value: "wikijs"
+          valueFrom:
+            configMapKeyRef:
+              name: wikijs-config
+              key: DB_USER
         - name: DB_PASS
-          value: "wikijs123"
+          valueFrom:
+            configMapKeyRef:
+              name: wikijs-config
+              key: DB_PASSWORD
         ports:
         - containerPort: 3000
         resources:
           requests:
-            cpu: 25m
+            cpu: 5m
             memory: 512Mi
         livenessProbe:
           httpGet:
@@ -52,3 +57,10 @@ spec:
             port: 3000
           periodSeconds: 15
           failureThreshold: 3
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"

@@ -35,16 +35,15 @@ spec:
         - name: ha-configmap
           mountPath: /config/configuration.yaml
           subPath: configuration.yaml
+        # - name: dev-bluetooth
+        #   mountPath: /dev
         - name: dbus-socket
           mountPath: /var/run/dbus
           readOnly: true
-        - name: dev-bluetooth
-          mountPath: /dev
-          readOnly: true
         resources:
           requests:
-            cpu: 10m
-            memory: 1024Mi
+            cpu: 5m
+            memory: 2048Mi
         readinessProbe:
           httpGet:
             path: /
@@ -77,10 +76,10 @@ spec:
       - name: ha-configmap
         configMap:
           name: home-assistant-config
-      - name: dev-bluetooth
-        hostPath:
-          path: /dev
-          type: Directory
+      # - name: dev-bluetooth
+      #   hostPath:
+      #     path: /dev
+      #     type: Directory
       - name: dbus-socket
         hostPath:
           path: /var/run/dbus

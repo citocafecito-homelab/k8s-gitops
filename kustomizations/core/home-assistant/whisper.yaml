@@ -57,14 +57,21 @@ spec:
         - containerPort: 9000
         resources:
           requests:
-            cpu: 100m
+            cpu: 5m
             memory: 512Mi
           limits:
-            cpu: 2000m
+            cpu: 100m
             memory: 2Gi
         volumeMounts:
         - name: whisper-data
           mountPath: /data
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
       volumes:
       - name: whisper-data
         persistentVolumeClaim:

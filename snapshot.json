@@ -1,4 +1,152 @@
 {
-    "timestamp": 1761664484.7571023,
-    "devices": []
+    "timestamp": 1762977548.9222815,
+    "devices": [
+        {
+            "name": "Air Fryer",
+            "id": "eb9035ad5e31c7bcfdfc9t",
+            "key": "8~UVa14}}D6w[6U9"
+        },
+        {
+            "name": "Palito largo de luz",
+            "id": "eb6d117f8f7fc36accascb",
+            "key": "OOgXSP-<Xh3u|E?P"
+        },
+        {
+            "name": "Comedero de Michitos",
+            "id": "ebca195e68fb97f9b28u3r",
+            "key": "/S-yw;<20F!Gl|lj"
+        },
+        {
+            "name": "Ble Gateway",
+            "id": "eb31ed24c178ed3a94laai",
+            "key": "3pr707dDdqTC]p9)"
+        },
+        {
+            "name": "Interruptor Cocina",
+            "id": "eb5472580474b893d8xpf0",
+            "key": "U{=&MxKegdjrtY:N"
+        },
+        {
+            "name": "Interruptor Entrada",
+            "id": "eb623f3dc5b9cec221o84l",
+            "key": "dct$l'5Z|hy-an(4"
+        },
+        {
+            "name": "Roberto ",
+            "id": "eb68ef26fedd8fe42ddzoe",
+            "key": "-TJZzxE{T/-.z:oV"
+        },
+        {
+            "name": "Interruptor Principal",
+            "id": "eb501a7322d9b7ff3fu08u",
+            "key": "nqm9$A6cf~#f4(T5"
+        },
+        {
+            "name": "Enchufe 2",
+            "id": "ebe4ed358e5868b513zrki",
+            "key": "=RW-x8P>mfk/Z;GD"
+        },
+        {
+            "name": "Enchufe 1",
+            "id": "eba69aa4fcec328b966qoz",
+            "key": "q6>?>)90V3|zqSGK"
+        },
+        {
+            "name": "Enchufe",
+            "id": "ebbd8c8edda9d67987tysk",
+            "key": "@~Xmxu^vmI#@LsC["
+        },
+        {
+            "name": "Interruptor Auxiliar",
+            "id": "eb863b5ef1c66a7d4cidcs",
+            "key": "SZKfa3my8?Mo;eGa"
+        },
+        {
+            "name": "Enchufe 3",
+            "id": "eb4ef32230ef7347006b17",
+            "key": "A[mFA~}O1[+osU[o"
+        },
+        {
+            "name": "Aromatisse",
+            "id": "ebb45119b8a0c26871og8f",
+            "key": "s[{B<:abQb*5!C-6"
+        },
+        {
+            "name": "Nochero",
+            "id": "eb0ddf24f4964dd990d2q3",
+            "key": "<ln>P.*<#fsT5]>U"
+        },
+        {
+            "name": "Interruptor Balcón",
+            "id": "eb2dd1a5b779492c02o4qy",
+            "key": "7nUG64>5~nkp/>'w"
+        },
+        {
+            "name": "Multi-Mode Gateway",
+            "id": "eb809d87c7d52285f5ahjd",
+            "key": "#D$'<CLl]5y+FnUH",
+            "subDevices": [
+                {
+                    "name": "Remote Dimmer",
+                    "id": "eb2b757c7b74b63b6aql3f",
+                    "key": "a4c13827c0f50f99"
+                },
+                {
+                    "name": "Wireless Switch",
+                    "id": "ebf5050eee7300d218fvzj",
+                    "key": "b0c7defffe7f8a82"
+                }
+            ]
+        },
+        {
+            "name": "Ventilador ",
+            "id": "08107077840d8e5483d6",
+            "key": "|S>VR:B>ikZ69/UW"
+        },
+        {
+            "name": "bombillo Escalera",
+            "id": "eb918b95310ca9cae1boab",
+            "key": "8TLHI.?^!scS:+'$"
+        },
+        {
+            "name": "Multitoma",
+            "id": "eb4fa2c888cb1abc09hg1j",
+            "key": "gky##cFgD{1m{(d^"
+        },
+        {
+            "name": "Interruptor Visitas",
+            "id": "eb2d1af690dff15d9fauof",
+            "key": "rekXm5>9Ql?=FLvP"
+        },
+        {
+            "name": "Ismael",
+            "id": "eb6387cfaa7c9265baa6qz",
+            "key": "_l_UAe8V]]b=H152"
+        },
+        {
+            "name": "Interruptor Baño Principal",
+            "id": "004538527c87ce8ccf5a",
+            "key": "#y6&:4Qth9}9qL]2"
+        },
+        {
+            "name": "Motor Garaje",
+            "id": "31078004dc4f22d1da50",
+            "key": "{P/w).*JXMY8!EsX"
+        },
+        {
+            "name": "Purificador",
+            "id": "05528600dc4f22e94417",
+            "key": "EAHl!_|!zr~BEcJ="
+        },
+        {
+            "name": "Interruptor Oficina",
+            "id": "eb70330664b17f34adfayy",
+            "key": "Pmd5/WfdBBBRe..v"
+        },
+        {
+            "name": "Smart TV Backlight",
+            "id": "eb67440bb2f567b4deovc5",
+            "key": "x!ZZJCrbF**mQUe8"
+        }
+    ]
 }

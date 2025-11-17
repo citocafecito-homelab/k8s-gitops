@@ -4,13 +4,18 @@ metadata:
   name: suwayomi
   labels:
     app.kubernetes.io/name: suwayomi
+    type: LoadBalancer
 spec:
-  type: NodePort
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.230
   selector:
     app.kubernetes.io/name: suwayomi
   ports:
   - name: http
     protocol: TCP
-    port: 4567
+    port: 80
     targetPort: 4567
-    nodePort: 30080
+  - name: web
+    protocol: TCP
+    port: 8181
+    targetPort: 8181

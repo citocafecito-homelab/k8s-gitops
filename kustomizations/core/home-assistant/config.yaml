@@ -68,7 +68,7 @@ data:
             icon: mdi:home-group
             state: >-
               {{ (is_state('person.habid_manzur', 'home')
-                  and is_state('person.julieth_sarmiento', 'home')) }}
+                  or is_state('person.julieth_sarmiento', 'home')) }}
 
           - name: "Casa ocupada"
             unique_id: casa_ocupada
