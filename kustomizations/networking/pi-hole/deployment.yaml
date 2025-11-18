@@ -30,19 +30,9 @@ spec:
       containers:
       - name: pihole
         image: pihole/pihole:2025.11.0
-        env:
-        - name: DNSMASQ_LISTENING
-          value: all
-        - name: FTLCONF_misc_etc_dnsmasq_d
-          value: "true"
-        - name: TZ
-          value: "America/Bogota"
-        - name: FTLCONF_dns_revServers
-          value: 'true,192.168.1.0/16,192.168.1.1'
-        - name: FTLCONF_dns_upstreams
-          value: '1.1.1.1;1.0.0.1;8.8.8.8;8.8.4.4'
-        - name: WEBPASSWORD_FILE
-          value: "/vault/secrets/admin_password"
+        envFrom:
+        - configMapRef:
+            name: pihole-env
         ports:
         - name: dns-tcp
           containerPort: 53
