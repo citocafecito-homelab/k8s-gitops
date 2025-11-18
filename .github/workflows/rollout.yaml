@@ -1,0 +1,43 @@
+name: Manual Deployment Restart
+
+on:
+  workflow_dispatch:
+    inputs:
+      namespace:
+        description: "Namespace del deployment"
+        required: true
+        default: "default"
+      deployment:
+        description: "Nombre del deployment a reiniciar"
+        required: true
+
+jobs:
+  restart:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5
+
+      - uses: yokawasa/action-setup-kube-tools@v0.13.1
+        with:
+          setup-tools: |
+            kubectl
+          kubectl: '1.33.4'
+
+      - name: Setup kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${KUBE_CONFIG}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+
+      - name: Restart Deployment
+        run: |
+          echo "Reiniciando deployment: ${{ inputs.deployment }} en namespace: ${{ inputs.namespace }}"
+          kubectl rollout restart deployment/${{ inputs.deployment }} -n ${{ inputs.namespace }}
+
+      - name: Wait for rollout to finish
+        run: |
+          kubectl rollout status deployment/${{ inputs.deployment }} -n ${{ inputs.namespace }}
