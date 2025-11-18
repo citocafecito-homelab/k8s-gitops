@@ -32,6 +32,7 @@ metadata:
 data:
   custom-override.conf: |
     # Redirección de dominios públicos a IPs internas
+    rebind-domain-ok=/citocafecito.work/
     address=/suwayomi.citocafecito.work/192.168.1.230
     address=/habiflix.citocafecito.work/192.168.1.242
     address=/jellyfin.citocafecito.work/192.168.1.242
