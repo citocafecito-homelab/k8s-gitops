@@ -3,7 +3,6 @@ kind: ConfigMap
 metadata:
   name: otbr-env
 data:
-  THREAD_BORDER_AGENT_URL: "ws://openthread.core.svc.cluster.local:8080"
   OT_RCP_DEVICE: "spinel+hdlc+uart:///dev/ttyUSB0?uart-baudrate=115200"
   OT_INFRA_IF: "enp1s0"
   OT_THREAD_IF: "wpan0"
@@ -70,4 +69,5 @@ spec:
           path: /mnt/openthread
           type: DirectoryOrCreate
 ---
+
 
