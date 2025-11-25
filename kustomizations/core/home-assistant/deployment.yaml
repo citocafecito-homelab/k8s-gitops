@@ -35,8 +35,6 @@ spec:
         - name: ha-configmap
           mountPath: /config/configuration.yaml
           subPath: configuration.yaml
-        # - name: dev-bluetooth
-        #   mountPath: /dev
         - name: dbus-socket
           mountPath: /var/run/dbus
           readOnly: true
@@ -76,10 +74,6 @@ spec:
       - name: ha-configmap
         configMap:
           name: home-assistant-config
-      # - name: dev-bluetooth
-      #   hostPath:
-      #     path: /dev
-      #     type: Directory
       - name: dbus-socket
         hostPath:
           path: /var/run/dbus

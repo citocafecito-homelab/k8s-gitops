@@ -21,6 +21,8 @@ spec:
         app.kubernetes.io/part-of: home-assistant
     spec:
       hostNetwork: true
+      hostIPC: true
+      hostPID: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: matter
@@ -37,12 +39,16 @@ spec:
           value: "debug"
         - name: PYTHONUNBUFFERED
           value: "1"
+        - name: CHIP_DEVICE_CONFIG_WIFI_IFACE
+          value: "enp1s0" 
+        - name: CHIP_MDNS_INTERFACE
+          value: "enp1s0"
         ports:
         - containerPort: 5582
         resources:
           requests:
-            cpu: 5m
-            memory: 256Mi
+            cpu: 100m
+            memory: 512Mi
         readinessProbe:
           httpGet:
             path: /
@@ -52,13 +58,20 @@ spec:
           allowPrivilegeEscalation: true
           capabilities:
             add:
-            - CAP_NET_RAW
             - NET_ADMIN
+            - NET_RAW
+            - NET_BROADCAST
+            - NET_BIND_SERVICE
+            - SYS_ADMIN
         volumeMounts:
         - name: matter-config
           mountPath: /data
         - name: dbus-socket
-          mountPath: /run/dbusls
+          mountPath: /run/dbus
+        - name: sysfs
+          mountPath: /sys
+        - name: bluetooth-dev
+          mountPath: /dev/bus/usb
       volumes:
       - name: matter-config
         persistentVolumeClaim:
@@ -67,6 +80,13 @@ spec:
         hostPath:
           path: /run/dbus
           type: Directory
+      - name: sysfs
+        hostPath:
+          path: /sys
+      - name: bluetooth-dev
+        hostPath:
+          path: /dev/bus/usb
+          type: DirectoryOrCreate
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"

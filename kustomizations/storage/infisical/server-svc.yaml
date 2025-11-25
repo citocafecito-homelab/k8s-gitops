@@ -6,7 +6,7 @@ metadata:
     type: LoadBalancer
 spec:
   type: LoadBalancer
-  loadBalancerIP: 192.168.1.238
+  loadBalancerIP: 192.168.1.33
   selector:
     app: infisical
   ports:

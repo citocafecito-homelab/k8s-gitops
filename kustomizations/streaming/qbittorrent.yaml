@@ -80,7 +80,6 @@ spec:
   - name: webui
     port: 8080
     targetPort: 8080
-    nodePort: 30081
   - name: bittorrent-tcp
     port: 6881
     targetPort: 6881
@@ -89,4 +88,26 @@ spec:
     port: 6881
     targetPort: 6881
     protocol: UDP
-  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qbittorrent-lb
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.35
+  ports:
+  - name: webui
+    port: 80
+    targetPort: 8080
+    protocol: TCP
+  - name: tcp
+    port: 6881
+    targetPort: 6881
+    protocol: TCP
+  - name: udp
+    port: 6881
+    targetPort: 6881
+    protocol: UDP
+  selector:
+    app: qbittorrent

@@ -7,7 +7,7 @@ metadata:
     type: LoadBalancer
 spec:
   type: LoadBalancer
-  loadBalancerIP: 192.168.1.226
+  loadBalancerIP: 192.168.1.18
   selector:
     app: vault
   ports:

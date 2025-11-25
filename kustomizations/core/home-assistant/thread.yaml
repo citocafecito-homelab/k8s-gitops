@@ -46,12 +46,12 @@ spec:
           capabilities:
             add:
             - NET_ADMIN
+            - SYS_RAWIO
         volumeMounts:
-        - name: serial-device
-          mountPath: /dev/ttyUSB0
-          readOnly: false
         - name: otbr-data
           mountPath: /data
+        - name: rcp
+          mountPath: /dev/ttyUSB0
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
@@ -60,14 +60,27 @@ spec:
         operator: "Exists"
         effect: "NoSchedule"
       volumes:
-      - name: serial-device
-        hostPath:
-          path: /dev/ttyUSB0
-          type: CharDevice
       - name: otbr-data
         hostPath:
           path: /mnt/openthread
           type: DirectoryOrCreate
+      - name: rcp
+        hostPath:
+          path: /dev/ttyUSB0
+          type: CharDevice
 ---
-
-
+apiVersion: v1
+kind: Service
+metadata:
+  name: openthread
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: openthread
+  ports:
+  - name: api
+    port: 8081
+    targetPort: 8081
+  - name: http
+    port: 5580
+    targetPort: 5580

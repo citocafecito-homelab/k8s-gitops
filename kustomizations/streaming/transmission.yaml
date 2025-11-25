@@ -83,13 +83,34 @@ spec:
   - name: webui
     port: 9091
     targetPort: 9091
-    nodePort: 30991
-  - name: torrent-tcp
+  - name: tcp
     port: 51413
     targetPort: 51413
     protocol: TCP
-  - name: torrent-udp
+  - name: udp
     port: 51413
     targetPort: 51413
     protocol: UDP
-  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission-lb
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.36
+  ports:
+  - name: webui
+    port: 80
+    targetPort: 9091
+    protocol: TCP
+  - name: tcp
+    port: 51413
+    targetPort: 51413
+    protocol: TCP
+  - name: udp
+    port: 51413
+    targetPort: 51413
+    protocol: UDP
+  selector:
+    app: transmission
