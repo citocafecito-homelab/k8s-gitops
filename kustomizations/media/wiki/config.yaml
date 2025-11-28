@@ -1,8 +1,26 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: wikijs-config
+  name: wikijs-database
 data:
   DB_NAME: "wikijs"
   DB_USER: "wikijs"
   DB_PASSWORD: "yq=40sGkjbL76-G."
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wikijs-config
+data:
+  config.yml: |
+    port: 3000
+    bindIP: 0.0.0.0
+    db:
+      type: postgres
+      host: 'wikijs-postgresql.media.svc.cluster.local'
+      port: 5432
+      db: '$(DB_NAME)'
+      user: '$(DB_USER)'
+      pass: '$(DB_PASS)'
+    logLevel: warn
+    bodyParserLimit: 5mb

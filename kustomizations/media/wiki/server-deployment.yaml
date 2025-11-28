@@ -18,26 +18,20 @@ spec:
       - name: wikijs
         image: ghcr.io/requarks/wiki:latest
         env:
-        - name: DB_TYPE
-          value: "postgres"
-        - name: DB_HOST
-          value: "wikijs-postgresql.media.svc.cluster.local"
-        - name: DB_PORT
-          value: "5432"
         - name: DB_NAME
           valueFrom:
             configMapKeyRef:
-              name: wikijs-config
+              name: wikijs-database
               key: DB_NAME
         - name: DB_USER
           valueFrom:
             configMapKeyRef:
-              name: wikijs-config
+              name: wikijs-database
               key: DB_USER
         - name: DB_PASS
           valueFrom:
             configMapKeyRef:
-              name: wikijs-config
+              name: wikijs-database
               key: DB_PASSWORD
         ports:
         - containerPort: 3000
@@ -57,6 +51,10 @@ spec:
             port: 3000
           periodSeconds: 15
           failureThreshold: 3
+        volumeMounts:
+        - name: config
+          mountPath: /wiki/config.yml
+          subPath: config.yml
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
@@ -64,3 +62,7 @@ spec:
       - key: "node-role.kubernetes.io/master"
         operator: "Exists"
         effect: "NoSchedule"
+      volumes:
+      - name: config
+        configMap:
+          name: wikijs-config

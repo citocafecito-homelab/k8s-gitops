@@ -24,17 +24,17 @@ spec:
         - name: POSTGRES_DB
           valueFrom:
             configMapKeyRef:
-              name: wikijs-config
+              name: wikijs-database
               key: DB_NAME
         - name: POSTGRES_USER
           valueFrom:
             configMapKeyRef:
-              name: wikijs-config
+              name: wikijs-database
               key: DB_USER
         - name: POSTGRES_PASSWORD
           valueFrom:
             configMapKeyRef:
-              name: wikijs-config
+              name: wikijs-database
               key: DB_PASSWORD
         volumeMounts:
         - name: wikijs-postgresql-storage
