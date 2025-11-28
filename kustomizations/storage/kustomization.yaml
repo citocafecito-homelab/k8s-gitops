@@ -4,8 +4,8 @@ kind: Kustomization
 resources:
 - minio
 - infisical
+- reactive-resume
 # Work in progress
-# - reactive-resume
 # - next-cloud
 
 namespace: storage

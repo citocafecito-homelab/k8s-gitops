@@ -13,38 +13,63 @@ spec:
       labels:
         app: reactive-resume
         app.kubernetes.io/name: reactive-resume
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: vault
+        vault.hashicorp.com/agent-inject-secret-home-assistant: "secret/data/minio"
+        vault.hashicorp.com/agent-inject-template-storage: |
+          {{ with secret "secret/data/minio" }}
+          export STORAGE_ACCESS_KEY="{{ .Data.data.MINIO_ROOT_USER }}"
+          export STORAGE_SECRET_KEY="{{ .Data.data.MINIO_ROOT_PASSWORD }}"
+          {{ end }}
     spec:
       containers:
       - name: reactive-resume
-        image: ghcr.io/requarks/wiki:latest
+        image: ghcr.io/amruthpillai/reactive-resume
+        command: ["sh", "-c"]
+        args:
+          - |
+            . /vault/secrets/storage && \
+            dumb-init pnpm run start
         env:
-        - name: DB_TYPE
-          value: "postgres"
-        - name: DB_HOST
-          value: "reactive-resume-postgresql.media.svc.cluster.local"
-        - name: DB_PORT
-          value: "5432"
-        - name: DB_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: reactive-resume-config
-              key: DB_NAME
-        - name: DB_USER
-          valueFrom:
-            configMapKeyRef:
-              name: reactive-resume-config
-              key: DB_USER
-        - name: DB_PASS
-          valueFrom:
-            configMapKeyRef:
-              name: reactive-resume-config
-              key: DB_PASSWORD
+        - name: TZ
+          value: America/Bogota
+        - name: PORT
+          value: "3000"
+        - name: NODE_ENV
+          value: "production"
+        - name: PUBLIC_URL
+          value: "http://192.168.1.24"
+        - name: STORAGE_URL
+          value: "http://minio.storage.svc.cluster.local:9000/reactive-resume"
+        - name: DATABASE_URL
+          value: "postgresql://reactive-resume:yq=40sGkjbL76-G.@reactive-resume-postgresql:5432/reactive-resume"
+        - name: CHROME_URL
+          value: "ws://chrome.core.svc.cluster.local:3000"
+        - name: CHROME_TOKEN
+          value: 3nX6AjTZOMdJAFdR
+        - name: STORAGE_ENDPOINT
+          value: "minio.storage.svc.cluster.local"
+        - name: STORAGE_PORT
+          value: "9000"
+        - name: STORAGE_REGION
+          value: "us-east-1"
+        - name: STORAGE_BUCKET
+          value: "reactive-resume"
+        - name: STORAGE_USE_SSL
+          value: "false"
+        - name: STORAGE_SKIP_BUCKET_CHECK
+          value: "false"
+        - name: REFRESH_TOKEN_SECRET
+          value: "dummy-refresh-secret"
+        - name: ACCESS_TOKEN_SECRET
+          value: "dummy-access-secret"
         ports:
         - containerPort: 3000
         resources:
           requests:
             cpu: 5m
-            memory: 512Mi
+            memory: 256Mi
         livenessProbe:
           httpGet:
             path: /healthz
