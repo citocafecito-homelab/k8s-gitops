@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chrome
+  labels:
+    app: chrome
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chrome
+      app.kubernetes.io/name: chrome
+  template:
+    metadata:
+      labels:
+        app: chrome
+        app.kubernetes.io/name: chrome
+    spec:
+      containers:
+        - name: chrome
+          image: ghcr.io/browserless/chromium:v2.18.0
+          env:
+          - name: TIMEOUT
+            value: "10000"
+          - name: CONCURRENT
+            value: "10"
+          - name: TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: chrome-secret
+                key: CHROME_TOKEN
+          - name: EXIT_ON_HEALTH_FAILURE
+            value: "true"
+          - name: PRE_REQUEST_HEALTH_CHECK
+            value: "true"
+          ports:
+            - containerPort: 3000

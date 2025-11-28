@@ -59,19 +59,9 @@ metadata:
   name: pihole-local-override
 data:
   custom-override.conf: |
-    # Permitir mDNS IPv6 (FF02::FB)
-    # listen-address=::1
-    # listen-address=0.0.0.0
-
-    # No bloquee tráfico mDNS
-    # local-service
-
-    # Redirección de dominios públicos a IPs internas
-    # rebind-domain-ok=/citocafecito.work/
-    # address=/suwayomi.citocafecito.work/192.168.1.230
-    # address=/habiflix.citocafecito.work/192.168.1.242
-    # address=/jellyfin.citocafecito.work/192.168.1.242
-    # address=/vault.citocafecito.work/192.168.1.226
+    address=/habiflix.citocafecito.work/192.168.1.40
+    address=/suwayomi.citocafecito.work/192.168.1.23
+    address=/vault.citocafecito.work/192.168.1.18
 ---
 apiVersion: v1
 kind: ConfigMap

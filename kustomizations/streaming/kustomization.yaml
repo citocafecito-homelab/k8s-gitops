@@ -5,11 +5,12 @@ namespace: streaming
 
 resources:
 - config.yaml
+- transmission.yaml
 - qbittorrent.yaml
+- flaresolverr.yaml
 - prowlarr.yaml
 - sonarr.yaml
 - radarr.yaml
 - bazarr.yaml
 - jellyserr.yaml
 - jellyfin.yaml
-- transmission.yaml

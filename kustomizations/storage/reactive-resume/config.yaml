@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: reactive-resume-config
+data:
+  DB_NAME: "reactive-resume"
+  DB_USER: "reactive-resume"
+  DB_PASSWORD: "yq=40sGkjbL76-G."

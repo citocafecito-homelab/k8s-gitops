@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: reactive-resume-postgresql
+spec:
+  serviceName: reactive-resume-postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reactive-resume-postgresql
+      app.kubernetes.io/name: reactive-resume-postgresql
+  template:
+    metadata:
+      labels:
+        app: reactive-resume-postgresql
+        app.kubernetes.io/name: reactive-resume-postgresql
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: reactive-resume-config
+              key: DB_NAME
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              name: reactive-resume-config
+              key: DB_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: reactive-resume-config
+              key: DB_PASSWORD
+        volumeMounts:
+        - name: reactive-resume-postgresql-storage
+          mountPath: /var/lib/postgresql/data
+        livenessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "reactive-resume" ]
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "reactive-resume" ]
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 10m
+            memory: 512Mi
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
+      volumes:
+      - name: reactive-resume-postgresql-storage
+        persistentVolumeClaim:
+          claimName: reactive-resume-postgresql-pvc
