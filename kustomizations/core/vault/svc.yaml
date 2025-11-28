@@ -21,10 +21,10 @@ kind: Service
 metadata:
   name: vault
 spec:
-  type: ClusterIP
-  selector:
-    app.kubernetes.io/name: vault
   ports:
   - name: http
     port: 8200
     targetPort: 8200
+  selector:
+    app.kubernetes.io/name: vault
+  type: ClusterIP
