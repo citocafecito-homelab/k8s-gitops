@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linkstack
+  labels:
+    app: linkstack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: linkstack
+  template:
+    metadata:
+      labels:
+        app: linkstack
+    spec:
+      containers:
+      - name: linkstack
+        image: ghcr.io/linkstackorg/linkstack:latest
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        envFrom:
+        - configMapRef:
+            name: linkstack-config
+        volumeMounts:
+        - name: linkstack-storage
+          mountPath: /htdocs
+      volumes:
+      - name: linkstack-storage
+        persistentVolumeClaim:
+          claimName: linkstack-pvc

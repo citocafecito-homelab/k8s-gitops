@@ -31,45 +31,15 @@ spec:
           - |
             . /vault/secrets/storage && \
             dumb-init pnpm run start
-        env:
-        - name: TZ
-          value: America/Bogota
-        - name: PORT
-          value: "3000"
-        - name: NODE_ENV
-          value: "production"
-        - name: PUBLIC_URL
-          value: "http://192.168.1.24"
-        - name: STORAGE_URL
-          value: "http://minio.storage.svc.cluster.local:9000/reactive-resume"
-        - name: DATABASE_URL
-          value: "postgresql://reactive-resume:yq=40sGkjbL76-G.@reactive-resume-postgresql:5432/reactive-resume"
-        - name: CHROME_URL
-          value: "ws://chrome.core.svc.cluster.local:3000"
-        - name: CHROME_TOKEN
-          value: 3nX6AjTZOMdJAFdR
-        - name: STORAGE_ENDPOINT
-          value: "minio.storage.svc.cluster.local"
-        - name: STORAGE_PORT
-          value: "9000"
-        - name: STORAGE_REGION
-          value: "us-east-1"
-        - name: STORAGE_BUCKET
-          value: "reactive-resume"
-        - name: STORAGE_USE_SSL
-          value: "false"
-        - name: STORAGE_SKIP_BUCKET_CHECK
-          value: "false"
-        - name: REFRESH_TOKEN_SECRET
-          value: "dummy-refresh-secret"
-        - name: ACCESS_TOKEN_SECRET
-          value: "dummy-access-secret"
+        envFrom:
+        - configMapRef:
+            name: reactive-resume-config
         ports:
         - containerPort: 3000
         resources:
           requests:
             cpu: 5m
-            memory: 256Mi
+            memory: 64Mi
         livenessProbe:
           httpGet:
             path: /healthz

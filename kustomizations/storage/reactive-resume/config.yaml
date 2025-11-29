@@ -1,8 +1,31 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: reactive-resume-config
+  name: reactive-db
 data:
   DB_NAME: "reactive-resume"
   DB_USER: "reactive-resume"
   DB_PASSWORD: "yq=40sGkjbL76-G."
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: reactive-resume-config
+  namespace: default
+data:
+  TZ: "America/Bogota"
+  PORT: "3000"
+  NODE_ENV: "production"
+  PUBLIC_URL: "http://192.168.1.24"
+  STORAGE_URL: "http://minio.storage.svc.cluster.local:9000/reactive-resume"
+  DATABASE_URL: "postgresql://reactive-resume:yq=40sGkjbL76-G.@reactive-resume-postgresql:5432/reactive-resume"
+  CHROME_URL: "ws://chrome.core.svc.cluster.local:3000"
+  CHROME_TOKEN: "3nX6AjTZOMdJAFdR"
+  STORAGE_ENDPOINT: "minio.storage.svc.cluster.local"
+  STORAGE_PORT: "9000"
+  STORAGE_REGION: "us-east-1"
+  STORAGE_BUCKET: "reactive-resume"
+  STORAGE_USE_SSL: "false"
+  STORAGE_SKIP_BUCKET_CHECK: "false"
+  REFRESH_TOKEN_SECRET: "dummy-refresh-secret"
+  ACCESS_TOKEN_SECRET: "dummy-access-secret"

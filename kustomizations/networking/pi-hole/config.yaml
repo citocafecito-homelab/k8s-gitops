@@ -29,20 +29,27 @@ metadata:
   name: pihole-custom-dns
 data:
   custom.conf: |
+    # Network
     address=/router.lan/192.168.1.1
     address=/deco.lan/192.168.1.3
     address=/deco-aux.lan/192.168.1.4
     address=/deco-x20.lan/192.168.1.5
+
+    # Servers
     address=/catuai.lan/192.168.1.10
-    address=/pneuma.lan/192.168.1.220
-    address=/julie.lan/192.168.1.221
+
+    # Services
     address=/vault.lan/192.168.1.18
-    address=/minio.lan/192.168.1.34
-    address=/resume.lan/192.168.1.31
-    address=/cv.lan/192.168.1.31
+    address=/linkstack.lan/192.168.1.25
     address=/suwayomi.lan/192.168.1.23
     address=/wiki.lan/192.168.1.24
+    address=/resume.lan/192.168.1.31
+    address=/cv.lan/192.168.1.31
     address=/infisical.lan/192.168.1.33
+    address=/minio.lan/192.168.1.34
+    address=/qbittorrent.lan/192.168.1.35
+    address=/torrent.lan/192.168.1.35
+    address=/transmission.lan/192.168.1.36
     address=/jellyfin.lan/192.168.1.40
     address=/habiflix.lan/192.168.1.40
     address=/jellyseerr.lan/192.168.1.41
@@ -50,9 +57,10 @@ data:
     address=/radarr.lan/192.168.1.43
     address=/sonarr.lan/192.168.1.44
     address=/prowlarr.lan/192.168.1.45
-    address=/qbittorrent.lan/192.168.1.35
-    address=/transmission.lan/192.168.1.36
-    address=/torrent.lan/192.168.1.35
+    address=/pneuma.lan/192.168.1.220
+    address=/julie.lan/192.168.1.221
+
+    # Printer
     address=/impresora.lan/192.168.1.254
 ---
 apiVersion: v1

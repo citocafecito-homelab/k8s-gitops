@@ -24,17 +24,17 @@ spec:
         - name: POSTGRES_DB
           valueFrom:
             configMapKeyRef:
-              name: reactive-resume-config
+              name: reactive-db
               key: DB_NAME
         - name: POSTGRES_USER
           valueFrom:
             configMapKeyRef:
-              name: reactive-resume-config
+              name: reactive-db
               key: DB_USER
         - name: POSTGRES_PASSWORD
           valueFrom:
             configMapKeyRef:
-              name: reactive-resume-config
+              name: reactive-db
               key: DB_PASSWORD
         volumeMounts:
         - name: reactive-resume-postgresql-storage

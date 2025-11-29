@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: linkstack
+  namespace: default
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.25
+  selector:
+    app: linkstack
+    type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 443
