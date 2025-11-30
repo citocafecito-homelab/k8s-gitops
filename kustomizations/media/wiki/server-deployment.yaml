@@ -38,7 +38,7 @@ spec:
         resources:
           requests:
             cpu: 5m
-            memory: 512Mi
+            memory: 256Mi
         livenessProbe:
           httpGet:
             path: /healthz

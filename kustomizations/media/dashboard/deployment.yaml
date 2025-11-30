@@ -66,7 +66,7 @@ spec:
         - export $(grep -v '^#' /vault/secrets/.env | xargs) && node /app/server.js
         env:
         - name: HOMEPAGE_ALLOWED_HOSTS
-          value: "homepage.local,192.168.1.10:30000,127.0.0.1,localhost,citocafecito.work"
+          value: "homepage.lan,192.168.1.10:30000,127.0.0.1,localhost,citocafecito.work"
         ports:
         - containerPort: 3000
         resources:

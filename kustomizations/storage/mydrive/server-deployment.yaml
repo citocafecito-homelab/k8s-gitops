@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydrive
+  labels:
+    app: mydrive
+    app.kubernetes.io/name: mydrive
+    app.kubernetes.io/part-of: mydrive
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mydrive
+      app.kubernetes.io/name: mydrive
+      app.kubernetes.io/part-of: mydrive
+  template:
+    metadata:
+      labels:
+        app: mydrive
+        app.kubernetes.io/name: mydrive
+        app.kubernetes.io/part-of: mydrive
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-inject-secret-mydrive: "secret/data/mydrive"
+        vault.hashicorp.com/agent-inject-secret-minio: "secret/data/minio"
+        vault.hashicorp.com/agent-inject-template-.env: |
+          {{- with secret "secret/data/minio" -}}
+          S3_ID={{ .Data.data.MINIO_ROOT_USER }}
+          S3_KEY={{ .Data.data.MINIO_ROOT_PASSWORD }}
+          {{ end }}
+          {{- with secret "secret/data/mydrive" -}}
+          PASSWORD_ACCESS={{ .Data.data.PASSWORD_ACCESS }}
+          PASSWORD_COOKIE={{ .Data.data.PASSWORD_COOKIE }}
+          PASSWORD_REFRESH={{ .Data.data.PASSWORD_REFRESH }}
+          {{ end }}
+    spec:
+      containers:
+        - name: mydrive
+          image: kylehoell/mydrive:latest
+          command: [ "/bin/sh", "-c" ]
+          args:
+          - export $(grep -v '^#' /vault/secrets/.env | xargs) && npm run start
+          ports:
+            - containerPort: 3000
+            - containerPort: 3000
+          env:
+            - name: DOCKER
+              value: "true"
+            - name: MONGODB_URL
+              value: "mongodb://mydrive-mongodb:27017/mydrive"
+            - name: DB_TYPE
+              value: s3
+            - name: S3_BUCKET
+              value: mydrive
+            - name: S3_ENDPOINT
+              value: "http://minio.storage.svc.cluster.local:9000"
+            - name: VIDEO_THUMBNAILS_ENABLED
+              value: "true"
+            # - name: BLOCK_CREATE_ACCOUNT
+            #   value: false
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: temp
+              mountPath: /temp
+      volumes:
+        - name: data
+          hostPath:
+            path: /mnt/mydrive/data
+            type: DirectoryOrCreate
+        - name: temp
+          hostPath:
+            path: /mnt/mydrive/temp
+            type: DirectoryOrCreate

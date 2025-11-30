@@ -5,6 +5,7 @@ resources:
 - minio
 - infisical
 - reactive-resume
+- mydrive
 # Work in progress
 # - next-cloud
 
