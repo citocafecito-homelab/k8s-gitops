@@ -59,7 +59,7 @@ spec:
             - name: VIDEO_THUMBNAILS_ENABLED
               value: "true"
             - name: BLOCK_CREATE_ACCOUNT
-              value: false
+              value: "false"
           volumeMounts:
             - name: data
               mountPath: /data

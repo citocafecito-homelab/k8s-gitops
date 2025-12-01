@@ -38,7 +38,7 @@ spec:
           value: "6881"
         resources:
           requests:
-            memory: 128Mi
+            memory: 64Mi
             cpu: 5m
         securityContext:
           runAsUser: 0

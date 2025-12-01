@@ -48,7 +48,7 @@ spec:
           value: "0.0.0.0,192.168.1.10,192.168.*.*,127.0.0.1"
         resources:
           requests:
-            memory: 128Mi
+            memory: 64Mi
             cpu: 5m
         volumeMounts:
         - name: config

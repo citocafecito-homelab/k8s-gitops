@@ -64,7 +64,7 @@ spec:
         resources:
           requests:
             cpu: 5m
-            memory: 128Mi
+            memory: 64Mi
         livenessProbe:
           httpGet:
             path: /api/healthcheck

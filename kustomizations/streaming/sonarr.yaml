@@ -32,7 +32,7 @@ spec:
           mountPath: /downloads
         resources:
           requests:
-            memory: 128Mi
+            memory: 64Mi
             cpu: 5m
         livenessProbe:
           tcpSocket:

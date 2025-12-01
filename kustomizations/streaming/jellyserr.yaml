@@ -35,7 +35,7 @@ spec:
               key: JELLYSEERR_PORT
         resources:
           requests:
-            memory: 128Mi
+            memory: 64Mi
             cpu: 5m
         livenessProbe:
           httpGet:
