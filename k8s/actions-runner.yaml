@@ -3,6 +3,8 @@ kind: Runner
 metadata:
   name: k8s-runner
   namespace: actions
+  labels:
+    app.kubernetes.io/name: k8s-runners
 spec:
   image: ghcr.io/actions/actions-runner:latest
   ephemeral: true

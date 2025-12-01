@@ -37,7 +37,17 @@ data:
 
     # Status style: dot, basic
     statusStyle: dot
-  custom.css: ""
+  custom.css: |
+    #k8s-gitops {
+      width: 150px;
+      height: 20px;
+      background-image: url("https://github.com/citocafecito-homelab/k8s-gitops/actions/workflows/main.yml/badge.svg");
+      background-repeat: no-repeat;
+        background-repeat: no-repeat;
+        background-position-x: right;
+        background-position-y: bottom;
+        padding-bottom: 20px;
+    }
   custom.js: ""
   bookmarks.yaml: |
     - Habid Manzur Network:
@@ -45,14 +55,17 @@ data:
             - href: https://steamcommunity.com/profiles/76561198120049216
               description: Perfil de Steam Habid Manzur
               icon: https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg
+
         - Github:
             - href: https://github.com/hmanzur
               icon: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
               description: "Habid Manzur's GitHub"
+
         - Linkedin:
             - href: https://linkedin.com/in/habid-manzur
               icon: https://cdn.worldvectorlogo.com/logos/linkedin-icon-2.svg
               description: "Habid Manzur's Linkedin"
+
         - HashiCorp Certified - Terraform Associate (003):
             - href: https://www.credly.com/badges/3958bf13-858b-4293-81f7-e6953b6a8332/public_url
               icon: https://images.credly.com/size/110x110/images/0dc62494-dc94-469a-83af-e35309f27356/blob
@@ -64,6 +77,7 @@ data:
               href: https://github.com/julhSarmiento
               icon: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
               description: "Julieth Sarmiento's Github"
+
         - Linkedin:
             - abbr: In
               href: https://linkedin.com/in/julieth-sarmiento
@@ -172,16 +186,16 @@ data:
               tunnelid: "{{HOMEPAGE_VAR_CLOUDFLARED_TUNNEL}}"
               key: "{{HOMEPAGE_VAR_CLOUDFLARED_KEY}}"
         
-        - Mikrotik:
-            href: http://router.lan
-            icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/mikrotik.webp
-            description: RouterOS Dashboard (Internal)
-            # widget:
-            #   type: mikrotik
-            #   url: http://192.168.1.10:8123
-            #   username: lorem
-            #   password: ipsum
-            #   verify_ssl: false
+        # - Mikrotik:
+        #     href: http://router.lan
+        #     icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/mikrotik.webp
+        #     description: RouterOS Dashboard (Internal)
+        #     # widget:
+        #     #   type: mikrotik
+        #     #   url: http://192.168.1.10:8123
+        #     #   username: lorem
+        #     #   password: ipsum
+        #     #   verify_ssl: false
 
         - Pi Hole:
             href: http://pihole.lan
@@ -221,11 +235,19 @@ data:
             showStats: true
 
     - Core Apps:
+        - Self Hosted Runners: 
+            # id: k8s-gitops
+            href: https://github.com/organizations/citocafecito-homelab/settings/actions/runners
+            icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/github-light.svg
+            namespace: actions
+            app: k8s-runners
+            showStats: true
+
         - Vault:
             href: https://vault.citocafecito.work/
             description: Gestión de secretos y claves
             icon: https://icon.icepanel.io/Technology/svg/HashiCorp-Vault.svg
-            ping: http://192.168.1.226/v1/sys/health
+            # ping: http://vault.core.svc.cluster.local:8200/v1/sys/health
             namespace: core
             app: vault
             showStats: true
@@ -234,8 +256,8 @@ data:
             href: https://s3.citocafecito.work/
             description: Almacenamiento de objetos S3 compatible con AWS
             icon: https://cdn.worldvectorlogo.com/logos/minio-1.svg
-            ping: http://192.168.1.10:30090/minio/health/live
-            namespace: core
+            # ping: http://192.168.1.34:9000/minio/health/live
+            namespace: storage
             app: minio
             showStats: true
 
@@ -243,7 +265,7 @@ data:
             href: https://infisical.citocafecito.work/
             description: Gestión de secretos y variables de entorno
             icon: https://cdn-1.webcatalog.io/catalog/infisical/infisical-icon-unplated.png
-            ping: http://192.168.1.10:30400
+            # ping: http://192.168.1.10:30400
             namespace: storage
             app: infisical
             showStats: true
@@ -260,7 +282,7 @@ data:
             href: https://home.citocafecito.work
             description: Centro de mando para la gestión y automatización del hogar
             icon: https://upload.wikimedia.org/wikipedia/en/thumb/4/49/Home_Assistant_logo_%282023%29.svg/1200px-Home_Assistant_logo_%282023%29.svg.png
-            ping: http://192.168.1.10:8123/api
+            ping: http://192.168.1.10:8123
             namespace: core
             app: home-assistant
             showStats: true
@@ -282,18 +304,25 @@ data:
             app: mosquitto
             showStats: true
 
-        - ZwaveJS2MQTT:
-            icon: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzxx1jjnLRtJSpaP9eDeAi1KDWrawKpWKmJg&s
-            description: Integrador avanzado de dispositivos Z-Wave
-            namespace: core
-            app: zwavejs2mqtt
-            showStats: true
+        # - ZwaveJS2MQTT:
+        #     icon: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzxx1jjnLRtJSpaP9eDeAi1KDWrawKpWKmJg&s
+        #     description: Integrador avanzado de dispositivos Z-Wave
+        #     namespace: core
+        #     app: zwavejs2mqtt
+        #     showStats: true
 
         - Matter:
             icon: https://cdn.jsdelivr.net/gh/selfhst/icons/svg/matter-light.svg
-            description: Servidor Matter + Ble
+            description: Servidor Matter
             namespace: core
-            app: matter-stack
+            app: matter
+            showStats: true
+
+        - Thread:
+            icon: https://homeautomationtalks.com/wp-content/uploads/2024/12/ThreadLogo-stort-1.png
+            description: Red de malla para Matter
+            namespace: core
+            app: openthread
             showStats: true
 
     - Control de voz:
@@ -325,52 +354,58 @@ data:
             app: openwakeword
             showStats: true
 
-    - Wiki:
-        - "Wiki.js":
-            href: https://wiki.citocafecito.work/
-            description: Plataforma de gestión de conocimiento
-            icon: https://raw.githubusercontent.com/requarks/wiki/refs/heads/main/server/themes/default/thumbnail.png
-            ping: http://192.168.1.10:30300/healthz
-            namespace: media
-            app: wikijs
-            showStats: true
-
-        - "Wiki.js DB":
-            description: Base de datos de la wiki
-            icon: https://cdn-icons-png.flaticon.com/512/9850/9850812.png
-            namespace: media
-            app: wikijs-postgresql
-            showStats: true
-
     - Multimedia:
+        - LinkStack:
+            # href: https://*.citocafecito.work
+            description: Plataforma personalizable para compartir enlaces
+            icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/linkstack.svg
+            namespace: media
+            app: linkstack
+            showStats: true
+
         - Suwayomi:
             href: https://suwayomi.citocafecito.work
             description: Lector de Manga
             icon: https://raw.githubusercontent.com/Suwayomi/Suwayomi-Server/refs/heads/master/server/src/main/resources/icon/faviconlogo.png
-            ping: http://192.168.1.231:30080
+            # ping: http://192.168.1.23
             namespace: media
             app: suwayomi
             showStats: true
             widget:
               type: suwayomi
-              url: http://suwayomi.media.svc.cluster.local:8181
+              url: http://suwayomi.media.svc.cluster.local:4567
               username: "{{HOMEPAGE_VAR_SUWAYOMI_USERNAME}}"
               password: "{{HOMEPAGE_VAR_SUWAYOMI_PASSWORD}}"
               category: 1
 
-        - Suwayomi DB:
-            description: Base de datos de Suwayomi
-            icon: https://cdn-icons-png.flaticon.com/512/9850/9850812.png
+        # - Suwayomi DB:
+        #     description: Base de datos de Suwayomi
+        #     icon: https://cdn-icons-png.flaticon.com/512/9850/9850812.png
+        #     namespace: media
+        #     app: suwayomi-postgresql
+        #     showStats: true
+
+        - "Wiki.js":
+            href: https://wiki.citocafecito.work/
+            description: Plataforma de gestión de conocimiento
+            icon: https://raw.githubusercontent.com/requarks/wiki/refs/heads/main/server/themes/default/thumbnail.png
             namespace: media
-            app: suwayomi-postgresql
+            app: wikijs
             showStats: true
+
+        # - "Wiki.js DB":
+        #     description: Base de datos de la wiki
+        #     icon: https://cdn-icons-png.flaticon.com/512/9850/9850812.png
+        #     namespace: media
+        #     app: wikijs-postgresql
+        #     showStats: true
 
     - Streaming:
         - Jellyfin:
             href: https://jellyfin.citocafecito.work/
             description: Servidor de medios de código abierto
             icon: https://upload.wikimedia.org/wikipedia/commons/4/41/Jellyfin_-_icon-transparent.svg
-            ping: http://192.168.1.10:30096/health
+            # ping: http://jellyfin.streaming.svc.cluster.local:8096/health
             showStats: true
             namespace: streaming
             app: jellyfin
@@ -378,6 +413,8 @@ data:
               type: jellyfin
               url: http://jellyfin.streaming.svc.cluster.local:8096
               key: "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}"
+              enableBlocks: true
+              enableNowPlaying: false
 
         - Jellyseerr:
             description: Interfaz de solicitud de contenido para Jellyfin o Plex
@@ -521,7 +558,7 @@ data:
         showSearchSuggestions: true
 
     - logo:
-        icon: https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/github-dark.svg
         href: https://github.com/hmanzur/ansible-cafeteria
         target: _blank
   docker.yaml: ""

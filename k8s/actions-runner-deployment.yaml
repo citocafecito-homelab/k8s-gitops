@@ -4,7 +4,15 @@ metadata:
   name: k8s-runners
   namespace: actions
 spec:
+  selector:
+    matchLabels:
+      app: k8s-runners
+      app.kubernetes.io/name: k8s-runners
   template:
+    metadata:
+      labels:
+        app: k8s-runners
+        app.kubernetes.io/name: k8s-runners
     spec:
       organization: citocafecito-homelab
       labels: []

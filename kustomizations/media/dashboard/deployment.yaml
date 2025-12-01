@@ -33,7 +33,7 @@ spec:
           HOMEPAGE_VAR_HA_TOKEN="{{ .Data.data.TOKEN }}"
           {{ end }}
           {{ with secret "secret/data/pihole" -}}
-          HOMEPAGE_VAR_PIHOLE_TOKEN="{{ .Data.data.API_KEY }}"
+          HOMEPAGE_VAR_PIHOLE_TOKEN="{{ .Data.data.WEBPASSWORD }}"
           {{ end }}
           {{ with secret "secret/data/speedtest " -}}
           HOMEPAGE_VAR_SPEEDTEST_TOKEN="{{ .Data.data.API_KEY }}"

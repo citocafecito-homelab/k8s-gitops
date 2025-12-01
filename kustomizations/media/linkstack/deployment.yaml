@@ -9,10 +9,12 @@ spec:
   selector:
     matchLabels:
       app: linkstack
+      app.kubernetes.io/name: linkstack
   template:
     metadata:
       labels:
         app: linkstack
+        app.kubernetes.io/name: linkstack
     spec:
       containers:
       - name: linkstack
@@ -25,7 +27,7 @@ spec:
             name: linkstack-config
         volumeMounts:
         - name: linkstack-storage
-          mountPath: /htdocs
+          mountPath: /data
       volumes:
       - name: linkstack-storage
         persistentVolumeClaim:
