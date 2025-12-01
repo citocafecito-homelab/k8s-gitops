@@ -26,13 +26,14 @@ spec:
         vault.hashicorp.com/agent-inject-secret-minio: "secret/data/minio"
         vault.hashicorp.com/agent-inject-template-.env: |
           {{- with secret "secret/data/minio" -}}
-          S3_ID={{ .Data.data.MINIO_ROOT_USER }}
-          S3_KEY={{ .Data.data.MINIO_ROOT_PASSWORD }}
+          S3_ID="{{ .Data.data.MINIO_ROOT_USER }}"
+          S3_KEY="{{ .Data.data.MINIO_ROOT_PASSWORD }}"
           {{ end }}
           {{- with secret "secret/data/mydrive" -}}
-          PASSWORD_ACCESS={{ .Data.data.PASSWORD_ACCESS }}
-          PASSWORD_COOKIE={{ .Data.data.PASSWORD_COOKIE }}
-          PASSWORD_REFRESH={{ .Data.data.PASSWORD_REFRESH }}
+          KEY="{{ .Data.data.KEY }}"
+          PASSWORD_ACCESS="{{ .Data.data.PASSWORD_ACCESS }}"
+          PASSWORD_COOKIE="{{ .Data.data.PASSWORD_COOKIE }}"
+          PASSWORD_REFRESH="{{ .Data.data.PASSWORD_REFRESH }}"
           {{ end }}
     spec:
       containers:
@@ -40,15 +41,15 @@ spec:
           image: kylehoell/mydrive:latest
           command: [ "/bin/sh", "-c" ]
           args:
-          - export $(grep -v '^#' /vault/secrets/.env | xargs) && npm run start
+          - NODE_ENV=production node --env-file=/vault/secrets/.env /usr/app-production/dist-backend/server/server-start.js
           ports:
             - containerPort: 3000
-            - containerPort: 3000
+            - containerPort: 8080
           env:
             - name: DOCKER
               value: "true"
             - name: MONGODB_URL
-              value: "mongodb://mydrive-mongodb:27017/mydrive"
+              value: "mongodb://admin:admin@mydrive-mongodb:27017/mydrive?authSource=admin"
             - name: DB_TYPE
               value: s3
             - name: S3_BUCKET
@@ -57,8 +58,8 @@ spec:
               value: "http://minio.storage.svc.cluster.local:9000"
             - name: VIDEO_THUMBNAILS_ENABLED
               value: "true"
-            # - name: BLOCK_CREATE_ACCOUNT
-            #   value: false
+            - name: BLOCK_CREATE_ACCOUNT
+              value: false
           volumeMounts:
             - name: data
               mountPath: /data
