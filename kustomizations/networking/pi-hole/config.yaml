@@ -11,7 +11,8 @@ data:
   # FTL
   FTLCONF_misc_etc_dnsmasq_d: "true"
   FTLCONF_dns_revServers: "true,192.168.1.0/16,192.168.1.1"
-  FTLCONF_dns_upstreams: "1.1.1.1;1.0.0.1;8.8.8.8;8.8.4.4"
+  # FTLCONF_dns_upstreams: "1.1.1.1;1.0.0.1;8.8.8.8;8.8.4.4"
+  FTLCONF_dns_upstreams: "8.8.8.8;8.8.4.4"
 
   # DHCP Server
   FTLCONF_dhcp_active: "true"
