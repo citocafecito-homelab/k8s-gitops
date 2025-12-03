@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: linkstack-config
+data:
+  TZ:            "America/Bogota"
+  APP_KEY:       "base64:fMuiXz8wvkdTuTJhgseI8lluB1h2KPK4fthWsWA1fNk="
+  REGISTER_AUTH: "verified"
+
+  # Server name
+  HTTP_SERVER_NAME:   "linkstack.lan"
+  HTTPS_SERVER_NAME:  "linkstack.citocafecito.work"
+  
+  # Database
+  DB_CONNECTION:  "mysql"
+  DB_HOST:        "linkstack-mysql.media.svc.cluster.local"
+  DB_PORT:        "3306"
+  DB_DATABASE:    "linkstack"
+  DB_USERNAME:    "linkstack"
+  DB_PASSWORD:    "linkstack"
+
+  # Session & Cache. Run php artisan cache:redis inside the container
+  CACHE_DRIVER:   "database"
+  SESSION_DRIVER: "database"
+  # REDIS_HOST:     "linkstack-redis"
+  # REDIS_PORT:     "6379"

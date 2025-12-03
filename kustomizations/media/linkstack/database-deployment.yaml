@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: linkstack-mysql
+  labels:
+    app: linkstack-mysql
+    app.kubernetes.io/name: linkstack-mysql
+    app.kubernetes.io/part-of: linkstack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: linkstack-mysql
+      app.kubernetes.io/name: linkstack-mysql
+  serviceName: linkstack-mysql
+  template:
+    metadata:
+      labels:
+        app: linkstack-mysql
+        app.kubernetes.io/name: linkstack-mysql
+        app.kubernetes.io/part-of: linkstack
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:9
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: linkstack 
+        - name: MYSQL_DATABASE
+          value: linkstack
+        - name: MYSQL_USER
+          value: linkstack
+        - name: MYSQL_PASSWORD
+          value: linkstack
+        ports:
+        - containerPort: 3306
+        resources:
+          requests:
+            cpu: 5m
+            memory: 64Mi
+        livenessProbe:
+          exec:
+            command: [ "mysqladmin", "ping", "-h", "localhost" ]
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "mysqladmin", "ping", "-h", "localhost" ]
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 3
+        volumeMounts:
+        - name: linkstack-mysql
+          mountPath: /var/lib/mysql 
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
+      volumes:
+      - name: linkstack-mysql
+        persistentVolumeClaim:
+          claimName: linkstack-mysql-pvc

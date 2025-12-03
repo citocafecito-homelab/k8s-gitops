@@ -4,6 +4,8 @@ metadata:
   name: linkstack
   labels:
     app: linkstack
+    app.kubernetes.io/name: linkstack
+    app.kubernetes.io/part-of: linkstack
 spec:
   replicas: 1
   selector:
@@ -15,6 +17,7 @@ spec:
       labels:
         app: linkstack
         app.kubernetes.io/name: linkstack
+        app.kubernetes.io/part-of: linkstack
     spec:
       containers:
       - name: linkstack
@@ -25,10 +28,3 @@ spec:
         envFrom:
         - configMapRef:
             name: linkstack-config
-        volumeMounts:
-        - name: linkstack-storage
-          mountPath: /data
-      volumes:
-      - name: linkstack-storage
-        persistentVolumeClaim:
-          claimName: linkstack-pvc

@@ -22,6 +22,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
+  volumeName: downloads-pv
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -47,6 +48,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
+  volumeName: movies-pv
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -72,6 +74,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
+  volumeName: series-pv
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -97,6 +100,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
+  volumeName: music-pv
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -122,3 +126,4 @@ spec:
   resources:
     requests:
       storage: 10Gi
+  volumeName: concerts-pv
