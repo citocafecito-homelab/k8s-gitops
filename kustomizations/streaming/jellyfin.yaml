@@ -32,8 +32,8 @@ spec:
           protocol: UDP
         resources:
           requests:
-            memory: 256Mi
-            cpu: 10m
+            memory: 1024Mi
+            cpu: 100m
         securityContext:
           runAsUser: 0
           runAsGroup: 0
@@ -62,13 +62,10 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
-          readOnly: false
         - name: movies
           mountPath: /media/movies
-          readOnly: true
         - name: series
           mountPath: /media/series
-          readOnly: true
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
@@ -82,13 +79,11 @@ spec:
           path: /mnt/jellyfin
           type: DirectoryOrCreate
       - name: movies
-        hostPath:
-          path: /mnt/multimedia/movies
-          type: Directory
+        persistentVolumeClaim:
+          claimName: movies-pvc
       - name: series
-        hostPath:
-          path: /mnt/multimedia/series
-          type: Directory
+        persistentVolumeClaim:
+          claimName: series-pvc
 ---
 apiVersion: v1
 kind: Service

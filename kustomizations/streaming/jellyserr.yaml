@@ -54,12 +54,14 @@ spec:
           timeoutSeconds: 5
           failureThreshold: 3
         volumeMounts:
-        - name: config
+        - name: jellyseerr-config
           mountPath: /app/config
         - name: movies
           mountPath: /mnt/multimedia/movies
+          readOnly: true
         - name: series
           mountPath: /mnt/multimedia/series
+          readOnly: true
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
@@ -68,18 +70,16 @@ spec:
         operator: "Exists"
         effect: "NoSchedule"
       volumes:
-      - name: config
+      - name: jellyseerr-config
         hostPath:
           path: /mnt/jellyseerr
           type: DirectoryOrCreate
       - name: movies
-        hostPath:
-          path: /mnt/multimedia/movies
-          type: Directory
+        persistentVolumeClaim:
+          claimName: movies-pvc
       - name: series
-        hostPath:
-          path: /mnt/multimedia/series
-          type: Directory
+        persistentVolumeClaim:
+          claimName: series-pvc
 ---
 apiVersion: v1
 kind: Service

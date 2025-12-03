@@ -47,7 +47,7 @@ spec:
         - containerPort: 5582
         resources:
           requests:
-            cpu: 10m
+            cpu: 5m
             memory: 64Mi
         readinessProbe:
           httpGet:

@@ -79,17 +79,14 @@ spec:
           path: /mnt/bazarr
           type: DirectoryOrCreate
       - name: downloads
-        hostPath:
-          path: /mnt/multimedia/downloads
-          type: Directory
+        persistentVolumeClaim: 
+          claimName: downloads-pvc
       - name: movies
-        hostPath:
-          path: /mnt/multimedia/movies
-          type: Directory
+        persistentVolumeClaim:
+          claimName: movies-pvc
       - name: series
-        hostPath:
-          path: /mnt/multimedia/series
-          type: Directory
+        persistentVolumeClaim:
+          claimName: series-pvc
 ---
 apiVersion: v1
 kind: Service

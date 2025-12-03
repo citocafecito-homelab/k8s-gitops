@@ -57,7 +57,7 @@ spec:
         #   mountPath: /config
         resources:
           requests:
-            cpu: 5m
+            cpu: 1m
             memory: 64Mi
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"

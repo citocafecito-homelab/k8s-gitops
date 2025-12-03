@@ -5,6 +5,7 @@ namespace: streaming
 
 resources:
 - config.yaml
+- pvc.yaml
 - transmission.yaml
 - qbittorrent.yaml
 - flaresolverr.yaml

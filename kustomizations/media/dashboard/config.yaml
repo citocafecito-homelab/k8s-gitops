@@ -227,7 +227,7 @@ data:
               bitratePrecision: 3
 
         - Dashboard:
-            description: Recursos usados
+            description: Recursos usados por este dashboard
             href: https://one.dash.cloudflare.com/e19111ae758ecab4a1a6a15d7c74be1b/networks/tunnels/cfd_tunnel/b2b836e5-915c-4227-b280-a8cfe0e445c4/edit?tab=overview
             icon: https://github.com/gethomepage/homepage/raw/main/public/android-chrome-192x192.png
             namespace: media

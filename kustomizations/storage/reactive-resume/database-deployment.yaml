@@ -53,8 +53,8 @@ spec:
           failureThreshold: 3
         resources:
           requests:
-            cpu: 10m
-            memory: 256Mi
+            cpu: 5m
+            memory: 128Mi
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"

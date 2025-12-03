@@ -5,7 +5,8 @@ resources:
 - minio
 - infisical
 - reactive-resume
-- mydrive
+# Not enough cpu available
+# - mydrive
 # Work in progress
 # - next-cloud
 

@@ -48,8 +48,8 @@ spec:
           protocol: UDP
         resources:
           requests:
-            cpu: 5m
-            memory: 64Mi
+            cpu: 50m
+            memory: 256Mi
         securityContext:
           capabilities:
             add:

@@ -68,13 +68,11 @@ spec:
           path: /mnt/sonarr
           type: DirectoryOrCreate
       - name: series
-        hostPath:
-          path: /mnt/multimedia/series
-          type: Directory
+        persistentVolumeClaim:
+          claimName: series-pvc
       - name: downloads
-        hostPath:
-          path: /mnt/multimedia/downloads
-          type: DirectoryOrCreate
+        persistentVolumeClaim:
+          claimName: downloads-pvc
 ---
 apiVersion: v1
 kind: Service

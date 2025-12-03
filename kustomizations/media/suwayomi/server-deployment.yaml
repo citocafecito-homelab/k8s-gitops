@@ -44,7 +44,7 @@ spec:
         resources:
           requests:
             cpu: 10m
-            memory: 1024Mi
+            memory: 512Mi
         volumeMounts:
         - name: suwayomi-storage
           mountPath: /home/suwayomi/.local/share/Tachidesk

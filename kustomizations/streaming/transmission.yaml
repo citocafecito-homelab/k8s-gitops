@@ -68,9 +68,8 @@ spec:
           path: /mnt/transmission
           type: DirectoryOrCreate
       - name: downloads
-        hostPath:
-          path: /mnt/multimedia/downloads
-          type: DirectoryOrCreate
+        persistentVolumeClaim:
+          claimName: downloads-pvc
 ---
 apiVersion: v1
 kind: Service

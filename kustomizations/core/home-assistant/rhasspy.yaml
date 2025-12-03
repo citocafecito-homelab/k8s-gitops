@@ -39,6 +39,7 @@ spec:
         vault.hashicorp.com/role: vault
         vault.hashicorp.com/agent-inject-secret-home-assistant: "secret/data/home-assistant"
         vault.hashicorp.com/secret-volume-path: "/profiles"
+        vault.hashicorp.com/tolerate: "true"
         vault.hashicorp.com/agent-inject-template-profile.json: |
           {{- with secret "secret/data/home-assistant" -}}
           {
@@ -69,8 +70,8 @@ spec:
         - containerPort: 12101
         resources:
           requests:
-            cpu: 5m
-            memory: 64Mi
+            cpu: 100m
+            memory: 32Mi
         volumeMounts:
         - name: rhasspy-storage
           mountPath: /data
