@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: glances
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: glances
+  template:
+    metadata:
+      labels:
+        app: glances
+    spec:
+      hostPID: true
+      containers:
+        - name: glances
+          image: nicolargo/glances:latest
+          env:
+            - name: GLANCES_OPT
+              value: "-w --disable-plugin processlist --fs-free-space"
+          ports:
+            - containerPort: 61208
+              hostPort: 61208
+          volumeMounts:
+            - name: host-root
+              mountPath: /host
+              readOnly: true
+      volumes:
+        - name: host-root
+          hostPath:
+            path: /
