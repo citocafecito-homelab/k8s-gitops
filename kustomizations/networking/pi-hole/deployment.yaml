@@ -34,17 +34,17 @@ spec:
         - configMapRef:
             name: pihole-env
         ports:
+        - name: dhcp
+          containerPort: 67
+          hostPort: 67
+          protocol: UDP
         - name: dns-tcp
           containerPort: 53
+          hostPort: 53
           protocol: TCP
         - name: dns-udp
           containerPort: 53
-          protocol: UDP
-        - name: http
-          containerPort: 8080
-          protocol: TCP
-        - name: dhcp
-          containerPort: 67
+          hostPort: 53
           protocol: UDP
         resources:
           requests:

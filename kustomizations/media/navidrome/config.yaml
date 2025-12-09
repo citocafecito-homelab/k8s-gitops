@@ -1,0 +1,148 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: navidrome-config
+data:
+  ND_SCANSCHEDULE: "1h"
+  ND_UIWELCOMEMESSAGE: "Bienvenidos a HabiMusic - Música en alta definición"
+  ND_SHAREURL: "https://music.citocafecito.work"
+  ND_BACKUP_COUNT: "3"
+  ND_BACKUP_PATH: "/data/backup"
+  ND_ENABLEGRAVATAR: "true"
+  ND_DEFAULTLANGUAGE: "es"
+  ND_ENABLESHARING: "true"
+  ND_LASTFM_LANGUAGE: "es"
+  ND_PLAYLISTSPATH: "smart-playlists"
+  ND_PREFERSORTTAGS: "true"
+  ND_SCANNER_PURGEMISSING: "always"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: navidrome-smart-playlists
+data:
+  favorites.nsp: |
+    {
+      "name": "Favoritos",
+      "comment": "Reproduce canciones marcadas",
+      "all": [{ "any": [ { "is": { "loved": true } }, { "gt": { "rating": 3 } } ] }],
+      "sort": "dateLoved",
+      "order": "desc"
+    }
+
+  supermix.nsp: |
+    {
+      "name": "Super Mix",
+      "comment": "Super Mix de canciones favoritas",
+      "all": [
+        {
+          "any": [
+            { "gt": { "rating": 3 } },
+            { "gt": { "playCount": 0 } }
+          ]
+        }
+      ],
+      "sort": "random",
+      "limit": 200
+    }
+
+  supersupermix.nsp: |
+    {
+      "name": "Super Super Mix",
+      "comment": "Super Mix de canciones super favoritas",
+      "all": [
+        {
+          "any": [
+            { "gt": { "rating": 4 } },
+            { "gt": { "playCount": 0 } }
+          ]
+        }
+      ],
+      "sort": "random",
+      "limit": 200
+    }
+  
+  top_60s.nsp: |
+    {
+      "name": "Top 60s Mix",
+      "all": [
+        {
+          "any": [
+            { "is": { "loved": true } },
+            { "gt": { "rating": 3 } },
+            { "gt": { "playCount": 0 } }
+          ]
+        },
+        { "inTheRange": { "year": [1961, 1970] } }
+      ],
+      "sort": "-rating,title",
+      "limit": 25
+    }
+
+  top_70s.nsp: |
+    {
+      "name": "Top 70s Mix",
+      "all": [
+        {
+          "any": [
+            { "is": { "loved": true } },
+            { "gt": { "rating": 3 } },
+            { "gt": { "playCount": 0 } }
+          ]
+        },
+        { "inTheRange": { "year": [1971, 1980] } }
+      ],
+      "sort": "-rating,title",
+      "limit": 25
+    }
+
+  top_80s.nsp: |
+    {
+      "name": "Top 80s Mix",
+      "all": [
+        {
+          "any": [
+            { "is": { "loved": true } },
+            { "gt": { "rating": 3 } },
+            { "gt": { "playCount": 0 } }
+          ]
+        },
+        { "inTheRange": { "year": [1981, 1990] } }
+      ],
+      "sort": "-rating,title",
+      "limit": 25
+    }
+
+  top_90s.nsp: |
+    {
+      "name": "Top 90s Mix",
+      "all": [
+        {
+          "any": [
+            { "is": { "loved": true } },
+            { "gt": { "rating": 3 } },
+            { "gt": { "playCount": 0 } }
+          ]
+        },
+        { "inTheRange": { "year": [1991, 2000] } }
+      ],
+      "sort": "-rating,title",
+      "limit": 25
+    }
+
+  top_00s.nsp: |
+    {
+      "name": "Top 00s Mix",
+      "all": [
+        {
+          "any": [
+            { "is": { "loved": true } },
+            { "gt": { "rating": 3 } },
+            { "gt": { "playCount": 0 } }
+          ]
+        },
+        { "inTheRange": { "year": [2001, 2010] } }
+      ],
+      "sort": "-rating,title",
+      "limit": 25
+    }

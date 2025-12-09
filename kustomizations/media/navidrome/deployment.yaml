@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: navidrome
+  labels:
+    app: navidrome
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: navidrome
+      app.kubernetes.io/name: navidrome
+  template:
+    metadata:
+      labels:
+        app: navidrome
+        app.kubernetes.io/name: navidrome
+    spec:
+      containers:
+      - name: navidrome
+        image: deluan/navidrome:latest
+        ports:
+        - containerPort: 4533
+          name: http
+        envFrom:
+          - configMapRef:
+              name: navidrome-config
+        env:
+          - name: ND_LASTFM_APIKEY
+            valueFrom:
+              secretKeyRef:
+                name: navidrome-lastfm-secret
+                key: ND_LASTFM_APIKEY
+          - name: ND_LASTFM_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: navidrome-lastfm-secret
+                key: ND_LASTFM_SECRET
+        volumeMounts:
+        - name: navidrome-data
+          mountPath: /data
+        - name: navidrome-backup
+          mountPath: /backup
+        - name: navidrome-music
+          mountPath: /music
+        - name: navidrome-smart-playlists
+          mountPath: /music/smart-playlists
+          readOnly: true
+      volumes:
+      - name: navidrome-data
+        hostPath:
+          path: /mnt/navidrome
+          type: DirectoryOrCreate
+      - name: navidrome-backup
+        hostPath:
+          path: /mnt/navidrome/backup
+          type: DirectoryOrCreate
+      - name: navidrome-music
+        hostPath:
+          path: /mnt/multimedia/music
+          type: DirectoryOrCreate
+      - name: navidrome-smart-playlists
+        configMap:
+          name: navidrome-smart-playlists

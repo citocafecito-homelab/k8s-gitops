@@ -41,6 +41,7 @@ data:
     # Services
     address=/vault.lan/192.168.1.18
     address=/linkstack.lan/192.168.1.25
+    address=/music.lan/192.168.1.26
     address=/suwayomi.lan/192.168.1.23
     address=/wiki.lan/192.168.1.24
     address=/resume.lan/192.168.1.31
