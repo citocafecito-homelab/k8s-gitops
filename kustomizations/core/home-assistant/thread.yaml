@@ -8,9 +8,38 @@ data:
   OT_THREAD_IF: "wpan0"
   OT_LOG_LEVEL: "7"
   OT_REST_LISTEN_ADDR: "0.0.0.0"
+  OTBR_USE_NCP_SETTINGS: "false"
 ---
+# Check https://openthread.io/guides/border-router/form-network?hl=es-419 for more context
+## Run on node if state is Detached
+# > avahi-browse -rt _matterc._udp
+# > avahi-browse -rt _matter._tcp
+#
+## Run in pod if restarts
+# > kubectl -n core exec -it openthread-0 -- ot-ctl
+#
+## Setup Thread Network
+# > state
+# > dataset set active 0e080000000000010000000300000d4a0300001435060004001fffe00208101fe4a592aedc030708fdae62688749f338051018170d707db7baad83afcca5edfd1315030f4f70656e5468726561642d636634310102cf4104109482e2bf32825f7ec31777d7aabe57f60c0402a0f7f8
+# > dataset commit active
+# > state
+#
+## See dataset active and shoud contain this information
+# > dataset active
+# Active Timestamp: 1
+# Channel: 13
+# Wake-up Channel: 20
+# Channel Mask: 0x07fff800
+# Ext PAN ID: 101fe4a592aedc03
+# Mesh Local Prefix: fdae:6268:8749:f338::/64
+# Network Key: 18170d707db7baad83afcca5edfd1315
+# Network Name: OpenThread-cf41
+# PAN ID: 0xcf41
+# PSKc: 9482e2bf32825f7ec31777d7aabe57f6
+# Security Policy: 672 onrc 0
+#
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: openthread
 spec:
@@ -19,8 +48,7 @@ spec:
     matchLabels:
       app: openthread
       app.kubernetes.io/name: openthread
-  strategy:
-    type: Recreate
+  serviceName: openthread
   template:
     metadata:
       labels:
@@ -66,7 +94,7 @@ spec:
           type: DirectoryOrCreate
       - name: rcp
         hostPath:
-          path: /dev/ttyUSB0
+          path: /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
           type: CharDevice
 ---
 apiVersion: v1

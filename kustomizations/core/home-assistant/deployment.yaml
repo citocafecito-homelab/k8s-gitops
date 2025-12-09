@@ -29,15 +29,6 @@ spec:
             - NET_ADMIN
             - NET_RAW
             - SYS_ADMIN
-        volumeMounts:
-        - name: config
-          mountPath: /config
-        - name: ha-configmap
-          mountPath: /config/configuration.yaml
-          subPath: configuration.yaml
-        - name: dbus-socket
-          mountPath: /var/run/dbus
-          readOnly: true
         resources:
           requests:
             cpu: 5m
@@ -58,6 +49,19 @@ spec:
           periodSeconds: 30
           timeoutSeconds: 5
           failureThreshold: 6
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: ha-configmap
+          mountPath: /config/configuration.yaml
+          subPath: configuration.yaml
+        - name: dbus-socket
+          mountPath: /var/run/dbus
+          readOnly: true
+        - name: zigbee
+          mountPath: /dev/ttyUSB0
+        - name: zwave
+          mountPath: /dev/ttyUSB1
       dnsPolicy: ClusterFirstWithHostNet
       hostNetwork: true
       tolerations:
@@ -78,3 +82,11 @@ spec:
         hostPath:
           path: /var/run/dbus
           type: Directory
+      - name: zigbee
+        hostPath:
+          path: /dev/serial/by-id/usb-Silicon_Labs_CP2105_Dual_USB_to_UART_Bridge_Controller_017084DF-if00-port0
+          type: CharDevice
+      - name: zwave
+        hostPath:
+          path: /dev/serial/by-id/usb-Silicon_Labs_CP2105_Dual_USB_to_UART_Bridge_Controller_017084DF-if01-port0
+          type: CharDevice

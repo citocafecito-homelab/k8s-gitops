@@ -12,7 +12,7 @@ resources:
 # Agents
 - mosquitto.yaml
 - matter.yaml
-- thread.yaml
+# - thread.yaml
 # - zwave.yaml
 # - zigbee2mqtt.yaml # Unnecesary if used ZHA 
 - ring-mqtt.yaml

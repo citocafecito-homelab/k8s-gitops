@@ -1,28 +1,28 @@
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: ring-mqtt-pv
-spec:
-  capacity:
-    storage: 1Gi
-  accessModes:
-  - ReadWriteOnce
-  hostPath:
-    path: /mnt/ring-mqtt
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: ring-mqtt-pvc
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: ring-mqtt-pv
+# spec:
+#   capacity:
+#     storage: 1Gi
+#   accessModes:
+#   - ReadWriteOnce
+#   hostPath:
+#     path: /mnt/ring-mqtt
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: ring-mqtt-pvc
+# spec:
+#   accessModes:
+#   - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 1Gi
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: ring-mqtt
   labels:
@@ -33,16 +33,18 @@ spec:
     matchLabels:
       app: ring-mqtt
       app.kubernetes.io/name: ring-mqtt
+      app.kubernetes.io/part-of: home-assistant
+  serviceName: ring-mqtt
   template:
     metadata:
       labels:
         app: ring-mqtt
         app.kubernetes.io/name: ring-mqtt
+        app.kubernetes.io/part-of: home-assistant
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: vault
         vault.hashicorp.com/agent-inject-secret-config.json: "secret/data/ring"
-        vault.hashicorp.com/secret-volume-path: "/data"
         vault.hashicorp.com/agent-inject-template-config.json: |
           {{- with secret "secret/data/ring" -}}
           {
@@ -57,7 +59,7 @@ spec:
             "livestream_user": "{{ .Data.data.CAMERA_USERNAME }}",
             "livestream_pass": "{{ .Data.data.CAMERA_PASSWORD }}",
             "enable_cameras": true,
-            "mqtt_client_id": "ringmqtt-mqtt"
+            "mqtt_client_id": "ring-mqtt"
           }
           {{- end }}
     spec:
@@ -65,6 +67,9 @@ spec:
       - name: ring-mqtt
         image: tsightler/ring-mqtt:latest
         imagePullPolicy: IfNotPresent
+        command: [ "/bin/sh", "-c" ]
+        args:
+        - cp /vault/secrets/config.json /data/config.json && /init
         ports:
         - containerPort: 51824
           name: web-ui
@@ -77,8 +82,8 @@ spec:
             cpu: 5m
             memory: 64Mi
         volumeMounts:
-        - name: ring-state
-          mountPath: /data/ring-state.json
+        - name: ring-data
+          mountPath: /data
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
@@ -87,12 +92,12 @@ spec:
         operator: "Exists"
         effect: "NoSchedule"
       volumes:
-      - name: ring-state
+      - name: ring-data
         hostPath:
-          path: /mnt/ring-mqtt/ring-state.json
-          type: FileOrCreate
+          path: /mnt/ring-mqtt
+          type: DirectoryOrCreate
 ---
-apiVersion: v1
+apiVersion: v1 
 kind: Service
 metadata:
   name: ring-mqtt
