@@ -24,8 +24,15 @@ data:
   favorites.nsp: |
     {
       "name": "Favoritos",
-      "comment": "Reproduce canciones marcadas",
-      "all": [{ "any": [ { "is": { "loved": true } }, { "gt": { "rating": 3 } } ] }],
+      "comment": "Canciones marcadas como favoritas o con rating alto",
+      "all": [
+        {
+          "any": [
+            { "is": { "loved": true } },
+            { "gt": { "rating": 3 } }
+          ]
+        }
+      ],
       "sort": "dateLoved",
       "order": "desc"
     }
@@ -33,7 +40,7 @@ data:
   supermix.nsp: |
     {
       "name": "Super Mix",
-      "comment": "Super Mix de canciones favoritas",
+      "comment": "Selección aleatoria de canciones con rating alto o que ya han sido reproducidas",
       "all": [
         {
           "any": [
@@ -49,7 +56,7 @@ data:
   supersupermix.nsp: |
     {
       "name": "Super Super Mix",
-      "comment": "Super Mix de canciones super favoritas",
+      "comment": "Selección aleatoria de canciones con rating muy alto o reproducidas anteriormente",
       "all": [
         {
           "any": [
@@ -65,6 +72,7 @@ data:
   top_60s.nsp: |
     {
       "name": "Top 60s Mix",
+      "comment": "Canciones favoritas o reproducidas de los años 60",
       "all": [
         {
           "any": [
@@ -82,6 +90,7 @@ data:
   top_70s.nsp: |
     {
       "name": "Top 70s Mix",
+      "comment": "Canciones favoritas o reproducidas de los años 70",
       "all": [
         {
           "any": [
@@ -99,6 +108,7 @@ data:
   top_80s.nsp: |
     {
       "name": "Top 80s Mix",
+      "comment": "Canciones favoritas o reproducidas de los años 80",
       "all": [
         {
           "any": [
@@ -116,6 +126,7 @@ data:
   top_90s.nsp: |
     {
       "name": "Top 90s Mix",
+      "comment": "Canciones favoritas o reproducidas de los años 90",
       "all": [
         {
           "any": [
@@ -133,6 +144,7 @@ data:
   top_00s.nsp: |
     {
       "name": "Top 00s Mix",
+      "comment": "Canciones favoritas o reproducidas de los años 2000",
       "all": [
         {
           "any": [
@@ -146,3 +158,4 @@ data:
       "sort": "-rating,title",
       "limit": 25
     }
+
