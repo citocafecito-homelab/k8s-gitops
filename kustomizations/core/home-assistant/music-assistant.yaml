@@ -46,7 +46,9 @@ spec:
       - name: music-assistant
         image: ghcr.io/music-assistant/server:latest
         ports:
-        - containerPort: 8095
+        - name: tcp
+          protocol: TCP
+          containerPort: 8096
         resources:
           requests:
             cpu: 5m
@@ -84,4 +86,4 @@ spec:
   - name: http
     protocol: TCP
     port: 8095
-    targetPort: 8095
+    targetPort: 8096

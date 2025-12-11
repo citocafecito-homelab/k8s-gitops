@@ -20,5 +20,4 @@ resources:
 - whisper.yaml
 - piper.yaml
 - openwakeword.yaml
-
-# - music-assistant.yaml
+- music-assistant.yaml

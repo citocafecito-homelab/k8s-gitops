@@ -63,7 +63,7 @@ data:
     address=/julie.lan/192.168.1.221
 
     # Printer
-    address=/impresora.lan/192.168.1.254
+    address=/impresora.lan/192.168.1.225
 ---
 apiVersion: v1
 kind: ConfigMap
