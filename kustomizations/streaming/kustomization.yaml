@@ -13,5 +13,6 @@ resources:
 - sonarr.yaml
 - radarr.yaml
 - bazarr.yaml
+- lidarr.yaml
 - jellyserr.yaml
 - jellyfin.yaml

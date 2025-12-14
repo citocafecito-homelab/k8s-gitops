@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lidarr
+  labels:
+    app: lidarr
+    app.kubernetes.io/name: lidarr
+    app.kubernetes.io/instance: streaming-stack
+    app.kubernetes.io/part-of: streaming-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lidarr
+      app.kubernetes.io/name: lidarr
+      app.kubernetes.io/instance: streaming-stack
+  template:
+    metadata:
+      labels:
+        app: lidarr
+        app.kubernetes.io/name: lidarr
+        app.kubernetes.io/instance: streaming-stack
+        app.kubernetes.io/part-of: streaming-stack
+    spec:
+      containers:
+      - name: lidarr
+        image: lscr.io/linuxserver/lidarr:latest
+        ports:
+        - containerPort: 8686
+        envFrom:
+        - configMapRef:
+            name: streaming-stack-config
+        resources:
+          requests:
+            memory: 64Mi
+            cpu: 5m
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          allowPrivilegeEscalation: true
+          capabilities:
+            drop: [ "ALL" ]
+            add: [ "CHOWN", "SETGID", "SETUID" ]
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8686
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8686
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: downloads
+          mountPath: /downloads
+        - name: movies
+          mountPath: /movies
+        - name: music 
+          mountPath: /music
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
+      volumes:
+      - name: config
+        hostPath:
+          path: /mnt/lidarr
+          type: DirectoryOrCreate
+      - name: downloads
+        persistentVolumeClaim: 
+          claimName: downloads-pvc
+      - name: movies
+        persistentVolumeClaim:
+          claimName: movies-pvc
+      - name: music
+        persistentVolumeClaim:
+          claimName: music-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lidarr
+  labels:
+    app: lidarr
+    app.kubernetes.io/name: lidarr
+    app.kubernetes.io/instance: streaming-stack
+    app.kubernetes.io/part-of: streaming-stack
+spec:
+  selector:
+    app: lidarr
+    app.kubernetes.io/name: lidarr
+    app.kubernetes.io/instance: streaming-stack
+  ports:
+  - name: http
+    port: 8686
+    targetPort: 8686
+    nodePort: 30686
+  type: NodePort
