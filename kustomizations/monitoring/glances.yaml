@@ -7,10 +7,12 @@ spec:
   selector:
     matchLabels:
       app: glances
+      app.kubernetes.io/name: glances
   template:
     metadata:
       labels:
         app: glances
+        app.kubernetes.io/name: glances
     spec:
       hostPID: true
       containers:

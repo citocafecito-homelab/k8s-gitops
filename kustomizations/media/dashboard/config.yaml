@@ -174,7 +174,7 @@ data:
                   format: "number"
                   suffix: " km/h"
 
-    - Sistema:
+    - Nodo Catuai:
         - CloudFlare Tunnel:
             href: https://one.dash.cloudflare.com/e19111ae758ecab4a1a6a15d7c74be1b/networks/tunnels/cfd_tunnel/b2b836e5-915c-4227-b280-a8cfe0e445c4/edit?tab=overview
             icon: https://icon.icepanel.io/Technology/svg/Cloudflare.svg
@@ -210,6 +210,15 @@ data:
               url: http://192.168.1.10
               version: 6
               key: "{{HOMEPAGE_VAR_PIHOLE_TOKEN}}"
+
+        - Glances:
+            href: http://192.168.1.10:61208/
+            icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/glances-light.svg
+            description: "Monitoreo de recursos del sistema"
+            namespace: monitoring
+            app: glances
+            showStats: true
+            ping: http://192.168.1.10:61208/
               
         - Red:
             href: http://192.168.1.10:30880/
@@ -225,14 +234,6 @@ data:
               version: 2
               key: "{{HOMEPAGE_VAR_SPEEDTEST_TOKEN}}"
               bitratePrecision: 3
-
-        - Dashboard:
-            description: Recursos usados por este dashboard
-            href: https://one.dash.cloudflare.com/e19111ae758ecab4a1a6a15d7c74be1b/networks/tunnels/cfd_tunnel/b2b836e5-915c-4227-b280-a8cfe0e445c4/edit?tab=overview
-            icon: https://github.com/gethomepage/homepage/raw/main/public/android-chrome-192x192.png
-            namespace: media
-            app: homepage
-            showStats: true
 
     - Core Apps:
         - Self Hosted Runners: 
@@ -400,7 +401,27 @@ data:
         #     app: wikijs-postgresql
         #     showStats: true
 
-    - Streaming:
+        - Dashboard:
+            description: Recursos usados por este dashboard
+            href: https://one.dash.cloudflare.com/e19111ae758ecab4a1a6a15d7c74be1b/networks/tunnels/cfd_tunnel/b2b836e5-915c-4227-b280-a8cfe0e445c4/edit?tab=overview
+            icon: https://github.com/gethomepage/homepage/raw/main/public/android-chrome-192x192.png
+            namespace: media
+            app: homepage
+            showStats: true
+
+    - Audio & Video:
+        - Lidarr:
+            description: Descarga y gestiona automáticamente canciones
+            icon: https://raw.githubusercontent.com/Lidarr/Lidarr/develop/Logo/512.png
+            showStats: true
+            namespace: streaming
+            app: lidarr
+            # widget:
+            #   type: sonarr
+            #   url: http://sonarr.streaming.svc.cluster.local:8989
+            #   key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
+            #   enableQueue: false
+
         - Jellyfin:
             href: https://jellyfin.citocafecito.work/
             description: Servidor de medios de código abierto
@@ -427,7 +448,7 @@ data:
               url: http://jellyseerr.streaming.svc.cluster.local:5055
               key: "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}"
 
-    - Series & Movies:
+    - Series, Movies & Music:
         - Bazarr:
             description: Descarga y gestiona subtítulos automáticamente
             icon: https://raw.githubusercontent.com/loganmarchione/homelab-svg-assets/refs/heads/main/assets/bazarr.svg

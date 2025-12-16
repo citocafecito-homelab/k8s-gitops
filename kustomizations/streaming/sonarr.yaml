@@ -48,13 +48,13 @@ spec:
           periodSeconds: 15
           timeoutSeconds: 5
           failureThreshold: 3
-        securityContext:
-          runAsUser: 0
-          runAsGroup: 0
-          allowPrivilegeEscalation: true
-          capabilities:
-            drop: [ "ALL" ]
-            add: [ "CHOWN", "SETGID", "SETUID" ]
+        # securityContext:
+        #   runAsUser: 0
+        #   runAsGroup: 0
+        #   allowPrivilegeEscalation: true
+        #   capabilities:
+        #     drop: [ "ALL" ]
+        #     add: [ "CHOWN", "SETGID", "SETUID" ]
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
