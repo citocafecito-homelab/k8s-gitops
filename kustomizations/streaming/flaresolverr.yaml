@@ -23,24 +23,29 @@ spec:
         image: ghcr.io/flaresolverr/flaresolverr:latest
         ports:
         - containerPort: 8191
+        env:
+        - name: CAPTCHA_SOLVER
+          value: 'hcaptcha-solver'
         envFrom:
         - configMapRef:
             name: streaming-stack-config
         resources:
           requests:
-            memory: 64Mi
-            cpu: 5m
+            memory: 512Mi
+            cpu: 50m
         livenessProbe:
-          tcpSocket:
+          httpGet:
+            path: /health
             port: 8191
-          initialDelaySeconds: 20
-          periodSeconds: 30
-          timeoutSeconds: 5
-          failureThreshold: 5
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          timeoutSeconds: 10
+          failureThreshold: 3
         readinessProbe:
-          tcpSocket:
+          httpGet:
+            path: /health
             port: 8191
-          initialDelaySeconds: 10
+          initialDelaySeconds: 15
           periodSeconds: 15
           timeoutSeconds: 5
           failureThreshold: 3
@@ -51,6 +56,32 @@ spec:
       - key: "node-role.kubernetes.io/master"
         operator: "Exists"
         effect: "NoSchedule"
+---
+# apiVersion: autoscaling/v2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: flaresolverr-hpa
+#   namespace: streaming
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: flaresolverr
+#   minReplicas: 1
+#   maxReplicas: 3
+#   metrics:
+#   - type: Resource
+#     resource:
+#       name: cpu
+#       target:
+#         type: Utilization
+#         averageUtilization: 70
+#   - type: Resource
+#     resource:
+#       name: memory
+#       target:
+#         type: Utilization
+#         averageUtilization: 80
 ---
 apiVersion: v1
 kind: Service

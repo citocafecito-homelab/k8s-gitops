@@ -106,5 +106,3 @@ spec:
   - name: http
     port: 6767
     targetPort: 6767
-    nodePort: 30677
-  type: NodePort

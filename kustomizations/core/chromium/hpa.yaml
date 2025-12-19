@@ -8,11 +8,11 @@ spec:
     kind: Deployment
     name: chrome
   minReplicas: 1
-  maxReplicas: 3
+  maxReplicas: 2
   metrics:
     - type: Resource
       resource:
-        name: cpu
+        name: memory
         target:
           type: Utilization
-          averageUtilization: 70
+          averageUtilization: 80

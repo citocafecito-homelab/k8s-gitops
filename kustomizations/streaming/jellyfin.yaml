@@ -68,6 +68,8 @@ spec:
           mountPath: /media/series
         - name: concerts
           mountPath: /media/concerts
+        - name: music
+          mountPath: /media/music
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
@@ -89,6 +91,9 @@ spec:
       - name: concerts
         persistentVolumeClaim:
           claimName: concerts-pvc
+      - name: music
+        persistentVolumeClaim:
+          claimName: music-pvc
 ---
 apiVersion: v1
 kind: Service

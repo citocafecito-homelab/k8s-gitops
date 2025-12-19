@@ -1,0 +1,29 @@
+repositories:
+- name: traefik
+  url: https://traefik.github.io/charts
+  
+- name: actions-runner-controller
+  url: https://actions-runner-controller.github.io/actions-runner-controller
+
+releases:
+- name: traefik
+  namespace: networking
+  chart: ./charts/traefik
+  hooks:
+    - events: ["prepare"]
+      command: "helm"
+      args: ["dependency", "update", "./charts/traefik"]
+
+- name: actions-runner-controller
+  namespace: actions
+  chart: ./charts/github-runner
+  hooks:
+    - events: ["prepare"]
+      command: "helm"
+      args: ["dependency", "update", "./charts/github-runner"]
+
+hooks:
+  - events: ["postsync"]
+    showlogs: true
+    command: "kubectl"
+    args: ["apply", "-k", "./kustomizations/streaming"]

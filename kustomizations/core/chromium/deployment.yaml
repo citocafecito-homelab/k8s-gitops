@@ -23,7 +23,11 @@ spec:
           - name: TIMEOUT
             value: "10000"
           - name: CONCURRENT
-            value: "10"
+            value: "5"
+          - name: PREBOOT_CHROME
+            value: "true"
+          - name: "CHROME_FLAGS"
+            value: "--disable-gpu --disable-dev-shm-usage --no-sandbox --single-process"
           - name: TOKEN
             valueFrom:
               secretKeyRef:
@@ -35,3 +39,25 @@ spec:
             value: "true"
           ports:
             - containerPort: 3000
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "512Mi"
+            limits:
+              cpu: "800m"
+              memory: "1.5Gi"
+          # Din't work - I will check it later
+          # livenessProbe:
+          #   httpGet:
+          #     path: /pressure
+          #     port: 3000
+          #   initialDelaySeconds: 60
+          #   periodSeconds: 30
+          #   failureThreshold: 3
+          # readinessProbe:
+          #   httpGet:
+          #     path: /pressure
+          #     port: 3000
+          #   initialDelaySeconds: 15
+          #   periodSeconds: 15
+          #   successThreshold: 1

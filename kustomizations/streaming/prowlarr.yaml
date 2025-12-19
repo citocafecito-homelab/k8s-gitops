@@ -79,9 +79,7 @@ metadata:
 spec:
   selector:
     app: prowlarr
-  type: NodePort
   ports:
   - name: http
     port: 9696
     targetPort: 9696
-    nodePort: 30996

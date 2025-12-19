@@ -1,0 +1,9 @@
+apiVersion: v2
+name: traefik-setup
+description: Umbrella chart para instalar Traefik
+type: application
+version: 1.0.0
+dependencies:
+  - name: traefik
+    version: 38.0.0
+    repository: https://traefik.github.io/charts
