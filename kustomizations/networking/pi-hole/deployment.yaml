@@ -29,7 +29,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: pihole
-        image: pihole/pihole:2025.11.0
+        image: pihole/pihole:2025.11.1
         envFrom:
         - configMapRef:
             name: pihole-env
@@ -48,8 +48,8 @@ spec:
           protocol: UDP
         resources:
           requests:
-            cpu: 50m
-            memory: 256Mi
+            cpu: 500m
+            memory: 1024Mi
         securityContext:
           capabilities:
             add:

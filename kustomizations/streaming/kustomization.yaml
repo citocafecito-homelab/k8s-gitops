@@ -16,4 +16,6 @@ resources:
 - lidarr.yaml
 - jellyserr.yaml
 - jellyfin.yaml
+# Not enough resources
+# - tinymediamanager.yaml
 - ingress.yaml

@@ -44,7 +44,7 @@ spec:
               service:
                 name: radarr
                 port:
-                  number: 8989
+                  number: 7878
     - host: lidarr.catuai.lan
       http:
         paths:
@@ -65,3 +65,13 @@ spec:
                 name: flaresolverr
                 port:
                   number: 8191
+    - host: tinymediamanager.catuai.lan
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: tinymediamanager
+                port:
+                  number: 4000

@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tinymediamanager
+  namespace: streaming
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tinymediamanager
+      app.kubernetes.io/name: tinymediamanager
+      app.kubernetes.io/instance: streaming-stack
+  template:
+    metadata:
+      labels:
+        app: tinymediamanager
+        app.kubernetes.io/name: tinymediamanager
+        app.kubernetes.io/instance: streaming-stack
+    spec:
+      containers:
+        - name: tinymediamanager
+          image: tinymediamanager/tinymediamanager:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5800
+            - containerPort: 4000
+          envFrom:
+            - configMapRef:
+                name: streaming-stack-config
+          volumeMounts:
+            - name: movies
+              mountPath: /media/movies
+            - name: series
+              mountPath: /media/series
+            - name: music
+              mountPath: /media/music
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: movies
+          persistentVolumeClaim:
+            claimName: movies-pvc
+        - name: series
+          persistentVolumeClaim:
+            claimName: series-pvc
+        - name: music
+          persistentVolumeClaim:
+            claimName: music-pvc
+        - name: config
+          hostPath:
+            path: /mnt/tinymediamanager
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tinymediamanager
+  labels:
+    app: tinymediamanager
+    app.kubernetes.io/name: tinymediamanager
+    app.kubernetes.io/instance: streaming-stack
+    app.kubernetes.io/part-of: streaming-stack
+spec:
+  selector:
+    app: tinymediamanager
+    app.kubernetes.io/name: tinymediamanager
+    app.kubernetes.io/instance: streaming-stack
+  ports:
+  - name: web
+    port: 5800
+    targetPort: 5800
+  - name: http
+    port: 4000
+    targetPort: 4000
