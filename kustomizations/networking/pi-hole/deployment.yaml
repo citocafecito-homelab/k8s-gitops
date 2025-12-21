@@ -15,14 +15,14 @@ spec:
       labels:
         app: pihole
         app.kubernetes.io/name: pihole
-      annotations:
-        vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/role: "vault"
-        vault.hashicorp.com/agent-inject-secret-admin_password: "secret/data/pihole"
-        vault.hashicorp.com/agent-inject-template-admin_password: |
-          {{- with secret "secret/data/pihole" -}}
-          {{ .Data.data.ADMIN_PASSWORD }}
-          {{- end }}
+      # annotations:
+      #   vault.hashicorp.com/agent-inject: "true"
+      #   vault.hashicorp.com/role: "vault"
+      #   vault.hashicorp.com/agent-inject-secret-admin_password: "secret/data/pihole"
+      #   vault.hashicorp.com/agent-inject-template-admin_password: |
+      #     {{- with secret "secret/data/pihole" -}}
+      #     {{ .Data.data.ADMIN_PASSWORD }}
+      #     {{- end }}
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
@@ -48,8 +48,11 @@ spec:
           protocol: UDP
         resources:
           requests:
-            cpu: 500m
+            cpu: 600m
             memory: 1024Mi
+          limits:
+            cpu: 1
+            memory: 4096Mi
         securityContext:
           capabilities:
             add:

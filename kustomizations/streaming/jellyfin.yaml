@@ -34,6 +34,9 @@ spec:
           requests:
             memory: 1024Mi
             cpu: 100m
+          limits:
+            cpu: 1
+            memory: 2048Mi
         securityContext:
           runAsUser: 0
           runAsGroup: 0

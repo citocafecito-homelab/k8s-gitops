@@ -5,8 +5,8 @@ resources:
 # Not enough cpu available
 # - mydrive
 # - infisical
+# - reactive-resume
 - minio
-- reactive-resume
 
 # Work in progress. Stoped due no enough hardware
 # - next-cloud

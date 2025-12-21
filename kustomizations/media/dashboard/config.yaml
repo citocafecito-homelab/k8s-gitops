@@ -417,8 +417,8 @@ data:
             namespace: streaming
             app: lidarr
             # widget:
-            #   type: sonarr
-            #   url: http://sonarr.streaming.svc.cluster.local:8989
+            #   type: lidarr
+            #   url: http://lidarr.streaming.svc.cluster.local:8989
             #   key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
             #   enableQueue: false
 
