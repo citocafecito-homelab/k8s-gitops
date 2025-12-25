@@ -3,5 +3,6 @@ kind: Kustomization
 
 resources:
 - glances.yaml
+- ingress.yaml
 
 namespace: monitoring
