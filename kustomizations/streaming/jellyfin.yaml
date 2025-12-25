@@ -1,3 +1,5 @@
+# Run kubectl apply -k https://github.com/intel/intel-device-plugins-for-kubernetes/deployments/gpu_plugin/overlays/nfd_labeled_nodes?ref=main
+# Check GPU run: sudo intel_gpu_top
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,6 +20,9 @@ spec:
       containers:
       - name: jellyfin
         image: jellyfin/jellyfin:latest
+        env:
+        - name: LIBVA_DRIVER_NAME
+          value: "iHD"
         envFrom:
         - configMapRef:
             name: streaming-stack-config
@@ -33,13 +38,16 @@ spec:
         resources:
           requests:
             memory: 1024Mi
-            cpu: 100m
+            cpu: 200m
           limits:
             cpu: 1
             memory: 2048Mi
         securityContext:
           runAsUser: 0
           runAsGroup: 0
+          privileged: true
+          capabilities:
+            add: ["SYS_RAWIO"]
         startupProbe:
           httpGet:
             path: /
@@ -63,6 +71,10 @@ spec:
           timeoutSeconds: 3
           failureThreshold: 3
         volumeMounts:
+        - mountPath: /dev/dri
+          name: dri
+        - mountPath: /dev/shm
+          name: shm
         - name: config
           mountPath: /config
         - name: movies
@@ -81,6 +93,13 @@ spec:
         operator: "Exists"
         effect: "NoSchedule"
       volumes:
+      - name: dri
+        hostPath:
+          path: /dev/dri
+      - name: shm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 512Mi
       - name: config
         hostPath:
           path: /mnt/jellyfin

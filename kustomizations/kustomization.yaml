@@ -5,6 +5,7 @@ resources:
 - metallb
 - networking
 - core
+- home-assistant
 - storage
 - media
 - monitoring

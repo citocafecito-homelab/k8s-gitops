@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources:
 - vault
-- home-assistant
 - chromium
 
 namespace: core

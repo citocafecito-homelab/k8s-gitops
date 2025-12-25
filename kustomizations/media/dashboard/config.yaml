@@ -248,7 +248,7 @@ data:
             href: https://vault.citocafecito.work/
             description: Gestión de secretos y claves
             icon: https://icon.icepanel.io/Technology/svg/HashiCorp-Vault.svg
-            # ping: http://vault.core.svc.cluster.local:8200/v1/sys/health
+            # ping: http://vault.corecluster.local:8200/v1/sys/health
             namespace: core
             app: vault
             showStats: true

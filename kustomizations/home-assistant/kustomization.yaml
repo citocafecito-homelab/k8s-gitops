@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+# Home Assistant Core
+- config.yaml
+- pvc.yaml
+# - matter-stack.yaml
+- deployment.yaml
+- svc.yaml
+
+# Agents
+- addons/mosquitto.yaml
+- addons/matter.yaml
+# - addons/thread.yaml
+# - addons/zwave.yaml
+# - addons/zigbee2mqtt.yaml # Unnecesary if used ZHA 
+- addons/ring-mqtt.yaml
+# - addons/rhasspy.yaml
+# - addons/whisper.yaml
+# - addons/piper.yaml
+# - addons/openwakeword.yaml
+- addons/music-assistant.yaml
+
+namespace: home-assistant

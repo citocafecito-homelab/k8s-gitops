@@ -42,13 +42,14 @@ spec:
         app: music-assistant
         app.kubernetes.io/name: music-assistant
     spec:
+      hostNetwork: true
       containers:
       - name: music-assistant
         image: ghcr.io/music-assistant/server:latest
         ports:
         - name: tcp
           protocol: TCP
-          containerPort: 8096
+          containerPort: 8095
         resources:
           requests:
             cpu: 5m
@@ -65,7 +66,6 @@ spec:
         volumeMounts:
         - name: music-assistant-data
           mountPath: /data
-      hostNetwork: true
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
@@ -89,4 +89,4 @@ spec:
   - name: http
     protocol: TCP
     port: 8095
-    targetPort: 8096
+    targetPort: 8095
