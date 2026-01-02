@@ -45,11 +45,14 @@ spec:
         - name: FILE__PASS
           value: /vault/secrets/pass
         - name: HOST_WHITELIST
-          value: "0.0.0.0,192.168.1.10,192.168.*.*,127.0.0.1"
+          value: "0.0.0.0,192.168.1.0/24,127.0.0.1"
         resources:
           requests:
-            memory: 64Mi
-            cpu: 5m
+            cpu: 50m
+            memory: 256Mi
+          limits:
+            cpu: 250m
+            memory: 512Mi
         volumeMounts:
         - name: config
           mountPath: /config
@@ -82,14 +85,7 @@ spec:
   - name: webui
     port: 9091
     targetPort: 9091
-  - name: tcp
-    port: 51413
-    targetPort: 51413
     protocol: TCP
-  - name: udp
-    port: 51413
-    targetPort: 51413
-    protocol: UDP
 ---
 apiVersion: v1
 kind: Service

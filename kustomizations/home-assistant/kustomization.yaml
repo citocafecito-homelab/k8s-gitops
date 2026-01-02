@@ -19,6 +19,6 @@ resources:
 # - addons/whisper.yaml
 # - addons/piper.yaml
 # - addons/openwakeword.yaml
-- addons/music-assistant.yaml
+# - addons/music-assistant.yaml
 
 namespace: home-assistant

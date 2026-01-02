@@ -6,7 +6,7 @@ resources:
 # - dashboard 
 # - wiki
 - suwayomi
-- linkstack 
+# - linkstack 
 - navidrome
 
 namespace: media

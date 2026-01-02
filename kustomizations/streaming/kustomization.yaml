@@ -7,7 +7,7 @@ resources:
 - config.yaml
 - pvc.yaml
 - transmission.yaml
-- qbittorrent.yaml
+# - qbittorrent.yaml
 - flaresolverr.yaml
 - prowlarr.yaml
 - sonarr.yaml
@@ -18,4 +18,5 @@ resources:
 - jellyfin.yaml
 # Not enough resources
 # - tinymediamanager.yaml
+# - tdarr.yaml
 - ingress.yaml

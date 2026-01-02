@@ -52,11 +52,11 @@ spec:
           containerPort: 8095
         resources:
           requests:
-            cpu: 5m
-            memory: 64Mi
-          limits:
-            cpu: 100m
+            cpu: 50m
             memory: 256Mi
+          limits:
+            cpu: 200m
+            memory: 512Mi
         securityContext:
           privileged: true
           capabilities:

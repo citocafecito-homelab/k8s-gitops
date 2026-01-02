@@ -23,7 +23,7 @@ spec:
           - name: TIMEOUT
             value: "10000"
           - name: CONCURRENT
-            value: "5"
+            value: "3"
           - name: PREBOOT_CHROME
             value: "true"
           - name: "CHROME_FLAGS"
@@ -41,10 +41,10 @@ spec:
             - containerPort: 3000
           resources:
             requests:
-              cpu: "200m"
+              cpu: "100m"
               memory: "512Mi"
             limits:
-              cpu: "800m"
+              cpu: "300m"
               memory: "1.5Gi"
           # Din't work - I will check it later
           # livenessProbe:

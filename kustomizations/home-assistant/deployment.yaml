@@ -31,7 +31,7 @@ spec:
             - SYS_ADMIN
         resources:
           requests:
-            cpu: 0.5
+            cpu: 200m
             memory: 2048Mi
         readinessProbe:
           httpGet:

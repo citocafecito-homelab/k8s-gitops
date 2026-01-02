@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
 - pi-hole
-- speedtest.yaml
+# - speedtest.yaml
 # - traefik
 
 namespace: networking
