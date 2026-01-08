@@ -1,3 +1,5 @@
+
+---
 apiVersion: actions.summerwind.dev/v1alpha1
 kind: RunnerDeployment
 metadata:
@@ -14,7 +16,8 @@ spec:
         app: k8s-runners
         app.kubernetes.io/name: k8s-runners
     spec:
+      dockerEnabled: false
       organization: citocafecito-homelab
+      serviceAccountName: github-runner
       labels: []
       env: []
-      dockerEnabled: false
