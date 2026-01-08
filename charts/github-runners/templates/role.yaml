@@ -5,7 +5,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: github-runner
-  namespace: actions
+  namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: cluster-admin

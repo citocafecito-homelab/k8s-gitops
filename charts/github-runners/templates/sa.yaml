@@ -2,4 +2,4 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: github-runner
-  namespace: actions
+  namespace: {{ .Release.Namespace }}

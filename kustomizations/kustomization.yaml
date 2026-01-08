@@ -5,9 +5,9 @@ resources:
 - metallb
 - networking
 - core
-- actions
 - home-assistant
 - storage
 - media
 - monitoring
 - streaming
+- development

@@ -1,0 +1,8 @@
+actions-runner-controller:
+  syncPeriod: 10m
+
+
+githubApp:
+  id: ""
+  installationId: ""
+  privateKey: ""

@@ -1,0 +1,52 @@
+namespace: development
+
+hostPath: /mnt/penpot
+
+penpot:
+  global:
+    postgresqlEnabled: true
+    valkeyEnabled: true
+    redisEnabled: false
+
+  config:
+    publicUri: https://penpot.citocafecito.work
+    flags: >
+      enable-registration
+      enable-login-with-password
+      disable-email-verification
+
+  persistence:
+    assets:
+      enabled: true
+      volumeName: penpot-assets-pv
+
+  postgresql:
+    primary:
+      persistence:
+        enabled: true
+        volumeName: penpot-postgres-pv
+
+  valkey:
+    primary:
+      persistence:
+        enabled: true
+        size: 5Gi
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+  hosts:
+    - host: penpot.lan
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: penpot.citocafecito.work
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: penpot-tls
+      hosts:
+        - penpot.citocafecito.work
