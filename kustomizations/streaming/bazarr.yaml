@@ -66,11 +66,10 @@ spec:
           mountPath: /movies
         - name: series
           mountPath: /tv
+      nodeSelector:
+        kubernetes.io/hostname: catuai
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
         operator: "Exists"
         effect: "NoSchedule"
       volumes:

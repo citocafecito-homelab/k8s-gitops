@@ -56,30 +56,13 @@ spec:
         volumeMounts:
         - name: jellyseerr-config
           mountPath: /app/config
-        - name: movies
-          mountPath: /mnt/multimedia/movies
-          readOnly: true
-        - name: series
-          mountPath: /mnt/multimedia/series
-          readOnly: true
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
-        operator: "Exists"
-        effect: "NoSchedule"
+      nodeSelector:
+        kubernetes.io/hostname: caturra
       volumes:
       - name: jellyseerr-config
         hostPath:
           path: /mnt/jellyseerr
           type: DirectoryOrCreate
-      - name: movies
-        persistentVolumeClaim:
-          claimName: movies-pvc
-      - name: series
-        persistentVolumeClaim:
-          claimName: series-pvc
 ---
 apiVersion: v1
 kind: Service

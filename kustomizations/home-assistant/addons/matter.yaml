@@ -101,6 +101,9 @@ spec:
           mountPath: /sys
         - name: bluetooth-dev
           mountPath: /dev/bus/usb
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
       volumes:
       - name: matter-config
         persistentVolumeClaim:
@@ -116,13 +119,6 @@ spec:
         hostPath:
           path: /dev/bus/usb
           type: DirectoryOrCreate
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
-        operator: "Exists"
-        effect: "NoSchedule"
 ---
 apiVersion: v1
 kind: Service

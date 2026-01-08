@@ -52,14 +52,7 @@ spec:
           failureThreshold: 3
         volumeMounts:
         - name: linkstack-mysql
-          mountPath: /var/lib/mysql 
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
-        operator: "Exists"
-        effect: "NoSchedule"
+          mountPath: /var/lib/mysql
       volumes:
       - name: linkstack-mysql
         persistentVolumeClaim:

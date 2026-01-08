@@ -48,18 +48,10 @@ spec:
           periodSeconds: 15
           timeoutSeconds: 5
           failureThreshold: 3
-        # securityContext:
-        #   runAsUser: 0
-        #   runAsGroup: 0
-        #   allowPrivilegeEscalation: true
-        #   capabilities:
-        #     drop: [ "ALL" ]
-        #     add: [ "CHOWN", "SETGID", "SETUID" ]
+      nodeSelector:
+        kubernetes.io/hostname: catuai
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
         operator: "Exists"
         effect: "NoSchedule"
       volumes:

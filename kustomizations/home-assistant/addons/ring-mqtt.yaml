@@ -87,13 +87,6 @@ spec:
         volumeMounts:
         - name: ring-data
           mountPath: /data
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
-        operator: "Exists"
-        effect: "NoSchedule"
       volumes:
       - name: ring-data
         hostPath:

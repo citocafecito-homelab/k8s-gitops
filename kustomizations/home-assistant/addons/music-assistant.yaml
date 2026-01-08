@@ -52,11 +52,11 @@ spec:
           containerPort: 8095
         resources:
           requests:
-            cpu: 50m
-            memory: 256Mi
-          limits:
             cpu: 200m
-            memory: 512Mi
+            memory: 515Mi
+          limits:
+            cpu: 1
+            memory: 1024Mi
         securityContext:
           privileged: true
           capabilities:
@@ -66,13 +66,6 @@ spec:
         volumeMounts:
         - name: music-assistant-data
           mountPath: /data
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
-        operator: "Exists"
-        effect: "NoSchedule"
       volumes:
       - name: music-assistant-data
         persistentVolumeClaim:

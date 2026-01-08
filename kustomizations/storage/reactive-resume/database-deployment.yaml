@@ -54,12 +54,9 @@ spec:
         resources:
           requests:
             cpu: 5m
-            memory: 128Mi
+            memory: 64Mi
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
         operator: "Exists"
         effect: "NoSchedule"
       volumes:

@@ -12,7 +12,6 @@ resources:
 # - cache-svc.yaml
 
 # LinkStack
-# - server-pvc.yaml
 - server-config.yaml
 - server-deployment.yaml
 - server-svc.yaml

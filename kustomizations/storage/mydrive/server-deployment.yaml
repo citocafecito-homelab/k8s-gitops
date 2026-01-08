@@ -65,6 +65,12 @@ spec:
               mountPath: /data
             - name: temp
               mountPath: /temp
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
       volumes:
         - name: data
           hostPath:

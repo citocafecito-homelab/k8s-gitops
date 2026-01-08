@@ -6,6 +6,10 @@ repositories:
   url: https://actions-runner-controller.github.io/actions-runner-controller
 
 releases:
+# - name: vault-agent
+#   namespace: vault
+#   helm install vault hashicorp/vault --set="injector.enabled=true"
+
 - name: traefik
   namespace: networking
   chart: ./charts/traefik

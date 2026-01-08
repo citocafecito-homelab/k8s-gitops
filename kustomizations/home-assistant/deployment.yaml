@@ -32,7 +32,7 @@ spec:
         resources:
           requests:
             cpu: 200m
-            memory: 2048Mi
+            memory: 1048Mi
         readinessProbe:
           httpGet:
             path: /
@@ -66,9 +66,6 @@ spec:
       hostNetwork: true
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
         operator: "Exists"
         effect: "NoSchedule"
       volumes:

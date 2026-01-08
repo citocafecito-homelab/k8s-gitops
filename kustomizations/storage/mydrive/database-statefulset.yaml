@@ -40,6 +40,12 @@ spec:
               command: ["mongosh", "--eval", "db.adminCommand('ping')"]
             initialDelaySeconds: 30
             timeoutSeconds: 5
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
       volumes:
         - name: data
           hostPath:

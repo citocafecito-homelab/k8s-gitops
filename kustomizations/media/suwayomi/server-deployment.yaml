@@ -43,21 +43,14 @@ spec:
             name: suwayomi-config
         resources:
           requests:
-            cpu: 0.5
+            cpu: 50m
             memory: 1024Mi
           limits:
-            cpu: 1
+            cpu: 100m
             memory: 2048Mi
         volumeMounts:
         - name: suwayomi-storage
           mountPath: /home/suwayomi/.local/share/Tachidesk
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
-        operator: "Exists"
-        effect: "NoSchedule"
       volumes:
       - name: suwayomi-storage
         persistentVolumeClaim:

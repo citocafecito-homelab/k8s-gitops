@@ -28,8 +28,11 @@ spec:
             name: streaming-stack-config
         resources:
           requests:
-            memory: 64Mi
-            cpu: 5m
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
         securityContext:
           runAsUser: 0
           runAsGroup: 0
@@ -44,7 +47,6 @@ spec:
           periodSeconds: 30
           timeoutSeconds: 5
           failureThreshold: 5
-
         readinessProbe:
           tcpSocket:
             port: 9696
@@ -55,13 +57,8 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
-        operator: "Exists"
-        effect: "NoSchedule"
+      nodeSelector:
+        kubernetes.io/hostname: caturra
       volumes:
       - name: config
         hostPath:

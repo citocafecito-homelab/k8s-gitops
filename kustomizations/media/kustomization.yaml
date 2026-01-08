@@ -3,10 +3,10 @@ kind: Kustomization
 
 resources:
 # Removed due no enough cpu
-# - dashboard 
-# - wiki
+- dashboard
+- wiki
 - suwayomi
-# - linkstack 
+- linkstack
 - navidrome
 
 namespace: media

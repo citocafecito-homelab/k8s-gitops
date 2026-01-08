@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: glances
-  namespace: monitoring
 spec:
   selector:
     matchLabels:
@@ -20,7 +19,7 @@ spec:
           image: nicolargo/glances:latest
           env:
             - name: GLANCES_OPT
-              value: "-w --disable-plugin processlist --fs-free-space"
+              value: "-w -B 0.0.0.0 --disable-plugin processlist --fs-free-space"
           ports:
             - containerPort: 61208
               hostPort: 61208
@@ -28,6 +27,13 @@ spec:
             - name: host-root
               mountPath: /host
               readOnly: true
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
       volumes:
         - name: host-root
           hostPath:

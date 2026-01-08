@@ -48,11 +48,11 @@ spec:
           protocol: UDP
         resources:
           requests:
-            cpu: 600m
+            cpu: 100m
             memory: 1024Mi
           limits:
-            cpu: 1
-            memory: 4096Mi
+            cpu: 300m
+            memory: 2048Mi
         securityContext:
           capabilities:
             add:
@@ -65,6 +65,8 @@ spec:
         volumeMounts:
         - name: pihole-etc
           mountPath: /etc/pihole
+        - name: shm-volume
+          mountPath: /dev/shm
         - name: custom-dns
           mountPath: /etc/dnsmasq.d/custom.conf
           subPath: custom.conf
@@ -74,17 +76,20 @@ spec:
         - name: adlists
           mountPath: /etc/pihole/adlists.list
           subPath: adlists.list
+      nodeSelector:
+        kubernetes.io/hostname: catuai
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
         operator: "Exists"
         effect: "NoSchedule"
       volumes:
       - name: pihole-etc
         persistentVolumeClaim:
           claimName: pihole-pvc
+      - name: shm-volume
+        emptyDir:
+          medium: Memory
+          sizeLimit: 256Mi
       - name: custom-dns
         configMap:
           name: pihole-custom-dns
@@ -94,3 +99,4 @@ spec:
       - name: adlists
         configMap:
           name: pihole-adlists
+      

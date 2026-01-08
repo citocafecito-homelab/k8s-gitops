@@ -71,8 +71,11 @@ spec:
         - containerPort: 3000
         resources:
           requests:
-            cpu: 5m
-            memory: 64Mi
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 200m
+            memory: 512Mi
         volumeMounts:
         - mountPath: /app/config/custom.js
           name: homepage-config

@@ -38,8 +38,8 @@ spec:
         - containerPort: 3000
         resources:
           requests:
-            cpu: 5m
-            memory: 64Mi
+            cpu: 50m
+            memory: 256Mi
         livenessProbe:
           httpGet:
             path: /healthz
@@ -54,8 +54,5 @@ spec:
           failureThreshold: 3
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
         operator: "Exists"
         effect: "NoSchedule"
