@@ -10,4 +10,4 @@ resources:
 - media
 - monitoring
 - streaming
-- development
+- runner-deployment.yaml
