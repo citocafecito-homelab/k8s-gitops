@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
 - sa.yaml
+- role.yaml
 - runner-deployment.yaml
 
 namespace: actions
