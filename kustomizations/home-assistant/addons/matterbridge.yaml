@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: matterbridge-config
+data:
+  matterbridge.toml: |
+    
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matterbridge
+  labels:
+    app.kubernetes.io/name: matterbridge
+    app.kubernetes.io/part-of: home-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: matterbridge
+      app.kubernetes.io/name: matterbridge
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: matterbridge
+        app.kubernetes.io/name: matterbridge
+        app.kubernetes.io/part-of: home-assistant
+    spec:
+      hostNetwork: true
+      containers:
+      - name: matterbridge
+        image: luligu/matterbridge:latest
+        ports:
+        - containerPort: 8283
+        volumeMounts:
+        - name: storage
+          mountPath: /root/.matterbridge
+        - name: certificate
+          mountPath: /root/.mattercert
+      nodeSelector:
+        kubernetes.io/hostname: caturra
+      volumes:
+      - name: storage
+        hostPath:
+          path: /mnt/matterbridge/.mattercert
+          type: DirectoryOrCreate
+      - name: certificate
+        hostPath:
+          path: /mnt/matterbridge/.mattercert
+          type: DirectoryOrCreate

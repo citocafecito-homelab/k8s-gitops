@@ -11,6 +11,7 @@ resources:
 # Agents
 - addons/mosquitto.yaml
 - addons/matter.yaml
+# - addons/matterbridge.yaml
 # - addons/thread.yaml
 # - addons/zwave.yaml
 # - addons/zigbee2mqtt.yaml # Unnecesary if used ZHA 

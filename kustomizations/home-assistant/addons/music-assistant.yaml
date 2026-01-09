@@ -66,6 +66,8 @@ spec:
         volumeMounts:
         - name: music-assistant-data
           mountPath: /data
+      nodeSelector:
+        kubernetes.io/hostname: caturra
       volumes:
       - name: music-assistant-data
         persistentVolumeClaim:
