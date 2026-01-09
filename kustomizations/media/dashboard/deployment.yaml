@@ -106,6 +106,8 @@ spec:
         - name: multimedia
           mountPath: /mnt/multimedia
           readOnly: true
+      nodeSelector:
+        kubernetes.io/hostname: catuai
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
