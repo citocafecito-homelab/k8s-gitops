@@ -4,7 +4,7 @@ metadata:
   name: otbr-env
 data:
   OT_RCP_DEVICE: "spinel+hdlc+uart:///dev/ttyUSB0?uart-baudrate=115200"
-  OT_INFRA_IF: "enp1s0"
+  OT_INFRA_IF: "enp2s0"
   OT_THREAD_IF: "wpan0"
   OT_LOG_LEVEL: "7"
   OT_REST_LISTEN_ADDR: "0.0.0.0"
@@ -80,13 +80,8 @@ spec:
           mountPath: /data
         - name: rcp
           mountPath: /dev/ttyUSB0
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
-        operator: "Exists"
-        effect: "NoSchedule"
+      nodeSelector:
+        kubernetes.io/hostname: caturra
       volumes:
       - name: otbr-data
         hostPath:

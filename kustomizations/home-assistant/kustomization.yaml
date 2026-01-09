@@ -12,13 +12,13 @@ resources:
 - addons/mosquitto.yaml
 - addons/matter.yaml
 # - addons/matterbridge.yaml
-# - addons/thread.yaml
-# - addons/zwave.yaml
+- addons/thread.yaml
+- addons/zwave.yaml
 # - addons/zigbee2mqtt.yaml # Unnecesary if used ZHA 
 - addons/ring-mqtt.yaml
 # - addons/rhasspy.yaml
 # - addons/whisper.yaml
-# - addons/piper.yaml
+- addons/piper.yaml
 # - addons/openwakeword.yaml
 - addons/music-assistant.yaml
 

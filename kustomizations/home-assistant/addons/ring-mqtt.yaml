@@ -81,9 +81,6 @@ spec:
           requests:
             cpu: 100m
             memory: 256Mi
-          limits:
-            cpu: 200m
-            memory: 512Mi
         volumeMounts:
         - name: ring-data
           mountPath: /data

@@ -44,34 +44,30 @@ spec:
       - name: whisper
         image: rhasspy/wyoming-whisper:latest
         args:
-        - "--model"
-        # - "medium-int8"
-        - "base-int8"
-        - "--uri"
-        - "tcp://0.0.0.0:9000"
-        - "--data-dir"
-        - "/data"
-        - "--language"
-        - "es"
+        - "--local-files-only"
+        env:
+          - name: BEAM_SIZE
+            value: "5"
+          - name: CPU_THREADS
+            value: "2"
+          - name: LANGUAGE
+            value: "es"
+          - name: MODEL
+            value: "small-int8"
+          - name: URI
+            value: "tcp://0.0.0.0:9000"
         ports:
         - containerPort: 9000
         resources:
           requests:
-            cpu: 5m
-            memory: 256Mi
+            cpu: "500m"
+            memory: "768Mi"
           limits:
-            cpu: 100m
-            memory: 2Gi
+            cpu: "1500m"
+            memory: "1500Mi"
         volumeMounts:
         - name: whisper-data
           mountPath: /data
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
-        operator: "Exists"
-        effect: "NoSchedule"
       volumes:
       - name: whisper-data
         persistentVolumeClaim:

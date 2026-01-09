@@ -51,25 +51,11 @@ spec:
         - name: TZ
           value: America/Bogota
         - name: OWW_DEVICE
-          value: cpu # Remove if ussing GPU
-        # volumeMounts:
-        # - name: config-volume
-        #   mountPath: /config
+          value: cpu
         resources:
           requests:
             cpu: 1m
             memory: 64Mi
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
-        operator: "Exists"
-        effect: "NoSchedule"
-      # volumes:
-      # - name: config-volume
-      #   configMap:
-      #     name: openwakeword-config
 ---
 apiVersion: v1
 kind: Service
