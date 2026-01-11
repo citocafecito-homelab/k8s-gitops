@@ -19,7 +19,6 @@ spec:
         vault.hashicorp.com/agent-inject-secret-cloudflared: "secret/data/cloudflared"
         vault.hashicorp.com/agent-inject-secret-home-assistant: "secret/data/home-assistant"
         vault.hashicorp.com/agent-inject-secret-pihole: "secret/data/pihole"
-        vault.hashicorp.com/agent-inject-secret-speedtest: "secret/data/speedtest"
         vault.hashicorp.com/agent-inject-secret-suwayomi: "secret/data/suwayomi"
         vault.hashicorp.com/agent-inject-secret-streaming: "secret/data/streaming"
         vault.hashicorp.com/agent-inject-secret-transmission: "secret/data/transmission"
@@ -49,8 +48,6 @@ spec:
           HOMEPAGE_VAR_RADARR_API_KEY="{{ .Data.data.RADARR_KEY }}"
           HOMEPAGE_VAR_SONARR_API_KEY="{{ .Data.data.SONARR_KEY }}"
           HOMEPAGE_VAR_PROWLARR_API_KEY="{{ .Data.data.PROWLARR_KEY }}"
-          HOMEPAGE_VAR_QBITTORRENT_USERNAME="{{ .Data.data.QBITTORRENT_USERNAME }}"
-          HOMEPAGE_VAR_QBITTORRENT_PASSWORD="{{ .Data.data.QBITTORRENT_PASSWORD }}"
           {{ end }}
           {{ with secret "secret/data/transmission " -}}
           HOMEPAGE_VAR_TRANSMISSION_USERNAME="{{ .Data.data.USERNAME }}"
@@ -71,11 +68,11 @@ spec:
         - containerPort: 3000
         resources:
           requests:
-            cpu: 100m
-            memory: 256Mi
+            cpu: 10m
+            memory: 128Mi
           limits:
             cpu: 200m
-            memory: 512Mi
+            memory: 256Mi
         volumeMounts:
         - mountPath: /app/config/custom.js
           name: homepage-config

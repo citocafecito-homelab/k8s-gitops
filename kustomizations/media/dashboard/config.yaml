@@ -220,20 +220,20 @@ data:
             showStats: true
             ping: http://192.168.1.10:61208/
               
-        - Red:
-            href: http://192.168.1.10:30880/
-            icon: https://www.svgrepo.com/show/504905/speedtest-by-ookla.svg
-            description: "Velocidad de la red por Speedtest Tracker"
-            namespace: networking
-            app: speedtest-tracker
-            showStats: true
-            ping: http://192.168.1.10:30880/api/healthcheck
-            widget:
-              type: speedtest
-              url: http://speedtest-tracker.networking.svc.cluster.local
-              version: 2
-              key: "{{HOMEPAGE_VAR_SPEEDTEST_TOKEN}}"
-              bitratePrecision: 3
+        # - Red:
+        #     href: http://192.168.1.10:30880/
+        #     icon: https://www.svgrepo.com/show/504905/speedtest-by-ookla.svg
+        #     description: "Velocidad de la red por Speedtest Tracker"
+        #     namespace: networking
+        #     app: speedtest-tracker
+        #     showStats: true
+        #     ping: http://192.168.1.10:30880/api/healthcheck
+        #     widget:
+        #       type: speedtest
+        #       url: http://speedtest-tracker.networking.svc.cluster.local
+        #       version: 2
+        #       key: "{{HOMEPAGE_VAR_SPEEDTEST_TOKEN}}"
+        #       bitratePrecision: 3
 
     - Core Apps:
         - Self Hosted Runners: 
@@ -284,7 +284,7 @@ data:
             description: Centro de mando para la gestión y automatización del hogar
             icon: https://upload.wikimedia.org/wikipedia/en/thumb/4/49/Home_Assistant_logo_%282023%29.svg/1200px-Home_Assistant_logo_%282023%29.svg.png
             ping: http://192.168.1.10:8123
-            namespace: core
+            namespace: home-assistant
             app: home-assistant
             showStats: true
             widget:
@@ -301,28 +301,28 @@ data:
         - Mosquitto MTQQ:
             icon: https://avatars.githubusercontent.com/u/1544528
             description: Broker MQTT implementado con Eclipse Mosquitto
-            namespace: core
+            namespace: home-assistant
             app: mosquitto
             showStats: true
 
         # - ZwaveJS2MQTT:
         #     icon: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzxx1jjnLRtJSpaP9eDeAi1KDWrawKpWKmJg&s
         #     description: Integrador avanzado de dispositivos Z-Wave
-        #     namespace: core
+        #     namespace: home-assistant
         #     app: zwavejs2mqtt
         #     showStats: true
 
         - Matter:
             icon: https://cdn.jsdelivr.net/gh/selfhst/icons/svg/matter-light.svg
             description: Servidor Matter
-            namespace: core
+            namespace: home-assistant
             app: matter
             showStats: true
 
         - Thread:
             icon: https://homeautomationtalks.com/wp-content/uploads/2024/12/ThreadLogo-stort-1.png
             description: Red de malla para Matter
-            namespace: core
+            namespace: home-assistant
             app: openthread
             showStats: true
 
@@ -330,28 +330,28 @@ data:
         - Wake Word:
             icon: https://raw.githubusercontent.com/OHF-Voice/piper1-gpl/refs/heads/main/etc/logo.svg
             description: Convertidor de texto a voz
-            namespace: core
+            namespace: home-assistant
             app: piper
             showStats: true
 
         - Rhasspy:
             icon: https://play-lh.googleusercontent.com/hzDSG8bVSdrD_oMKHg5FijEMc_2KMH9bUucykpwBlSUvE_7fJZOdBBFJJ03_eNee0A
             description: Asistente de voz
-            namespace: core
+            namespace: home-assistant
             app: rhasspy
             showStats: true
 
         - Piper:
             icon: https://raw.githubusercontent.com/OHF-Voice/piper1-gpl/refs/heads/main/etc/logo.svg
             description: Convertidor de texto a voz
-            namespace: core
+            namespace: home-assistant
             app: piper
             showStats: true
 
         - Whisper:
             icon: https://avatars.githubusercontent.com/u/59055969?s=200&v=4
             description: Convertidor de voz a texto
-            namespace: core
+            namespace: home-assistant
             app: openwakeword
             showStats: true
 
@@ -496,17 +496,17 @@ data:
               url: http://prowlarr.streaming.svc.cluster.local:9696
               key: "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}"
 
-        - qBittorrent:
-            description: Cliente BitTorrent avanzado y de código abierto
-            icon: https://upload.wikimedia.org/wikipedia/commons/6/66/New_qBittorrent_Logo.svg
-            showStats: true
-            namespace: streaming
-            app: qbittorrent
-            widget:
-              type: qbittorrent
-              url: http://qbittorrent.streaming.svc.cluster.local:8080
-              username: "{{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}"
-              password: "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}"
+        # - qBittorrent:
+        #     description: Cliente BitTorrent avanzado y de código abierto
+        #     icon: https://upload.wikimedia.org/wikipedia/commons/6/66/New_qBittorrent_Logo.svg
+        #     showStats: true
+        #     namespace: streaming
+        #     app: qbittorrent
+        #     widget:
+        #       type: qbittorrent
+        #       url: http://qbittorrent.streaming.svc.cluster.local:8080
+        #       username: "{{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}"
+        #       password: "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}"
 
         - Transmission:
             description: Cliente BitTorrent ligero y rápido

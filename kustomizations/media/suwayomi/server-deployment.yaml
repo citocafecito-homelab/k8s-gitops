@@ -27,7 +27,7 @@ spec:
         fsGroup: 1000
       containers:
       - name: suwayomi
-        image: ghcr.io/suwayomi/suwayomi-server:v2.1.2031
+        image: ghcr.io/suwayomi/suwayomi-server:v2.1.2049
         command: [ "/bin/sh", "-c" ]
         args:
         - |
@@ -43,8 +43,8 @@ spec:
             name: suwayomi-config
         resources:
           requests:
-            cpu: 50m
-            memory: 750Mi
+            cpu: 10m
+            memory: 256Mi
           limits:
             cpu: 100m
             memory: 1024Mi

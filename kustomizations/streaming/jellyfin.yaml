@@ -37,11 +37,11 @@ spec:
           protocol: UDP
         resources:
           requests:
-            memory: 2048Mi
+            memory: 3Gi
             cpu: 1
           limits:
             cpu: 2
-            memory: 4096Mi
+            memory: 8Gi
         securityContext:
           runAsUser: 0
           runAsGroup: 0
@@ -75,6 +75,8 @@ spec:
           name: dri
         - mountPath: /dev/shm
           name: shm
+        - name: transcode-cache
+          mountPath: /cache
         - name: config
           mountPath: /config
         - name: movies
@@ -99,6 +101,10 @@ spec:
         emptyDir:
           medium: Memory
           sizeLimit: 1024Mi
+      - name: transcode-cache
+        emptyDir:
+          medium: Memory
+          sizeLimit: 4Gi
       - name: config
         hostPath:
           path: /mnt/jellyfin

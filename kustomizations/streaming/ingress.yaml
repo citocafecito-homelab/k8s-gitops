@@ -5,7 +5,7 @@ metadata:
   namespace: streaming
 spec:
   rules:
-    - host: prowlarr.catuai.lan
+    - host: prowlarr.citocafecito.work
       http:
         paths:
           - path: /
@@ -15,7 +15,7 @@ spec:
                 name: prowlarr
                 port:
                   number: 9696
-    - host: bazarr.catuai.lan
+    - host: bazarr.citocafecito.work
       http:
         paths:
           - path: /
@@ -25,7 +25,7 @@ spec:
                 name: bazarr
                 port:
                   number: 6767
-    - host: sonarr.catuai.lan
+    - host: sonarr.citocafecito.work
       http:
         paths:
           - path: /
@@ -35,7 +35,7 @@ spec:
                 name: sonarr
                 port:
                   number: 8989
-    - host: radarr.catuai.lan
+    - host: radarr.citocafecito.work
       http:
         paths:
           - path: /
@@ -45,7 +45,7 @@ spec:
                 name: radarr
                 port:
                   number: 7878
-    - host: lidarr.catuai.lan
+    - host: lidarr.citocafecito.work
       http:
         paths:
           - path: /
@@ -55,7 +55,7 @@ spec:
                 name: lidarr
                 port:
                   number: 8686
-    - host: flaresolverr.catuai.lan
+    - host: flaresolverr.citocafecito.work
       http:
         paths:
           - path: /
@@ -65,7 +65,7 @@ spec:
                 name: flaresolverr
                 port:
                   number: 8191
-    - host: tinymediamanager.catuai.lan
+    - host: tinymediamanager.citocafecito.work
       http:
         paths:
           - path: /
@@ -75,7 +75,7 @@ spec:
                 name: tinymediamanager
                 port:
                   number: 4000
-    - host: dispatcharr.catuai.lan
+    - host: dispatcharr.citocafecito.work
       http:
         paths:
           - path: /

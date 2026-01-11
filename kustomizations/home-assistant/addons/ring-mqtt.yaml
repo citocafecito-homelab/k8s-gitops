@@ -79,8 +79,11 @@ spec:
           name: rtsp
         resources:
           requests:
-            cpu: 100m
+            cpu: 50m
             memory: 256Mi
+          limits:
+            cpu: 200m
+            memory: 512Mi
         volumeMounts:
         - name: ring-data
           mountPath: /data

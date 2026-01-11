@@ -39,30 +39,40 @@ data:
     address=/catuai.lan/192.168.1.10
 
     # Services
-    address=/vault.lan/192.168.1.18
-    address=/linkstack.lan/192.168.1.25
-    address=/music.lan/192.168.1.26
-    address=/suwayomi.lan/192.168.1.23
-    address=/wiki.lan/192.168.1.24
-    address=/resume.lan/192.168.1.31
-    address=/cv.lan/192.168.1.31
-    address=/mydrive.lan/192.168.1.32
-    address=/infisical.lan/192.168.1.33
-    address=/minio.lan/192.168.1.34
-    address=/qbittorrent.lan/192.168.1.35
-    address=/torrent.lan/192.168.1.35
-    address=/transmission.lan/192.168.1.36
+    address=/vault.citocafecito.work/192.168.1.18
+    address=/linkstack.citocafecito.work/192.168.1.25
+    address=/music.citocafecito.work/192.168.1.26
+    address=/suwayomi.citocafecito.work/192.168.1.23
+    address=/wiki.citocafecito.work/192.168.1.24
+    address=/resume.citocafecito.work/192.168.1.31
+    address=/cv.citocafecito.work/192.168.1.31
+    address=/mydrive.citocafecito.work/192.168.1.32
+    address=/infisical.citocafecito.work/192.168.1.33
+    address=/minio.citocafecito.work/192.168.1.34
+    address=/transmission.citocafecito.work/192.168.1.36
+    address=/jellyfin.citocafecito.work/192.168.1.40
+    address=/habiflix.citocafecito.work/192.168.1.40
+    address=/jellyseerr.citocafecito.work/192.168.1.41
+
+    # Traefik Local
+    address=/bazarr.citocafecito.work/192.168.1.19
+    address=/radarr.citocafecito.work/192.168.1.19
+    address=/sonarr.citocafecito.work/192.168.1.19
+    address=/prowlarr.citocafecito.work/192.168.1.19
+    address=/lidarr.citocafecito.work/192.168.1.19
+    address=/flaresolverr.citocafecito.work/192.168.1.19
+    address=/kite.citocafecito.work/192.168.1.19
+
+    # Legacy .lan
     address=/jellyfin.lan/192.168.1.40
     address=/habiflix.lan/192.168.1.40
     address=/jellyseerr.lan/192.168.1.41
-    address=/bazarr.lan/192.168.1.42
-    address=/radarr.lan/192.168.1.43
-    address=/sonarr.lan/192.168.1.44
-    address=/prowlarr.lan/192.168.1.45
+
+    # Computers
     address=/pneuma.lan/192.168.1.220
     address=/julie.lan/192.168.1.221
 
-    # Printer
+    # Printers
     address=/impresora.lan/192.168.1.225
 ---
 apiVersion: v1

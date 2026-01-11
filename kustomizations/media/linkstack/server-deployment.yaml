@@ -30,8 +30,8 @@ spec:
             name: linkstack-config
         resources:
           requests:
-            cpu: "100m"
-            memory: "128Mi"
+            cpu: 10m
+            memory: 128Mi
           limits:
-            cpu: "500m"
-            memory: "512Mi"
+            cpu: 200m
+            memory: 256Mi

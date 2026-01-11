@@ -27,3 +27,13 @@ spec:
             name: kite
             port:
               number: 8080
+  - host: kite.citocafecito.work
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: kite
+            port:
+              number: 8080
