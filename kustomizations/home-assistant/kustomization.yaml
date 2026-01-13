@@ -9,6 +9,7 @@ resources:
 - svc.yaml
 
 # Agents
+# - addons/esphome.yaml
 - addons/mosquitto.yaml
 - addons/matter.yaml
 # - addons/matterbridge.yaml

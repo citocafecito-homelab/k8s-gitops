@@ -1,0 +1,15 @@
+apiVersion: tailscale.com/v1alpha1
+kind: ProxyGroup
+metadata:
+  name: ts-proxies
+spec:
+  type: egress
+  replicas: 3
+---
+apiVersion: tailscale.com/v1alpha1
+kind: Connector
+metadata:
+  name: citocafecito
+spec:
+  subnetRouter:
+    advertiseRoutes: ["10.244.0.0/16"]

@@ -8,6 +8,8 @@ resources:
 - suwayomi
 - linkstack
 - navidrome
+- lidify
+- excalidraw
 - ingress.yaml
 
 namespace: media

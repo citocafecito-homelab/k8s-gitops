@@ -11,3 +11,4 @@ resources:
 - monitoring
 - streaming
 - runner-deployment.yaml
+- proxy.yaml

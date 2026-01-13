@@ -37,7 +37,7 @@ spec:
           protocol: UDP
         resources:
           requests:
-            memory: 3Gi
+            memory: 4Gi
             cpu: 1
           limits:
             cpu: 2
@@ -104,7 +104,7 @@ spec:
       - name: transcode-cache
         emptyDir:
           medium: Memory
-          sizeLimit: 4Gi
+          sizeLimit: 5Gi
       - name: config
         hostPath:
           path: /mnt/jellyfin
@@ -126,6 +126,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: jellyfin
+  annotations:
+    tailscale.com/expose: "true"
   labels:
     app: jellyfin
     app.kubernetes.io/name: jellyfin
