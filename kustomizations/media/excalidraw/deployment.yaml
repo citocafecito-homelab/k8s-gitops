@@ -1,56 +1,30 @@
-apiVersion: apps/v1
 kind: Deployment
+apiVersion: apps/v1
 metadata:
-  name: lidify
+  name: excalidraw
+  generation: 1
   labels:
-    app: lidify
+    app: excalidraw
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: lidify
+      app: excalidraw
   template:
     metadata:
       labels:
-        app: lidify
+        app: excalidraw
     spec:
       containers:
-        - name: lidify
-          image: thewicklowwolf/lidify:latest
+        - name: excalidraw
+          image: excalidraw/excalidraw:latest
           ports:
-            - containerPort: 5000
-          env:
-            - name: last_fm_api_key
-              valueFrom:
-                secretKeyRef:
-                  name: navidrome-lastfm-secret
-                  key: ND_LASTFM_APIKEY
-            - name: last_fm_api_secret
-              valueFrom:
-                secretKeyRef:
-                  name: navidrome-lastfm-secret
-                  key: ND_LASTFM_SECRET
-            - name: mode
-              value: "LastFM"
-          volumeMounts:
-            - name: lidify-config
-              mountPath: /lidify/config
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
+            - containerPort: 80
+              protocol: TCP
           resources:
-            requests:
-              cpu: "25m"
-              memory: "32Mi"
             limits:
-              cpu: "150m"
-              memory: "128Mi"
-      volumes:
-        - name: lidify-config
-          hostPath:
-            path: /mnt/lidify
-            type: DirectoryOrCreate
-        - name: localtime
-          hostPath:
-            path: /etc/localtime
-            type: File
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
