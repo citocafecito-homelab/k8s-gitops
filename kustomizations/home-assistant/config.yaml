@@ -32,7 +32,8 @@ data:
         title: Pi-Hole
         icon: mdi:pi-hole
         # url: http://pihole.networking.svc.cluster.local
-        url: http://192.168.1.10
+        # url: http://192.168.1.10
+        url: http://pi.hole
 
       kubernetesss:
         ui_mode: toolbar
