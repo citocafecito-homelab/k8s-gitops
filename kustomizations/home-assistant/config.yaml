@@ -47,6 +47,12 @@ data:
         icon: mdi:kubernetes
         url: http://kite.lan
 
+      bazarr:
+        ui_mode: toolbar
+        title: Bazarr
+        icon: mdi:tts
+        url: http://bazarr.streaming.svc.cluster.local:6767
+
     default_config:
 
     api:
