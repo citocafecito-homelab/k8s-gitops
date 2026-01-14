@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       annotations:
-        app.kubernetes.io/documentation: tbd3s
+        app.kubernetes.io/documentation: tbd4
       labels:
         app: home-assistant
         app.kubernetes.io/name: home-assistant
