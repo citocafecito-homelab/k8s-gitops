@@ -31,13 +31,20 @@ data:
         ui_mode: toolbar
         title: Pi-Hole
         icon: mdi:pi-hole
-        url: http://pihole.networking.svc.cluster.local
+        # url: http://pihole.networking.svc.cluster.local
+        url: http://192.168.1.10
 
       kubernetesss:
         ui_mode: toolbar
         title: K8s
         icon: mdi:kubernetes
         url: http://kite.monitoring.svc.cluster.local:8080
+
+      kite:
+        ui_mode: toolbar
+        title: Kite
+        icon: mdi:kubernetes
+        url: http://kite.lan
 
     default_config:
 
