@@ -29,14 +29,14 @@ data:
     ingress:
       pihole:
         ui_mode: toolbar
-        title: Pi-Holes
+        title: Pi-Hole
         icon: mdi:pi-hole
         url: http://pihole.networking.svc.cluster.local
 
       kubernetesss:
         ui_mode: toolbar
         title: K8s
-        icon: mdi:kubernetess
+        icon: mdi:kubernetes
         url: http://kite.monitoring.svc.cluster.local:8080
 
     default_config:
