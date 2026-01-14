@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
 - pi-hole
+- external-dns
 # - speedtest.yaml
 # - traefik
 

@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mydrive
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: drive.lan
   labels:
     app.kubernetes.io/name: mydrive
     type: LoadBalancer

@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: reactive-resume
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: resume.lan
   labels:
     app.kubernetes.io/name: reactive-resume
     type: LoadBalancer

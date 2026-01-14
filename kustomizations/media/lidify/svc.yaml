@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: lidify
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: lidify.lan
 spec:
   selector:
     app: lidify

@@ -55,8 +55,6 @@ spec:
           mountPath: /config
         - name: downloads
           mountPath: /downloads
-        - name: movies
-          mountPath: /movies
         - name: music 
           mountPath: /music
       nodeSelector:
@@ -73,9 +71,6 @@ spec:
       - name: downloads
         persistentVolumeClaim: 
           claimName: downloads-pvc
-      - name: movies
-        persistentVolumeClaim:
-          claimName: movies-pvc
       - name: music
         persistentVolumeClaim:
           claimName: music-pvc

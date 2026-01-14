@@ -15,14 +15,14 @@ spec:
       labels:
         app: pihole
         app.kubernetes.io/name: pihole
-      # annotations:
-      #   vault.hashicorp.com/agent-inject: "true"
-      #   vault.hashicorp.com/role: "vault"
-      #   vault.hashicorp.com/agent-inject-secret-admin_password: "secret/data/pihole"
-      #   vault.hashicorp.com/agent-inject-template-admin_password: |
-      #     {{- with secret "secret/data/pihole" -}}
-      #     {{ .Data.data.ADMIN_PASSWORD }}
-      #     {{- end }}
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-inject-secret-admin_password: "secret/data/pihole"
+        vault.hashicorp.com/agent-inject-template-admin_password: |
+          {{- with secret "secret/data/pihole" -}}
+          {{ .Data.data.ADMIN_PASSWORD }}
+          {{- end }}
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
@@ -70,9 +70,6 @@ spec:
         - name: custom-dns
           mountPath: /etc/dnsmasq.d/custom.conf
           subPath: custom.conf
-        - name: pihole-local-override
-          mountPath: /etc/dnsmasq.d/custom-override.conf
-          subPath: custom-override.conf
         - name: adlists
           mountPath: /etc/pihole/adlists.list
           subPath: adlists.list
@@ -93,9 +90,6 @@ spec:
       - name: custom-dns
         configMap:
           name: pihole-custom-dns
-      - name: pihole-local-override
-        configMap:
-          name: pihole-local-override
       - name: adlists
         configMap:
           name: pihole-adlists

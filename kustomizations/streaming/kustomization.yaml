@@ -7,6 +7,7 @@ resources:
 - config.yaml
 - pvc.yaml
 - transmission.yaml
+- autobrr.yaml
 # - qbittorrent.yaml
 - flaresolverr.yaml
 - prowlarr.yaml

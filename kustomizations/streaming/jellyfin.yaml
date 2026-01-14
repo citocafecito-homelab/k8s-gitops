@@ -38,7 +38,7 @@ spec:
         resources:
           requests:
             memory: 4Gi
-            cpu: 1
+            cpu: .5
           limits:
             cpu: 2
             memory: 8Gi
@@ -144,6 +144,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: jellyfin-lb
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: habiflix.lan
   labels:
     type: LoadBalancer
 spec:

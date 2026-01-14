@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-- config.yaml
-- pv.yaml
+- sa.yaml
+- role.yaml
+- binding.yaml
 - deployment.yaml
-- svc.yaml
