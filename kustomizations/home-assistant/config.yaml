@@ -29,9 +29,15 @@ data:
     ingress:
       pihole:
         ui_mode: toolbar
-        title: Frigate
+        title: Pi-Holes
         icon: mdi:pi-hole
-        url: http://192.168.1.10
+        url: http://pihole.networking.svc.cluster.local
+
+      kubernetesss:
+        ui_mode: toolbar
+        title: K8s
+        icon: mdi:kubernetess
+        url: http://kite.monitoring.svc.cluster.local:8080
 
     default_config:
 
