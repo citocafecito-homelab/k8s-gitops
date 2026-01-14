@@ -25,14 +25,6 @@ jobs:
             kubectl
           kubectl: '1.33.4'
 
-      - name: Setup kubeconfig
-        run: |
-          mkdir -p ~/.kube
-          echo "${KUBE_CONFIG}" | base64 -d > ~/.kube/config
-          chmod 600 ~/.kube/config
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-
       - name: Restart Deployment
         run: |
           echo "Reiniciando deployment: ${{ inputs.deployment }} en namespace: ${{ inputs.namespace }}"
