@@ -26,6 +26,13 @@ data:
         snapshots: /config/www/snapshots
         timbre: /config/www/timbre
 
+    ingress:
+      pihole:
+        ui_mode: toolbar
+        title: Frigate
+        icon: mdi:pi-hole
+        url: http://192.168.1.10
+
     default_config:
 
     api:
