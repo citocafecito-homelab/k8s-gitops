@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: cloudflared
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: cloudflared
@@ -25,23 +25,11 @@ spec:
             - name: TUNNEL_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: cloudflared-token
+                  name: cloudflared-secret
                   key: token
           ports:
             - containerPort: 2000
               name: metrics
-          livenessProbe:
-            httpGet:
-              path: /ready
-              port: 2000
-            initialDelaySeconds: 10
-            periodSeconds: 20
-          readinessProbe:
-            httpGet:
-              path: /ready
-              port: 2000
-            initialDelaySeconds: 10
-            periodSeconds: 20
           resources:
             requests:
               cpu: 50m
@@ -49,3 +37,7 @@ spec:
             limits:
               cpu: 200m
               memory: 128Mi
+          securityContext:
+            capabilities:
+              add:
+                - NET_RAW
