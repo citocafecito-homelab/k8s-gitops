@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudflared-config
+data:
+  config.yaml: |
+    tunnel: citocafecito.work
+    no-autoupdate: true
+    loglevel: info
