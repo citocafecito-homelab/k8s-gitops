@@ -1,3 +1,53 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: transmission-hooks
+data:
+  on-complete.sh: |
+    #!/bin/sh
+
+    echo "Torrent finished:"
+    echo "Dir:  $TR_TORRENT_DIR"
+    echo "Name: $TR_TORRENT_NAME"
+
+    TORRENT_PATH="$TR_TORRENT_DIR/$TR_TORRENT_NAME"
+    echo "Full path: $TORRENT_PATH"
+
+    # Solo procesamos si está dentro del directorio de Lidarr
+    case "$TORRENT_PATH" in
+      */lidarr/*) ;;
+      *)
+        echo "Not a Lidarr download, skipping"
+        exit 0
+        ;;
+    esac
+
+    echo "Creating split2flac Job in Kubernetes"
+
+    kubectl create job split2flac-$(date +%s) \
+      --image=mikenye/split2flac \
+      -- /bin/sh -c "
+        cd /workdir &&
+        CUE=\$(find . -maxdepth 1 -iname '*.cue' | head -n1) &&
+        [ -z \"\$CUE\" ] && echo 'No CUE found' && exit 0 &&
+        FLACS=\$(find . -maxdepth 1 -iname '*.flac' | wc -l) &&
+        [ \"\$FLACS\" -gt 1 ] && echo 'Already split' && exit 0 &&
+        split2flac \"\$(basename \$CUE)\"
+      "
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: transmission-config
+data:
+  settings.json: |
+    {
+      "download-dir": "/downloads",
+      "incomplete-dir-enabled": false,
+      "script-torrent-done-enabled": true,
+      "script-torrent-done-filename": "/scripts/on-complete.sh"
+    }
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -57,8 +107,16 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
+        - name: transmission-config
+          mountPath: /config/settings.json
+          subPath: settings.json
         - name: downloads
           mountPath: /downloads
+        - name: hooks
+          mountPath: /scripts
+          readOnly: true
+      nodeSelector:
+        kubernetes.io/hostname: catuai
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
@@ -68,9 +126,16 @@ spec:
         hostPath:
           path: /mnt/transmission
           type: DirectoryOrCreate
+      - name: transmission-config
+        configMap:
+          name: transmission-config
       - name: downloads
         persistentVolumeClaim:
           claimName: downloads-pvc
+      - name: hooks
+        configMap:
+          name: transmission-hooks
+          defaultMode: 0755
 ---
 apiVersion: v1
 kind: Service

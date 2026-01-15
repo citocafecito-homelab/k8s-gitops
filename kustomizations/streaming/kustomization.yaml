@@ -4,21 +4,27 @@ kind: Kustomization
 namespace: streaming
 
 resources:
+## Base
 - config.yaml
 - pvc.yaml
-- transmission.yaml
-- autobrr.yaml
-# - qbittorrent.yaml
-- flaresolverr.yaml
-- prowlarr.yaml
-- sonarr.yaml
-- radarr.yaml
-- bazarr.yaml
-- lidarr.yaml
-- dispatcharr.yaml
-- jellyserr.yaml
-- jellyfin.yaml
-# Not enough resources
-# - tinymediamanager.yaml
-# - tdarr.yaml
 - ingress.yaml
+
+## Apps
+- apps/transmission.yaml
+- apps/autobrr.yaml
+# - apps/qbittorrent.yaml
+- apps/flaresolverr.yaml
+- apps/prowlarr.yaml
+- apps/sonarr.yaml
+- apps/radarr.yaml
+- apps/bazarr.yaml
+- apps/lidarr.yaml
+- apps/dispatcharr.yaml
+- apps/jellyserr.yaml
+- apps/jellyfin.yaml
+# Not enough resources
+# - apps/tinymediamanager.yaml
+# - apps/tdarr.yaml
+
+## Jobs
+- jobs/split2flac.yaml

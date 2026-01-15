@@ -28,7 +28,7 @@ spec:
             memory: 128Mi
           limits:
             cpu: 200m
-            memory: 256Mi
+            memory: 1Gi
         envFrom:
           - configMapRef:
               name: navidrome-config
@@ -44,6 +44,8 @@ spec:
                 name: navidrome-lastfm-secret
                 key: ND_LASTFM_SECRET
         volumeMounts:
+        - name: transcode-cache
+          mountPath: /data/cache/transcoding
         - name: navidrome-data
           mountPath: /data
         - name: navidrome-backup
@@ -51,7 +53,7 @@ spec:
         - name: navidrome-music
           mountPath: /music
         - name: navidrome-playlists
-          mountPath: /data/playlists
+          mountPath: /music/playlists
           readOnly: true
       nodeSelector:
         kubernetes.io/hostname: catuai
@@ -60,6 +62,10 @@ spec:
         operator: "Exists"
         effect: "NoSchedule"
       volumes:
+      - name: transcode-cache
+        emptyDir:
+          medium: Memory
+          sizeLimit: 512Mi
       - name: navidrome-data
         hostPath:
           path: /mnt/navidrome

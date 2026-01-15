@@ -1,0 +1,82 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: split2flac
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: split2flac
+        image: mikenye/split2flac
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            set -e
+
+            echo "==== split2flac recursive scan ===="
+
+            # Usamos un bucle estándar compatible con /bin/sh
+            find /workdir -type f -iname "*.cue" | while read -r CUE; do
+              # Validar que la línea no esté vacía
+              [ -z "$CUE" ] && continue
+
+              DIR=$(dirname "$CUE")
+              CUE_NAME=$(basename "$CUE")
+              
+              # Extraer audio, quitar comillas y limpiar el \r de Windows
+              AUDIO_FILE=$(grep -m 1 "FILE" "$CUE" | sed -e 's/FILE "\(.*\)" .*/\1/' | tr -d '\r')
+
+              # Cambiar al directorio usando comillas para los espacios
+              cd "$DIR" || continue
+
+              # Validar que encontramos un archivo de audio en el CUE
+              if [ -z "$AUDIO_FILE" ]; then 
+                echo "No FILE entry in $CUE_NAME"
+                continue
+              fi
+
+              # Si ya existe la marca, saltar
+              if [ -f "${AUDIO_FILE}.split2flacdone" ]; then
+                echo "Skipping (Done): $AUDIO_FILE"
+                continue
+              fi
+
+              # Validar que el archivo físico existe
+              if [ ! -f "$AUDIO_FILE" ]; then
+                echo "Audio not found: $AUDIO_FILE"
+                continue
+              fi
+
+              echo "Processing: $AUDIO_FILE"
+
+              # Ejecución. Se añade -p "" para intentar forzar salida plana si el binario lo permite
+              /split2flac/split2flac -o . -v -cue "$CUE_NAME" "$AUDIO_FILE"
+
+              if [ $? -eq 0 ]; then
+                touch "${AUDIO_FILE}.split2flacdone"
+                echo "Success: $AUDIO_FILE"
+              else
+                echo "Error processing: $AUDIO_FILE"
+              fi
+            done
+
+            echo "==== Process Complete ===="
+        envFrom:
+        - configMapRef:
+            name: streaming-stack-config
+        volumeMounts:
+        - name: music
+          mountPath: /workdir
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      volumes:
+      - name: music
+        hostPath:
+          path: /mnt/multimedia/downloads/lidarr
+          type: Directory
