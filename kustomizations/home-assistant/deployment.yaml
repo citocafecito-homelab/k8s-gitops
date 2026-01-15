@@ -12,8 +12,8 @@ spec:
     type: Recreate
   template:
     metadata:
-      annotations:
-        app.kubernetes.io/documentation: tbd6
+      # annotations:
+      #   app.kubernetes.io/documentation: tbd10
       labels:
         app: home-assistant
         app.kubernetes.io/name: home-assistant
