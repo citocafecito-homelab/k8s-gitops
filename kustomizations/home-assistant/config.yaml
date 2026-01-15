@@ -26,32 +26,33 @@ data:
         snapshots: /config/www/snapshots
         timbre: /config/www/timbre
 
-    ingress:
-      pihole:
-        ui_mode: toolbar
-        title: Pi-Hole
-        icon: mdi:pi-hole
-        # url: http://pihole.networking.svc.cluster.local
-        # url: http://192.168.1.10
-        url: http://pi.hole
+    # ingress:
+    #   pihole:
+    #     ui_mode: toolbar
+    #     title: Pi-Hole
+    #     icon: mdi:pi-hole
+    #     # url: http://pihole.networking.svc.cluster.local
+    #     # url: http://192.168.1.10
+    #     url: http://192.168.1.26
 
-      kubernetesss:
-        ui_mode: toolbar
-        title: K8s
-        icon: mdi:kubernetes
-        url: http://kite.monitoring.svc.cluster.local:8080
+    #   kubernetesss:
+    #     ui_mode: toolbar
+    #     title: K8s
+    #     icon: mdi:kubernetes
+    #     url: http://kite.monitoring.svc.cluster.local:8080
 
-      kite:
-        ui_mode: toolbar
-        title: Kite
-        icon: mdi:kubernetes
-        url: http://kite.lan
+    #   kite:
+    #     ui_mode: toolbar
+    #     title: Kite
+    #     icon: mdi:kubernetes
+    #     url: http://kite.lan
 
-      bazarr:
-        ui_mode: toolbar
-        title: Bazarr
-        icon: mdi:tts
-        url: http://bazarr.streaming.svc.cluster.local:6767
+    #   bazarr:
+    #     ui_mode: toolbar
+    #     title: Bazarr
+    #     icon: mdi:tts
+    #     # url: http://bazarr.streaming.svc.cluster.local:6767
+    #     url: http://bazarr.citocafecito.work
 
     default_config:
 
