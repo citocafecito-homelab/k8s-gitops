@@ -5,6 +5,7 @@ namespace: streaming
 
 resources:
 ## Base
+- ../shared-playlists
 - config.yaml
 - pvc.yaml
 - ingress.yaml

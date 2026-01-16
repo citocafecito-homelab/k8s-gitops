@@ -87,6 +87,9 @@ spec:
           mountPath: /media/concerts
         - name: music
           mountPath: /music
+        - name: playlists
+          mountPath: /music/playlists
+          readOnly: true
       nodeSelector:
         kubernetes.io/hostname: catuai
       tolerations:
@@ -121,6 +124,9 @@ spec:
       - name: music
         persistentVolumeClaim:
           claimName: music-pvc
+      - name: playlists
+        configMap:
+          name: playlists
 ---
 apiVersion: v1
 kind: Service

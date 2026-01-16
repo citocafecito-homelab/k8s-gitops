@@ -1,0 +1,181 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: navidrome-playlists
+data:
+  Angra-Temple-of-Shadows-20th-Anniversary-Tour.m3u: |
+    #EXTM3U
+    #PLAYLIST:Angra - Temple of Shadows 20th Anniversary Tour
+    #COMMENT: Angra 3h de concierto
+
+    #EXTINF:-1,Nothing to Say
+    /music/Angra/(2014) Secret Garden/Angra - Secret Garden - 02 - Nothing to Say.mp3
+
+    #EXTINF:-1,Millennium Sun
+    /music/Angra/(2001) Rebirth/Angra - 03 - Millennium Sun.mp3
+
+    #EXTINF:-1,Tide of Changes - Part I
+    /music/Angra/(2023) Cycles of Pain/Angra - 04 - Tide of Changes – Part I.flac
+
+    #EXTINF:-1,Tide of Changes - Part II
+    /music/Angra/(2023) Cycles of Pain/Angra - 04 - Tide of Changes – Part II.flac
+
+    #EXTINF:-1,Deus le volt!
+    /music/Angra/(2004) Temple of Shadows/Angra - 01 - Deus le volt!.mp3
+
+    #EXTINF:-1,Spread Your Fire
+    /music/Angra/(2004) Temple of Shadows/Angra - 02 - Spread Your Fire.mp3
+
+    #EXTINF:-1,Angels and Demons
+    /music/Angra/(2004) Temple of Shadows/Angra - 03 - Angels and Demons.mp3
+
+    #EXTINF:-1,Waiting Silence
+    /music/Angra/(2004) Temple of Shadows/Angra - 04 - Waiting Silence.mp3
+
+    #EXTINF:-1,Wishing Well
+    /music/Angra/(2004) Temple of Shadows/Angra - 05 - Wishing Well.mp3
+
+    #EXTINF:-1,The Temple of Hate
+    /music/Angra/(2004) Temple of Shadows/Angra - 06 - The Temple of Hate.mp3
+
+    #EXTINF:-1,The Shadow Hunter
+    /music/Angra/(2004) Temple of Shadows/Angra - 07 - The Shadow Hunter.mp3
+
+    #EXTINF:-1,No Pain for the Dead
+    /music/Angra/(2004) Temple of Shadows/Angra - 08 - No Pain for the Dead.mp3
+
+    #EXTINF:-1,Winds of Destination
+    /music/Angra/(2004) Temple of Shadows/Angra - 09 - Winds of Destination.mp3
+
+    #EXTINF:-1,Sprouts of Time
+    /music/Angra/(2004) Temple of Shadows/Angra - 10 - Sprouts of Time.mp3
+
+    #EXTINF:-1,Morning Star
+    /music/Angra/(2004) Temple of Shadows/Angra - 11 - Morning Star.mp3
+
+    #EXTINF:-1,Late Redemption
+    /music/Angra/(2004) Temple of Shadows/Angra - 12 - Late Redemption.mp3
+
+    #EXTINF:-1,Vida Seca
+    /music/Angra/(2023) Cycles of Pain/Angra - 06 - Vida seca.flac
+
+    #EXTINF:-1,Rebirth
+    /music/Angra/(2014) Secret Garden/Angra - Secret Garden - 10 - Rebirth.mp3
+
+    #EXTINF:-1,Unfinished Allegro
+    /music/Angra/(2014) Secret Garden/Angra - Secret Garden - 08 - Unfinished Allegro.mp3
+
+    #EXTINF:-1,Carry On
+    /music/Angra/(2014) Secret Garden/Angra - Secret Garden - 09 - Carry On.mp3
+
+    #EXTINF:-1,Nova Era
+    /music/Angra/(2014) Secret Garden/Angra - Secret Garden - 11 - Nova era.mp3
+
+    #EXTINF:-1,Gate XIII
+    /music/Angra/(2004) Temple of Shadows/Angra - 13 - Gate XIII.mp3
+
+  Iron-Maiden-Future-Past-Tour.m3u: |
+    #EXTM3U
+    #PLAYLIST:Iron Maiden - The Future Past Tour
+    #COMMENT: Setlist basado en archivos locales
+
+    #EXTINF:-1,Caught Somewhere in Time
+    /music/Iron Maiden/(1986) Somewhere in Time/Iron Maiden - Somewhere in Time - 01 - Caught Somewhere in Time.flac
+
+    #EXTINF:-1,Stranger in a Strange Land
+    /music/Iron Maiden/(1986) Somewhere in Time/Iron Maiden - Somewhere in Time - 06 - Stranger in a Strange Land.flac
+
+    #EXTINF:-1,The Writing on the Wall
+    /music/Iron Maiden/(2021) Senjutsu/Iron Maiden - Senjutsu - 03 - The Writing on the Wall.flac
+
+    #EXTINF:-1,Days of Future Past
+    /music/Iron Maiden/(2021) Senjutsu/Iron Maiden - Senjutsu - 05 - Days of Future Past.flac
+
+    #EXTINF:-1,The Time Machine
+    /music/Iron Maiden/(2021) Senjutsu/Iron Maiden - Senjutsu - 06 - The Time Machine.flac
+
+    #EXTINF:-1,The Prisoner
+    /music/Iron Maiden/(1982) The Number of the Beast/Iron Maiden - 03 - The Prisoner.flac
+
+    #EXTINF:-1,Death of the Celts
+    /music/Iron Maiden/(2021) Senjutsu/Iron Maiden - Senjutsu - 02 - Death of the Celts.flac
+
+    #EXTINF:-1,Can I Play With Madness
+    /music/Iron Maiden/(1988) Seventh Son of a Seventh Son/Iron Maiden - Seventh Son of a Seventh Son - 03 - Can I Play With Madness.flac
+
+    #EXTINF:-1,Heaven Can Wait
+    /music/Iron Maiden/(1986) Somewhere in Time/Iron Maiden - Somewhere in Time - 04 - Heaven Can Wait.flac
+
+    #EXTINF:-1,Alexander the Great
+    /music/Iron Maiden/(1986) Somewhere in Time/Iron Maiden - Somewhere in Time - 08 - Alexander the Great.flac
+
+    #EXTINF:-1,Fear of the Dark
+    /music/Iron Maiden/(1992) Fear of the Dark/Iron Maiden - 12 - Fear of the Dark.mp3
+
+    #EXTINF:-1,Iron Maiden
+    /music/Iron Maiden/(1980) Iron Maiden/Iron Maiden - 08 - Iron Maiden.flac
+
+    #EXTINF:-1,Hell on Earth
+    /music/Iron Maiden/(2021) Senjutsu/Iron Maiden - Senjutsu - 04 - Hell on Earth.flac
+
+    #EXTINF:-1,The Trooper
+    /music/Iron Maiden/(1983) Piece of Mind/Iron Maiden - 05 - The Trooper.flac
+
+    #EXTINF:-1,Wasted Years
+    /music/Iron Maiden/(1986) Somewhere in Time/Iron Maiden - Somewhere in Time - 02 - Wasted Years.flac
+
+  Iron-Maiden-Run-For-Your-Lives.m3u: |
+    #EXTM3U
+    #PLAYLIST:Iron Maiden - Run For Your Lives World Tour (50th Anniversary)
+    #COMMENT: Desde Iron Maiden a Fear of the Dark
+
+    #EXTINF:-1,Murders in the Rue Morgue
+    /music/Iron Maiden/(1981) Killers/Iron Maiden - 03 - Murders in the Rue Morgue.flac
+
+    #EXTINF:-1,Wrathchild
+    /music/Iron Maiden/(1981) Killers/Iron Maiden - 02 - Wrathchild.flac
+
+    #EXTINF:-1,Killers
+    /music/Iron Maiden/(1981) Killers/Iron Maiden - 07 - Killers.flac
+
+    #EXTINF:-1,Phantom of the Opera
+    /music/Iron Maiden/(1980) Iron Maiden/Iron Maiden - 05 - Phantom of the Opera.flac
+
+    #EXTINF:-1,The Number of the Beast
+    /music/Iron Maiden//Iron Maiden - 05 - The Number of the Beast.flac
+
+    #EXTINF:-1,The Clairvoyant
+    /music/Iron Maiden/(1988) Seventh Son of a Seventh Son/Iron Maiden - Seventh Son of a Seventh Son - 07 - The Clairvoyant.flac
+
+    #EXTINF:-1,Powerslave
+    /music/Iron Maiden/(1984) Powerslave/Iron Maiden - Powerslave - 07 - Powerslave.flac
+
+    #EXTINF:-1,2 Minutes to Midnight
+    /music/Iron Maiden/(1984) Powerslave/Iron Maiden - Powerslave - 02 - 2 Minutes to Midnight.flac
+
+    #EXTINF:-1,Rime of the Ancient Mariner
+    /music/Iron Maiden/(1984) Powerslave/Iron Maiden - Powerslave - 08 - Rime of the Ancient Mariner.flac
+
+    #EXTINF:-1,Run to the Hills
+    /music/Iron Maiden//Iron Maiden - 06 - Run to the Hills.flac
+
+    #EXTINF:-1,Seventh Son of a Seventh Son
+    /music/Iron Maiden/(1988) Seventh Son of a Seventh Son/Iron Maiden - Seventh Son of a Seventh Son - 05 - Seventh Son of a Seventh Son.flac
+
+    #EXTINF:-1,The Trooper
+    /music/Iron Maiden/(1983) Piece of Mind/Iron Maiden - 05 - The Trooper.flac
+
+    #EXTINF:-1,Hallowed Be Thy Name
+    /music/Iron Maiden/(1982) The Number of the Beast/Iron Maiden - 09 - Hallowed Be Thy Name.flac
+
+    #EXTINF:-1,Iron Maiden
+    /music/Iron Maiden/(1980) Iron Maiden/Iron Maiden - 08 - Iron Maiden.flac
+
+    #EXTINF:-1,Aces High
+    /music/Iron Maiden/(1984) Powerslave/Iron Maiden - Powerslave - 01 - Aces High.flac
+
+    #EXTINF:-1,Fear of the Dark
+    /music/Iron Maiden/(1992) Fear of the Dark/Iron Maiden - 12 - Fear of the Dark.mp3
+
+    #EXTINF:-1,Wasted Years
+    /music/Iron Maiden/(1986) Somewhere in Time/Iron Maiden - Somewhere in Time - 02 - Wasted Years.flac

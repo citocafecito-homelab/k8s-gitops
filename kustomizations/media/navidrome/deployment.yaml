@@ -52,7 +52,7 @@ spec:
           mountPath: /backup
         - name: navidrome-music
           mountPath: /music
-        - name: navidrome-playlists
+        - name: playlists
           mountPath: /music/playlists
           readOnly: true
         - name: navidrome-smart-playlists
@@ -84,6 +84,6 @@ spec:
       - name: navidrome-smart-playlists
         configMap:
           name: navidrome-smart-playlists
-      - name: navidrome-playlists
+      - name: playlists
         configMap:
-          name: navidrome-playlists
+          name: playlists

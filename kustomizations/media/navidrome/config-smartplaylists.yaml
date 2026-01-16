@@ -1,0 +1,142 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: navidrome-smart-playlists
+data:
+  favorites.nsp: |
+    {
+      "name": "Favoritos",
+      "comment": "Canciones marcadas como favoritas o con rating alto",
+      "all": [
+        {
+          "any": [
+            { "is": { "loved": true } },
+            { "gt": { "rating": 3 } }
+          ]
+        }
+      ],
+      "sort": "dateLoved",
+      "order": "desc"
+    }
+
+  supermix.nsp: |
+    {
+      "name": "Super Mix",
+      "comment": "Selección aleatoria de canciones con rating alto o que ya han sido reproducidas",
+      "all": [
+        {
+          "any": [
+            { "gt": { "rating": 3 } },
+            { "gt": { "playCount": 0 } }
+          ]
+        }
+      ],
+      "sort": "random",
+      "limit": 200
+    }
+
+  supersupermix.nsp: |
+    {
+      "name": "Super Super Mix",
+      "comment": "Selección aleatoria de canciones con rating muy alto o reproducidas anteriormente",
+      "all": [
+        {
+          "any": [
+            { "gt": { "rating": 4 } },
+            { "gt": { "playCount": 0 } }
+          ]
+        }
+      ],
+      "sort": "random",
+      "limit": 200
+    }
+  
+  top_60s.nsp: |
+    {
+      "name": "Top 60s Mix",
+      "comment": "Canciones favoritas o reproducidas de los años 60",
+      "all": [
+        {
+          "any": [
+            { "is": { "loved": true } },
+            { "gt": { "rating": 3 } },
+            { "gt": { "playCount": 0 } }
+          ]
+        },
+        { "inTheRange": { "year": [1961, 1970] } }
+      ],
+      "sort": "-rating,title",
+      "limit": 25
+    }
+
+  top_70s.nsp: |
+    {
+      "name": "Top 70s Mix",
+      "comment": "Canciones favoritas o reproducidas de los años 70",
+      "all": [
+        {
+          "any": [
+            { "is": { "loved": true } },
+            { "gt": { "rating": 3 } },
+            { "gt": { "playCount": 0 } }
+          ]
+        },
+        { "inTheRange": { "year": [1971, 1980] } }
+      ],
+      "sort": "-rating,title",
+      "limit": 25
+    }
+
+  top_80s.nsp: |
+    {
+      "name": "Top 80s Mix",
+      "comment": "Canciones favoritas o reproducidas de los años 80",
+      "all": [
+        {
+          "any": [
+            { "is": { "loved": true } },
+            { "gt": { "rating": 3 } },
+            { "gt": { "playCount": 0 } }
+          ]
+        },
+        { "inTheRange": { "year": [1981, 1990] } }
+      ],
+      "sort": "-rating,title",
+      "limit": 25
+    }
+
+  top_90s.nsp: |
+    {
+      "name": "Top 90s Mix",
+      "comment": "Canciones favoritas o reproducidas de los años 90",
+      "all": [
+        {
+          "any": [
+            { "is": { "loved": true } },
+            { "gt": { "rating": 3 } },
+            { "gt": { "playCount": 0 } }
+          ]
+        },
+        { "inTheRange": { "year": [1991, 2000] } }
+      ],
+      "sort": "-rating,title",
+      "limit": 25
+    }
+
+  top_00s.nsp: |
+    {
+      "name": "Top 00s Mix",
+      "comment": "Canciones favoritas o reproducidas de los años 2000",
+      "all": [
+        {
+          "any": [
+            { "is": { "loved": true } },
+            { "gt": { "rating": 3 } },
+            { "gt": { "playCount": 0 } }
+          ]
+        },
+        { "inTheRange": { "year": [2001, 2010] } }
+      ],
+      "sort": "-rating,title",
+      "limit": 25
+    }
