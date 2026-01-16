@@ -24,16 +24,7 @@ data:
 
     echo "Creating split2flac Job in Kubernetes"
 
-    kubectl create job split2flac-$(date +%s) \
-      --image=mikenye/split2flac \
-      -- /bin/sh -c "
-        cd /workdir &&
-        CUE=\$(find . -maxdepth 1 -iname '*.cue' | head -n1) &&
-        [ -z \"\$CUE\" ] && echo 'No CUE found' && exit 0 &&
-        FLACS=\$(find . -maxdepth 1 -iname '*.flac' | wc -l) &&
-        [ \"\$FLACS\" -gt 1 ] && echo 'Already split' && exit 0 &&
-        split2flac \"\$(basename \$CUE)\"
-      "
+    kubectl create job --from=cronjob/split2flac -n streaming split2flac-manual-$(date +%s)
 ---
 apiVersion: v1
 kind: ConfigMap

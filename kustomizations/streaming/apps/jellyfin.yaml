@@ -37,7 +37,7 @@ spec:
           protocol: UDP
         resources:
           requests:
-            memory: 4Gi
+            memory: 2Gi
             cpu: .5
           limits:
             cpu: 2
@@ -86,7 +86,7 @@ spec:
         - name: concerts
           mountPath: /media/concerts
         - name: music
-          mountPath: /media/music
+          mountPath: /music
       nodeSelector:
         kubernetes.io/hostname: catuai
       tolerations:

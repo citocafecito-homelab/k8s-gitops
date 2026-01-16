@@ -1,0 +1,44 @@
+name: Manual Job Execution
+
+on:
+  workflow_dispatch:
+    inputs:
+      namespace:
+        description: "Namespace del deployment"
+        required: true
+        default: "default"
+      job:
+        description: "Nombre del CronJob base (ej: split2flac)"
+        required: true
+
+jobs:
+  restart:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5
+
+      - uses: yokawasa/action-setup-kube-tools@v0.13.1
+        with:
+          setup-tools: |
+            kubectl
+          kubectl: '1.33.4'
+
+      - name: Trigger Manual Job
+        run: |
+          echo "==== Verificando existencia de CronJob $JOB_NAME en $NS ===="
+          if ! kubectl get cronjob "$JOB_NAME" -n "$NS" > /dev/null 2>&1; then
+            echo "Error: El CronJob $JOB_NAME no existe en el namespace $NS"
+            exit 1
+          fi
+
+          # Generar sufijo corto para evitar pasarnos de 63 caracteres
+          TS=$(date +%s | tail -c 5)
+          NEW_JOB_NAME="${JOB_NAME}-manual-${TS}"
+
+          echo "==== Creando Job: $NEW_JOB_NAME ===="
+          kubectl create job --from=cronjob/"$JOB_NAME" "$NEW_JOB_NAME" -n "$NS"
+          
+          echo "==== Job creado con éxito ===="
+          echo "Para ver logs: kubectl logs -n $NS -l job-name=$NEW_JOB_NAME"

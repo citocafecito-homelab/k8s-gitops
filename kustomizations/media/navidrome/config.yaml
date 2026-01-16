@@ -16,6 +16,7 @@ data:
   ND_PLAYLISTSPATH: "playlists"
   ND_PREFERSORTTAGS: "true"
   ND_SCANNER_PURGEMISSING: "always"
+  ND_LYRICSPRIORITY: ".lrc,embedded"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -114,7 +115,7 @@ data:
     /music/Iron Maiden/(2021) Senjutsu/Iron Maiden - Senjutsu - 06 - The Time Machine.flac
 
     #EXTINF:-1,The Prisoner
-    /music/Iron Maiden/(1982) The Number of the Beast/Iron Maiden - 03 - The Prisoner.mp3
+    /music/Iron Maiden/(1982) The Number of the Beast/Iron Maiden - 03 - The Prisoner.flac
 
     #EXTINF:-1,Death of the Celts
     /music/Iron Maiden/(2021) Senjutsu/Iron Maiden - Senjutsu - 02 - Death of the Celts.flac
@@ -146,22 +147,22 @@ data:
   Iron-Maiden-Run-For-Your-Lives.m3u: |
     #EXTM3U
     #PLAYLIST:Iron Maiden - Run For Your Lives World Tour (50th Anniversary)
-    #COMMENT: Setlist corregido - Era 1980-1992
+    #COMMENT: Desde Iron Maiden a Fear of the Dark
 
     #EXTINF:-1,Murders in the Rue Morgue
-    /music/Iron Maiden/(1981) Killers/Iron Maiden - 03 - Murders in the Rue Morgue.mp3
+    /music/Iron Maiden/(1981) Killers/Iron Maiden - 03 - Murders in the Rue Morgue.flac
 
     #EXTINF:-1,Wrathchild
-    /music/Iron Maiden/(1981) Killers/Iron Maiden - 02 - Wrathchild.mp3
+    /music/Iron Maiden/(1981) Killers/Iron Maiden - 02 - Wrathchild.flac
 
     #EXTINF:-1,Killers
-    /music/Iron Maiden/(1981) Killers/Iron Maiden - 07 - Killers.mp3
+    /music/Iron Maiden/(1981) Killers/Iron Maiden - 07 - Killers.flac
 
     #EXTINF:-1,Phantom of the Opera
-    /music/Iron Maiden/(1980) Iron Maiden/Iron Maiden - 05 - Phantom of the Opera.mp3
+    /music/Iron Maiden/(1980) Iron Maiden/Iron Maiden - 05 - Phantom of the Opera.flac
 
     #EXTINF:-1,The Number of the Beast
-    /music/Iron Maiden/(1982) The Number of the Beast/Iron Maiden - 05 - The Number of the Beast.mp3
+    /music/Iron Maiden//Iron Maiden - 05 - The Number of the Beast.flac
 
     #EXTINF:-1,The Clairvoyant
     /music/Iron Maiden/(1988) Seventh Son of a Seventh Son/Iron Maiden - Seventh Son of a Seventh Son - 07 - The Clairvoyant.flac
@@ -176,7 +177,7 @@ data:
     /music/Iron Maiden/(1984) Powerslave/Iron Maiden - Powerslave - 08 - Rime of the Ancient Mariner.flac
 
     #EXTINF:-1,Run to the Hills
-    /music/Iron Maiden/(1982) The Number of the Beast/Iron Maiden - 06 - Run to the Hills.mp3
+    /music/Iron Maiden//Iron Maiden - 06 - Run to the Hills.flac
 
     #EXTINF:-1,Seventh Son of a Seventh Son
     /music/Iron Maiden/(1988) Seventh Son of a Seventh Son/Iron Maiden - Seventh Son of a Seventh Son - 05 - Seventh Son of a Seventh Son.flac
@@ -185,7 +186,7 @@ data:
     /music/Iron Maiden/(1983) Piece of Mind/Iron Maiden - 05 - The Trooper.flac
 
     #EXTINF:-1,Hallowed Be Thy Name
-    /music/Iron Maiden/(1982) The Number of the Beast/Iron Maiden - 09 - Hallowed Be Thy Name.mp3
+    /music/Iron Maiden/(1982) The Number of the Beast/Iron Maiden - 09 - Hallowed Be Thy Name.flac
 
     #EXTINF:-1,Iron Maiden
     /music/Iron Maiden/(1980) Iron Maiden/Iron Maiden - 08 - Iron Maiden.flac
@@ -198,11 +199,18 @@ data:
 
     #EXTINF:-1,Wasted Years
     /music/Iron Maiden/(1986) Somewhere in Time/Iron Maiden - Somewhere in Time - 02 - Wasted Years.flac
-
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: navidrome-smart-playlists
+data:
   Stratovarius-Calle-13-bar-bogota-colombia-2025.m3u: |
     #EXTM3U
     #PLAYLIST:Stratovarius - Live at Calle 13 Bar, Bogota
     #COMMENT: Setlist Power Metal en Bogotá
+    #EXTARTIST:Stratovarius
+    #EXTGENRE:Power Metal
 
     #EXTINF:-1,Forever Free
     /music/Stratovarius/(1997) Visions/Stratovarius - 03 - Forever Free.mp3

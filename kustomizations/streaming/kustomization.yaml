@@ -11,7 +11,7 @@ resources:
 
 ## Apps
 - apps/transmission.yaml
-- apps/autobrr.yaml
+# - apps/autobrr.yaml
 # - apps/qbittorrent.yaml
 - apps/flaresolverr.yaml
 - apps/prowlarr.yaml

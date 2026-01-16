@@ -55,6 +55,9 @@ spec:
         - name: navidrome-playlists
           mountPath: /music/playlists
           readOnly: true
+        - name: navidrome-smart-playlists
+          mountPath: /music/playlists/smarts
+          readOnly: true
       nodeSelector:
         kubernetes.io/hostname: catuai
       tolerations:
