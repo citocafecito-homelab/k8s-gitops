@@ -1,0 +1,43 @@
+#EXTM3U
+#PLAYLIST:Angra - The Favorites Anthology (Personal Selection)
+#COMMENT: Las favoritas del usuario + complementos esenciales y covers.
+
+# --- ERA MATOS (The Progressive Roots) ---
+#EXTINF:-1,Make Believe
+/music/Angra/(1996) Holy Land/Angra - Holy Land - 07 - Make Believe.mp3
+
+#EXTINF:-1,Carolina IV
+/music/Angra/(1996) Holy Land/Angra - Holy Land - 04 - Carolina IV.mp3
+
+#EXTINF:-1,Evil Warning (Remix)
+/music/Angra/(1993) Angels Cry/Angra - Angels Cry - 09 - Evil Warning.mp3
+
+# --- ERA FALASCHI (The Golden Power Era) ---
+#EXTINF:-1,Rebirth
+/music/Angra/(2001) Rebirth/Angra - 07 - Rebirth.mp3
+
+#EXTINF:-1,Running Alone
+/music/Angra/(2001) Rebirth/Angra - 09 - Running Alone.mp3
+
+#EXTINF:-1,The Temple of Hate (feat. Kai Hansen)
+/music/Angra/(2004) Temple of Shadows/Angra - Temple of Shadows - 06 - The Temple of Hate.mp3
+
+#EXTINF:-1,Mama (Genesis Cover)
+/music/Angra/(2002) Hunters and Prey/Angra - Hunters and Prey - 07 - Mama.mp3
+
+# --- ERA FABIO (The Modern Mastery) ---
+#EXTINF:-1,War Horns
+/music/Angra/(2018) ØMNI/Angra - ØMNI - 06 - War Horns.flac
+
+#EXTINF:-1,Secret Garden (feat. Simone Simons)
+/music/Angra/(2014) Secret Garden/CD1/Angra - Secret Garden - 06 - Secret Garden.mp3
+
+#EXTINF:-1,Newborn Me
+/music/Angra/(2014) Secret Garden/CD1/Angra - Secret Garden - 01 - Newborn Me.mp3
+
+#EXTINF:-1,Faithless Sanctuary
+/music/Angra/(2023) Cycles of Pain/Angra - Cycles of Pain - 09 - Faithless Sanctuary.flac
+
+# --- THE GRAND FINALE ---
+#EXTINF:-1,Gate XIII
+/music/Angra/(2004) Temple of Shadows/Angra - Temple of Shadows - 13 - Gate XIII.mp3

@@ -1,3 +1,4 @@
+#Run it: kubectl create job --from=cronjob/split2flac "split2flac-manual-$(date +%Y%m%d-%H%M%S)" -n streaming
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -62,7 +63,7 @@ spec:
                   /usr/bin/shnsplit -f "$CUE_NAME" -o flac "$AUDIO_FILE"
 
                   if [ $? -eq 0 ]; then
-                    # touch "${AUDIO_FILE}.split2flacdone"
+                    touch "${AUDIO_FILE}.split2flacdone"
                     echo "Success: $AUDIO_FILE"
                   else
                     echo "Error processing: $AUDIO_FILE"

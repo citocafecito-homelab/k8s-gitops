@@ -1,5 +1,17 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-resources:
-- config.yaml
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: shared-playlists
+    files:
+      - angra/Angra-Temple-of-Shadows-20th-Anniversary-Tour.m3u
+      - angra/Angra-The-Cycles-of-Rebirth.m3u
+      - angra/Angra-The-Favorites-Anthology.m3u
+      - iron-maiden/Iron-Maiden-Future-Past-Tour.m3u
+      - iron-maiden/Iron-Maiden-Run-For-Your-Lives.m3u
+      - iron-maiden/Iron-Maiden-The-Heritage-of-the-Beast.m3u
+      - stratovarius/Stratovarius-Best-Of.m3u
+      - stratovarius/Stratovarius-Calle-13-bar-bogota-colombia-2025.m3u

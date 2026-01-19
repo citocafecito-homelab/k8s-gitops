@@ -126,7 +126,7 @@ spec:
           claimName: music-pvc
       - name: playlists
         configMap:
-          name: playlists
+          name: shared-playlists
 ---
 apiVersion: v1
 kind: Service

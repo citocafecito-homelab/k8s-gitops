@@ -86,4 +86,4 @@ spec:
           name: navidrome-smart-playlists
       - name: playlists
         configMap:
-          name: playlists
+          name: shared-playlists

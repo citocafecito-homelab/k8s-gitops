@@ -1,0 +1,71 @@
+#EXTM3U
+#PLAYLIST:Angra - Temple of Shadows 20th Anniversary Tour
+#COMMENT: Setlist conmemorativo con rutas verificadas (3h de concierto)
+
+# --- MAIN SET ---
+#EXTINF:-1,Nothing to Say
+/music/Angra/(2014) Secret Garden/CD2/Angra - Secret Garden - 02 - Nothing to Say.mp3
+
+#EXTINF:-1,Millennium Sun
+/music/Angra/(2001) Rebirth/Angra - 03 - Millennium Sun.mp3
+
+#EXTINF:-1,Tide of Changes - Part I
+/music/Angra/(2023) Cycles of Pain/Angra - Cycles of Pain - 04 - Tide of Changes – Part I.flac
+
+#EXTINF:-1,Tide of Changes - Part II
+/music/Angra/(2023) Cycles of Pain/Angra - Cycles of Pain - 05 - Tide of Changes – Part II.flac
+
+#EXTINF:-1,Deus le volt!
+/music/Angra/(2004) Temple of Shadows/Angra - Temple of Shadows - 01 - Deus le volt!.mp3
+
+#EXTINF:-1,Spread Your Fire
+/music/Angra/(2004) Temple of Shadows/Angra - Temple of Shadows - 02 - Spread Your Fire.mp3
+
+#EXTINF:-1,Angels and Demons
+/music/Angra/(2004) Temple of Shadows/Angra - Temple of Shadows - 03 - Angels and Demons.mp3
+
+#EXTINF:-1,Waiting Silence
+/music/Angra/(2004) Temple of Shadows/Angra - Temple of Shadows - 04 - Waiting Silence.mp3
+
+#EXTINF:-1,Wishing Well
+/music/Angra/(2004) Temple of Shadows/Angra - Temple of Shadows - 05 - Wishing Well.mp3
+
+#EXTINF:-1,The Temple of Hate
+/music/Angra/(2004) Temple of Shadows/Angra - Temple of Shadows - 06 - The Temple of Hate.mp3
+
+#EXTINF:-1,The Shadow Hunter
+/music/Angra/(2004) Temple of Shadows/Angra - Temple of Shadows - 07 - The Shadow Hunter.mp3
+
+#EXTINF:-1,No Pain for the Dead
+/music/Angra/(2004) Temple of Shadows/Angra - Temple of Shadows - 08 - No Pain for the Dead.mp3
+
+#EXTINF:-1,Winds of Destination
+/music/Angra/(2004) Temple of Shadows/Angra - Temple of Shadows - 09 - Winds of Destination.mp3
+
+#EXTINF:-1,Sprouts of Time
+/music/Angra/(2004) Temple of Shadows/Angra - Temple of Shadows - 10 - Sprouts of Time.mp3
+
+#EXTINF:-1,Morning Star
+/music/Angra/(2004) Temple of Shadows/Angra - Temple of Shadows - 11 - Morning Star.mp3
+
+#EXTINF:-1,Late Redemption
+/music/Angra/(2004) Temple of Shadows/Angra - Temple of Shadows - 12 - Late Redemption.mp3
+
+#EXTINF:-1,Vida Seca
+/music/Angra/(2023) Cycles of Pain/Angra - Cycles of Pain - 06 - Vida seca.flac
+
+# --- ENCORE ---
+#EXTINF:-1,Rebirth
+/music/Angra/(2014) Secret Garden/CD2/Angra - Secret Garden - 10 - Rebirth.mp3
+
+#EXTINF:-1,Unfinished Allegro
+/music/Angra/(2014) Secret Garden/CD2/Angra - Secret Garden - 08 - Unfinished Allegro.mp3
+
+#EXTINF:-1,Carry On
+/music/Angra/(2014) Secret Garden/CD2/Angra - Secret Garden - 09 - Carry On.mp3
+
+#EXTINF:-1,Nova Era
+/music/Angra/(2014) Secret Garden/CD2/Angra - Secret Garden - 11 - Nova era.mp3
+
+#EXTINF:-1,Gate XIII
+/music/Angra/(2004) Temple of Shadows/Angra - Temple of Shadows - 13 - Gate XIII.mp3

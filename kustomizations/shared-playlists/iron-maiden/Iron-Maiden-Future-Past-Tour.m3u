@@ -1,0 +1,50 @@
+#EXTM3U
+#PLAYLIST:Iron Maiden - The Future Past Tour
+#COMMENT: Setlist basado en archivos locales (1986 / 2021 focus)
+
+# --- MAIN SET ---
+#EXTINF:-1,Caught Somewhere in Time
+/music/Iron Maiden/(1986) Somewhere in Time/CD1/Iron Maiden - Somewhere in Time - 01 - Caught Somewhere in Time.flac
+
+#EXTINF:-1,Stranger in a Strange Land
+/music/Iron Maiden/(1986) Somewhere in Time/CD1/Iron Maiden - Somewhere in Time - 06 - Stranger in a Strange Land.flac
+
+#EXTINF:-1,The Writing on the Wall
+/music/Iron Maiden/(2021) Senjutsu/CD1/Iron Maiden - Senjutsu - 03 - The Writing on the Wall.flac
+
+#EXTINF:-1,Days of Future Past
+/music/Iron Maiden/(2021) Senjutsu/CD1/Iron Maiden - Senjutsu - 05 - Days of Future Past.flac
+
+#EXTINF:-1,The Time Machine
+/music/Iron Maiden/(2021) Senjutsu/CD1/Iron Maiden - Senjutsu - 06 - The Time Machine.flac
+
+#EXTINF:-1,The Prisoner
+/music/Iron Maiden/(1982) The Number of the Beast/Iron Maiden - The Number of the Beast - 03 - The Prisoner.flac
+
+#EXTINF:-1,Death of the Celts
+/music/Iron Maiden/(2021) Senjutsu/CD2/Iron Maiden - Senjutsu - 02 - Death of the Celts.flac
+
+#EXTINF:-1,Can I Play With Madness
+/music/Iron Maiden/(1988) Seventh Son of a Seventh Son/CD1/Iron Maiden - Seventh Son of a Seventh Son - 03 - Can I Play With Madness.flac
+
+#EXTINF:-1,Heaven Can Wait
+/music/Iron Maiden/(1986) Somewhere in Time/CD1/Iron Maiden - Somewhere in Time - 04 - Heaven Can Wait.flac
+
+#EXTINF:-1,Alexander the Great
+/music/Iron Maiden/(1986) Somewhere in Time/CD1/Iron Maiden - Somewhere in Time - 08 - Alexander the Great.flac
+
+#EXTINF:-1,Fear of the Dark
+/music/Iron Maiden/(1992) Fear of the Dark/CD1/Iron Maiden - Fear of the Dark - 12 - Fear of the Dark.flac
+
+#EXTINF:-1,Iron Maiden
+/music/Iron Maiden/(1980) Iron Maiden/Iron Maiden - Iron Maiden - 08 - Iron Maiden.flac
+
+# --- ENCORE ---
+#EXTINF:-1,Hell on Earth
+/music/Iron Maiden/(2021) Senjutsu/CD2/Iron Maiden - Senjutsu - 04 - Hell on Earth.flac
+
+#EXTINF:-1,The Trooper
+/music/Iron Maiden/(1983) Piece of Mind/Iron Maiden - Piece of Mind - 05 - The Trooper.flac
+
+#EXTINF:-1,Wasted Years
+/music/Iron Maiden/(1986) Somewhere in Time/CD1/Iron Maiden - Somewhere in Time - 02 - Wasted Years.flac

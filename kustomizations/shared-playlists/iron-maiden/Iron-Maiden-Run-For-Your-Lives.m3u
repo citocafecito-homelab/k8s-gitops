@@ -1,0 +1,56 @@
+#EXTM3U
+#PLAYLIST:Iron Maiden - Run For Your Lives World Tour (50th Anniversary)
+#COMMENT: Setlist oficial Desde Iron Maiden (1980) hasta Fear of the Dark (1992)
+
+# --- MAIN SET ---
+#EXTINF:-1,Murders in the Rue Morgue
+/music/Iron Maiden/(1981) Killers/Iron Maiden - Killers - 03 - Murders in the Rue Morgue.flac
+
+#EXTINF:-1,Wrathchild
+/music/Iron Maiden/(1981) Killers/Iron Maiden - Killers - 02 - Wrathchild.flac
+
+#EXTINF:-1,Killers
+/music/Iron Maiden/(1981) Killers/Iron Maiden - Killers - 07 - Killers.flac
+
+#EXTINF:-1,Phantom of the Opera
+/music/Iron Maiden/(1980) Iron Maiden/Iron Maiden - Iron Maiden - 04 - Phantom of the Opera.flac
+
+#EXTINF:-1,The Number of the Beast
+/music/Iron Maiden/(1982) The Number of the Beast/Iron Maiden - The Number of the Beast - 05 - The Number of the Beast.flac
+
+#EXTINF:-1,The Clairvoyant
+/music/Iron Maiden/(1988) Seventh Son of a Seventh Son/CD1/Iron Maiden - Seventh Son of a Seventh Son - 07 - The Clairvoyant.flac
+
+#EXTINF:-1,Powerslave
+/music/Iron Maiden/(1984) Powerslave/CD1/Iron Maiden - Powerslave - 07 - Powerslave.flac
+
+#EXTINF:-1,2 Minutes to Midnight
+/music/Iron Maiden/(1984) Powerslave/CD1/Iron Maiden - Powerslave - 02 - 2 Minutes to Midnight.flac
+
+#EXTINF:-1,Rime of the Ancient Mariner
+/music/Iron Maiden/(1984) Powerslave/CD1/Iron Maiden - Powerslave - 08 - Rime of the Ancient Mariner.flac
+
+#EXTINF:-1,Run to the Hills
+/music/Iron Maiden/(1982) The Number of the Beast/Iron Maiden - The Number of the Beast - 06 - Run to the Hills.flac
+
+#EXTINF:-1,Seventh Son of a Seventh Son
+/music/Iron Maiden/(1988) Seventh Son of a Seventh Son/CD1/Iron Maiden - Seventh Son of a Seventh Son - 05 - Seventh Son of a Seventh Son.flac
+
+#EXTINF:-1,The Trooper
+/music/Iron Maiden/(1983) Piece of Mind/Iron Maiden - Piece of Mind - 05 - The Trooper.flac
+
+#EXTINF:-1,Hallowed Be Thy Name
+/music/Iron Maiden/(1982) The Number of the Beast/Iron Maiden - The Number of the Beast - 08 - Hallowed Be Thy Name.flac
+
+#EXTINF:-1,Iron Maiden
+/music/Iron Maiden/(1980) Iron Maiden/Iron Maiden - Iron Maiden - 08 - Iron Maiden.flac
+
+# --- ENCORE ---
+#EXTINF:-1,Aces High
+/music/Iron Maiden/(1984) Powerslave/CD1/Iron Maiden - Powerslave - 01 - Aces High.flac
+
+#EXTINF:-1,Fear of the Dark
+/music/Iron Maiden/(1992) Fear of the Dark/CD1/Iron Maiden - Fear of the Dark - 12 - Fear of the Dark.flac
+
+#EXTINF:-1,Wasted Years
+/music/Iron Maiden/(1986) Somewhere in Time/CD1/Iron Maiden - Somewhere in Time - 02 - Wasted Years.flac
