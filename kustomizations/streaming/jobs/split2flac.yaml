@@ -74,6 +74,7 @@ spec:
                 done
                 
                 echo "==== Process Complete ===="
+                exit 0
             envFrom:
             - configMapRef:
                 name: streaming-stack-config

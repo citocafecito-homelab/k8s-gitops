@@ -5,26 +5,9 @@ metadata:
 data:
   on-complete.sh: |
     #!/bin/sh
-
-    echo "Torrent finished:"
-    echo "Dir:  $TR_TORRENT_DIR"
-    echo "Name: $TR_TORRENT_NAME"
-
-    TORRENT_PATH="$TR_TORRENT_DIR/$TR_TORRENT_NAME"
-    echo "Full path: $TORRENT_PATH"
-
-    # Solo procesamos si está dentro del directorio de Lidarr
-    case "$TORRENT_PATH" in
-      */lidarr/*) ;;
-      *)
-        echo "Not a Lidarr download, skipping"
-        exit 0
-        ;;
-    esac
-
     echo "Creating split2flac Job in Kubernetes"
 
-    kubectl create job --from=cronjob/split2flac -n streaming split2flac-manual-$(date +%s)
+    kubectl create job --from=cronjob/split2flac -n streaming split2flac-oncomplete-$(date +%s)
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -39,6 +22,9 @@ data:
       "script-torrent-done-filename": "/scripts/on-complete.sh"
     }
 ---
+# IF ssh run 
+# export TR_AUTH="$(cat /vault/secrets/user):$(cat /vault/secrets/pass)"
+# alias tr='transmission-remote --authenv'
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -62,8 +48,6 @@ spec:
         vault.hashicorp.com/address: "http://vault.core.svc.cluster.local:8200"
         vault.hashicorp.com/agent-inject-template-creds: |
           {{- with secret "secret/data/transmission " -}}
-          USER="{{ .Data.data.USERNAME }}"
-          PASS="{{ .Data.data.PASSWORD }}"
           {{ .Data.data.USERNAME | writeToFile "/vault/secrets/user" "vault" "vault" "0600" }}
           {{ .Data.data.PASSWORD | writeToFile "/vault/secrets/pass" "vault" "vault" "0600" }}
           {{- end -}}
@@ -98,9 +82,9 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
-        - name: transmission-config
-          mountPath: /config/settings.json
-          subPath: settings.json
+        # - name: transmission-config
+        #   mountPath: /config/settings.json
+        #   subPath: settings.json
         - name: downloads
           mountPath: /downloads
         - name: hooks
@@ -117,9 +101,9 @@ spec:
         hostPath:
           path: /mnt/transmission
           type: DirectoryOrCreate
-      - name: transmission-config
-        configMap:
-          name: transmission-config
+      # - name: transmission-config
+      #   configMap:
+      #     name: transmission-config
       - name: downloads
         persistentVolumeClaim:
           claimName: downloads-pvc
