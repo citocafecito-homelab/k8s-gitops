@@ -23,6 +23,7 @@ resources:
 - apps/dispatcharr.yaml
 - apps/jellyserr.yaml
 - apps/jellyfin.yaml
+- apps/plex.yaml
 # Not enough resources
 # - apps/tinymediamanager.yaml
 # - apps/tdarr.yaml

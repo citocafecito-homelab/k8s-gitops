@@ -28,6 +28,8 @@ spec:
           mountPath: /config
         - name: series
           mountPath: /tv
+        - name: movies
+          mountPath: /movies
         - name: downloads
           mountPath: /downloads
         resources:
@@ -62,6 +64,9 @@ spec:
       - name: series
         persistentVolumeClaim:
           claimName: series-pvc
+      - name: movies
+        persistentVolumeClaim:
+          claimName: movies-pvc
       - name: downloads
         persistentVolumeClaim:
           claimName: downloads-pvc
