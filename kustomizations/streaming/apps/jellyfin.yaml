@@ -41,7 +41,7 @@ spec:
             cpu: 100m
           limits:
             cpu: 2
-            memory: 8Gi
+            memory: 10Gi
         securityContext:
           runAsUser: 0
           runAsGroup: 0
@@ -77,12 +77,18 @@ spec:
           mountPath: /dev/shm
         - name: cache
           mountPath: /cache
+        - name: transcodes
+          mountPath: /cache/transcodes
         - name: config
           mountPath: /config
         - name: movies
           mountPath: /media/movies
         - name: series
           mountPath: /media/series
+        - name: records
+          mountPath: /media/records
+        - name: intros
+          mountPath: /media/intros
         - name: concerts
           mountPath: /media/concerts
         - name: music
@@ -103,7 +109,11 @@ spec:
       - name: shm
         emptyDir:
           medium: Memory
-          sizeLimit: 2Gi
+          sizeLimit: 1Gi
+      - name: transcodes
+        emptyDir:
+          medium: Memory
+          sizeLimit: 7Gi
       - name: cache
         hostPath:
           path: /mnt/multimedia/cache
@@ -111,6 +121,14 @@ spec:
       - name: config
         hostPath:
           path: /mnt/jellyfin
+          type: DirectoryOrCreate
+      - name: intros
+        hostPath:
+          path: /mnt/multimedia/intros
+          type: DirectoryOrCreate
+      - name: records
+        hostPath:
+          path: /mnt/multimedia2/records
           type: DirectoryOrCreate
       - name: movies
         persistentVolumeClaim:
