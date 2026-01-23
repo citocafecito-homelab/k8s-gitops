@@ -37,8 +37,8 @@ spec:
           protocol: UDP
         resources:
           requests:
-            memory: 2Gi
-            cpu: .5
+            memory: 1Gi
+            cpu: 100m
           limits:
             cpu: 2
             memory: 8Gi
@@ -71,12 +71,12 @@ spec:
           timeoutSeconds: 3
           failureThreshold: 3
         volumeMounts:
-        - mountPath: /dev/dri
-          name: dri
-        - mountPath: /dev/shm
-          name: shm
-        - name: transcode-overlay
-          mountPath: /cache/transcode
+        - name: dri
+          mountPath: /dev/dri
+        - name: shm
+          mountPath: /dev/shm
+        - name: cache
+          mountPath: /cache
         - name: config
           mountPath: /config
         - name: movies
@@ -90,34 +90,6 @@ spec:
         - name: playlists
           mountPath: /music/playlists
           readOnly: true
-      initContainers:
-      - name: overlay-init
-        image: alpine:latest
-        securityContext:
-          privileged: true
-        command:
-          - sh
-          - -c
-          - |
-            set -e
-
-            # Crear estructura real
-            mkdir -p /ram/upper
-            mkdir -p /ram/work
-            mkdir -p /disk
-            mkdir -p /merged
-
-            # Montar overlay correctamente
-            mount -t overlay overlay \
-              -o lowerdir=/disk,upperdir=/ram/upper,workdir=/ram/work \
-              /merged
-        volumeMounts:
-          - name: transcode-ram
-            mountPath: /ram
-          - name: transcode-disk
-            mountPath: /disk
-          - name: transcode-overlay
-            mountPath: /merged
       nodeSelector:
         kubernetes.io/hostname: catuai
       tolerations:
@@ -132,16 +104,10 @@ spec:
         emptyDir:
           medium: Memory
           sizeLimit: 2Gi
-      - name: transcode-ram
-        emptyDir:
-          medium: Memory
-          sizeLimit: 5Gi
-      - name: transcode-disk
+      - name: cache
         hostPath:
-          path: /mnt/multimedia/transcoding
+          path: /mnt/multimedia/cache
           type: DirectoryOrCreate
-      - name: transcode-overlay
-        emptyDir: {}
       - name: config
         hostPath:
           path: /mnt/jellyfin
