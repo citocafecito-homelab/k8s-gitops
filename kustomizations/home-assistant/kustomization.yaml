@@ -6,6 +6,7 @@ resources:
 - config.yaml
 - pvc.yaml
 - deployment.yaml
+- ingress.yaml
 - svc.yaml
 
 # Agents

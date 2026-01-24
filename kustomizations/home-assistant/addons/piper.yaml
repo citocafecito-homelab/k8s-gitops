@@ -44,6 +44,8 @@ spec:
         volumeMounts:
         - name: piper-data
           mountPath: /data
+      nodeSelector:
+        kubernetes.io/hostname: caturra
       volumes:
       - name: piper-data
         persistentVolumeClaim:
