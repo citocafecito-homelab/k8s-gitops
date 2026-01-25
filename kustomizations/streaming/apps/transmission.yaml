@@ -1,6 +1,95 @@
 # IF ssh run 
 # export TR_AUTH="$(cat /vault/secrets/user):$(cat /vault/secrets/pass)"
 # alias tr='transmission-remote --authenv'
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: transmission-settings
+data:
+  settings.json: | 
+    {
+      "alt-speed-down": 50,
+      "alt-speed-enabled": false,
+      "alt-speed-time-begin": 540,
+      "alt-speed-time-day": 127,
+      "alt-speed-time-enabled": false,
+      "alt-speed-time-end": 1020,
+      "alt-speed-up": 50,
+      "announce-ip": "",
+      "announce-ip-enabled": false,
+      "anti-brute-force-enabled": false,
+      "anti-brute-force-threshold": 100,
+      "bind-address-ipv4": "0.0.0.0",
+      "bind-address-ipv6": "::",
+      "blocklist-enabled": false,
+      "blocklist-url": "http://www.example.com/blocklist",
+      "cache-size-mb": 4,
+      "default-trackers": "",
+      "dht-enabled": true,
+      "download-dir": "/downloads",
+      "download-queue-enabled": false,
+      "download-queue-size": 999,
+      "encryption": 1,
+      "idle-seeding-limit": 30,
+      "idle-seeding-limit-enabled": false,
+      "incomplete-dir": "/downloads/incomplete",
+      "incomplete-dir-enabled": false,
+      "lpd-enabled": false,
+      "message-level": 2,
+      "peer-congestion-algorithm": "",
+      "peer-id-ttl-hours": 6,
+      "peer-limit-global": 200,
+      "peer-limit-per-torrent": 50,
+      "peer-port": 51413,
+      "peer-port-random-high": 65535,
+      "peer-port-random-low": 49152,
+      "peer-port-random-on-start": false,
+      "peer-socket-tos": "le",
+      "pex-enabled": true,
+      "port-forwarding-enabled": true,
+      "preallocation": 1,
+      "prefetch-enabled": true,
+      "queue-stalled-enabled": false,
+      "queue-stalled-minutes": 30,
+      "ratio-limit": 2,
+      "ratio-limit-enabled": false,
+      "rename-partial-files": true,
+      "rpc-authentication-required": true,
+      "rpc-bind-address": "0.0.0.0",
+      "rpc-enabled": true,
+      "rpc-host-whitelist": "0.0.0.0,192.168.1.0/24,127.0.0.1",
+      "rpc-host-whitelist-enabled": true,
+      "rpc-password": "{89c0e656f521af9dd3fc0b4bd2ff9c2935f88978FoYc70OL",
+      "rpc-port": 9091,
+      "rpc-socket-mode": "0750",
+      "rpc-url": "/transmission/",
+      "rpc-username": "catuai",
+      "rpc-whitelist": "127.0.0.1",
+      "rpc-whitelist-enabled": false,
+      "scrape-paused-torrents-enabled": true,
+      "script-torrent-added-enabled": false,
+      "script-torrent-added-filename": "",
+      "script-torrent-done-enabled": false,
+      "script-torrent-done-filename": "",
+      "script-torrent-done-seeding-enabled": false,
+      "script-torrent-done-seeding-filename": "",
+      "seed-queue-enabled": false,
+      "seed-queue-size": 10,
+      "speed-limit-down": 100,
+      "speed-limit-down-enabled": false,
+      "speed-limit-up": 100,
+      "speed-limit-up-enabled": false,
+      "start-added-torrents": true,
+      "tcp-enabled": true,
+      "torrent-added-verify-mode": "fast",
+      "trash-original-torrent-files": false,
+      "umask": "002",
+      "upload-slots-per-torrent": 14,
+      "utp-enabled": false,
+      "watch-dir": "/watch",
+      "watch-dir-enabled": true
+    }
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,16 +106,6 @@ spec:
         app: transmission
         app.kubernetes.io/name: transmission
         app.kubernetes.io/part-of: streaming-stack
-      annotations:
-        vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/role: vault
-        vault.hashicorp.com/agent-inject-secret-creds: 'secret/data/transmission'
-        vault.hashicorp.com/address: "http://vault.core.svc.cluster.local:8200"
-        vault.hashicorp.com/agent-inject-template-creds: |
-          {{- with secret "secret/data/transmission" -}}
-          {{ .Data.data.USERNAME | writeToFile "/vault/secrets/user" "vault" "vault" "0600" }}
-          {{ .Data.data.PASSWORD | writeToFile "/vault/secrets/pass" "vault" "vault" "0600" }}
-          {{- end -}}
     spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
@@ -42,35 +121,6 @@ spec:
         envFrom:
         - configMapRef:
             name: streaming-stack-config
-        env:
-        - name: FILE__USER
-          value: /vault/secrets/user
-        - name: FILE__PASS
-          value: /vault/secrets/pass
-        - name: HOST_WHITELIST
-          value: "0.0.0.0,192.168.1.0/24,127.0.0.1"
-        - name: TR_LOG_LEVEL
-          value: "3"
-        - name: TR_ENFORCE_IPV4
-          value: "true"
-        - name: TR_PREFER_IPV4
-          value: "true"
-        - name: TR_PORT_FORWARDING_ENABLED
-          value: "false"
-        - name: TR_DNS_SERVERS
-          value: "1.1.1.1,8.8.8.8"
-        - name: PEERPORT
-          value: "51413"
-        - name: TR_INCOMPLETE_DIR_ENABLED
-          value: "false"
-        - name: TR_DOWNLOAD_DIR
-          value: "/downloads"
-        - name: TR_DOWNLOAD_QUEUE_ENABLED
-          value: "false"
-        - name: TR_SEED_QUEUE_ENABLED
-          value: "false"
-        - name: TR_QUEUE_STALLED_ENABLED
-          value: "false"
         resources:
           requests:
             cpu: 50m
@@ -79,6 +129,9 @@ spec:
             cpu: 250m
             memory: 512Mi
         volumeMounts:
+        - name: settings
+          mountPath: /config
+          subPath: settings.json
         - name: resume
           mountPath: /config/resume
         - name: torrents
@@ -94,6 +147,10 @@ spec:
         operator: "Exists"
         effect: "NoSchedule"
       volumes:
+      - name: settings
+        configMap:
+          name: transmission-settings
+          defaultMode: 0644
       - name: resume
         hostPath:
           path: /mnt/transmission/resume
