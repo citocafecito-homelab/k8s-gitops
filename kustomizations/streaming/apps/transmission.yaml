@@ -130,7 +130,7 @@ spec:
             memory: 512Mi
         volumeMounts:
         - name: settings
-          mountPath: /config
+          mountPath: /config/settings.json
           subPath: settings.json
         - name: resume
           mountPath: /config/resume
