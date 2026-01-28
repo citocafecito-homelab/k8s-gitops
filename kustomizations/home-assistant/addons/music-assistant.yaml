@@ -43,6 +43,7 @@ spec:
         app.kubernetes.io/name: music-assistant
     spec:
       hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: music-assistant
         image: ghcr.io/music-assistant/server:latest
@@ -85,3 +86,20 @@ spec:
     protocol: TCP
     port: 8095
     targetPort: 8095
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: music-assistant
+spec:
+  rules:
+  - host: musicassistant.lan
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: music-assistant
+              port:
+                number: 8095

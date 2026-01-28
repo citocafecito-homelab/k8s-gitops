@@ -22,10 +22,11 @@ kind: Service
 metadata:
   name: navidrome
   labels:
+    app: navidrome
     app.kubernetes.io/name: navidrome
-    type: LoadBalancer
 spec:
   selector:
+    app: navidrome
     app.kubernetes.io/name: navidrome
   ports:
   - name: http

@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: vault-ssh-ca-bootstrap
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: vault-ssh-ca-bootstrap
+  template:
+    metadata:
+      labels:
+        app: vault-ssh-ca-bootstrap
+    spec:
+      hostPID: true
+      hostNetwork: true
+      initContainers:
+      - name: bootstrap
+        image: alpine:latest
+        securityContext:
+          privileged: true
+        command:
+        - sh
+        - -c
+        - |
+          # 1. Instalar dependencias necesarias
+          apk add --no-cache curl
+
+          MARKER="/mnt/host/var/lib/vault-ssh-ca.done"
+          CA_PATH="/mnt/host/etc/ssh/trusted-user-ca-keys.pem"
+          SSHD_CONFIG="/mnt/host/etc/ssh/sshd_config"
+
+          if [ -f "$MARKER" ]; then
+            echo "Already configured on this node."
+            exit 0
+          fi
+
+          echo "Installing Vault SSH CA on host..."
+
+          # 2. Descargar la llave (usando FQDN por si acaso)
+          # Ajusta 'vault.vault-namespace' al namespace real de tu Vault
+          curl -s -f http://vault.kube-system.svc.cluster.local:8200/v1/ssh-client-signer/public_key > "$CA_PATH"
+
+          if [ $? -ne 0 ]; then
+            echo "Failed to download key from Vault"
+            exit 1
+          fi
+
+          # 3. Configurar sshd_config
+          if ! grep -q "^TrustedUserCAKeys" "$SSHD_CONFIG"; then
+            echo "TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys.pem" >> "$SSHD_CONFIG"
+          fi
+
+          # 4. Reiniciar SSH saliendo al namespace del host (PID 1)
+          # Usamos el binario del host directamente
+          nsenter -t 1 -m -u -n -i -- systemctl restart ssh
+
+          touch "$MARKER"
+          echo "Done."
+        volumeMounts:
+        - name: host-root
+          mountPath: /mnt/host
+      containers:
+      - name: pause
+        image: registry.k8s.io/pause:3.9
+      volumes:
+      - name: host-root
+        hostPath:
+          path: /

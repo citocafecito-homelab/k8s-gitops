@@ -8,12 +8,12 @@ resources:
 - ../shared-playlists
 - config.yaml
 - pvc.yaml
-- ingress.yaml
 
 ## Apps
+# - apps/nzbget.yaml
 - apps/transmission.yaml
-# - apps/autobrr.yaml
-# - apps/qbittorrent.yaml
+# - apps/deluge.yaml
+# - apps/qbittorrent.yaml (deprecated)
 - apps/flaresolverr.yaml
 - apps/prowlarr.yaml
 - apps/sonarr.yaml
@@ -24,9 +24,10 @@ resources:
 - apps/jellyserr.yaml
 - apps/jellyfin.yaml
 - apps/plex.yaml
-# Not enough resources
+# Not enough resources / uncompleted tests
 # - apps/tinymediamanager.yaml
 # - apps/tdarr.yaml
+# - apps/autobrr.yaml
 
 ## Jobs
 - jobs/split2flac.yaml

@@ -23,15 +23,12 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: vault-entrypoint
+  name: vault-scripts
 data:
   vault-entrypoint.sh: |
     #!/bin/sh
     set -e
 
-    # Environment setup
-    export VAULT_ADDR="http://127.0.0.1:8200"
-    export VAULT_SKIP_VERIFY=true
     VAULT_CONFIG="/vault/config/vault.hcl"
 
     echo "🚀 Starting Vault server..."
@@ -64,3 +61,62 @@ data:
 
     # Keep Vault running in the foreground
     wait $VAULT_PID
+
+  jwt-setup.sh: |
+    #!/bin/sh
+
+    # 1. Configuración de variables locales
+    export VAULT_ADDR="http://127.0.0.1:8200"
+    export VAULT_SKIP_VERIFY=true
+
+    echo "Iniciando configuración postStart..."
+
+    # 2. Bucle de espera (Health Check)
+    # Esperamos a que initialized sea true y sealed sea false
+    until wget -qO- $VAULT_ADDR/v1/sys/health | grep '"initialized":true' | grep '"sealed":false' > /dev/null; do
+      echo "Vault está sellado o iniciándose... reintentando en 2 segundos"
+      sleep 2
+    done
+
+    echo "Vault detectado y desellado. Procediendo con la configuración..."
+
+    # 3. Habilitar SSH Secrets Engine
+    # Usamos || true para que el script no aborte si ya está habilitado
+    vault secrets enable -path=ssh-client-signer ssh || true
+
+    # Configurar la CA para firmar llaves de clientes
+    vault write ssh-client-signer/config/ca generate_signing_key=true || true
+
+    # 4. Crear el Rol para Ansible
+    # Este rol permite firmar llaves para el usuario 'ansible-user'
+    vault write ssh-client-signer/roles/ansible-role \
+        key_type=ca \
+        allow_user_certificates=true \
+        allowed_users=ansible-user \
+        default_extensions="permit-pty,permit-port-forwarding" \
+        ttl=15m || true
+
+    # 5. Configurar Autenticación JWT para GitHub Actions
+    vault auth enable jwt || true
+
+    # Configurar el endpoint de confianza de GitHub
+    vault write auth/jwt/config \
+        oidc_discovery_url="https://token.actions.githubusercontent.com" \
+        bound_issuer="https://token.actions.githubusercontent.com" || true
+
+    # 6. Crear el Rol de confianza para tu Repositorio
+    # IMPORTANTE: Reemplaza TU_ORG y TU_REPO con tus datos reales
+    vault write auth/jwt/role/github-ansible-role - <<EOF
+    {
+      "role_type": "jwt",
+      "bound_audiences": "https://github.com/TU_ORG",
+      "user_claim": "workflow",
+      "bound_claims": {
+        "repository": "TU_ORG/TU_REPO"
+      },
+      "policies": ["default"],
+      "ttl": "15m"
+    }
+    EOF
+
+    echo "Configuración de JWT y SSH CA completada exitosamente."

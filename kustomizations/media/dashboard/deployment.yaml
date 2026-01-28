@@ -34,14 +34,14 @@ spec:
           {{ with secret "secret/data/pihole" -}}
           HOMEPAGE_VAR_PIHOLE_TOKEN="{{ .Data.data.WEBPASSWORD }}"
           {{ end }}
-          {{ with secret "secret/data/speedtest " -}}
+          {{ with secret "secret/data/speedtest" -}}
           HOMEPAGE_VAR_SPEEDTEST_TOKEN="{{ .Data.data.API_KEY }}"
           {{ end }}
-          {{ with secret "secret/data/suwayomi " -}}
+          {{ with secret "secret/data/suwayomi" -}}
           HOMEPAGE_VAR_SUWAYOMI_USERNAME="{{ .Data.data.USERNAME }}"
           HOMEPAGE_VAR_SUWAYOMI_PASSWORD="{{ .Data.data.PASSWORD }}"
           {{ end }}
-          {{ with secret "secret/data/streaming " -}}
+          {{ with secret "secret/data/streaming" -}}
           HOMEPAGE_VAR_JELLYFIN_API_KEY="{{ .Data.data.JELLYFIN_KEY }}"
           HOMEPAGE_VAR_JELLYSEERR_API_KEY="{{ .Data.data.JELLYSEERR_KEY }}"
           HOMEPAGE_VAR_BAZARR_API_KEY="{{ .Data.data.BAZARR_KEY }}"
@@ -49,7 +49,7 @@ spec:
           HOMEPAGE_VAR_SONARR_API_KEY="{{ .Data.data.SONARR_KEY }}"
           HOMEPAGE_VAR_PROWLARR_API_KEY="{{ .Data.data.PROWLARR_KEY }}"
           {{ end }}
-          {{ with secret "secret/data/transmission " -}}
+          {{ with secret "secret/data/transmission" -}}
           HOMEPAGE_VAR_TRANSMISSION_USERNAME="{{ .Data.data.USERNAME }}"
           HOMEPAGE_VAR_TRANSMISSION_PASSWORD="{{ .Data.data.PASSWORD }}"
           {{ end }}

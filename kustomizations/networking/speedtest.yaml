@@ -33,7 +33,7 @@ spec:
         vault.hashicorp.com/role: vault
         vault.hashicorp.com/agent-inject-secret-speedtest: "secret/data/speedtest"
         vault.hashicorp.com/agent-inject-template-speedtest: |
-          {{- with secret "secret/data/speedtest " -}}
+          {{- with secret "secret/data/speedtest" -}}
           ADMIN_EMAIL="{{ .Data.data.ADMIN_EMAIL }}"
           ADMIN_NAME="{{ .Data.data.ADMIN_NAME }}"
           ADMIN_PASSWORD="{{ .Data.data.ADMIN_PASSWORD }}"

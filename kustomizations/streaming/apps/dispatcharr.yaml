@@ -101,3 +101,20 @@ spec:
   - name: web
     port: 9191
     targetPort: 9191
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dispatcharr
+spec:
+  rules:
+  - host: dispatcharr.citocafecito.work
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: dispatcharr
+              port:
+                number: 9191

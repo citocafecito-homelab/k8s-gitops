@@ -35,10 +35,6 @@ data:
     address=/deco-aux.lan/192.168.1.4
     address=/deco-x20.lan/192.168.1.5
 
-    # Servers
-    address=/catuai.lan/192.168.1.10
-    address=/caturra.lan/192.168.1.10
-
     # Computers
     address=/pneuma.lan/192.168.1.220
     address=/julie.lan/192.168.1.221

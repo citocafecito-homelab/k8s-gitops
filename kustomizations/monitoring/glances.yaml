@@ -38,3 +38,44 @@ spec:
         - name: host-root
           hostPath:
             path: /
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: glances
+spec:
+  clusterIP: None
+  selector:
+    app: glances
+  ports:
+    - port: 61208
+      targetPort: 61208
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: glances
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  rules:
+  - host: catuai.lan
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: glances
+            port:
+              number: 61208
+  - host: caturra.lan
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: glances
+            port:
+              number: 61208

@@ -1,47 +1,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deluge
+  name: nzbget
   labels:
-    app: deluge
-    app.kubernetes.io/name: deluge
+    app: nzbget
+    app.kubernetes.io/name: nzbget
     app.kubernetes.io/instance: streaming-stack
     app.kubernetes.io/part-of: streaming-stack
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: deluge
-      app.kubernetes.io/name: deluge
+      app: nzbget
+      app.kubernetes.io/name: nzbget
       app.kubernetes.io/instance: streaming-stack
       app.kubernetes.io/part-of: streaming-stack
   template:
     metadata:
       labels:
-        app: deluge
-        app.kubernetes.io/name: deluge
+        app: nzbget
+        app.kubernetes.io/name: nzbget
         app.kubernetes.io/instance: streaming-stack
         app.kubernetes.io/part-of: streaming-stack
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "vault"
-        vault.hashicorp.com/agent-inject-secret-secrets: "secret/data/deluge"
+        vault.hashicorp.com/agent-inject-secret-secrets: "secret/data/nzbget"
         vault.hashicorp.com/agent-inject-template-secrets: |
-          {{- with secret "secret/data/deluge" -}}
+          {{- with secret "secret/data/nzbget" -}}
           {{ .Data.data.USER | writeToFile "/vault/secrets/user" "vault" "vault" "0600" }}
           {{ .Data.data.PASS | writeToFile "/vault/secrets/pass" "vault" "vault" "0600" }}
           {{- end -}}
     spec:
       containers:
-      - name: deluge
-        image: lscr.io/linuxserver/deluge:latest
+      - name: nzbget
+        image: lscr.io/linuxserver/nzbget:latest
         env:
-        - name: DELUGE_USER__MYVAR
+        - name: NZBGET_USER__MYVAR
           value: /vault/secrets/user
-        - name: DELUGE_PASS__MYVAR
+        - name: NZBGET_PASS__MYVAR
           value: /vault/secrets/pass
-        - name: DELUGE_LOGLEVEL
-          value: warning
         envFrom:
         - configMapRef:
             name: streaming-stack-config
@@ -62,7 +60,7 @@ spec:
       volumes:
       - name: config
         hostPath:
-          path: /mnt/deluge
+          path: /mnt/nzbget
           type: DirectoryOrCreate
       - name: downloads
         persistentVolumeClaim:
@@ -71,36 +69,28 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: deluge
+  name: nzbget
 spec:
   ports:
-    - port: 8112
-      targetPort: 8112
-      name: webui
-    - port: 6881
-      targetPort: 6881
-      protocol: TCP
-      name: torrent-tcp
-    - port: 6881
-      targetPort: 6881
-      protocol: UDP
-      name: torrent-udp
+    - port: 6789
+      targetPort: 6789
+      name: tcp
   selector:
-    app: deluge
+    app: nzbget
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: deluge
+  name: nzbget
 spec:
   rules:
-  - host: deluge.citocafecito.work
-    http:
-      paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: deluge
-              port:
-                number: 8112
+    - host: nzbget.citocafecito.work
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nzbget
+                port:
+                  number: 6789
