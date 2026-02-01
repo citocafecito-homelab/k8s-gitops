@@ -1,6 +1,6 @@
 # K8s GitOps
 
-[![Deploy Kustomizations](https://github.com/citocafecito-homelab/k8s-gitops/actions/workflows/main.yml/badge.svg)](https://github.com/citocafecito-homelab/k8s-gitops/actions/workflows/main.yml)
+[![Deploy Kustomizations](https://github.com/citocafecito-homelab/k8s-gitops/actions/workflows/kustomizations.yaml/badge.svg)](https://github.com/citocafecito-homelab/k8s-gitops/actions/workflows/kustomizations.yaml)
 
 | GitOps repository for managing Kubernetes deployments of `Citocafecito homelab` applications.
 
