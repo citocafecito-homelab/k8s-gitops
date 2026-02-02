@@ -44,8 +44,8 @@ spec:
                 name: navidrome-lastfm-secret
                 key: ND_LASTFM_SECRET
         volumeMounts:
-        - name: transcode-cache
-          mountPath: /data/cache/transcoding
+        - name: cache
+          mountPath: /data/cache
         - name: navidrome-data
           mountPath: /data
         - name: navidrome-backup
@@ -59,16 +59,12 @@ spec:
           mountPath: /music/playlists/smarts
           readOnly: true
       nodeSelector:
-        kubernetes.io/hostname: catuai
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
+        kubernetes.io/hostname: caturra
       volumes:
-      - name: transcode-cache
+      - name: cache
         emptyDir:
           medium: Memory
-          sizeLimit: 512Mi
+          sizeLimit: 750Mi
       - name: navidrome-data
         hostPath:
           path: /mnt/navidrome

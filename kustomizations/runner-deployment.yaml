@@ -4,6 +4,7 @@ metadata:
   name: k8s-runners
   namespace: actions
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: k8s-runners

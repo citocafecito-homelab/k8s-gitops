@@ -13,7 +13,6 @@ spec:
         app: vault-ssh-ca-bootstrap
     spec:
       hostPID: true
-      hostNetwork: true
       initContainers:
       - name: bootstrap
         image: alpine:latest
@@ -39,7 +38,10 @@ spec:
 
           # 2. Descargar la llave (usando FQDN por si acaso)
           # Ajusta 'vault.vault-namespace' al namespace real de tu Vault
-          curl -s -f http://vault.kube-system.svc.cluster.local:8200/v1/ssh-client-signer/public_key > "$CA_PATH"
+          curl -sf \
+            http://vault.core.svc.cluster.local:8200/v1/ssh-client-signer/config/ca \
+            | jq -r '.data.public_key' \
+            > "$CA_PATH"
 
           if [ $? -ne 0 ]; then
             echo "Failed to download key from Vault"
@@ -53,7 +55,8 @@ spec:
 
           # 4. Reiniciar SSH saliendo al namespace del host (PID 1)
           # Usamos el binario del host directamente
-          nsenter -t 1 -m -u -n -i -- systemctl restart ssh
+          nsenter -t 1 -m -u -n -i -- sh -c \
+            "systemctl restart ssh || systemctl restart sshd"
 
           touch "$MARKER"
           echo "Done."
