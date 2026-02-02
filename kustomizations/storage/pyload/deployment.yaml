@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pyload
+spec:
+  selector:
+    matchLabels:
+      app: pyload
+  template:
+    metadata:
+      labels:
+        app: pyload
+    spec:
+      containers:
+      - name: pyload
+        image: lscr.io/linuxserver/pyload
+        env:
+        - name: USER_ID
+          value: "1000"
+        - name: GROUP_ID
+          value: "1000"
+        - name: TZ
+          value: America/Bogota
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        ports:
+        - containerPort: 7227
+        - containerPort: 8000
+        - containerPort: 9666
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: downloads
+          mountPath: /downloads
+      volumes:
+      - name: config
+        hostPath:
+          path: /mnt/pyload
+      - name: downloads
+        hostPath:
+          path: /mnt/multimedia/downloads

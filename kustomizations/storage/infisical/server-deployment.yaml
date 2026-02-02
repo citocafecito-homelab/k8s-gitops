@@ -67,9 +67,3 @@ spec:
           requests:
             memory: "512Mi"
             cpu: 5m
-        volumeMounts:
-        - name: infisical-data
-          mountPath: /mnt/infisical
-      volumes:
-      - name: infisical-data
-        emptyDir: {}

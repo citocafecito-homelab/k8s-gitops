@@ -24,14 +24,14 @@ metadata:
 spec:
   loadBalancerIP: 192.168.1.34
   ports:
-    - name: api
-      protocol: TCP
-      port: 9000
-      targetPort: 9000
-    - name: console
-      protocol: TCP
-      port: 80
-      targetPort: 9090
+  - name: api
+    protocol: TCP
+    port: 9000
+    targetPort: 9000
+  - name: console
+    protocol: TCP
+    port: 80
+    targetPort: 9090
   type: LoadBalancer
   selector:
     app: minio

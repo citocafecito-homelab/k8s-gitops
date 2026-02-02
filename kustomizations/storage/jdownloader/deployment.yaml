@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jdownloader
+spec:
+  selector:
+    matchLabels:
+      app: jdownloader
+  template:
+    metadata:
+      labels:
+        app: jdownloader
+    spec:
+      containers:
+      - name: jdownloader
+        image: jlesage/jdownloader-2
+        env:
+        - name: USER_ID
+          value: "1000"
+        - name: GROUP_ID
+          value: "1000"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        ports:
+        - containerPort: 5800
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: downloads
+          mountPath: /output
+      volumes:
+      - name: config
+        hostPath:
+          path: /mnt/jdownloader
+      - name: downloads
+        hostPath:
+          path: /mnt/multimedia/downloads
