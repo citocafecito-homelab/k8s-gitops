@@ -10,6 +10,7 @@ spec:
     metadata:
       labels:
         app: jdownloader
+        state: deprecated
     spec:
       containers:
       - name: jdownloader
