@@ -26,29 +26,35 @@ spec:
         env:
         - name: CAPTCHA_SOLVER
           value: 'hcaptcha-solver'
+        - name: BROWSER
+          value: "chrome"
+        - name: CHROME_URL
+          value: "http://chrome.core.svc.cluster.local:3000"
         envFrom:
         - configMapRef:
             name: streaming-stack-config
         resources:
           requests:
+            cpu: 100m
             memory: 512Mi
-            cpu: 5m
+          limits:
+            cpu: 500m
+            memory: 1Gi
         livenessProbe:
           httpGet:
             path: /health
             port: 8191
-          initialDelaySeconds: 30
+          initialDelaySeconds: 90
           periodSeconds: 60
           timeoutSeconds: 10
-          failureThreshold: 3
+          failureThreshold: 5
         readinessProbe:
           httpGet:
             path: /health
             port: 8191
-          initialDelaySeconds: 15
+          initialDelaySeconds: 45
           periodSeconds: 15
           timeoutSeconds: 5
-          failureThreshold: 3
       nodeSelector:
         kubernetes.io/hostname: caturra
 ---
@@ -77,10 +83,10 @@ spec:
   - host: flaresolverr.citocafecito.work
     http:
       paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: flaresolverr
-              port:
-                number: 8191
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: flaresolverr
+            port:
+              number: 8191

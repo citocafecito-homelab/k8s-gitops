@@ -5,59 +5,50 @@ metadata:
   labels:
     app: chrome
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: chrome
-      app.kubernetes.io/name: chrome
   template:
     metadata:
       labels:
         app: chrome
-        app.kubernetes.io/name: chrome
     spec:
       containers:
-        - name: chrome
-          image: ghcr.io/browserless/chromium:v2.18.0
-          env:
-          - name: TIMEOUT
-            value: "10000"
-          - name: CONCURRENT
-            value: "5"
-          - name: PREBOOT_CHROME
-            value: "true"
-          - name: "CHROME_FLAGS"
-            value: "--disable-gpu --disable-dev-shm-usage --no-sandbox --single-process"
-          - name: TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: chrome-secret
-                key: CHROME_TOKEN
-          - name: EXIT_ON_HEALTH_FAILURE
-            value: "true"
-          - name: PRE_REQUEST_HEALTH_CHECK
-            value: "true"
-          ports:
-            - containerPort: 3000
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "512Mi"
-            limits:
-              cpu: "300m"
-              memory: "1.5Gi"
-          # Din't work - I will check it later
-          # livenessProbe:
-          #   httpGet:
-          #     path: /pressure
-          #     port: 3000
-          #   initialDelaySeconds: 60
-          #   periodSeconds: 30
-          #   failureThreshold: 3
-          # readinessProbe:
-          #   httpGet:
-          #     path: /pressure
-          #     port: 3000
-          #   initialDelaySeconds: 15
-          #   periodSeconds: 15
-          #   successThreshold: 1
+      - name: chrome
+        image: ghcr.io/browserless/chromium:v2.18.0
+        ports:
+        - containerPort: 3000
+        env:
+        - name: PREBOOT_CHROME
+          value: "true"
+        - name: CONCURRENT
+          value: "2"
+        - name: TIMEOUT
+          value: "10000"
+        - name: CHROME_FLAGS
+          value: "--disable-gpu --disable-dev-shm-usage --no-sandbox"
+        resources:
+          requests:
+            cpu: "150m"
+            memory: "512Mi"
+          limits:
+            cpu: "500m"
+            memory: "1.5Gi"
+        livenessProbe:
+          httpGet:
+            path: /pressure
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /pressure
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        startupProbe:
+          httpGet:
+            path: /pressure
+            port: 3000
+          failureThreshold: 30
+          periodSeconds: 2
