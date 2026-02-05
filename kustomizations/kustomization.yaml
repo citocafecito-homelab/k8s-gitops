@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
 - metallb
+- actions
 - networking
 - core
 - home-assistant
