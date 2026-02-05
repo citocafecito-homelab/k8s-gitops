@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: garage
+  labels:
+    app: garage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: garage
+  template:
+    metadata:
+      labels:
+        app: garage
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: vault
+        vault.hashicorp.com/agent-inject-secret-garage-config: "secret/data/garage"
+        vault.hashicorp.com/agent-inject-file-garage-config: "garage.toml"
+        vault.hashicorp.com/secret-volume-path-garage-config: "/etc/garage"
+        vault.hashicorp.com/agent-inject-template-garage-config: |
+          {{- with secret "secret/data/garage" -}}
+          metadata_di         = "/var/lib/garage/meta"
+          data_dir            = "/var/lib/garage/data"
+          replication_factor  = 2
+          rpc_bind_addr       = "[::]:3901"
+
+          [s3_api]
+          api_bind_addr = "[::]:3900"
+          s3_region     = "garage"
+
+          [admin]
+          api_bind_addr = "[::]:3903"
+          admin_token = "<ADMIN_TOKEN>"
+          {{- end -}}
+    spec:
+      containers:
+      - name: garage
+        image: ghcr.io/deuxfleurs/garage:latest
+        imagePullPolicy: IfNotPresent
+        args:
+        - server
+        - --config
+        - /etc/garage/garage.toml
+        env:
+        - name: GARAGE_RPC_SECRET_FILE
+          value: /vault/secrets/rpc_secret
+        - name: GARAGE_ADMIN_TOKEN_FILE
+          value: /vault/secrets/admin_token
+        ports:
+        - name: s3
+          containerPort: 3900
+        - name: admin
+          containerPort: 3903
+        resources:
+          requests:
+            cpu: 10m
+            memory: 100Mi
+          limits:
+            cpu: 200m
+            memory: 512Mi
+        volumeMounts:
+        - name: meta
+          mountPath: /var/lib/garage/meta
+        - name: data
+          mountPath: /var/lib/garage/data
+      volumes:
+      - name: meta
+        hostPath:
+          path: /mnt/garage/meta
+      - name: data
+        hostPath:
+          path: /mnt/garage/data
