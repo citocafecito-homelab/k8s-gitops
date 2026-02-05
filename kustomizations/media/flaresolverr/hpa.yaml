@@ -8,7 +8,7 @@ spec:
     kind: Deployment
     name: flaresolverr
   minReplicas: 2
-  maxReplicas: 4
+  maxReplicas: 6
   behavior:
     scaleUp:
       stabilizationWindowSeconds: 60
