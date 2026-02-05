@@ -1,0 +1,23 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: k8s-runners
+spec:
+  selector:
+    matchLabels:
+      app: k8s-runners
+      app.kubernetes.io/name: k8s-runners
+  template:
+    metadata:
+      labels:
+        app: k8s-runners
+        app.kubernetes.io/name: k8s-runners
+    spec:
+      dockerEnabled: false
+      ephemeral: true
+      organization: citocafecito-homelab
+      serviceAccountName: github-runner
+      labels:
+      - arc
+      - k8s
+      env: []

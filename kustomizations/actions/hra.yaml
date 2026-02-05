@@ -1,0 +1,17 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: HorizontalRunnerAutoscaler
+metadata:
+  name: k8s-runner-autoscaler
+spec:
+  scaleTargetRef:
+    kind: RunnerDeployment
+    name: k8s-runners
+  minReplicas: 1
+  maxReplicas: 5
+  scaleDownDelaySecondsAfterScaleOut: 300
+  metrics:
+  - type: TotalNumberOfQueuedAndInProgressWorkflowRuns
+    repositoryNames:
+    - ansible-cafeteria
+    - k8s-gitops
+    - habiflix-ux
