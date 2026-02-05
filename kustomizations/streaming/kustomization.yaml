@@ -14,7 +14,6 @@ resources:
 - apps/transmission.yaml
 # - apps/deluge.yaml
 # - apps/qbittorrent.yaml (deprecated)
-- apps/flaresolverr.yaml
 - apps/prowlarr.yaml
 - apps/sonarr.yaml
 - apps/radarr.yaml
