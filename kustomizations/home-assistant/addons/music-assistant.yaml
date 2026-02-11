@@ -53,11 +53,11 @@ spec:
           containerPort: 8095
         resources:
           requests:
-            cpu: 200m
+            cpu: 250m
             memory: 515Mi
           limits:
             cpu: 1
-            memory: 1024Mi
+            memory: 2Gi
         securityContext:
           privileged: true
           capabilities:
@@ -68,7 +68,7 @@ spec:
         - name: music-assistant-data
           mountPath: /data
       nodeSelector:
-        kubernetes.io/hostname: caturra
+        kubernetes.io/hostname: castillo
       volumes:
       - name: music-assistant-data
         persistentVolumeClaim:
