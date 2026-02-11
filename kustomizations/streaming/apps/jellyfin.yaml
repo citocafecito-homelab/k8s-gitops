@@ -124,7 +124,7 @@ spec:
           type: DirectoryOrCreate
       - name: records
         hostPath:
-          path: /mnt/multimedia/records
+          path: /mnt/multimedia2/records
           type: DirectoryOrCreate
       - name: movies
         persistentVolumeClaim:
