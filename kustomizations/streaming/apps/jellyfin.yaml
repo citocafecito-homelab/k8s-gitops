@@ -75,10 +75,10 @@ spec:
           mountPath: /dev/dri
         - name: shm
           mountPath: /dev/shm
-        - name: cache
-          mountPath: /cache
-        # - name: transcodes
-        #   mountPath: /cache/transcodes
+        # - name: cache
+        #   mountPath: /cache
+        - name: transcodes
+          mountPath: /cache/transcodes
         - name: config
           mountPath: /config
         - name: movies
@@ -110,14 +110,14 @@ spec:
         emptyDir:
           medium: Memory
           sizeLimit: 1Gi
-      # - name: transcodes
-      #   emptyDir:
-      #     medium: Memory
-      #     sizeLimit: 7Gi
-      - name: cache
-        hostPath:
-          path: /mnt/cache
-          type: DirectoryOrCreate
+      - name: transcodes
+        emptyDir:
+          medium: Memory
+          sizeLimit: 10Gi
+      # - name: cache
+      #   hostPath:
+      #     path: /mnt/cache
+      #     type: DirectoryOrCreate
       - name: config
         hostPath:
           path: /mnt/jellyfin
@@ -128,7 +128,7 @@ spec:
           type: DirectoryOrCreate
       - name: records
         hostPath:
-          path: /mnt/multimedia2/records
+          path: /mnt/multimedia/records
           type: DirectoryOrCreate
       - name: movies
         persistentVolumeClaim:

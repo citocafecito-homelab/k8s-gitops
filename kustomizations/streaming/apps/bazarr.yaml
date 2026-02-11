@@ -67,7 +67,7 @@ spec:
         - name: series
           mountPath: /tv
       nodeSelector:
-        kubernetes.io/hostname: caturra
+        kubernetes.io/hostname: castillo
       volumes:
       - name: config
         hostPath:
