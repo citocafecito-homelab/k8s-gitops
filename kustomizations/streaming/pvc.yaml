@@ -34,7 +34,7 @@ spec:
   accessModes:
   - ReadWriteMany
   hostPath:
-    path: /mnt/multimedia2/movies
+    path: /mnt/multimedia/movies
   persistentVolumeReclaimPolicy: Retain
   volumeMode: Filesystem
 ---
@@ -60,7 +60,7 @@ spec:
   accessModes:
   - ReadWriteMany
   hostPath:
-    path: /mnt/multimedia2/series
+    path: /mnt/multimedia/series
   persistentVolumeReclaimPolicy: Retain
   volumeMode: Filesystem
 ---
