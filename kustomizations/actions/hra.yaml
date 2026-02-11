@@ -6,8 +6,8 @@ spec:
   scaleTargetRef:
     kind: RunnerDeployment
     name: k8s-runners
-  minReplicas: 1
-  maxReplicas: 5
+  minReplicas: 3
+  maxReplicas: 10
   scaleDownDelaySecondsAfterScaleOut: 300
   metrics:
   - type: TotalNumberOfQueuedAndInProgressWorkflowRuns
