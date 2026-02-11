@@ -97,11 +97,7 @@ spec:
           mountPath: /music/playlists
           readOnly: true
       nodeSelector:
-        kubernetes.io/hostname: catuai
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
+        kubernetes.io/hostname: castillo
       volumes:
       - name: dri
         hostPath:
