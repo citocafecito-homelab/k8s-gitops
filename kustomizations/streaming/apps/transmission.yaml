@@ -163,6 +163,5 @@ spec:
           path: /mnt/transmission/watch
           type: DirectoryOrCreate
       - name: downloads
-        hostPath:
-          path: /mnt/downloads
-          type: DirectoryOrCreate
+        persistentVolumeClaim:
+          claimName: downloads-pvc
