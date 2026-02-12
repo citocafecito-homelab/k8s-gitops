@@ -131,11 +131,8 @@ spec:
             name: streaming-stack-config
         resources:
           requests:
-            cpu: 50m
+            cpu: 200m
             memory: 256Mi
-          limits:
-            cpu: 250m
-            memory: 512Mi
         volumeMounts:
         - name: settings
           mountPath: /config/settings.json
