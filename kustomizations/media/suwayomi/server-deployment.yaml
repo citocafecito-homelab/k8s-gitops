@@ -51,9 +51,14 @@ spec:
         volumeMounts:
         - name: suwayomi-storage
           mountPath: /home/suwayomi/.local/share/Tachidesk
+        - name: suwayomi-cache
+          mountPath: /home/suwayomi/.local/share/Tachidesk/cache
       nodeSelector:
         kubernetes.io/hostname: castillo
       volumes:
       - name: suwayomi-storage
         persistentVolumeClaim:
           claimName: suwayomi-pvc
+      - name: suwayomi-cache
+        emptyDir:
+          medium: Memory 
