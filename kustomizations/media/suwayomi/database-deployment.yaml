@@ -53,8 +53,10 @@ spec:
           failureThreshold: 3
         resources:
           requests:
-            cpu: 5m
-            memory: 64Mi
+            cpu: 50m
+            memory: 128Mi
+      nodeSelector:
+        kubernetes.io/hostname: castillo
       volumes:
       - name: suwayomi-postgresql-storage
         persistentVolumeClaim:
