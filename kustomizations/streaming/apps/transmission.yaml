@@ -91,7 +91,7 @@ data:
     }
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   name: transmission
 spec:
@@ -108,16 +108,24 @@ spec:
         app.kubernetes.io/part-of: streaming-stack
     spec:
       dnsPolicy: ClusterFirstWithHostNet
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: DoesNotExist
       containers:
       - name: transmission
         image: lscr.io/linuxserver/transmission:latest
         ports:
         - containerPort: 9091
-          protocol: TCP
         - containerPort: 51413
-          protocol: TCP
         - containerPort: 51413
           protocol: UDP
+        env:
+        - name: PEERPORT
+          value: "51413"
         envFrom:
         - configMapRef:
             name: streaming-stack-config
@@ -160,8 +168,9 @@ spec:
           path: /mnt/transmission/watch
           type: DirectoryOrCreate
       - name: downloads
-        persistentVolumeClaim:
-          claimName: downloads-pvc
+        hostPath:
+          path: /mnt/downloads
+          type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: Service
@@ -184,27 +193,32 @@ spec:
     targetPort: 51413
     protocol: UDP
 ---
-apiVersion: v1
-kind: Service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: transmission-lb
+  name: transmission
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: transmission.lan
+    kubernetes.io/ingress.class: traefik
+    external-dns.alpha.kubernetes.io/hostname: transmission.caturra.lan,transmission.castillo.lan
 spec:
-  type: LoadBalancer
-  loadBalancerIP: 192.168.1.36
-  ports:
-  - name: webui
-    port: 80
-    targetPort: 9091
-    protocol: TCP
-  - name: tcp
-    port: 51413
-    targetPort: 51413
-    protocol: TCP
-  - name: udp
-    port: 51413
-    targetPort: 51413
-    protocol: UDP
-  selector:
-    app: transmission
+  rules:
+  - host: transmission.caturra.lan
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: transmission
+              port:
+                number: 9091
+  - host: transmission.castillo.lan
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: transmission
+              port:
+                number: 9091
