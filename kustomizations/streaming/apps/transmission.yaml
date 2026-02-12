@@ -57,8 +57,8 @@ data:
       "rpc-authentication-required": true,
       "rpc-bind-address": "0.0.0.0",
       "rpc-enabled": true,
-      "rpc-host-whitelist": "0.0.0.0,192.168.1.0/24,127.0.0.1",
-      "rpc-host-whitelist-enabled": true,
+      "rpc-host-whitelist": "127.0.0.1,192.168.*.*"
+      "rpc-host-whitelist-enabled": false,
       "rpc-password": "{89c0e656f521af9dd3fc0b4bd2ff9c2935f88978FoYc70OL",
       "rpc-port": 9091,
       "rpc-socket-mode": "0750",
@@ -95,7 +95,6 @@ kind: DaemonSet
 metadata:
   name: transmission
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: transmission
@@ -108,6 +107,7 @@ spec:
         app.kubernetes.io/part-of: streaming-stack
     spec:
       dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -148,8 +148,6 @@ spec:
           mountPath: /watch
         - name: downloads
           mountPath: /downloads
-      nodeSelector:
-        kubernetes.io/hostname: caturra
       volumes:
       - name: settings
         configMap:
@@ -171,54 +169,3 @@ spec:
         hostPath:
           path: /mnt/downloads
           type: DirectoryOrCreate
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: transmission
-spec:
-  selector:
-    app: transmission
-  ports:
-  - name: webui
-    port: 9091
-    targetPort: 9091
-    protocol: TCP
-  - name: tcp
-    port: 51413
-    targetPort: 51413
-    protocol: TCP
-  - name: udp
-    port: 51413
-    targetPort: 51413
-    protocol: UDP
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: transmission
-  annotations:
-    kubernetes.io/ingress.class: traefik
-    external-dns.alpha.kubernetes.io/hostname: transmission.caturra.lan,transmission.castillo.lan
-spec:
-  rules:
-  - host: transmission.caturra.lan
-    http:
-      paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: transmission
-              port:
-                number: 9091
-  - host: transmission.castillo.lan
-    http:
-      paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: transmission
-              port:
-                number: 9091
