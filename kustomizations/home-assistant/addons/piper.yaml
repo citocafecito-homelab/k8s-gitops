@@ -45,7 +45,7 @@ spec:
         - name: piper-data
           mountPath: /data
       nodeSelector:
-        kubernetes.io/hostname: caturra
+        kubernetes.io/hostname: castillo
       volumes:
       - name: piper-data
         persistentVolumeClaim:

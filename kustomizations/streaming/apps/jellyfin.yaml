@@ -75,8 +75,6 @@ spec:
           mountPath: /dev/dri
         - name: shm
           mountPath: /dev/shm
-        # - name: cache
-        #   mountPath: /cache
         - name: transcodes
           mountPath: /cache/transcodes
         - name: config
@@ -110,10 +108,6 @@ spec:
         emptyDir:
           medium: Memory
           sizeLimit: 10Gi
-      # - name: cache
-      #   hostPath:
-      #     path: /mnt/cache
-      #     type: DirectoryOrCreate
       - name: config
         hostPath:
           path: /mnt/jellyfin
@@ -133,11 +127,14 @@ spec:
         persistentVolumeClaim:
           claimName: series-pvc
       - name: concerts
-        persistentVolumeClaim:
-          claimName: concerts-pvc
+        hostPath:
+          path: /mnt/downloads/concerts
+          type: DirectoryOrCreate
       - name: music
-        persistentVolumeClaim:
-          claimName: music-pvc
+        nfs:
+          server: 192.168.1.11
+          path: /mnt/music
+          readOnly: false
       - name: playlists
         configMap:
           name: shared-playlists

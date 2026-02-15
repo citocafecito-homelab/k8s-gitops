@@ -65,8 +65,10 @@ spec:
           path: /mnt/lidarr
           type: DirectoryOrCreate
       - name: downloads
-        persistentVolumeClaim: 
-          claimName: downloads-pvc
+        nfs:
+          server: 192.168.1.12
+          path: /mnt/downloads
+          readOnly: false
       - name: music
         persistentVolumeClaim:
           claimName: music-pvc

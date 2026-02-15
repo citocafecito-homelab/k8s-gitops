@@ -68,6 +68,8 @@ spec:
         volumeMounts:
         - name: whisper-data
           mountPath: /data
+      nodeSelector:
+        kubernetes.io/hostname: castillo
       volumes:
       - name: whisper-data
         persistentVolumeClaim:

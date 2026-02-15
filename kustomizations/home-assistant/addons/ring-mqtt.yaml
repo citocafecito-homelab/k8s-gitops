@@ -87,6 +87,8 @@ spec:
         volumeMounts:
         - name: ring-data
           mountPath: /data
+      nodeSelector:
+        kubernetes.io/hostname: caturra
       volumes:
       - name: ring-data
         hostPath:

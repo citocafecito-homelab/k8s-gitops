@@ -62,7 +62,7 @@ data:
       "rpc-password": "{89c0e656f521af9dd3fc0b4bd2ff9c2935f88978FoYc70OL",
       "rpc-port": 9091,
       "rpc-socket-mode": "0750",
-      "rpc-url": "/",
+      "rpc-url": "/transmission",
       "rpc-username": "catuai",
       "rpc-whitelist": "127.0.0.1",
       "rpc-whitelist-enabled": false,
@@ -90,11 +90,88 @@ data:
       "watch-dir-enabled": true
     }
 ---
+# apiVersion: apps/v1
+# kind: DaemonSet
+# metadata:
+#   name: transmission
+# spec:
+#   selector:
+#     matchLabels:
+#       app: transmission
+#       app.kubernetes.io/name: transmission
+#   template:
+#     metadata:
+#       labels:
+#         app: transmission
+#         app.kubernetes.io/name: transmission
+#         app.kubernetes.io/part-of: streaming-stack
+#     spec:
+#       dnsPolicy: ClusterFirstWithHostNet
+#       hostNetwork: true
+#       affinity:
+#         nodeAffinity:
+#           requiredDuringSchedulingIgnoredDuringExecution:
+#             nodeSelectorTerms:
+#               - matchExpressions:
+#                   - key: node-role.kubernetes.io/control-plane
+#                     operator: DoesNotExist
+#       containers:
+#       - name: transmission
+#         image: lscr.io/linuxserver/transmission:latest
+#         ports:
+#         - containerPort: 9091
+#         - containerPort: 51413
+#         - containerPort: 51413
+#           protocol: UDP
+#         env:
+#         - name: PEERPORT
+#           value: "51413"
+#         envFrom:
+#         - configMapRef:
+#             name: streaming-stack-config
+#         resources:
+#           requests:
+#             cpu: 200m
+#             memory: 256Mi
+#         volumeMounts:
+#         - name: settings
+#           mountPath: /config/settings.json
+#           subPath: settings.json
+#         - name: resume
+#           mountPath: /config/resume
+#         - name: torrents
+#           mountPath: /config/torrents
+#         - name: watch
+#           mountPath: /watch
+#         - name: downloads
+#           mountPath: /downloads
+#       volumes:
+#       - name: settings
+#         configMap:
+#           name: transmission-settings
+#           defaultMode: 0644
+#       - name: resume
+#         hostPath:
+#           path: /mnt/transmission/resume
+#           type: DirectoryOrCreate
+#       - name: torrents
+#         hostPath:
+#           path: /mnt/transmission/torrents
+#           type: DirectoryOrCreate
+#       - name: watch
+#         hostPath:
+#           path: /mnt/transmission/watch
+#           type: DirectoryOrCreate
+#       - name: downloads
+#         persistentVolumeClaim:
+#           claimName: downloads-pvc
+---
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
   name: transmission
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: transmission
@@ -107,32 +184,26 @@ spec:
         app.kubernetes.io/part-of: streaming-stack
     spec:
       dnsPolicy: ClusterFirstWithHostNet
-      hostNetwork: true
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: node-role.kubernetes.io/control-plane
-                    operator: DoesNotExist
       containers:
       - name: transmission
         image: lscr.io/linuxserver/transmission:latest
         ports:
         - containerPort: 9091
+          protocol: TCP
         - containerPort: 51413
+          protocol: TCP
         - containerPort: 51413
           protocol: UDP
-        env:
-        - name: PEERPORT
-          value: "51413"
         envFrom:
         - configMapRef:
             name: streaming-stack-config
         resources:
           requests:
-            cpu: 200m
+            cpu: 50m
             memory: 256Mi
+          limits:
+            cpu: 250m
+            memory: 512Mi
         volumeMounts:
         - name: settings
           mountPath: /config/settings.json
@@ -145,6 +216,8 @@ spec:
           mountPath: /watch
         - name: downloads
           mountPath: /downloads
+      nodeSelector:
+        kubernetes.io/hostname: castillo
       volumes:
       - name: settings
         configMap:
@@ -165,3 +238,49 @@ spec:
       - name: downloads
         persistentVolumeClaim:
           claimName: downloads-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission
+spec:
+  selector:
+    app: transmission
+  ports:
+  - name: webui
+    port: 9091
+    targetPort: 9091
+    protocol: TCP
+  - name: tcp
+    port: 51413
+    targetPort: 51413
+    protocol: TCP
+  - name: udp
+    port: 51413
+    targetPort: 51413
+    protocol: UDP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission-lb
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: transmission.lan
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.36
+  ports:
+  - name: webui
+    port: 80
+    targetPort: 9091
+    protocol: TCP
+  - name: tcp
+    port: 51413
+    targetPort: 51413
+    protocol: TCP
+  - name: udp
+    port: 51413
+    targetPort: 51413
+    protocol: UDP
+  selector:
+    app: transmission

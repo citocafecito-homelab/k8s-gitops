@@ -75,7 +75,7 @@ spec:
           type: DirectoryOrCreate
       - name: navidrome-music
         hostPath:
-          path: /mnt/multimedia/music
+          path: /mnt/music
           type: DirectoryOrCreate
       - name: navidrome-smart-playlists
         configMap:

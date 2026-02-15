@@ -84,6 +84,8 @@ spec:
       - name: data
         persistentVolumeClaim:
           claimName: zigbee2mqtt-pvc
+      nodeSelector:
+        kubernetes.io/hostname: caturra
       - name: config
         configMap:
           name: zigbee2mqtt-config

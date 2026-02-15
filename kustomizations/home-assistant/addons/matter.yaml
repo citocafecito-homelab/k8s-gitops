@@ -73,11 +73,11 @@ spec:
         - containerPort: 5582
         resources:
           requests:
-            cpu: 10m
-            memory: 128Mi
-          limits:
-            cpu: 50m
+            cpu: 100m
             memory: 256Mi
+          limits:
+            cpu: 200m
+            memory: 512Mi
         readinessProbe:
           httpGet:
             path: /
@@ -101,9 +101,8 @@ spec:
           mountPath: /sys
         - name: bluetooth-dev
           mountPath: /dev/bus/usb
-      tolerations:
-      - key: node-role.kubernetes.io/control-plane
-        operator: Exists
+      nodeSelector:
+        kubernetes.io/hostname: caturra
       volumes:
       - name: matter-config
         persistentVolumeClaim:

@@ -53,8 +53,8 @@ spec:
         - containerPort: 3000
         resources:
           requests:
-            cpu: 1m
-            memory: 64Mi
+            cpu: 100m
+            memory: 256Mi
         securityContext:
           privileged: true
           runAsUser: 0

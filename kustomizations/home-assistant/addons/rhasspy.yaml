@@ -75,6 +75,8 @@ spec:
         volumeMounts:
         - name: rhasspy-storage
           mountPath: /data
+      nodeSelector:
+        kubernetes.io/hostname: castillo
       volumes:
       - name: rhasspy-storage
         persistentVolumeClaim:
