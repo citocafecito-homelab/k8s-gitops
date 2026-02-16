@@ -1,12 +1,11 @@
 #EXTM3U
 #PLAYLIST:Stratovarius - Definitive Collection
-# Rutas relativas a /music/
 
 #EXTINF:-1,Black Diamond
-/music/Stratovarius/(1997) Visions/Stratovarius - 01 - Black Diamond.mp3
+/music/Stratovarius/(1997) Visions/Stratovarius - 01 - Black Diamond.flac
 
 #EXTINF:-1,Hunting High and Low
-/music/Stratovarius/(2000) Infinite/Stratovarius - 01 - Hunting High and Low.mp3
+/music/Stratovarius/(2000) Infinite/Stratovarius - 01 - Hunting High and Low.flac
 
 #EXTINF:-1,Survive
 /music/Stratovarius/(2022) Survive/Stratovarius - 01 - Survive.flac
@@ -15,22 +14,22 @@
 /music/Stratovarius/(1996) Episode/Stratovarius - 01 - Father Time.flac
 
 #EXTINF:-1,Eagleheart
-/music/Stratovarius/(2003) Elements, Pt. 1/Stratovarius - Elements, Pt. 1 - 01 - Eagleheart.mp3
+/music/Stratovarius/(2003) Elements, Pt. 1/Stratovarius - 01 - Eagleheart.flac
 
 #EXTINF:-1,Unbreakable
-/music/Stratovarius/(2013) Nemesis/Stratovarius - 02 - Unbreakable.mp3
+/music/Stratovarius/(2013) Nemesis/Stratovarius - 02 - Unbreakable.flac
 
 #EXTINF:-1,Speed of Light
 /music/Stratovarius/(1996) Episode/Stratovarius - 05 - Speed of Light.flac
 
 #EXTINF:-1,Paradise
-/music/Stratovarius/(1997) Visions/Stratovarius - 08 - Paradise.mp3
+/music/Stratovarius/(1997) Visions/Stratovarius - 08 - Paradise.flac
 
 #EXTINF:-1,Destiny
-/music/Stratovarius/(1998) Destiny/Stratovarius - 01 - Destiny.mp3
+/music/Stratovarius/(1998) Destiny/Stratovarius - 01 - Destiny.flac
 
 #EXTINF:-1,Legions
-/music/Stratovarius/(1997) Visions/Stratovarius - 05 - Legions.mp3
+/music/Stratovarius/(1997) Visions/Stratovarius - 05 - Legions.flac
 
 #EXTINF:-1,Frozen in Time
 /music/Stratovarius/(2022) Survive/Stratovarius - 06 - Frozen in Time.flac
@@ -42,7 +41,7 @@
 /music/Stratovarius/(1996) Episode/Stratovarius - 12 - Forever.flac
 
 #EXTINF:-1,The Kiss of Judas
-/music/Stratovarius/(1997) Visions/Stratovarius - 02 - The Kiss of Judas.mp3
+/music/Stratovarius/(1997) Visions/Stratovarius - 02 - The Kiss of Judas.flac
 
 #EXTINF:-1,Shine in the Dark
-/music/Stratovarius/(2015) Eternal/Stratovarius - 02 - Shine in the Dark.mp3
+/music/Stratovarius/(2015) Eternal/Stratovarius - 02 - Shine in the Dark.flac

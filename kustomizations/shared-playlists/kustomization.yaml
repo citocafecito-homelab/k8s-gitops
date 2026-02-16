@@ -10,8 +10,10 @@ configMapGenerator:
       - angra/Angra-Temple-of-Shadows-20th-Anniversary-Tour.m3u
       - angra/Angra-The-Cycles-of-Rebirth.m3u
       - angra/Angra-The-Favorites-Anthology.m3u
+      - helloween/Helloween-40-years-tour.m3u
       - iron-maiden/Iron-Maiden-Future-Past-Tour.m3u
       - iron-maiden/Iron-Maiden-Run-For-Your-Lives.m3u
       - iron-maiden/Iron-Maiden-The-Heritage-of-the-Beast.m3u
       - stratovarius/Stratovarius-Best-Of.m3u
       - stratovarius/Stratovarius-Calle-13-bar-bogota-colombia-2025.m3u
+      - stratovarius/Stratovarius-Melodic-Ballads.m3u

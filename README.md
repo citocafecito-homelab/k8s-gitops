@@ -56,3 +56,30 @@ If you’re reviewing this repo to learn:
 - Layer separation: Note how each application has its own namespace or folder with constrained resources (HPA/VPA).
 - Persistence: Decoupled PersistentVolumeClaims are used to ensure data survives pod restarts.
 - Secrets: You won’t find passwords here. The use of Sealed Secrets or injection via Vault/Infisical is recommended.
+
+
+```mermaid
+graph TD
+    subgraph Fase_Evaluacion [1. Discovery & Planning]
+        A[Análisis de VMWare] --> B[Inventario de Recursos]
+        B --> C[Definición de Estrategia 7R]
+    end
+
+    subgraph Fase_MGM [2. AWS MGM Governance]
+        C --> D[Configuración Landing Zone]
+        D --> E[Control Tower & Service Catalog]
+    end
+
+    subgraph Modulos_Curso [3. Entregables del Curso]
+        E --> M1[1. Guías de Estudio: PDF/MD]
+        E --> M2[2. Código Replicable: Terraform/IAC]
+        E --> M3[3. Labs: Sandbox AWS]
+        E --> M4[4. Podcast: Guía Segmentada]
+    end
+
+    subgraph Migracion_Real [4. Ejecución con AWS MGN]
+        M2 --> F[Instalación de Agentes en VM]
+        F --> G[Replicación de Datos]
+        G --> H[Cutover / Lanzamiento]
+    end
+```
