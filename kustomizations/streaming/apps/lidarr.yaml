@@ -57,21 +57,22 @@ spec:
           mountPath: /downloads
         - name: music 
           mountPath: /music
-      nodeSelector:
-        kubernetes.io/hostname: caturra
       volumes:
       - name: config
-        hostPath:
+        nfs:
+          server: 192.168.1.11
           path: /mnt/lidarr
-          type: DirectoryOrCreate
+          readOnly: false
       - name: downloads
         nfs:
           server: 192.168.1.12
           path: /mnt/downloads
           readOnly: false
       - name: music
-        persistentVolumeClaim:
-          claimName: music-pvc
+        nfs:
+          server: 192.168.1.11
+          path: /mnt/music
+          readOnly: false
 ---
 apiVersion: v1
 kind: Service

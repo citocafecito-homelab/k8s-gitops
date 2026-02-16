@@ -81,13 +81,12 @@ spec:
             volumeMounts:
             - name: music
               mountPath: /workdir
-          nodeSelector:
-            kubernetes.io/hostname: caturra
           securityContext:
             runAsUser: 0
             runAsGroup: 0
           volumes:
           - name: music
-            hostPath:
-              path: /mnt/multimedia/downloads/lidarr
-              type: Directory
+            nfs:
+              server: 192.168.1.12
+              path: /mnt/downloads
+              readOnly: false
