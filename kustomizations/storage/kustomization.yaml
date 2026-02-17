@@ -6,7 +6,7 @@ resources:
 # - mydrive
 # - reactive-resume
 # - infisical
-- minio
+# - minio
 - pyload
 
 # Work in progress. Stoped due no enough hardware

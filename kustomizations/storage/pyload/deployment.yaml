@@ -37,10 +37,12 @@ spec:
           mountPath: /config
         - name: downloads
           mountPath: /downloads
+      nodeSelector:
+        kubernetes.io/hostname: castillo
       volumes:
       - name: config
         hostPath:
           path: /mnt/pyload
       - name: downloads
         hostPath:
-          path: /mnt/multimedia/downloads
+          path: /mnt/downloads

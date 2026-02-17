@@ -7,8 +7,8 @@ resources:
 - suwayomi
 - linkstack
 - navidrome
-- lidify
-- excalidraw
+# - lidify
+# - excalidraw
 - flaresolverr
 
 namespace: media

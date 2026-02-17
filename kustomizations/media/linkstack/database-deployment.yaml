@@ -53,6 +53,8 @@ spec:
         volumeMounts:
         - name: linkstack-mysql
           mountPath: /var/lib/mysql
+      nodeSelector:
+        kubernetes.io/hostname: castillo
       volumes:
       - name: linkstack-mysql
         persistentVolumeClaim:

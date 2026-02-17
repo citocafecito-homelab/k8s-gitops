@@ -17,6 +17,15 @@ spec:
         app.kubernetes.io/name: flaresolverr
     spec:
       terminationGracePeriodSeconds: 30
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                - caturra
       containers:
       - name: flaresolverr
         image: ghcr.io/flaresolverr/flaresolverr:latest

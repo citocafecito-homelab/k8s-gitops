@@ -55,6 +55,8 @@ spec:
           requests:
             cpu: 5m
             memory: 256Mi
+      nodeSelector:
+        kubernetes.io/hostname: castillo
       volumes:
       - name: wikijs-postgresql-storage
         persistentVolumeClaim:
