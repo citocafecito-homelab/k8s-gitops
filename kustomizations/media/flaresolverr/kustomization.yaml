@@ -5,4 +5,5 @@ resources:
 - deployment.yaml
 - hpa.yaml
 # - svc.yaml
+- scale.yaml
 - ingress.yaml
