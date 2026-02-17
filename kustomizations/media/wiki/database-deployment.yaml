@@ -4,7 +4,7 @@ metadata:
   name: wikijs-postgresql
 spec:
   serviceName: wikijs-postgresql
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: wikijs-postgresql
