@@ -86,7 +86,5 @@ spec:
             runAsGroup: 0
           volumes:
           - name: music
-            nfs:
-              server: 192.168.1.12
-              path: /mnt/downloads
-              readOnly: false
+            persistentVolumeClaim:
+              claimName: downloads-pvc

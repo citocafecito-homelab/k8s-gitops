@@ -1,6 +1,6 @@
 #EXTM3U
-#PLAYLIST:Helloween - 40 Years Anniversary Tour (Colombia 2026)
-# Rutas basadas en la biblioteca local .flac
+#PLAYLIST:Helloween - 40 Years Anniversary Tour (Complete Setlist)
+# Basado en la biblioteca local .flac
 
 #EXTINF:-1,March of Time
 /music/Helloween/(1988) Keeper of the Seven Keys, Part II/Helloween - Keeper of the Seven Keys, Part II - 08 - March of Time.flac
@@ -8,17 +8,11 @@
 #EXTINF:-1,The King for a 1000 Years
 /music/Helloween/(2005) Keeper of the Seven Keys - The Legacy/Helloween - Keeper of the Seven Keys - The Legacy - 01 - The King for a 1000 Years.flac
 
-#EXTINF:-1,Future World
-/music/Helloween/(1987) Keeper of the Seven Keys, Part I/Helloween - Keeper of the Seven Keys, Part I - 05 - Future World.flac
-
 #EXTINF:-1,This Is Tokyo
 /music/Helloween/(2025) Giants & Monsters/Helloween - Giants & Monsters - 06 - This Is Tokyo.flac
 
 #EXTINF:-1,We Burn
 /music/Helloween/(1996) The Time of the Oath/Helloween - The Time of the Oath - 01 - We Burn.flac
-
-#EXTINF:-1,Twilight of the Gods
-/music/Helloween/(1987) Keeper of the Seven Keys, Part I/Helloween - Keeper of the Seven Keys, Part I - 03 - Twilight of the Gods.flac
 
 #EXTINF:-1,Ride the Sky
 /music/Helloween/(1985) Walls of Jericho/Helloween - Walls of Jericho - 01 - Walls of Jericho + Ride the Sky.flac
@@ -32,26 +26,17 @@
 #EXTINF:-1,Universe (Gravity for Hearts)
 /music/Helloween/(2025) Giants & Monsters/Helloween - Giants & Monsters - 07 - Universe (Gravity for Hearts).flac
 
-#EXTINF:-1,Hell Was Made in Heaven
-/music/Helloween/(2003) Rabbit Don't Come Easy/Helloween - Rabbit Don't Come Easy - 08 - Hell Was Made in Heaven.flac
-
-#EXTINF:-1,I Want Out
-/music/Helloween/(1988) Keeper of the Seven Keys, Part II/Helloween - Keeper of the Seven Keys, Part II - 09 - I Want Out.flac
+#EXTINF:-1,Pink Bubbles Go Ape
+/music/Helloween/(1991) Pink Bubbles Go Ape/Helloween - 01 - Pink Bubbles Go Ape.flac
 
 #EXTINF:-1,In the Middle of a Heartbeat
 /music/Helloween/(1994) Master of the Rings/Helloween - Master of the Rings - 10 - In the Middle of a Heartbeat.flac
 
-#EXTINF:-1,A Tale That Wasn't Right
-/music/Helloween/(1987) Keeper of the Seven Keys, Part I/Helloween - Keeper of the Seven Keys, Part I - 06 - A Tale That Wasn't Right.flac
-
 #EXTINF:-1,Power
-/music/Helloween/(1996) The Time of the Oath/Helloween - The Time of the Oath - 06 - Power.flac
+/music/Helloween/(1996) The Time of the Oath/Helloween - The Time of the Oath - 04 - Power.flac
 
 #EXTINF:-1,Heavy Metal (Is the Law)
 /music/Helloween/(1985) Walls of Jericho/Helloween - Walls of Jericho - 07 - Heavy Metal (Is the Law).flac
-
-#EXTINF:-1,Halloween
-/music/Helloween/(1987) Keeper of the Seven Keys, Part I/Helloween - Keeper of the Seven Keys, Part I - 07 - Halloween.flac
 
 #EXTINF:-1,Eagle Fly Free
 /music/Helloween/(1988) Keeper of the Seven Keys, Part II/Helloween - Keeper of the Seven Keys, Part II - 02 - Eagle Fly Free.flac
@@ -62,5 +47,11 @@
 #EXTINF:-1,Dr. Stein
 /music/Helloween/(1988) Keeper of the Seven Keys, Part II/Helloween - Keeper of the Seven Keys, Part II - 05 - Dr. Stein.flac
 
+#EXTINF:-1,How Many Tears
+/music/Helloween/(1985) Walls of Jericho/Helloween - Walls of Jericho - 08 - How Many Tears.flac
+
 #EXTINF:-1,Keeper of the Seven Keys
 /music/Helloween/(1988) Keeper of the Seven Keys, Part II/Helloween - Keeper of the Seven Keys, Part II - 10 - Keeper of the Seven Keys.flac
+
+#EXTINF:-1,I Want Out
+/music/Helloween/(1988) Keeper of the Seven Keys, Part II/Helloween - Keeper of the Seven Keys, Part II - 09 - I Want Out.flac

@@ -29,10 +29,10 @@ spec:
           value: "--disable-gpu --disable-dev-shm-usage --no-sandbox"
         resources:
           requests:
-            cpu: "150m"
+            cpu: "0.5"
             memory: "512Mi"
           limits:
-            cpu: "500m"
+            cpu: "1"
             memory: "1.5Gi"
         livenessProbe:
           httpGet:

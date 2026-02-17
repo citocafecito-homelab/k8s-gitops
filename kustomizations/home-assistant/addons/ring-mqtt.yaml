@@ -1,26 +1,3 @@
-# apiVersion: v1
-# kind: PersistentVolume
-# metadata:
-#   name: ring-mqtt-pv
-# spec:
-#   capacity:
-#     storage: 1Gi
-#   accessModes:
-#   - ReadWriteOnce
-#   hostPath:
-#     path: /mnt/ring-mqtt
-# ---
-# apiVersion: v1
-# kind: PersistentVolumeClaim
-# metadata:
-#   name: ring-mqtt-pvc
-# spec:
-#   accessModes:
-#   - ReadWriteOnce
-#   resources:
-#     requests:
-#       storage: 1Gi
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -44,6 +21,8 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: vault
+        vault.hashicorp.com/secret-volume-path: "/data"
+        
         vault.hashicorp.com/agent-inject-secret-config.json: "secret/data/ring"
         vault.hashicorp.com/agent-inject-template-config.json: |
           {{- with secret "secret/data/ring" -}}
@@ -62,14 +41,38 @@ spec:
             "mqtt_client_id": "ring-mqtt"
           }
           {{- end }}
+        
+        vault.hashicorp.com/agent-inject-secret-ring-state.json: "secret/data/ring"
+        vault.hashicorp.com/agent-inject-template-ring-state.json: |
+          {{- with secret "secret/data/ring" -}}
+            {
+              "ring_token": "{{ .Data.data.TOKEN }}",
+              "systemId": "{{ .Data.data.SYSTEM_ID }}",
+              "devices": {
+                  "5c475e0dde74": {
+                      "snapshot": {
+                          "mode": "Auto",
+                          "autoInterval": true,
+                          "interval": 600
+                      },
+                      "event_select": {
+                          "state": "Motion 1"
+                      },
+                      "motion": {
+                          "duration": 180
+                      },
+                      "ding": {
+                          "duration": 180
+                      }
+                  }
+              }
+            }
+          {{- end }}
     spec:
       containers:
       - name: ring-mqtt
         image: tsightler/ring-mqtt:latest
         imagePullPolicy: IfNotPresent
-        command: [ "/bin/sh", "-c" ]
-        args:
-        - cp /vault/secrets/config.json /data/config.json && /init
         ports:
         - containerPort: 51824
           name: web-ui
@@ -84,16 +87,6 @@ spec:
           limits:
             cpu: 200m
             memory: 512Mi
-        volumeMounts:
-        - name: ring-data
-          mountPath: /data
-      nodeSelector:
-        kubernetes.io/hostname: caturra
-      volumes:
-      - name: ring-data
-        hostPath:
-          path: /mnt/ring-mqtt
-          type: DirectoryOrCreate
 ---
 apiVersion: v1 
 kind: Service
@@ -116,18 +109,3 @@ spec:
     port: 8554
     targetPort: 8554
     name: rtsp
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: ring-mqtt-local
-spec:
-  selector:
-    app: ring-mqtt
-  type: NodePort
-  ports:
-  - protocol: TCP
-    port: 55123 # El puerto interno real del contenedor
-    targetPort: 55123 # Puerto expuesto por Ring-MQTT
-    nodePort: 31824 # El puerto accesible desde tu red (puedes mantenerlo)
-    name: web-ui

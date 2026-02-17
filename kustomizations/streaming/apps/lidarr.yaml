@@ -58,21 +58,17 @@ spec:
         - name: music 
           mountPath: /music
       volumes:
-      - name: config
-        nfs:
-          server: 192.168.1.11
-          path: /mnt/lidarr
-          readOnly: false
       - name: downloads
-        nfs:
-          server: 192.168.1.12
-          path: /mnt/downloads
-          readOnly: false
+        persistentVolumeClaim:
+          claimName: downloads-pvc
+      - name: config
+        hostPath:
+          path: /lidarrc
+          type: DirectoryOrCreate
       - name: music
-        nfs:
-          server: 192.168.1.11
+        hostPath:
           path: /mnt/music
-          readOnly: false
+          type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: Service
