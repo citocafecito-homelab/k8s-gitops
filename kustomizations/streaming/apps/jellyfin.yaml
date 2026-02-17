@@ -38,9 +38,9 @@ spec:
         resources:
           requests:
             memory: 1Gi
-            cpu: 100m
-          limits:
             cpu: 2
+          limits:
+            cpu: 4
             memory: 10Gi
         securityContext:
           runAsUser: 0
@@ -107,7 +107,7 @@ spec:
       - name: transcodes
         emptyDir:
           medium: Memory
-          sizeLimit: 10Gi
+          sizeLimit: 12Gi
       - name: config
         hostPath:
           path: /mnt/jellyfin

@@ -7,7 +7,6 @@ metadata:
     app.kubernetes.io/name: linkstack
     app.kubernetes.io/part-of: linkstack
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: linkstack
@@ -30,8 +29,8 @@ spec:
             name: linkstack-config
         resources:
           requests:
-            cpu: 10m
-            memory: 128Mi
+            cpu: 100m
+            memory: 256Mi
           limits:
             cpu: 200m
-            memory: 256Mi
+            memory: 512Mi

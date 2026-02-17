@@ -174,7 +174,7 @@ data:
                   format: "number"
                   suffix: " km/h"
 
-    - Nodo Catuai:
+    - Networking:
         - CloudFlare Tunnel:
             href: https://one.dash.cloudflare.com/e19111ae758ecab4a1a6a15d7c74be1b/networks/tunnels/cfd_tunnel/b2b836e5-915c-4227-b280-a8cfe0e445c4/edit?tab=overview
             icon: https://icon.icepanel.io/Technology/svg/Cloudflare.svg
@@ -283,13 +283,13 @@ data:
             href: https://home.citocafecito.work
             description: Centro de mando para la gestión y automatización del hogar
             icon: https://upload.wikimedia.org/wikipedia/en/thumb/4/49/Home_Assistant_logo_%282023%29.svg/1200px-Home_Assistant_logo_%282023%29.svg.png
-            ping: http://192.168.1.10:8123
+            ping: http://192.168.1.11:8123
             namespace: home-assistant
             app: home-assistant
             showStats: true
             widget:
               type: homeassistant
-              url: http://192.168.1.10:8123
+              url: http://192.168.1.11:8123
               key: "{{HOMEPAGE_VAR_HA_TOKEN}}"
               custom:
                 - template: "{{ states.switch|selectattr('state','equalto','on')|list|length }}"
@@ -368,7 +368,7 @@ data:
             href: https://suwayomi.citocafecito.work
             description: Lector de Manga
             icon: https://raw.githubusercontent.com/Suwayomi/Suwayomi-Server/refs/heads/master/server/src/main/resources/icon/faviconlogo.png
-            # ping: http://192.168.1.23
+            ping: http://suwayomi.lan
             namespace: media
             app: suwayomi
             showStats: true
@@ -378,13 +378,6 @@ data:
               username: "{{HOMEPAGE_VAR_SUWAYOMI_USERNAME}}"
               password: "{{HOMEPAGE_VAR_SUWAYOMI_PASSWORD}}"
               category: 1
-
-        # - Suwayomi DB:
-        #     description: Base de datos de Suwayomi
-        #     icon: https://cdn-icons-png.flaticon.com/512/9850/9850812.png
-        #     namespace: media
-        #     app: suwayomi-postgresql
-        #     showStats: true
 
         - "Wiki.js":
             href: https://wiki.citocafecito.work/
@@ -416,11 +409,11 @@ data:
             showStats: true
             namespace: streaming
             app: lidarr
-            # widget:
-            #   type: lidarr
-            #   url: http://lidarr.streaming.svc.cluster.local:8989
-            #   key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
-            #   enableQueue: false
+            widget:
+              type: lidarr
+              url: http://lidarr.streaming.svc.cluster.local:8989
+              key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
+              enableQueue: false
 
         - Jellyfin:
             href: https://jellyfin.citocafecito.work/
@@ -436,6 +429,21 @@ data:
               key: "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}"
               enableBlocks: true
               enableNowPlaying: false
+
+        - dispatcharr:
+            href: https://dispatcharr.citocafecito.work/
+            description: Servidor de medios de código abierto
+            icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/dispatcharr.svg
+            ping: http://dispatcharr.citocafecito.work
+            showStats: true
+            namespace: streaming
+            app: dispatcharr
+            widget:
+              type: dispatcharr
+              url: http://dispatcharr.streaming.svc.cluster.local:9191
+              username: "{{HOMEPAGE_VAR_DISPATCHARR_USER}}"
+              password: "{{HOMEPAGE_VAR_DISPATCHARR_PASSWORD}}"
+              enableActiveStreams: true 
 
         - Jellyseerr:
             description: Interfaz de solicitud de contenido para Jellyfin o Plex
@@ -560,17 +568,17 @@ data:
         icon: https://icons.veryicon.com/png/o/food--drinks/minnie-bakery-02/coffee-41.png
         href: /
 
-    - resources:
-        label: Catuai
-        cpu: true # optional, enabled by default, disable by setting to false
-        mem: true # optional, enabled by default, disable by setting to false
-        cputemp: true # disabled by default
-        disk: 
-          - /
-          # - /mnt/multimedia
-        diskUnits: bytes # optional, bytes (default) or bbytes. Only applies to disk
-        network: true 
-        expanded: true # show the expanded view
+    # - resources:
+    #     label: Catuai
+    #     cpu: true # optional, enabled by default, disable by setting to false
+    #     mem: true # optional, enabled by default, disable by setting to false
+    #     cputemp: true # disabled by default
+    #     disk: 
+    #       - /
+    #       # - /mnt/multimedia
+    #     diskUnits: bytes # optional, bytes (default) or bbytes. Only applies to disk
+    #     network: true 
+    #     expanded: true # show the expanded view
 
     - search:
         provider: [brave, google, duckduckgo]

@@ -64,10 +64,13 @@ spec:
           value: iHD
         ports:
         - containerPort: 9191
+        - containerPort: 5656
         securityContext:
           privileged: true
           capabilities:
-            add: ["SYS_RAWIO"]
+            add:
+             - SYS_NICE
+             - SYS_RAWIO
         volumeMounts:
         - mountPath: /dev/dri
           name: dri
@@ -101,6 +104,9 @@ spec:
   - name: web
     port: 9191
     targetPort: 9191
+  - name: tcp
+    port: 5656
+    targetPort: 5656
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

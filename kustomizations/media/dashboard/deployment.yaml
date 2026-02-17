@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: homepage
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: homepage
@@ -48,6 +48,8 @@ spec:
           HOMEPAGE_VAR_RADARR_API_KEY="{{ .Data.data.RADARR_KEY }}"
           HOMEPAGE_VAR_SONARR_API_KEY="{{ .Data.data.SONARR_KEY }}"
           HOMEPAGE_VAR_PROWLARR_API_KEY="{{ .Data.data.PROWLARR_KEY }}"
+          HOMEPAGE_VAR_DISPATCHARR_USER="{{ .Data.data.DISPATCHARR_USER }}"
+          HOMEPAGE_VAR_DISPATCHARR_PASSWORD="{{ .Data.data.DISPATCHARR_PASSWORD }}"
           {{ end }}
           {{ with secret "secret/data/transmission" -}}
           HOMEPAGE_VAR_TRANSMISSION_USERNAME="{{ .Data.data.USERNAME }}"
@@ -68,11 +70,11 @@ spec:
         - containerPort: 3000
         resources:
           requests:
-            cpu: 10m
-            memory: 128Mi
-          limits:
             cpu: 200m
             memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 1Gi
         volumeMounts:
         - mountPath: /app/config/custom.js
           name: homepage-config

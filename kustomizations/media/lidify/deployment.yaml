@@ -42,8 +42,6 @@ spec:
                   name: lidarr-secret
                   key: LIDARR_API_KEY
           volumeMounts:
-            - name: lidify-config
-              mountPath: /lidify/config
             - name: localtime
               mountPath: /etc/localtime
               readOnly: true
@@ -51,23 +49,17 @@ spec:
               mountPath: /data/media/music/
           resources:
             requests:
-              cpu: "25m"
-              memory: "32Mi"
-            limits:
-              cpu: "150m"
+              cpu: "100m"
               memory: "128Mi"
-      nodeSelector:
-        kubernetes.io/hostname: caturra
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
       volumes:
-        - name: lidify-config
-          hostPath:
-            path: /mnt/lidify
-            type: DirectoryOrCreate
         - name: localtime
           hostPath:
             path: /etc/localtime
             type: File
         - name: music
           hostPath:
-            path: /mnt/multimedia/music
+            path: /mnt/music
           

@@ -5,26 +5,6 @@ metadata:
   annotations:
     external-dns.alpha.kubernetes.io/hostname: suwayomi.lan
   labels:
-    app: suwayomi
-    app.kubernetes.io/name: suwayomi
-spec:
-  selector:
-    app: suwayomi
-  ports:
-  - name: http
-    port: 4567
-    targetPort: 4567
-  - name: web
-    port: 8181
-    targetPort: 8181
----    
-apiVersion: v1
-kind: Service
-metadata:
-  name: suwayomi-lb
-  annotations:
-    external-dns.alpha.kubernetes.io/hostname: suwayomi.lan
-  labels:
     app.kubernetes.io/name: suwayomi
     type: LoadBalancer
 spec:
@@ -36,6 +16,10 @@ spec:
   - name: http
     protocol: TCP
     port: 80
+    targetPort: 4567
+  - name: internal
+    protocol: TCP
+    port: 4567
     targetPort: 4567
   - name: web
     protocol: TCP

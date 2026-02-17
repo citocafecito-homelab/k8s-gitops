@@ -57,6 +57,8 @@ spec:
           mountPath: /downloads
         - name: music 
           mountPath: /music
+      nodeSelector:
+        kubernetes.io/hostname: caturra
       volumes:
       - name: downloads
         persistentVolumeClaim:
