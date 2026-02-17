@@ -1,15 +1,13 @@
-apiVersion: keda.sh/v1alpha1
-kind: ScaledObject
+apiVersion: http.keda.sh/v1alpha1
+kind: HTTPScaledObject
 metadata:
   name: flaresolverr
 spec:
   scaleTargetRef:
     name: flaresolverr
-  minReplicaCount: 0
-  maxReplicaCount: 6
-  cooldownPeriod: 300
-  triggers:
-  - type: cpu
-    metricType: Utilization
-    metadata:
-      value: "70"
+    service: flaresolverr
+    port: 8191
+  replicas:
+    min: 0
+    max: 4
+  scaledownPeriod: 300
