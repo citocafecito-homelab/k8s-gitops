@@ -77,7 +77,7 @@ spec:
         - mountPath: /data
           name: dispatcharr-data
       nodeSelector:
-        kubernetes.io/hostname: caturra
+        kubernetes.io/hostname: castillo
       volumes:
       - name: dri
         hostPath:

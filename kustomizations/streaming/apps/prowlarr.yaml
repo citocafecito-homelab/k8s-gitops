@@ -57,12 +57,13 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
+      nodeSelector:
+        kubernetes.io/hostname: castillo
       volumes:
       - name: config
-        nfs:
-          server: 192.168.1.11
+        hostPath:
           path: /mnt/prowlarr
-          readOnly: false
+          type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: Service

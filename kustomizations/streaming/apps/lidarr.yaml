@@ -58,14 +58,14 @@ spec:
         - name: music 
           mountPath: /music
       nodeSelector:
-        kubernetes.io/hostname: caturra
+        kubernetes.io/hostname: castillo
       volumes:
       - name: downloads
         persistentVolumeClaim:
           claimName: downloads-pvc
       - name: config
         hostPath:
-          path: /lidarrc
+          path: /mnt/lidarrc
           type: DirectoryOrCreate
       - name: music
         hostPath:
