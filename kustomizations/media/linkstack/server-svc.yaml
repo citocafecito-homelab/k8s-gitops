@@ -4,6 +4,7 @@ metadata:
   name: linkstack
   annotations:
     external-dns.alpha.kubernetes.io/hostname: linkstack.lan
+    traefik.ingress.kubernetes.io/router.timeout: 120s
   labels:
     app.kubernetes.io/name: linkstack
     type: LoadBalancer

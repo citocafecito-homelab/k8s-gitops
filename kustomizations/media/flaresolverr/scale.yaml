@@ -3,6 +3,9 @@ kind: HTTPScaledObject
 metadata:
   name: flaresolverr
 spec:
+  hosts:
+  - flaresolverr.citocafecito.work
+  targetPendingRequests: 1
   scaleTargetRef:
     name: flaresolverr
     service: flaresolverr
@@ -10,4 +13,3 @@ spec:
   replicas:
     min: 0
     max: 4
-  scaledownPeriod: 300

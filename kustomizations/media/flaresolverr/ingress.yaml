@@ -2,6 +2,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: flaresolverr
+  annotations:
+    traefik.ingress.kubernetes.io/router.timeout: 60s
 spec:
   rules:
   - host: flaresolverr.citocafecito.work
@@ -11,6 +13,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: flaresolverr
+            name: keda-add-ons-http-interceptor-proxy
             port:
-              number: 8191
+              number: 8080

@@ -1,0 +1,19 @@
+apiVersion: http.keda.sh/v1alpha1
+kind: HTTPScaledObject
+metadata:
+  name: linkstack
+spec:
+  hosts:
+  - linkstack.citocafecito.work
+  - linkstack.lan
+  - linkstack.local
+  - keda-add-ons-http-interceptor-proxy.keda.svc.cluster.local
+  - keda-add-ons-http-interceptor-proxy.keda
+  targetPendingRequests: 1
+  scaleTargetRef:
+    name: linkstack
+    service: linkstack
+    port: 80
+  replicas:
+    min: 0
+    max: 3

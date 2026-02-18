@@ -28,7 +28,7 @@ resources:
 
 ## Complex apps
 - dispatcharr
-- jellyfinn
+# - jellyfin
 
 ## Jobs
 - jobs/split2flac.yaml
