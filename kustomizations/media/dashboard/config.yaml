@@ -84,9 +84,9 @@ data:
               icon: https://cdn.worldvectorlogo.com/logos/linkedin-icon-2.svg
               description: "Julieth Sarmiento's Linkedin"
   services.yaml: |
-    - Global:
+    - Clima:
         - La Ceja:
-            icon: mdi-weather-cloudy
+            icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/the-weather-channel.svg
             description: Clima actual en La Ceja, Antioquia
             widget:
               type: customapi
@@ -109,7 +109,7 @@ data:
                   suffix: " km/h"
 
         - Medellín:
-            icon: mdi-weather-cloudy
+            icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/the-weather-channel.svg
             description: Clima actual en Medellín, Antioquia
             widget:
               type: customapi
@@ -130,8 +130,9 @@ data:
                   label: "Viento"
                   format: "number"
                   suffix: " km/h"
+
         - Barranquilla:
-            icon: mdi-weather-cloudy
+            icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/the-weather-channel.svg
             description: Clima actual en Barranquilla, Atlántico
             widget:
               type: customapi
@@ -152,11 +153,13 @@ data:
                   label: "Viento"
                   format: "number"
                   suffix: " km/h"
+
         - Bogotá:
-            icon: mdi-weather-cloudy
+            icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/the-weather-channel.svg
             description: Clima actual en Bogotá, D.C.
             widget:
               type: customapi
+              refreshInterval: 60000
               url: https://api.open-meteo.com/v1/forecast?latitude=4.61&longitude=-74.08&current=temperature_2m,weather_code,wind_speed_10m&timezone=America%2FBogota&forecast_days=1
               mappings:
                 - name: 
@@ -173,6 +176,141 @@ data:
                   label: "Viento"
                   format: "number"
                   suffix: " km/h"
+
+    - Catuai (Control Plane):
+        - CPU Usage:
+            description: Uso del CPU
+            showStats: true
+            icon: https://cdn-icons-png.flaticon.com/512/4854/4854348.png
+            widget:
+              metric: cpu
+              refreshInterval: 5000
+              type: glances
+              url: http://192.168.1.10:61208/
+              version: 4
+
+        - Memory Usage:
+            description: Uso de memoria
+            showStats: true
+            icon: mdi-memory
+            widget:
+              metric: memory
+              refreshInterval: 5000
+              type: glances
+              url: http://192.168.1.10:61208/
+              version: 4
+
+        - Network Usage:
+            description: Uso de red
+            showStats: true
+            icon: mdi-ethernet
+            widget:
+              metric: network:eth0
+              refreshInterval: 5000
+              type: glances
+              url: http://192.168.1.10:61208/
+              version: 4
+
+        - Disk:
+            description: Uso de disco
+            showStats: true
+            icon: mdi-harddisk
+            widget:
+              metric: disk:sda
+              refreshInterval: 5000
+              type: glances
+              url: http://192.168.1.10:61208/
+              version: 4
+
+    - Caturra (Domotic Worker):
+        - CPU Usage:
+            description: Uso del CPU
+            showStats: true
+            icon: https://cdn-icons-png.flaticon.com/512/4854/4854348.png
+            widget:
+              metric: cpu
+              refreshInterval: 5000
+              type: glances
+              url: http://192.168.1.11:61208/
+              version: 4
+
+        - Memory Usage:
+            description: Uso de memoria
+            showStats: true
+            icon: mdi-memory
+            widget:
+              metric: memory
+              refreshInterval: 5000
+              type: glances
+              url: http://192.168.1.11:61208/
+              version: 4
+
+        - Network Usage:
+            description: Uso de red
+            showStats: true
+            icon: mdi-ethernet
+            widget:
+              metric: network:eth0
+              refreshInterval: 5000
+              type: glances
+              url: http://192.168.1.11:61208/
+              version: 4
+
+        - Disk:
+            description: Uso de disco
+            showStats: true
+            icon: mdi-harddisk
+            widget:
+              metric: disk:sda
+              refreshInterval: 5000
+              type: glances
+              url: http://192.168.1.10:61208/
+              version: 4
+
+    - Castillo (Streaming Worker):
+        - CPU Usage:
+            description: Uso del CPU
+            showStats: true
+            icon: https://cdn-icons-png.flaticon.com/512/4854/4854348.png
+            widget:
+              metric: cpu
+              refreshInterval: 5000
+              type: glances
+              url: http://192.168.1.12:61208/
+              version: 4
+
+        - Memory Usage:
+            description: Uso de memoria
+            showStats: true
+            icon: mdi-memory
+            widget:
+              metric: memory
+              refreshInterval: 5000
+              type: glances
+              url: http://192.168.1.12:61208/
+              version: 4
+
+        - Network Usage:
+            description: Uso de red
+            showStats: true
+            icon: mdi-ethernet
+            widget:
+              metric: network:eth0
+              refreshInterval: 5000
+              type: glances
+              url: http://192.168.1.12:61208/
+              version: 4
+
+        - Disk:
+            description: Uso de disco
+            showStats: true
+            icon: mdi-harddisk
+            widget:
+              metric: disk:sda
+              refreshInterval: 5000
+              type: glances
+              url: http://192.168.1.12:61208/
+              version: 4
 
     - Networking:
         - CloudFlare Tunnel:
@@ -210,15 +348,6 @@ data:
               url: http://192.168.1.10
               version: 6
               key: "{{HOMEPAGE_VAR_PIHOLE_TOKEN}}"
-
-        - Glances:
-            href: http://192.168.1.10:61208/
-            icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/glances-light.svg
-            description: "Monitoreo de recursos del sistema"
-            namespace: monitoring
-            app: glances
-            showStats: true
-            ping: http://192.168.1.10:61208/
               
         # - Red:
         #     href: http://192.168.1.10:30880/
@@ -254,10 +383,10 @@ data:
             showStats: true
 
         - MiniO:
-            href: https://s3.citocafecito.work/
+            href: https://s3.console.citocafecito.work/
             description: Almacenamiento de objetos S3 compatible con AWS
             icon: https://cdn.worldvectorlogo.com/logos/minio-1.svg
-            # ping: http://192.168.1.34:9000/minio/health/live
+            ping: http://minio.lan/minio/health/live
             namespace: storage
             app: minio
             showStats: true
@@ -266,17 +395,17 @@ data:
             href: https://infisical.citocafecito.work/
             description: Gestión de secretos y variables de entorno
             icon: https://cdn-1.webcatalog.io/catalog/infisical/infisical-icon-unplated.png
-            # ping: http://192.168.1.10:30400
+            ping: http://infisical.lan
             namespace: storage
             app: infisical
             showStats: true
 
-        - Infisical DB:
-            description: Base de datos de la aplicación Infisical
-            icon: https://cdn-icons-png.flaticon.com/512/9850/9850812.png
-            namespace: storage
-            app: infisical-postgresql
-            showStats: true
+        # - Infisical DB:
+        #     description: Base de datos de la aplicación Infisical
+        #     icon: https://cdn-icons-png.flaticon.com/512/9850/9850812.png
+        #     namespace: storage
+        #     app: infisical-postgresql
+        #     showStats: true
 
     - Domótica:
         - Home Assistant:
@@ -355,7 +484,7 @@ data:
             app: openwakeword
             showStats: true
 
-    - Multimedia:
+    - Social & Media Content:
         - LinkStack:
             # href: https://*.citocafecito.work
             description: Plataforma personalizable para compartir enlaces
@@ -368,7 +497,6 @@ data:
             href: https://suwayomi.citocafecito.work
             description: Lector de Manga
             icon: https://raw.githubusercontent.com/Suwayomi/Suwayomi-Server/refs/heads/master/server/src/main/resources/icon/faviconlogo.png
-            ping: http://suwayomi.lan
             namespace: media
             app: suwayomi
             showStats: true
@@ -403,17 +531,19 @@ data:
             showStats: true
 
     - Audio & Video:
-        - Lidarr:
-            description: Descarga y gestiona automáticamente canciones
-            icon: https://raw.githubusercontent.com/Lidarr/Lidarr/develop/Logo/512.png
+        - Navidrome:
+            href: https://music.citocafecito.work
+            description: Gestor de música local alias "HabiMusic"
+            icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/navidrome.svg
+            app: navidrome
+            namespace: media
             showStats: true
-            namespace: streaming
-            app: lidarr
             widget:
-              type: lidarr
-              url: http://lidarr.streaming.svc.cluster.local:8989
-              key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
-              enableQueue: false
+              type: navidrome
+              url: http://navidrome.media.svc.cluster.local:4533
+              user: "{{HOMEPAGE_VAR_NAVIDROME_USERNAME}}"
+              token: "{{HOMEPAGE_VAR_NAVIDROME_TOKEN}}"
+              salt: "{{HOMEPAGE_VAR_NAVIDROME_SALT}}"
 
         - Jellyfin:
             href: https://jellyfin.citocafecito.work/
@@ -432,9 +562,8 @@ data:
 
         - dispatcharr:
             href: https://dispatcharr.citocafecito.work/
-            description: Servidor de medios de código abierto
+            description: Gestor de canales IPTV
             icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/dispatcharr.svg
-            ping: http://dispatcharr.citocafecito.work
             showStats: true
             namespace: streaming
             app: dispatcharr
@@ -443,20 +572,9 @@ data:
               url: http://dispatcharr.streaming.svc.cluster.local:9191
               username: "{{HOMEPAGE_VAR_DISPATCHARR_USER}}"
               password: "{{HOMEPAGE_VAR_DISPATCHARR_PASSWORD}}"
-              enableActiveStreams: true 
+              enableActiveStreams: true
 
-        - Jellyseerr:
-            description: Interfaz de solicitud de contenido para Jellyfin o Plex
-            icon: https://raw.githubusercontent.com/Fallenbagel/jellyseerr/develop/public/android-chrome-512x512.png
-            showStats: true
-            namespace: streaming
-            app: jellyseerr
-            widget:
-              type: jellyseerr
-              url: http://jellyseerr.streaming.svc.cluster.local:5055
-              key: "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}"
-
-    - Series, Movies & Music:
+    - "*Arr Managers":
         - Bazarr:
             description: Descarga y gestiona subtítulos automáticamente
             icon: https://raw.githubusercontent.com/loganmarchione/homelab-svg-assets/refs/heads/main/assets/bazarr.svg
@@ -491,6 +609,29 @@ data:
               url: http://sonarr.streaming.svc.cluster.local:8989
               key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
               enableQueue: false
+        
+        - Lidarr:
+            description: Descarga y gestiona automáticamente canciones
+            icon: https://raw.githubusercontent.com/Lidarr/Lidarr/develop/Logo/512.png
+            showStats: true
+            namespace: streaming
+            app: lidarr
+            widget:
+              type: lidarr
+              url: http://lidarr.streaming.svc.cluster.local:8686
+              key: "{{HOMEPAGE_VAR_LIDARR_API_KEY}}"
+              enableQueue: false 
+
+        - Jellyseerr:
+            description: Interfaz de solicitud de contenido para Jellyfin o Plex
+            icon: https://raw.githubusercontent.com/Fallenbagel/jellyseerr/develop/public/android-chrome-512x512.png
+            showStats: true
+            namespace: streaming
+            app: jellyseerr
+            widget:
+              type: jellyseerr
+              url: http://jellyseerr.streaming.svc.cluster.local:5055
+              key: "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}"
 
     - Torrents:
         - Prowlarr:

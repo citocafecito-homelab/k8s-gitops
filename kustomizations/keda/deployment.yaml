@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keda-add-ons-http-interceptor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keda-http-add-on
+  template:
+    metadata:
+      labels:
+        app: keda-http-add-on
+    spec:
+      containers:
+      - name: interceptor
+        image: ghcr.io/kedacore/http-add-on:2.19.0
+        ports:
+        - containerPort: 8080

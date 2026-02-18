@@ -20,6 +20,7 @@ spec:
         vault.hashicorp.com/agent-inject-secret-home-assistant: "secret/data/home-assistant"
         vault.hashicorp.com/agent-inject-secret-pihole: "secret/data/pihole"
         vault.hashicorp.com/agent-inject-secret-suwayomi: "secret/data/suwayomi"
+        vault.hashicorp.com/agent-inject-secret-navidrome: "secret/data/navidrome"
         vault.hashicorp.com/agent-inject-secret-streaming: "secret/data/streaming"
         vault.hashicorp.com/agent-inject-secret-transmission: "secret/data/transmission"
         vault.hashicorp.com/agent-inject-template-.env: |
@@ -40,6 +41,11 @@ spec:
           {{ with secret "secret/data/suwayomi" -}}
           HOMEPAGE_VAR_SUWAYOMI_USERNAME="{{ .Data.data.USERNAME }}"
           HOMEPAGE_VAR_SUWAYOMI_PASSWORD="{{ .Data.data.PASSWORD }}"
+          {{ with secret "secret/data/navidrome" -}}
+          HOMEPAGE_VAR_NAVIDROME_USERNAME="{{ .Data.data.USERNAME }}"
+          HOMEPAGE_VAR_NAVIDROME_TOKEN="{{ .Data.data.PASSWORD }}"
+          HOMEPAGE_VAR_NAVIDROME_SALT="{{ .Data.data.SALT }}"
+          {{ end }}
           {{ end }}
           {{ with secret "secret/data/streaming" -}}
           HOMEPAGE_VAR_JELLYFIN_API_KEY="{{ .Data.data.JELLYFIN_KEY }}"
@@ -48,6 +54,7 @@ spec:
           HOMEPAGE_VAR_RADARR_API_KEY="{{ .Data.data.RADARR_KEY }}"
           HOMEPAGE_VAR_SONARR_API_KEY="{{ .Data.data.SONARR_KEY }}"
           HOMEPAGE_VAR_PROWLARR_API_KEY="{{ .Data.data.PROWLARR_KEY }}"
+          HOMEPAGE_VAR_LIDARR_API_KEY="{{ .Data.data.LIDARR_KEY }}"
           HOMEPAGE_VAR_DISPATCHARR_USER="{{ .Data.data.DISPATCHARR_USER }}"
           HOMEPAGE_VAR_DISPATCHARR_PASSWORD="{{ .Data.data.DISPATCHARR_PASSWORD }}"
           {{ end }}

@@ -11,5 +11,5 @@ spec:
     service: flaresolverr
     port: 8191
   replicas:
-    min: 0
+    min: 2
     max: 4
