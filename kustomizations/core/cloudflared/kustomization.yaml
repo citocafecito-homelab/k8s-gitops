@@ -6,3 +6,4 @@ resources:
 - sa.yaml
 - deployment.yaml
 - svc.yaml
+- external-dns.yaml

@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: vaultwarden-postgresql
+spec:
+  serviceName: vaultwarden-postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vaultwarden-postgresql
+      app.kubernetes.io/name: vaultwarden-postgresql
+  template:
+    metadata:
+      labels:
+        app: vaultwarden-postgresql
+        app.kubernetes.io/name: vaultwarden-postgresql
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: vaultwarden-config
+              key: DATABASE_NAME
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              name: vaultwarden-config
+              key: DATABASE_USERNAME
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: vaultwarden-config
+              key: DATABASE_PASSWORD
+        volumeMounts:
+        - name: vaultwarden-postgresql-storage
+          mountPath: /var/lib/postgresql/data
+        livenessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "vaultwarden" ]
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "vaultwarden" ]
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+      nodeSelector:
+        kubernetes.io/hostname: castillo
+      volumes:
+      - name: vaultwarden-postgresql-storage
+        persistentVolumeClaim:
+          claimName: vaultwarden-postgresql-pvc

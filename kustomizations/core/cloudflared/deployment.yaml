@@ -28,8 +28,8 @@ spec:
                   name: cloudflared-secret
                   key: token
           ports:
-            - containerPort: 2000
-              name: metrics
+          - containerPort: 2000
+            name: metrics
           resources:
             requests:
               cpu: 50m
@@ -41,3 +41,9 @@ spec:
             capabilities:
               add:
                 - NET_RAW
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"

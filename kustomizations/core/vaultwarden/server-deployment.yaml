@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vaultwarden
+  namespace: core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vaultwarden
+  template:
+    metadata:
+      labels:
+        app: vaultwarden
+    spec:
+      containers:
+      - name: vaultwarden
+        image: vaultwarden/server:latest
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: vaultwarden-config
+              key: DATABASE_URL
+        - name: DOMAIN
+          value: "https://passwords.citocafecito.work"
+        - name: SIGNUPS_ALLOWED
+          value: "true"
+        - name: IP_HEADER
+          value: "CF-Connecting-IP"
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /alive
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 10

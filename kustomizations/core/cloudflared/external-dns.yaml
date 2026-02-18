@@ -1,20 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: external-dns
+  name: external-dns-cloudflare
+  namespace: core
 spec:
   replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: external-dns
+      app: external-dns-cloudflare
   template:
     metadata:
       labels:
-        app: external-dns
-      annotations:
-        app.kubernetes.io/documentation: "https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/pihole.md"
+        app: external-dns-cloudflare
     spec:
       serviceAccountName: external-dns
       containers:
@@ -23,18 +22,23 @@ spec:
         args:
           - --source=service
           - --source=ingress
-          - --policy=upsert-only
-          - --provider=pihole
+          - --provider=cloudflare
+          - --domain-filter=citocafecito.work
+          # - --cloudflare-dns-records-proxied
+          - --cloudflare-proxied
+          - --txt-owner-id=k8s-cluster
+          - --log-level=info
         env:
-        - name:  EXTERNAL_DNS_PIHOLE_SERVER
-          value: "http://pihole.networking.svc.cluster.local"
-        - name: EXTERNAL_DNS_PIHOLE_API_VERSION
-          value: "6"
-        - name: EXTERNAL_DNS_PIHOLE_PASSWORD
+        - name: CF_API_TOKEN
           valueFrom:
             secretKeyRef:
-              name: pihole-secret
-              key: WEBPASSWORD
+              name: cloudflared-secret
+              key: token
+        - name: CF_API_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: cloudflared-secret
+              key: email
       securityContext:
         fsGroup: 65534
       nodeSelector:

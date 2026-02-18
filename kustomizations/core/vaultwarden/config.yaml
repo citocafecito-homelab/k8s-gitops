@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vaultwarden-config
+data:
+  DATABASE_TYPE: POSTGRESQL
+  DATABASE_URL: "postgresql://vaultwarden:2K%3CGbzK%5B%2596p%3Bv%25O@vaultwarden-postgresql.core.svc.cluster.local:5432/vaultwarden"
+  DATABASE_NAME: "vaultwarden"
+  DATABASE_USERNAME: "vaultwarden"
+  DATABASE_PASSWORD: "2K<GbzK[%96p;v%O"
