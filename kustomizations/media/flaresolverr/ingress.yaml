@@ -15,6 +15,10 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: keda-add-ons-http-interceptor-proxy
+            name: flaresolverr
             port:
-              number: 8080
+              number: 8191
+          # service:
+          #   name: keda-add-ons-http-interceptor-proxy
+          #   port:
+          #     number: 8080

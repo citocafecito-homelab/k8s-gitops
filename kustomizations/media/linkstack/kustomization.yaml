@@ -8,13 +8,14 @@ resources:
 - database-svc.yaml
 
 # Redis (In progress, table in the meantime)
-# - cache-deployment.yaml
-# - cache-svc.yaml
+- cache-deployment.yaml
+- cache-svc.yaml
 
 # LinkStack
 - server-config.yaml
 - server-deployment.yaml
 - server-svc.yaml
 - server-ingress.yaml
-# - server-hpa.yaml
-- server-scale.yaml
+- server-hpa.yaml
+# No working
+# - server-scale.yaml

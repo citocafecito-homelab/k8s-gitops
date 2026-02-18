@@ -1,14 +1,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: flaresolverr
+  name: dispatcharr
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: flaresolverr
-  minReplicas: 2
-  maxReplicas: 6
+    name: dispatcharr
+  minReplicas: 1
+  maxReplicas: 3
   behavior:
     scaleUp:
       stabilizationWindowSeconds: 60

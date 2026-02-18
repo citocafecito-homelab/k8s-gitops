@@ -4,18 +4,28 @@ metadata:
   name: linkstack
   namespace: media
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
-    traefik.ingress.kubernetes.io/router.middlewares: keda-http@kubernetescrd
-    traefik.ingress.kubernetes.io/router.timeout: 120s
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    # traefik.ingress.kubernetes.io/router.middlewares: keda-http@kubernetescrd
+    # traefik.ingress.kubernetes.io/router.timeout: 120s
 spec:
   rules:
-  - host: linkstack.lan
+  # - host: linkstack.local
+  #   http:
+  #     paths:
+  #     - path: /
+  #       pathType: Prefix
+  #       backend:
+  #         service:
+  #           name: linkstack-proxy
+  #           port:
+  #             number: 80
+  - host: linkstack.citocafecito.work
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: keda-add-ons-http-interceptor-proxy
+            name: linkstack
             port:
-              number: 8080
+              number: 80

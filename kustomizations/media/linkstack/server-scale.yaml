@@ -1,38 +1,23 @@
-# apiVersion: http.keda.sh/v1alpha1
-# kind: HTTPScaledObject
-# metadata:
-#   name: linkstack
-# spec:
-#   scaleTargetRef:
-#     name: linkstack
-#     service: linkstack
-#     port: 80
-#   hosts:
-#     - linkstack.lan
-#     - linkstack.citocafecito.work
-#   targetPendingRequests: 2
-#   replicas:
-#     min: 0
-#     max: 3
----
 kind: HTTPScaledObject
 apiVersion: http.keda.sh/v1alpha1
 metadata:
   name: linkstack
+  namespace: media
   annotations:
     httpscaledobject.keda.sh/skip-scaledobject-creation: "false"
 spec:
   hosts:
+  - linkstack.local
   - linkstack.lan
   - linkstack.citocafecito.work
+  - linkstack-proxy
   scaleTargetRef:
     kind: Deployment
-    apiVersion: apps/v1
     name: linkstack
     service: linkstack
     port: 80
   replicas:
-    min: 1
+    min: 0
     max: 3
   scaledownPeriod: 60
   scalingMetric:
