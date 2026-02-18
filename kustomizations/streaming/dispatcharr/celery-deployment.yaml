@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dispatcharr-celery
+  labels:
+    app: dispatcharr-celery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dispatcharr-celery
+  template:
+    metadata:
+      labels:
+        app: dispatcharr-celery
+    spec:
+      containers:
+      - name: celery
+        image: ghcr.io/dispatcharr/dispatcharr:latest
+        command: ["/app/docker/entrypoint.celery.sh"]
+        envFrom:
+        - configMapRef:
+            name: dispatcharr-config
+        env:
+        - name: DJANGO_SETTINGS_MODULE
+          value: "dispatcharr.settings"
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        securityContext:
+          privileged: true
+          capabilities:
+            add:
+              - SYS_NICE
+        volumeMounts:
+        - mountPath: /dev/dri
+          name: dri
+        - mountPath: /data
+          name: dispatcharr-data
+      nodeSelector:
+        kubernetes.io/hostname: castillo
+      volumes:
+      - name: dri
+        hostPath:
+          path: /dev/dri
+      - name: dispatcharr-data
+        persistentVolumeClaim:
+          claimName: dispatcharr-pvc

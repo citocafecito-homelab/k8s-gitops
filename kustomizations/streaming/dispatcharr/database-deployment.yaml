@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dispatcharr-postgresql
+spec:
+  serviceName: dispatcharr-postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dispatcharr-postgresql
+      app.kubernetes.io/name: dispatcharr-postgresql
+  template:
+    metadata:
+      labels:
+        app: dispatcharr-postgresql
+        app.kubernetes.io/name: dispatcharr-postgresql
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:17
+        ports:
+        - containerPort: 5432
+        envFrom:
+        - configMapRef:
+            name: dispatcharr-config 
+        volumeMounts:
+        - name: dispatcharr-postgresql-storage
+          mountPath: /var/lib/postgresql/data
+        livenessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "dispatcharr" ]
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "dispatcharr" ]
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 5m
+            memory: 256Mi
+      nodeSelector:
+        kubernetes.io/hostname: castillo
+      volumes:
+      - name: dispatcharr-postgresql-storage
+        persistentVolumeClaim:
+          claimName: dispatcharr-postgresql-pvc

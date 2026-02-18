@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dispatcharr-valkey
+  labels:
+    app: dispatcharr-valkey
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dispatcharr-valkey
+  template:
+    metadata:
+      labels:
+        app: dispatcharr-valkey
+    spec:
+      containers:
+      - name: valkey
+        image: valkey/valkey:latest
+        args:
+          - "--save"
+          - ""
+          - "--appendonly"
+          - "no"
+        ports:
+        - containerPort: 6379
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi

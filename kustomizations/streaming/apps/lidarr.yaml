@@ -65,7 +65,7 @@ spec:
           claimName: downloads-pvc
       - name: config
         hostPath:
-          path: /mnt/lidarrc
+          path: /mnt/lidarr
           type: DirectoryOrCreate
       - name: music
         hostPath:

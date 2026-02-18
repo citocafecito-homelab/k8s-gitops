@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- config.yaml
+
+# Cache
+- cache-deployment.yaml
+- cache-svc.yaml
+
+# Database
+- database-pv.yaml
+- database-deployment.yaml
+- database-svc.yaml
+
+# Celery
+- celery-deployment.yaml
+
+# Server
+- server-deployment.yaml
+- server-svc.yaml
+- server-ingress.yaml
+- server-scaler.yaml

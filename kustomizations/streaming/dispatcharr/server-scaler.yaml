@@ -1,0 +1,17 @@
+apiVersion: http.keda.sh/v1alpha1
+kind: HTTPScaledObject
+metadata:
+  name: dispatcharr
+spec:
+  scaleTargetRef:
+    name: dispatcharr
+    kind: Deployment
+    apiVersion: apps/v1
+    service: dispatcharr
+    port: 9191
+  replicas:
+    min: 0
+    max: 3
+  scaledownPeriod: 300  # 5 minutos sin tráfico → escala a 0
+  hosts:
+    - dispatcharr.citocafecito.work
