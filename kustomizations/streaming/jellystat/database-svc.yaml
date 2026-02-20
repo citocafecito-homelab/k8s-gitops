@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellystat-postgresql
+  labels:
+    app.kubernetes.io/name: jellystat-postgresql
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    app.kubernetes.io/name: jellystat-postgresql

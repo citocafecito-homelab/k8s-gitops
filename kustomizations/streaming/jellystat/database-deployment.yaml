@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jellystat-postgresql
+spec:
+  serviceName: jellystat-postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellystat-postgresql
+      app.kubernetes.io/name: jellystat-postgresql
+  template:
+    metadata:
+      labels:
+        app: jellystat-postgresql
+        app.kubernetes.io/name: jellystat-postgresql
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:17
+        ports:
+        - containerPort: 5432
+        envFrom:
+        - configMapRef:
+            name: jellystat-database
+        volumeMounts:
+        - name: jellystat-postgresql-storage
+          mountPath: /var/lib/postgresql/data
+        livenessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "jellystat" ]
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "jellystat" ]
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+      nodeSelector:
+        kubernetes.io/hostname: castillo
+      volumes:
+      - name: jellystat-postgresql-storage
+        persistentVolumeClaim:
+          claimName: jellystat-postgresql-pvc

@@ -1,0 +1,55 @@
+# See https://github.com/CyferShepard/Jellystat
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellystat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellystat
+      app.kubernetes.io/name: jellystat
+  template:
+    metadata:
+      labels:
+        app: jellystat
+        app.kubernetes.io/name: jellystat
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: vault
+        vault.hashicorp.com/agent-inject-secret-jellystat: "secret/data/jellystat"
+        vault.hashicorp.com/agent-inject-template-jellystat: |
+          {{- with secret "secret/data/jellystat" -}}
+          {{ .Data.data.JWT_SECRET | writeToFile "/vault/secrets/jwt" "vault" "vault" "0600" }}
+          {{ .Data.data.ADMIN_USER | writeToFile "/vault/secrets/user" "vault" "vault" "0600" }}
+          {{ .Data.data.ADMIN_PASS | writeToFile "/vault/secrets/password" "vault" "vault" "0600" }}
+          {{- end -}}
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - name: jellystat
+        image: ghcr.io/cyfershepard/jellystat:latest
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - configMapRef:
+            name: jellystat-database
+        - configMapRef:
+            name: jellystat-config
+        env:
+        - name: JWT_SECRET__MYVAR
+          value: /vault/secrets/jwt
+        - name: JS_USER__MYVAR
+          value: /vault/secrets/user
+        - name: JJS_PASSWORD__MYVAR
+          value: /vault/secrets/password
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 1          
+            memory: 1024Mi
+      nodeSelector:
+        kubernetes.io/hostname: castillo

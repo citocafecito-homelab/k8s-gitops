@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- config.yaml
+
+# Database
+- database-pv.yaml
+- database-deployment.yaml
+- database-svc.yaml
+
+# Server
+- server-deployment.yaml
+- server-svc.yaml

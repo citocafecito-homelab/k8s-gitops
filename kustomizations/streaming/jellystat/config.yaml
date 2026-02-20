@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jellystat-database
+data:
+  # General
+  TZ:            "America/Bogota"
+
+  # Database
+  POSTGRES_DB:        "jellystat"
+  POSTGRES_USER:      "jellystat"
+  POSTGRES_PASSWORD:  "268a44bcfbff39240a1b40b5f0fb01e1677c7213e500a93109421043fa2ce2f6"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jellystat-config
+data: 
+  POSTGRES_IP:  "jellystat-postgresql"
+  IS_EMBY_API:  "false"
