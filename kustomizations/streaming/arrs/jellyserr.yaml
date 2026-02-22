@@ -1,38 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jellyseerr
+  name: seerr
   labels:
-    app: jellyseerr
-    app.kubernetes.io/name: jellyseerr
+    app: seerr
+    app.kubernetes.io/name: seerr
     app.kubernetes.io/part-of: streaming-stack
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: jellyseerr
-      app.kubernetes.io/name: jellyseerr
+      app: seerr
+      app.kubernetes.io/name: seerr
   template:
     metadata:
       labels:
-        app: jellyseerr
-        app.kubernetes.io/name: jellyseerr
+        app: seerr
+        app.kubernetes.io/name: seerr
         app.kubernetes.io/part-of: streaming-stack
     spec:
       containers:
-      - name: jellyseerr
-        image: fallenbagel/jellyseerr:latest
+      - name: seerr
+        image: ghcr.io/seerr-team/seerr:latest
         ports:
         - containerPort: 5055
         envFrom:
         - configMapRef:
             name: streaming-stack-config
-        env:
-        - name: PORT
-          valueFrom:
-            configMapKeyRef:
-              name: streaming-stack-config
-              key: JELLYSEERR_PORT
         resources:
           requests:
             memory: 64Mi
@@ -53,28 +47,40 @@ spec:
           periodSeconds: 15
           timeoutSeconds: 5
           failureThreshold: 3
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          privileged: false
+          runAsUser: 1000
+          runAsGroup: 1000
+          seccompProfile:
+            type: RuntimeDefault
         volumeMounts:
-        - name: jellyseerr-config
+        - name: seerr-config
           mountPath: /app/config
       nodeSelector:
         kubernetes.io/hostname: castillo
       volumes:
-      - name: jellyseerr-config
+      - name: seerr-config
         hostPath:
-          path: /mnt/jellyseerr
+          path: /mnt/seerr
           type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: jellyseerr
+  name: seerr
   labels:
-    app: jellyseerr
-    app.kubernetes.io/name: jellyseerr
+    app: seerr
+    app.kubernetes.io/name: seerr
     app.kubernetes.io/part-of: streaming-stack
 spec:
   selector:
-    app: jellyseerr
+    app: seerr
   ports:
   - name: http
     port: 5055
@@ -83,18 +89,21 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: jellyseerr-lb
+  name: seerr-lb
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: jellyseerr.lan
+    external-dns.alpha.kubernetes.io/hostname: seerr.lan
   labels:
     type: LoadBalancer
 spec:
   type: LoadBalancer
   loadBalancerIP: 192.168.1.41
   selector:
-    app: jellyseerr
+    app: seerr
   ports:
-  - name: http
+  - name: webui
     protocol: TCP
     port: 80
+    targetPort: 5055
+  - name: http
+    port: 5055
     targetPort: 5055

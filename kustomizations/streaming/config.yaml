@@ -26,10 +26,6 @@ data:
   JELLYFIN_HOST: "jellyfin"
   JELLYFIN_PORT: "8096"
 
-  # Jellyseerr
-  JELLYSEERR_HOST: "Jellyseerr"
-  JELLYSEERR_PORT: "5055"
-
   # Shared paths
   DOWNLOADS_PATH: "/downloads"
   MOVIES_PATH: "/movies"

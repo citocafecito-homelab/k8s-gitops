@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: jellystat-config
 data: 
-  POSTGRES_IP:        "jellystat-postgresql.streaming.svc.cluster.local"
+  POSTGRES_IP:        "jellystat-postgresql"
   IS_EMBY_API:        "false"
   FILE__JWT_SECRET:   "/vault/secrets/jwt"
   FILE__JS_USER:      "/vault/secrets/user"

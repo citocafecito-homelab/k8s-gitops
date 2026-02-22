@@ -2,12 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nzbget
-  labels:
-    app: nzbget
-    app.kubernetes.io/name: nzbget
-    app.kubernetes.io/instance: streaming-stack
-    app.kubernetes.io/part-of: streaming-stack
-    app.kubernetes.io/documentation: https://hub.docker.com/r/linuxserver/nzbget
 spec:
   replicas: 1
   selector:
@@ -24,6 +18,7 @@ spec:
         app.kubernetes.io/instance: streaming-stack
         app.kubernetes.io/part-of: streaming-stack
       annotations:
+        app.kubernetes.io/documentation: "https://hub.docker.com/r/linuxserver/nzbget"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "vault"
         vault.hashicorp.com/agent-inject-secret-secrets: "secret/data/nzbget"
