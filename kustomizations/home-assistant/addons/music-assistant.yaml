@@ -47,6 +47,9 @@ spec:
       containers:
       - name: music-assistant
         image: ghcr.io/music-assistant/server:latest
+        env:
+          - name: LOG_LEVEL
+            value: warning
         ports:
         - name: tcp
           protocol: TCP
@@ -60,6 +63,8 @@ spec:
             memory: 2Gi
         securityContext:
           privileged: true
+          appArmorProfile:
+            type: unconfined
           capabilities:
             add:
             - DAC_READ_SEARCH

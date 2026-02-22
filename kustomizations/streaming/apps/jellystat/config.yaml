@@ -7,14 +7,18 @@ data:
   TZ:            "America/Bogota"
 
   # Database
-  POSTGRES_DB:        "jellystat"
+  POSTGRES_DB:        "jfstat"
   POSTGRES_USER:      "jellystat"
   POSTGRES_PASSWORD:  "268a44bcfbff39240a1b40b5f0fb01e1677c7213e500a93109421043fa2ce2f6"
+  POSTGRES_PORT:      "5432"
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: jellystat-config
 data: 
-  POSTGRES_IP:  "jellystat-postgresql"
-  IS_EMBY_API:  "false"
+  POSTGRES_IP:        "jellystat-postgresql.streaming.svc.cluster.local"
+  IS_EMBY_API:        "false"
+  FILE__JWT_SECRET:   "/vault/secrets/jwt"
+  FILE__JS_USER:      "/vault/secrets/user"
+  FILE__JS_PASSWORD:  "/vault/secrets/password"

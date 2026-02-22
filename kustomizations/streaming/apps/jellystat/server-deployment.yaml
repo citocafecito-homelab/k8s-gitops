@@ -1,4 +1,3 @@
-# See https://github.com/CyferShepard/Jellystat
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,6 +14,7 @@ spec:
         app: jellystat
         app.kubernetes.io/name: jellystat
       annotations:
+        app.kubernetes.io/documentation: "https://github.com/CyferShepard/Jellystat"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: vault
         vault.hashicorp.com/agent-inject-secret-jellystat: "secret/data/jellystat"
@@ -37,19 +37,10 @@ spec:
             name: jellystat-database
         - configMapRef:
             name: jellystat-config
-        env:
-        - name: JWT_SECRET__MYVAR
-          value: /vault/secrets/jwt
-        - name: JS_USER__MYVAR
-          value: /vault/secrets/user
-        - name: JJS_PASSWORD__MYVAR
-          value: /vault/secrets/password
         resources:
           requests:
-            cpu: 100m
+            cpu: 200m
             memory: 256Mi
           limits:
-            cpu: 1          
+            cpu: 500m          
             memory: 1024Mi
-      nodeSelector:
-        kubernetes.io/hostname: castillo

@@ -9,27 +9,32 @@ resources:
 - config.yaml
 - pvc.yaml
 
-## Apps
-# - apps/nzbget.yaml
-- apps/transmission.yaml
-# - apps/deluge.yaml
-# - apps/qbittorrent.yaml (deprecated)
-- apps/prowlarr.yaml
-- apps/sonarr.yaml
-- apps/radarr.yaml
-- apps/bazarr.yaml
-- apps/lidarr.yaml
-- apps/jellyserr.yaml
-- apps/plex.yaml
-# Not enough resources / uncompleted tests
-# - apps/tinymediamanager.yaml
-# - apps/tdarr.yaml
-# - apps/autobrr.yaml
+## Media Downloaders
+- downloaders/nzbget.yaml
+- downloaders/transmission.yaml
+- downloaders/flood.yaml
+# - downloaders/deluge.yaml (deprecated)
+# - downloaders/qbittorrent.yaml (deprecated)
 
-## Complex apps
-- dispatcharr
-- jellystat
-# - jellyfin
+## Arr* arrs
+- arrs/prowlarr.yaml
+- arrs/sonarr.yaml
+- arrs/radarr.yaml
+- arrs/bazarr.yaml
+- arrs/lidarr.yaml
+- arrs/jellyserr.yaml
+- arrs/tinymediamanager.yaml
+
+# Not enough resources / uncompleted tests
+
+# - arrs/tdarr.yaml
+# - arrs/autobrr.yaml
+
+## Complex Apps
+- apps/dispatcharr
+- apps/jellystat
+- apps/jellyfin
+- apps/plex
 
 ## Jobs
 - jobs/split2flac.yaml

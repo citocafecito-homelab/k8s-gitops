@@ -36,27 +36,22 @@ spec:
       - name: nzbget
         image: lscr.io/linuxserver/nzbget:latest
         env:
-        - name: NZBGET_USER__MYVAR
+        - name: FILE__NZBGET_USER
           value: /vault/secrets/user
-        - name: NZBGET_PASS__MYVAR
+        - name: FILE__NZBGET_PASS
           value: /vault/secrets/pass
         envFrom:
         - configMapRef:
             name: streaming-stack-config
         ports:
-        - containerPort: 8112
-          name: webui
+        - containerPort: 6789
         volumeMounts:
         - name: config
           mountPath: /config
         - name: downloads
           mountPath: /downloads
       nodeSelector:
-        kubernetes.io/hostname: catuai
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
+        kubernetes.io/hostname: castillo
       volumes:
       - name: config
         hostPath:
@@ -71,12 +66,12 @@ kind: Service
 metadata:
   name: nzbget
 spec:
-  ports:
-    - port: 6789
-      targetPort: 6789
-      name: tcp
   selector:
     app: nzbget
+  ports:
+  - name: webui
+    port: 6789
+    targetPort: 6789
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
