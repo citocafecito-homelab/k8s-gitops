@@ -6,7 +6,7 @@ metadata:
 data:
   TZ: America/Bogota
   BIND_ADDRESS: 0.0.0.0
-  AUTH_MODE: BASIC_AUTH
+  AUTH_MODE: UI_LOGIN
   DATABASE_TYPE: POSTGRESQL
   DATABASE_NAME: "suwayomi"
   DATABASE_URL: "postgresql://suwayomi-postgresql.media.svc.cluster.local:5432/suwayomi"

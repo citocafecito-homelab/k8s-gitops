@@ -36,6 +36,8 @@ spec:
               mountPath: /media/music
             - name: config
               mountPath: /config
+      nodeSelector:
+        kubernetes.io/hostname: castillo
       volumes:
         - name: movies
           persistentVolumeClaim:

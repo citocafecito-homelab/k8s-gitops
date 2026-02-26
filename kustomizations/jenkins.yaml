@@ -53,6 +53,8 @@ spec:
           volumeMounts:
             - name: jenkins-home
               mountPath: /var/jenkins_home
+      nodeSelector:
+        kubernetes.io/hostname: castillo
       securityContext:
         fsGroup: 1000
       volumes:
