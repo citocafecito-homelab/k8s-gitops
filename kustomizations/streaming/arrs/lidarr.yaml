@@ -58,7 +58,7 @@ spec:
         - name: music 
           mountPath: /music
       nodeSelector:
-        kubernetes.io/hostname: castillo
+        kubernetes.io/hostname: caturra
       securityContext:
         fsGroup: 1000
       volumes:
