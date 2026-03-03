@@ -39,6 +39,8 @@ spec:
       labels:
         app: whisper
         app.kubernetes.io/name: whisper
+      annotations:
+        app.kubernetes.io/documentation: https://docs.linuxserver.io/images/docker-faster-whisper/#docker-cli-click-here-for-more-info
     spec:
       containers:
       - name: whisper
@@ -51,11 +53,15 @@ spec:
           - name: TZ
             value: "America/Bogota"
           - name: WHISPER_BEAM
-            value: "3"
+            value: "2"
           - name: WHISPER_LANG
-            value: "auto"
+            value: "es"
           - name: WHISPER_MODEL
             value: "large-v3-turbo"
+          - name: WHISPER_COMPUTE_TYPE
+            value: "int8"
+          - name: WHISPER_CPU_THREADS
+            value: "4"
         ports:
         - containerPort: 10300
         resources:
