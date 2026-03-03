@@ -57,9 +57,7 @@ spec:
           - name: WHISPER_LANG
             value: "es"
           - name: WHISPER_MODEL
-            value: "large-v3-turbo"
-          - name: WHISPER_COMPUTE_TYPE
-            value: "int8"
+            value: "turbo"
           - name: WHISPER_CPU_THREADS
             value: "4"
         ports:

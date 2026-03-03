@@ -6,7 +6,7 @@ spec:
   scaleTargetRef:
     kind: RunnerDeployment
     name: k8s-runners
-  minReplicas: 3
+  minReplicas: 2
   maxReplicas: 10
   scaleDownDelaySecondsAfterScaleOut: 300
   metrics:
