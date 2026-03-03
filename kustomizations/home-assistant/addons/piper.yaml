@@ -37,17 +37,25 @@ spec:
     spec:
       containers:
       - name: piper
-        image: rhasspy/wyoming-piper:latest
-        args: [ "--voice", "es_MX-ald-medium" ]
+        image: lscr.io/linuxserver/piper:latest
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PUID
+          value: "1000"
+        - name: TZ
+          value: "America/Bogota
+        - name: PIPER_VOICE
+          value: es_MX-claude-high
         ports:
         - containerPort: 10200
         volumeMounts:
-        - name: piper-data
-          mountPath: /data
+        - name: piper-config
+          mountPath: /config
       nodeSelector:
         kubernetes.io/hostname: castillo
       volumes:
-      - name: piper-data
+      - name: piper-config
         persistentVolumeClaim:
           claimName: piper-pvc
 ---
