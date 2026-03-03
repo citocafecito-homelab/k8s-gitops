@@ -42,36 +42,36 @@ spec:
     spec:
       containers:
       - name: whisper
-        image: rhasspy/wyoming-whisper:latest
-        args:
-        - "--local-files-only"
+        image: lscr.io/linuxserver/faster-whisper:latest
         env:
-          - name: BEAM_SIZE
-            value: "5"
-          - name: CPU_THREADS
-            value: "2"
-          - name: LANGUAGE
-            value: "es"
-          - name: MODEL
-            value: "small-int8"
-          - name: URI
-            value: "tcp://0.0.0.0:9000"
+          - name: PUID
+            value: "1000"
+          - name: PUID
+            value: "1000"
+          - name: TZ
+            value: "America/Bogota"
+          - name: WHISPER_BEAM
+            value: "3"
+          - name: WHISPER_LANG
+            value: "auto"
+          - name: WHISPER_MODEL
+            value: "large-v3-turbo"
         ports:
-        - containerPort: 9000
+        - containerPort: 10300
         resources:
           requests:
-            cpu: "500m"
-            memory: "768Mi"
+            cpu: 1
+            memory: "1Gi"
           limits:
-            cpu: "1500m"
-            memory: "1500Mi"
+            cpu: 4
+            memory: "4Gi"
         volumeMounts:
-        - name: whisper-data
-          mountPath: /data
+        - name: whisper-config
+          mountPath: /config
       nodeSelector:
         kubernetes.io/hostname: castillo
       volumes:
-      - name: whisper-data
+      - name: whisper-config
         persistentVolumeClaim:
           claimName: whisper-pvc
 ---
@@ -84,6 +84,6 @@ spec:
     app: whisper
   ports:
   - name: wyoming
-    port: 9000
-    targetPort: 9000
+    port: 10300
+    targetPort: 10300
     protocol: TCP
