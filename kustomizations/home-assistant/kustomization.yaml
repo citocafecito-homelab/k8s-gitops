@@ -20,7 +20,7 @@ resources:
 - addons/ring-mqtt.yaml
 # - addons/rhasspy.yaml
 - addons/whisper.yaml
-- addons/piper.yaml
+# - addons/piper.yaml
 # - addons/openwakeword.yaml
 - addons/music-assistant.yaml
 

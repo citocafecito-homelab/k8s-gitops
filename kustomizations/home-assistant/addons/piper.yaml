@@ -46,7 +46,7 @@ spec:
         - name: TZ
           value: "America/Bogota
         - name: PIPER_VOICE
-          value: es_MX-claude-high
+          value: "es_MX-claude-high"
         ports:
         - containerPort: 10200
         volumeMounts:
