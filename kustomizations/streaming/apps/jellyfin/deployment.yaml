@@ -81,11 +81,11 @@ spec:
           mountPath: /media/movies
         - name: series
           mountPath: /media/series
-        - name: series
+        - name: anines
           mountPath: /media/anines
-        - name: series
+        - name: animations
           mountPath: /media/animations
-        - name: series
+        - name: cartoons
           mountPath: /media/cartoons
         - name: records
           mountPath: /media/records
