@@ -81,8 +81,8 @@ spec:
           mountPath: /media/movies
         - name: series
           mountPath: /media/series
-        - name: anines
-          mountPath: /media/anines
+        - name: animes
+          mountPath: /media/animes
         - name: animations
           mountPath: /media/animations
         - name: cartoons
