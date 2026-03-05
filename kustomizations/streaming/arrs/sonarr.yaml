@@ -32,6 +32,12 @@ spec:
           mountPath: /movies
         - name: downloads
           mountPath: /downloads
+        - name: animes
+          mountPath: /animes
+        - name: animations
+          mountPath: /animations
+        - name: cartoons
+          mountPath: /cartoons
         resources:
           requests:
             memory: 64Mi
@@ -66,6 +72,18 @@ spec:
       - name: downloads
         persistentVolumeClaim:
           claimName: downloads-pvc
+      - name: animes
+        hostPath:
+          path: /mnt/multimedia/animes
+          type: DirectoryOrCreate
+      - name: animations
+        hostPath:
+          path: /mnt/multimedia/animations
+          type: DirectoryOrCreate
+      - name: cartoons
+        hostPath:
+          path: /mnt/multimedia/cartoons
+          type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: Service
