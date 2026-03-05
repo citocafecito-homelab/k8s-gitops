@@ -81,6 +81,12 @@ spec:
           mountPath: /media/movies
         - name: series
           mountPath: /media/series
+        - name: series
+          mountPath: /media/anines
+        - name: series
+          mountPath: /media/animations
+        - name: series
+          mountPath: /media/cartoons
         - name: records
           mountPath: /media/records
         - name: intros
@@ -124,9 +130,21 @@ spec:
       - name: series
         persistentVolumeClaim:
           claimName: series-pvc
+      - name: animes
+        hostPath:
+          path: /mnt/multimedia/animes
+          type: DirectoryOrCreate
+      - name: animations
+        hostPath:
+          path: /mnt/multimedia/animations
+          type: DirectoryOrCreate
+      - name: cartoons
+        hostPath:
+          path: /mnt/multimedia/cartoons
+          type: DirectoryOrCreate
       - name: concerts
         hostPath:
-          path: /mnt/downloads/concerts
+          path: /mnt/multimedia/concerts
           type: DirectoryOrCreate
       - name: music
         nfs:
