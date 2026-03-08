@@ -66,23 +66,12 @@ spec:
       - name: movies
         persistentVolumeClaim:
           claimName: movies-pvc
-      - name: series
-        persistentVolumeClaim:
-          claimName: series-pvc
       - name: downloads
         persistentVolumeClaim:
           claimName: downloads-pvc
-      - name: animes
-        hostPath:
-          path: /mnt/multimedia/animes
-          type: DirectoryOrCreate
       - name: animations
         hostPath:
           path: /mnt/animations/movies
-          type: DirectoryOrCreate
-      - name: cartoons
-        hostPath:
-          path: /mnt/multimedia/cartoons
           type: DirectoryOrCreate
 ---
 apiVersion: v1
