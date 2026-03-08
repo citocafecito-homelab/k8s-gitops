@@ -136,7 +136,7 @@ spec:
           type: DirectoryOrCreate
       - name: animations
         hostPath:
-          path: /mnt/multimedia/animations
+          path: /mnt/animations
           type: DirectoryOrCreate
       - name: cartoons
         hostPath:
