@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fusionauth-database
+data:
+  DATABASE_NAME: "fusionauth"
+  DATABASE_USERNAME: "fusionauth"
+  DATABASE_PASSWORD: "2K<GbzK[%96p;v%O"

@@ -6,6 +6,7 @@ resources:
 - actions
 - networking
 - core
+- auth
 - home-assistant
 - storage
 - media

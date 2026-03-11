@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: fusionauth-postgresql
+spec:
+  serviceName: fusionauth-postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fusionauth-postgresql
+      app.kubernetes.io/name: fusionauth-postgresql
+  template:
+    metadata:
+      labels:
+        app: fusionauth-postgresql
+        app.kubernetes.io/name: fusionauth-postgresql
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:16-bookworm
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: fusionauth-database
+              key: DATABASE_NAME
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              name: fusionauth-database
+              key: DATABASE_USERNAME
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: fusionauth-database
+              key: DATABASE_PASSWORD
+        volumeMounts:
+        - name: fusionauth-postgresql-storage
+          mountPath: /var/lib/postgresql/data
+        livenessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "fusionauth" ]
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "fusionauth" ]
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+      nodeSelector:
+        kubernetes.io/hostname: castillo
+      volumes:
+      - name: fusionauth-postgresql-storage
+        persistentVolumeClaim:
+          claimName: fusionauth-postgresql-pvc

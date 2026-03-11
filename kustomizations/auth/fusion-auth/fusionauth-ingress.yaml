@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: fusionauth
+  namespace: media
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    # traefik.ingress.kubernetes.io/router.middlewares: keda-http@kubernetescrd
+    # traefik.ingress.kubernetes.io/router.timeout: 120s
+spec:
+  rules:
+  # - host: fusionauth.local
+  #   http:
+  #     paths:
+  #     - path: /
+  #       pathType: Prefix
+  #       backend:
+  #         service:
+  #           name: fusionauth-proxy
+  #           port:
+  #             number: 80
+  - host: fusionauth.citocafecito.work
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: fusionauth
+            port:
+              number: 80

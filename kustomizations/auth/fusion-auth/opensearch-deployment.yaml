@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opensearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opensearch
+  template:
+    metadata:
+      labels:
+        app: opensearch
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: castillo
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - name: opensearch
+        image: opensearchproject/opensearch:2
+        env:
+        - name: cluster.name
+          value: "fusionauth"
+        - name: discovery.type
+          value: "single-node"
+        - name: plugins.security.disabled
+          value: "true"
+        - name: bootstrap.memory_lock
+          value: "true"
+        - name: OPENSEARCH_JAVA_OPTS
+          value: "-Xms512m -Xmx512m"
+        - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+          value: "zSAG53dz6J^="
+        ports:
+        - containerPort: 9200
+        - containerPort: 9600
+        volumeMounts:
+        - name: search-data
+          mountPath: /usr/share/opensearch/data
+      volumes:
+      - name: search-data
+        persistentVolumeClaim:
+          claimName: opensearch-pvc

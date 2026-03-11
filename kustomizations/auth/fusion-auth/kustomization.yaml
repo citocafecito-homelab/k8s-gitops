@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+
+# Postgresql
+- database-config.yaml
+- database-pv.yaml
+- database-deployment.yaml
+- database-svc.yaml
+
+# Open Search
+- opensearch-pv.yaml
+- opensearch-deployment.yaml
+- opensearch-svc.yaml
+
+# fusionauth
+- fusionauth-config.yaml
+- fusionauth-deployment.yaml
+- fusionauth-svc.yaml
+- fusionauth-ingress.yaml
+# - fusionauth-hpa.yaml
+
+- ingress.yaml

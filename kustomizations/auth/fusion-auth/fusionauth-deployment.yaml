@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fusionauth
+  labels:
+    app: fusionauth
+    app.kubernetes.io/name: fusionauth
+    app.kubernetes.io/part-of: fusionauth
+spec:
+  selector:
+    matchLabels:
+      app: fusionauth
+      app.kubernetes.io/name: fusionauth
+  template:
+    metadata:
+      labels:
+        app: fusionauth
+        app.kubernetes.io/name: fusionauth
+        app.kubernetes.io/part-of: fusionauth
+    spec:
+      containers:
+      - name: fusionauth
+        image: fusionauth/fusionauth-app:latest
+        ports:
+        - containerPort: 9011
+        envFrom:
+        - configMapRef:
+            name: fusionauth-config
+        env:
+        - name: DATABASE_ROOT_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: fusionauth-database
+              key: DATABASE_USERNAME
+        - name: DATABASE_ROOT_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: fusionauth-database
+              key: DATABASE_PASSWORD
+        - name: DATABASE_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: fusionauth-database
+              key: DATABASE_USERNAME
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: fusionauth-database
+              key: DATABASE_PASSWORD
+        resources:
+          requests:
+            cpu: 0.5
+            memory: 512Mi
+          limits:
+            cpu: 1
+            memory: 1Gi
