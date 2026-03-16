@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: pyload
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: pyload
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: pyload
-        image: lscr.io/linuxserver/pyload
+        image: lscr.io/linuxserver/pyload-ng:latest
         env:
         - name: USER_ID
           value: "1000"
@@ -30,7 +30,6 @@ spec:
             cpu: 500m
             memory: 512Mi
         ports:
-        - containerPort: 7227
         - containerPort: 8000
         - containerPort: 9666
         volumeMounts:

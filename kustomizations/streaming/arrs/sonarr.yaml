@@ -100,6 +100,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: sonarr
+  annotations:
+    external-dns.alpha.kubernetes.io/controller: "ignore"
 spec:
   rules:
   - host: sonarr.citocafecito.work
