@@ -1,0 +1,9 @@
+apiVersion: v2
+name: sparkyfitness
+description: Sparkyfitness fitness tracking application
+type: application
+version: 0.0.1-alpha
+dependencies:
+  - name: sparkyfitness
+    version: 0.2.0
+    repository: https://SparkyFitness.github.io/charts

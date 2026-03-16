@@ -1,0 +1,22 @@
+namespace: sparkyfitness
+
+postgresql:
+  enabled: true
+  auth:
+    database: sparkyfitness
+    username: sparky
+  persistence:
+    size: 8Gi
+
+ingress:
+  enabled: true
+  className: traefik
+  hosts:
+    - host: fitness.citofacefito.work
+      paths:
+        - path: /
+          pathType: Prefix
+  # tls:
+  #   - secretName: sparkyfitness-tls
+  #     hosts:
+  #       - fitness.citofacefito.work

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: filebrowser-nodes
+spec:
+  selector:
+    matchLabels:
+      app: filebrowser
+  template:
+    metadata:
+      labels:
+        app: filebrowser
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+      - name: filebrowser
+        image: filebrowser/filebrowser:latest
+        args: 
+          - --root=/host-mnt
+          - --noauth
+          - --address=0.0.0.0
+          - --port=9000
+        volumeMounts:
+        - name: host-storage
+          mountPath: /host-mnt
+        - name: config-db
+          mountPath: /database
+        securityContext:
+          runAsUser: 0
+      # tolerations:
+      # - key: node-role.kubernetes.io/control-plane
+      #   operator: Exists
+      #   effect: NoSchedule
+      volumes:
+      - name: host-storage
+        hostPath:
+          path: /mnt
+      - name: config-db
+        emptyDir: {}

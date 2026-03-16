@@ -6,7 +6,13 @@ on:
       namespace:
         description: "Namespace del deployment"
         required: true
-        default: "default"
+        type: choice
+        options:
+          - networking
+          - media
+          - monitoring
+          - storage
+          - streaming
       deployment:
         description: "Nombre del deployment a reiniciar"
         required: true
