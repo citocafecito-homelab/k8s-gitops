@@ -86,6 +86,7 @@ kind: Ingress
 metadata:
   name: prowlarr
 spec:
+  ingressClassName: cloudflare-tunnel
   rules:
   - host: prowlarr.citocafecito.work
     http:

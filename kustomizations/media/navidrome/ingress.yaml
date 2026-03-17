@@ -1,17 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: dispatcharr
+  name: navidrome
 spec:
   ingressClassName: cloudflare-tunnel
   rules:
-  - host: dispatcharr.citocafecito.work
+  - host: music.citocafecito.work
     http:
       paths:
         - path: /
           pathType: Prefix
           backend:
             service:
-              name: dispatcharr
+              name: navidrome
               port:
-                number: 9191
+                number: 4533

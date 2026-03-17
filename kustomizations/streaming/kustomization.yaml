@@ -10,9 +10,9 @@ resources:
 - pvc.yaml
 
 ## Media Downloaders
-- downloaders/nzbget.yaml
+# - downloaders/nzbget.yaml
 - downloaders/transmission.yaml
-- downloaders/flood.yaml
+# - downloaders/flood.yaml
 # - downloaders/deluge.yaml (deprecated)
 # - downloaders/qbittorrent.yaml (deprecated)
 

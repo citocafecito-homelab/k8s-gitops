@@ -75,7 +75,7 @@ metadata:
   name: nzbget
 spec:
   rules:
-    - host: nzbget.citocafecito.work
+    - host: nzbget.lan
       http:
         paths:
           - path: /

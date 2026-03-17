@@ -24,8 +24,8 @@ spec:
             - name: TUNNEL_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: cloudflared-secret
-                  key: tunnel
+                  name: cloudflare-api
+                  key: cloudflare-tunnel-key
           ports:
           - containerPort: 2000
             name: metrics
@@ -40,8 +40,6 @@ spec:
             capabilities:
               add:
                 - NET_RAW
-      nodeSelector:
-        kubernetes.io/hostname: castillo
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"

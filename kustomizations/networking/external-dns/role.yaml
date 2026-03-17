@@ -4,11 +4,17 @@ metadata:
   name: external-dns
 rules:
   - apiGroups: [""]
-    resources: ["ingresses", "nodes", "services", "endpoints", "pods"]
+    resources: ["nodes", "services", "endpoints", "pods"]
     verbs: ["get", "watch", "list"]
+
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses"]
+    verbs: ["get", "watch", "list"]
+
   - apiGroups: ["discovery.k8s.io"]
     resources: ["endpointslices"]
     verbs: ["get", "watch", "list"]
+
   - apiGroups: ["gateway.networking.k8s.io"]
     resources: ["gateways", "httproutes", "tlsroutes", "tcproutes", "udproutes"] 
     verbs: ["get", "watch", "list"]

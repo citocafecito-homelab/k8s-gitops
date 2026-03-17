@@ -21,7 +21,7 @@ kind: Service
 metadata:
   name: jellyfin-lb
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: habiflix.lan
+    external-dns.alpha.kubernetes.io/hostname: jellyfin.lan, habiflix.lan
   labels:
     type: LoadBalancer
 spec:

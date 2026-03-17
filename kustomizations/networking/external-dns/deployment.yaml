@@ -35,6 +35,7 @@ spec:
         args:
           - --source=service
           - --source=ingress
+          - --registry=noop
           - --domain-filter=lan
           - --policy=upsert-only
           - --provider=pihole

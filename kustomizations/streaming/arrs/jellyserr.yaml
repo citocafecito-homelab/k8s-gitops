@@ -107,3 +107,21 @@ spec:
   - name: http
     port: 5055
     targetPort: 5055
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: seerr
+spec:
+  ingressClassName: cloudflare-tunnel
+  rules:
+  - host: seerr.citocafecito.work
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: seerr
+              port:
+                number: 5055

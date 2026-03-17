@@ -1,17 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: dispatcharr
+  name: plex
 spec:
   ingressClassName: cloudflare-tunnel
   rules:
-  - host: dispatcharr.citocafecito.work
+  - host: plex.citocafecito.work
     http:
       paths:
         - path: /
           pathType: Prefix
           backend:
             service:
-              name: dispatcharr
+              name: plex
               port:
-                number: 9191
+                number: 80

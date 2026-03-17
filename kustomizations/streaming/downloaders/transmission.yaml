@@ -284,3 +284,21 @@ spec:
     protocol: UDP
   selector:
     app: transmission
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: transmission
+spec:
+  ingressClassName: cloudflare-tunnel
+  rules:
+  - host: transmission.citocafecito.work
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: transmission
+              port:
+                number: 9091

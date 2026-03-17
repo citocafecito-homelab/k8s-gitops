@@ -7,3 +7,4 @@ resources:
 - config-smartplaylists.yaml
 - deployment.yaml
 - svc.yaml
+- ingress.yaml

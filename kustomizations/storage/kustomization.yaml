@@ -5,7 +5,7 @@ resources:
 # Not enough cpu available
 # - mydrive
 # - reactive-resume
-# - infisical
+- infisical
 # - minio
 - pyload
 

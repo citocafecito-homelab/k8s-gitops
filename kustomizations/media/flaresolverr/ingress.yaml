@@ -8,7 +8,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.timeout: 120s
 spec:
   rules:
-  - host: flaresolverr.citocafecito.work
+  - host: flaresolverr.lan
     http:
       paths:
       - path: /
@@ -18,7 +18,3 @@ spec:
             name: flaresolverr
             port:
               number: 8191
-          # service:
-          #   name: keda-add-ons-http-interceptor-proxy
-          #   port:
-          #     number: 8080

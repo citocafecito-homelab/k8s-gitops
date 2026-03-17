@@ -19,5 +19,4 @@ resources:
 - fusionauth-deployment.yaml
 - fusionauth-svc.yaml
 # - fusionauth-hpa.yaml
-
-- ingress.yaml
+- fusionauth-ingress.yaml

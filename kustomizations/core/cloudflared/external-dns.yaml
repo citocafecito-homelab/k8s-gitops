@@ -25,18 +25,20 @@ spec:
           - --provider=cloudflare
           - --domain-filter=citocafecito.work
           - --cloudflare-proxied
-          - --annotation-filter=external-dns.alpha.kubernetes.io/hostname
+          # - --annotation-filter=external-dns.alpha.kubernetes.io/hostname
+          - --policy=sync
           - --cloudflare-record-comment="provisioned by citocafecito k8s cluster"
+          - --txt-owner-id=citocafecito-homelab
         env:
         - name: CF_API_TOKEN
           valueFrom:
             secretKeyRef:
-              name: cloudflared-secret
-              key: api
+              name: cloudflare-api
+              key: api-token
       securityContext:
         fsGroup: 65534
       nodeSelector:
-        kubernetes.io/hostname: castillo
+        kubernetes.io/hostname: catuai
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"

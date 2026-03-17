@@ -50,7 +50,7 @@ spec:
         - name: REDIS_URL
           value: "redis://infisical-redis:6379"
         - name: SITE_URL
-          value: "http://infisical.local"
+          value: "http://infisical.citocafecito.work"
         - name: AUTH_ENABLED
           value: "true"
         - name: EMAIL_SERVICE
