@@ -4,6 +4,6 @@ kind: Kustomization
 resources:
 - config.yaml
 - sa.yaml
-- deployment.yaml
+- tunnel.yaml
 - svc.yaml
 - external-dns.yaml

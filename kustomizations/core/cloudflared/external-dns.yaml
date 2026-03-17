@@ -4,7 +4,7 @@ metadata:
   name: external-dns-cloudflare
   namespace: core
 spec:
-  replicas: 0
+  replicas: 1
   strategy:
     type: Recreate
   selector:
@@ -15,7 +15,7 @@ spec:
       labels:
         app: external-dns-cloudflare
     spec:
-      serviceAccountName: external-dns
+      serviceAccountName: cloudflared
       containers:
       - name: external-dns
         image: registry.k8s.io/external-dns/external-dns:v0.20.0
@@ -24,26 +24,23 @@ spec:
           - --source=ingress
           - --provider=cloudflare
           - --domain-filter=citocafecito.work
-          # - --cloudflare-dns-records-proxied
           - --cloudflare-proxied
-          - --txt-owner-id=k8s-cluster
-          - --log-level=info
+          - --annotation-filter=external-dns.alpha.kubernetes.io/hostname
+          - --cloudflare-record-comment="provisioned by citocafecito k8s cluster"
         env:
         - name: CF_API_TOKEN
           valueFrom:
             secretKeyRef:
               name: cloudflared-secret
-              key: token
-        - name: CF_API_EMAIL
-          valueFrom:
-            secretKeyRef:
-              name: cloudflared-secret
-              key: email
+              key: api
       securityContext:
         fsGroup: 65534
       nodeSelector:
-        kubernetes.io/hostname: catuai
+        kubernetes.io/hostname: castillo
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
         operator: "Exists"
         effect: "NoSchedule"
