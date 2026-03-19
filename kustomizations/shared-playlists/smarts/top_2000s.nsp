@@ -1,0 +1,29 @@
+{
+  "name": "Top 2000s Mix",
+  "all": [
+    {
+      "any": [
+        {
+          "is": {
+            "loved": true
+          }
+        },
+        {
+          "gt": {
+            "rating": 3
+          }
+        }
+      ]
+    },
+    {
+      "inTheRange": {
+        "year": [
+          2000,
+          2009
+        ]
+      }
+    }
+  ],
+  "sort": "random",
+  "limit": 50
+}

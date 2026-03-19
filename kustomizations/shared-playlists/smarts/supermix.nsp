@@ -1,0 +1,22 @@
+{
+  "name": "Super Mix",
+  "comment": "Favoritos y canciones con rating alto en orden aleatorio",
+  "all": [
+    {
+      "any": [
+        {
+          "is": {
+            "loved": true
+          }
+        },
+        {
+          "gt": {
+            "rating": 3
+          }
+        }
+      ]
+    }
+  ],
+  "sort": "random",
+  "limit": 300
+}

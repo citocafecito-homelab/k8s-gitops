@@ -1,10 +1,32 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: myconfigmap
-  labels:
-    app: myapplication
+  name: garage-config
 data:
   garage.toml: |
-    lorem ipsum
+    metadata_dir = "/var/lib/garage/meta"
+    data_dir = "/var/lib/garage/data"
+    db_engine = "lmdb"
+    metadata_auto_snapshot_interval = "6h"
 
+    replication_factor = 1
+
+    compression_level = 2
+
+    rpc_bind_addr = "[::]:3901"
+    rpc_public_addr = "192.168.1.34:3901"
+    rpc_secret = "1d03aa576b4150487583e1d107462ac36eadaa2b8da2dd977c137f614912d39e"
+
+    [s3_api]
+    s3_region = "garage"
+    api_bind_addr = "[::]:3900"
+    root_domain = ".s3.garage"
+
+    [s3_web]
+    bind_addr = "[::]:3902"
+    root_domain = ".web.garage"
+    index = "index.html"
+
+    [admin]
+    api_bind_addr = "[::]:3903"
+    admin_token = "141113"

@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: garage
+  labels:
+    app: garage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: garage
+  template:
+    metadata:
+      labels:
+        app: garage
+    spec:
+      containers:
+      - name: garage
+        image: dxflrs/garage:v2.2.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: s3
+          containerPort: 3900
+        - name: rpc
+          containerPort: 3901
+        - name: s3web
+          containerPort: 3902
+        - name: api
+          containerPort: 3903
+        resources:
+          requests:
+            cpu: 10m
+            memory: 100Mi
+          limits:
+            cpu: 200m
+            memory: 512Mi
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/garage.toml
+          subPath: garage.toml
+        - name: meta
+          mountPath: /var/lib/garage/meta
+        - name: data
+          mountPath: /var/lib/garage/data
+      # - name: garage-webui
+      #   image: khairul169/garage-webui:latest
+      #   ports:
+      #   - containerPort: 3000
+      #   env:
+      #   - name: GARAGE_ADMIN_URL
+      #     value: "http://127.0.0.1:3903"
+      #   - name: GARAGE_ADMIN_TOKEN
+      #     value: "141113" 
+      #   - name: GARAGE_S3_REGION
+      #     value: "garage"
+      #   - name: GARAGE_S3_ENDPOINT
+      #     value: "http://192.168.1.34:3900"
+      #   volumeMounts:
+      #   - name: config-volume
+      #     mountPath: /etc/garage.toml
+      #     subPath: garage.toml
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      volumes:
+      - name: config-volume
+        configMap:
+          name: garage-config
+      - name: meta
+        hostPath:
+          path: /mnt/garage/meta
+      - name: data
+        hostPath:
+          path: /mnt/garage/data

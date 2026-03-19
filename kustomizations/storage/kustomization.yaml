@@ -11,7 +11,7 @@ resources:
 
 # Work in progress. Stoped due no enough hardware
 # - next-cloud
-# - garage
+- garage
 
 # Deprecated
 # - jdownloader

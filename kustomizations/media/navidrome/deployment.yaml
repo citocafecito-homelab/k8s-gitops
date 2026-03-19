@@ -54,10 +54,6 @@ spec:
           mountPath: /music
         - name: playlists
           mountPath: /music/playlists
-          readOnly: true
-        - name: navidrome-smart-playlists
-          mountPath: /music/playlists/smarts
-          readOnly: true
       nodeSelector:
         kubernetes.io/hostname: caturra
       volumes:
@@ -77,9 +73,6 @@ spec:
         hostPath:
           path: /mnt/music
           type: DirectoryOrCreate
-      - name: navidrome-smart-playlists
-        configMap:
-          name: navidrome-smart-playlists
       - name: playlists
         configMap:
           name: shared-playlists

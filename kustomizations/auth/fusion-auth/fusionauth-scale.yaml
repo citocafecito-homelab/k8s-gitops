@@ -2,7 +2,6 @@ kind: HTTPScaledObject
 apiVersion: http.keda.sh/v1alpha1
 metadata:
   name: fusionauth
-  namespace: media
   annotations:
     httpscaledobject.keda.sh/skip-scaledobject-creation: "false"
 spec:

@@ -1,0 +1,29 @@
+{
+  "name": "Top 80s Mix",
+  "all": [
+    {
+      "any": [
+        {
+          "is": {
+            "loved": true
+          }
+        },
+        {
+          "gt": {
+            "rating": 3
+          }
+        }
+      ]
+    },
+    {
+      "inTheRange": {
+        "year": [
+          1980,
+          1989
+        ]
+      }
+    }
+  ],
+  "sort": "random",
+  "limit": 50
+}

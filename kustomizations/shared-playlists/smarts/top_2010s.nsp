@@ -1,0 +1,29 @@
+{
+  "name": "Top 2010s Mix",
+  "all": [
+    {
+      "any": [
+        {
+          "is": {
+            "loved": true
+          }
+        },
+        {
+          "gt": {
+            "rating": 3
+          }
+        }
+      ]
+    },
+    {
+      "inTheRange": {
+        "year": [
+          2010,
+          2019
+        ]
+      }
+    }
+  ],
+  "sort": "random",
+  "limit": 50
+}

@@ -3,10 +3,11 @@ kind: ConfigMap
 metadata:
   name: navidrome-smart-playlists
 data:
-  favorites.nsp: |
+  # 1. Supermix (Favoritos - Aleatorio)
+  supermix.nsp: |
     {
-      "name": "Favoritos",
-      "comment": "Canciones marcadas como favoritas o con rating alto",
+      "name": "Super Mix",
+      "comment": "Favoritos y canciones con rating alto en orden aleatorio",
       "all": [
         {
           "any": [
@@ -15,128 +16,83 @@ data:
           ]
         }
       ],
-      "sort": "dateLoved",
-      "order": "desc"
-    }
-
-  supermix.nsp: |
-    {
-      "name": "Super Mix",
-      "comment": "Selección aleatoria de canciones con rating alto o que ya han sido reproducidas",
-      "all": [
-        {
-          "any": [
-            { "gt": { "rating": 3 } },
-            { "gt": { "playCount": 0 } }
-          ]
-        }
-      ],
       "sort": "random",
-      "limit": 200
+      "limit": 300
     }
 
+  # 2. Super Super Mix (Más escuchados + Favoritos top)
   supersupermix.nsp: |
     {
       "name": "Super Super Mix",
-      "comment": "Selección aleatoria de canciones con rating muy alto o reproducidas anteriormente",
+      "comment": "Tus canciones más quemadas y top ratings",
       "all": [
         {
           "any": [
             { "gt": { "rating": 4 } },
-            { "gt": { "playCount": 0 } }
+            { "gt": { "playCount": 10 } }
           ]
         }
       ],
       "sort": "random",
-      "limit": 200
-    }
-  
-  top_60s.nsp: |
-    {
-      "name": "Top 60s Mix",
-      "comment": "Canciones favoritas o reproducidas de los años 60",
-      "all": [
-        {
-          "any": [
-            { "is": { "loved": true } },
-            { "gt": { "rating": 3 } },
-            { "gt": { "playCount": 0 } }
-          ]
-        },
-        { "inTheRange": { "year": [1961, 1970] } }
-      ],
-      "sort": "-rating,title",
-      "limit": 25
+      "limit": 150
     }
 
-  top_70s.nsp: |
+  # 3. Descubrimiento (Nunca escuchadas)
+  discovery.nsp: |
     {
-      "name": "Top 70s Mix",
-      "comment": "Canciones favoritas o reproducidas de los años 70",
+      "name": "Descubrimiento",
+      "comment": "Joyas de tu librería que aún no has reproducido",
       "all": [
-        {
-          "any": [
-            { "is": { "loved": true } },
-            { "gt": { "rating": 3 } },
-            { "gt": { "playCount": 0 } }
-          ]
-        },
-        { "inTheRange": { "year": [1971, 1980] } }
+        { "is": { "playCount": 0 } }
       ],
-      "sort": "-rating,title",
-      "limit": 25
+      "sort": "random",
+      "limit": 100
     }
 
   top_80s.nsp: |
     {
       "name": "Top 80s Mix",
-      "comment": "Canciones favoritas o reproducidas de los años 80",
       "all": [
         {
           "any": [
             { "is": { "loved": true } },
-            { "gt": { "rating": 3 } },
-            { "gt": { "playCount": 0 } }
+            { "gt": { "rating": 3 } }
           ]
         },
-        { "inTheRange": { "year": [1981, 1990] } }
+        { "inTheRange": { "year": [1980, 1989] } }
       ],
-      "sort": "-rating,title",
-      "limit": 25
+      "sort": "random",
+      "limit": 50
     }
 
   top_90s.nsp: |
     {
       "name": "Top 90s Mix",
-      "comment": "Canciones favoritas o reproducidas de los años 90",
       "all": [
         {
           "any": [
             { "is": { "loved": true } },
-            { "gt": { "rating": 3 } },
-            { "gt": { "playCount": 0 } }
+            { "gt": { "rating": 3 } }
           ]
         },
-        { "inTheRange": { "year": [1991, 2000] } }
+        { "inTheRange": { "year": [1990, 1999] } }
       ],
-      "sort": "-rating,title",
-      "limit": 25
+      "sort": "random",
+      "limit": 50
     }
 
   top_00s.nsp: |
     {
       "name": "Top 00s Mix",
-      "comment": "Canciones favoritas o reproducidas de los años 2000",
       "all": [
         {
           "any": [
             { "is": { "loved": true } },
-            { "gt": { "rating": 3 } },
-            { "gt": { "playCount": 0 } }
+            { "gt": { "rating": 3 } }
           ]
         },
-        { "inTheRange": { "year": [2001, 2010] } }
+        { "inTheRange": { "year": [2000, 2009] } }
       ],
-      "sort": "-rating,title",
-      "limit": 25
+      "sort": "random",
+      "limit": 50
     }

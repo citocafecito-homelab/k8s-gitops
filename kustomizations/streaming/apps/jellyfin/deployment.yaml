@@ -15,12 +15,27 @@ spec:
         app.kubernetes.io/name: jellyfin
         app.kubernetes.io/part-of: streaming-stack
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        # Group id (992) can be found running 
+        # getent group render | cut -d: -f3
+        fsGroup: 1000
+        supplementalGroups: [44, 992]
       containers:
       - name: jellyfin
         image: jellyfin/jellyfin:latest
         env:
         - name: LIBVA_DRIVER_NAME
           value: "iHD"
+        - name: JELLYFIN_CONFIG_DIR
+          value: "/config/config"
+        - name: JELLYFIN_DATA_DIR
+          value: "/config"
+        - name: JELLYFIN_METADATA_DIR
+          value: "/config/metadata"
+        - name: JELLYFIN_CACHE_DIR
+          value: "/config/cache"
         envFrom:
         - configMapRef:
             name: streaming-stack-config
@@ -35,17 +50,16 @@ spec:
           protocol: UDP
         resources:
           requests:
-            memory: 1Gi
-            cpu: 2
+            cpu: "1"
+            memory: "1Gi"
           limits:
-            cpu: 4
-            memory: 10Gi
+            cpu: "4"
+            memory: "8Gi"
         securityContext:
-          # runAsUser: 0
-          # runAsGroup: 0
           privileged: true
+          allowPrivilegeEscalation: true
           capabilities:
-            add: ["SYS_RAWIO"]
+            add: ["SYS_RAWIO", "SETPCAP", "SYS_ADMIN"]
         startupProbe:
           httpGet:
             path: /
@@ -71,6 +85,7 @@ spec:
         volumeMounts:
         - name: dri
           mountPath: /dev/dri
+          readOnly: false
         - name: shm
           mountPath: /dev/shm
         - name: transcodes
@@ -107,11 +122,11 @@ spec:
       - name: shm
         emptyDir:
           medium: Memory
-          sizeLimit: 1Gi
+          sizeLimit: 2Gi
       - name: transcodes
         emptyDir:
           medium: Memory
-          sizeLimit: 12Gi
+          sizeLimit: 4Gi
       - name: config
         hostPath:
           path: /mnt/jellyfin

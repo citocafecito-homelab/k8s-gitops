@@ -1,0 +1,13 @@
+{
+  "name": "Descubrimiento",
+  "comment": "Joyas de tu librería que aún no has reproducido",
+  "all": [
+    {
+      "is": {
+        "playCount": 0
+      }
+    }
+  ],
+  "sort": "random",
+  "limit": 100
+}

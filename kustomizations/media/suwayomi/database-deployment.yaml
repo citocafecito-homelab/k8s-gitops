@@ -56,7 +56,11 @@ spec:
             cpu: 50m
             memory: 128Mi
       nodeSelector:
-        kubernetes.io/hostname: castillo
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
       volumes:
       - name: suwayomi-postgresql-storage
         persistentVolumeClaim:

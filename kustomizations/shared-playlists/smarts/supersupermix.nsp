@@ -1,0 +1,22 @@
+{
+  "name": "Super Super Mix",
+  "comment": "Tus canciones más quemadas y top ratings",
+  "all": [
+    {
+      "any": [
+        {
+          "gt": {
+            "rating": 4
+          }
+        },
+        {
+          "gt": {
+            "playCount": 10
+          }
+        }
+      ]
+    }
+  ],
+  "sort": "random",
+  "limit": 150
+}
