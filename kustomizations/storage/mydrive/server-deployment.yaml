@@ -23,11 +23,11 @@ spec:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "vault"
         vault.hashicorp.com/agent-inject-secret-mydrive: "secret/data/mydrive"
-        vault.hashicorp.com/agent-inject-secret-minio: "secret/data/minio"
+        vault.hashicorp.com/agent-inject-secret-mydrive: "secret/data/mydrive"
         vault.hashicorp.com/agent-inject-template-.env: |
-          {{- with secret "secret/data/minio" -}}
-          S3_ID="{{ .Data.data.MINIO_ROOT_USER }}"
-          S3_KEY="{{ .Data.data.MINIO_ROOT_PASSWORD }}"
+          {{- with secret "secret/data/mydrive" -}}
+          S3_ID="{{ .Data.data.S3_ACCESS_KEY }}"
+          S3_KEY="{{ .Data.data.S3_SECRET_KEY }}"
           {{ end }}
           {{- with secret "secret/data/mydrive" -}}
           KEY="{{ .Data.data.KEY }}"
@@ -55,7 +55,7 @@ spec:
             - name: S3_BUCKET
               value: mydrive
             - name: S3_ENDPOINT
-              value: "http://minio.storage.svc.cluster.local:9000"
+              value: "http://garage.storage.svc.cluster.local:3900"
             - name: VIDEO_THUMBNAILS_ENABLED
               value: "true"
             - name: BLOCK_CREATE_ACCOUNT
@@ -65,12 +65,6 @@ spec:
               mountPath: /data
             - name: temp
               mountPath: /temp
-      nodeSelector:
-        kubernetes.io/hostname: catuai
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
       volumes:
         - name: data
           hostPath:

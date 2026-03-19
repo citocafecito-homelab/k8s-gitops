@@ -45,7 +45,7 @@ Complete stack for multimedia content management:
 ### 📦 Storage & Utilities
 
 - `Nextcloud` / `MyDrive`: Private cloud storage and collaboration.
-- `Minio` (deprecated) / `Garage` (in progress): S3-compatible object storage.
+- `Garage` (in progress): S3-compatible object storage.
 - Tools: `Reactive Resume` (CV management), `Wiki.js` (documentation), `Excalidraw`.
 - Download Managers: `pyLoad`.
 

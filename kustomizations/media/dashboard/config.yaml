@@ -382,15 +382,6 @@ data:
             app: vault
             showStats: true
 
-        - MiniO:
-            href: https://s3.console.citocafecito.work/
-            description: Almacenamiento de objetos S3 compatible con AWS
-            icon: https://cdn.worldvectorlogo.com/logos/minio-1.svg
-            ping: http://minio.lan/minio/health/live
-            namespace: storage
-            app: minio
-            showStats: true
-
         - Infisical:
             href: https://infisical.citocafecito.work/
             description: Gestión de secretos y variables de entorno

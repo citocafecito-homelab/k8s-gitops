@@ -2,8 +2,8 @@ kind: Service
 apiVersion: v1
 metadata:
   name: garage
-  annotations:
-    external-dns.alpha.kubernetes.io/hostname: garage.lan
+  # annotations:
+  #   metallb.universe.tf/allow-shared-ip: "garage-cluster-ip"
 spec:
   type: LoadBalancer
   loadBalancerIP: 192.168.1.34
@@ -11,14 +11,10 @@ spec:
     app: garage
   ports:
   - name: s3
+    protocol: TCP
     port: 3900
     targetPort: 3900
-  - name: rpc
-    port: 3901
-    targetPort: 3901
-  - name: s3web
-    port: 3902
-    targetPort: 3902
-  - name: api
+  - name: admin-api
+    protocol: TCP
     port: 3903
     targetPort: 3903

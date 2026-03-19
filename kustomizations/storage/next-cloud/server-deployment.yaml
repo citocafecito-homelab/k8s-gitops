@@ -39,15 +39,15 @@ spec:
         - name: NEXTCLOUD_OBJECTSTORE_KEY
           valueFrom:
             secretKeyRef:
-              name: minio-credentials
+              name: s3-credentials
               key: accesskey
         - name: NEXTCLOUD_OBJECTSTORE_SECRET
           valueFrom:
             secretKeyRef:
-              name: minio-credentials
+              name: s3-credentials
               key: secretkey
         - name: NEXTCLOUD_OBJECTSTORE_HOST
-          value: minio.default.svc.cluster.local
+          value: garage.storage.svc.cluster.local
         - name: NEXTCLOUD_OBJECTSTORE_PORT
           value: "9000"
         - name: NEXTCLOUD_OBJECTSTORE_USE_SSL

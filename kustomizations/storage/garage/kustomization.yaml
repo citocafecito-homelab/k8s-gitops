@@ -4,5 +4,7 @@ kind: Kustomization
 resources:
 - config.yaml
 - server-deployment.yaml
+- server-svc.yaml
 - webui-deployment.yaml
-- svc.yaml
+- webui-svc.yaml
+- ingress.yaml

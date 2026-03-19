@@ -56,7 +56,7 @@ Stack completo para gestión de contenido multimedia:
 
 - `Nextcloud` / `MyDrive`: Almacenamiento y colaboración en la nube privada.
 
-- `Minio` (deprecado) / `Garage` (en progreso): Almacenamiento de objetos compatible con S3.
+- `Garage`: Almacenamiento de objetos compatible con S3.
 
 - Herramientas: `Reactive Resume` (gestión de CV), `Wiki.js` (documentación), `Excalidraw`.
 

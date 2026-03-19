@@ -16,11 +16,11 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: vault
-        vault.hashicorp.com/agent-inject-secret-home-assistant: "secret/data/minio"
+        vault.hashicorp.com/agent-inject-secret-home-assistant: "secret/data/reactive-resume"
         vault.hashicorp.com/agent-inject-template-storage: |
-          {{ with secret "secret/data/minio" }}
-          export STORAGE_ACCESS_KEY="{{ .Data.data.MINIO_ROOT_USER }}"
-          export STORAGE_SECRET_KEY="{{ .Data.data.MINIO_ROOT_PASSWORD }}"
+          {{ with secret "secret/data/reactive-resume" }}
+          export STORAGE_ACCESS_KEY="{{ .Data.data.S3_ACCESS_KEY }}"
+          export STORAGE_SECRET_KEY="{{ .Data.data.S3_SECRET_KEY }}"
           {{ end }}
     spec:
       containers:

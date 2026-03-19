@@ -42,23 +42,6 @@ spec:
           mountPath: /var/lib/garage/meta
         - name: data
           mountPath: /var/lib/garage/data
-      # - name: garage-webui
-      #   image: khairul169/garage-webui:latest
-      #   ports:
-      #   - containerPort: 3000
-      #   env:
-      #   - name: GARAGE_ADMIN_URL
-      #     value: "http://127.0.0.1:3903"
-      #   - name: GARAGE_ADMIN_TOKEN
-      #     value: "141113" 
-      #   - name: GARAGE_S3_REGION
-      #     value: "garage"
-      #   - name: GARAGE_S3_ENDPOINT
-      #     value: "http://192.168.1.34:3900"
-      #   volumeMounts:
-      #   - name: config-volume
-      #     mountPath: /etc/garage.toml
-      #     subPath: garage.toml
       nodeSelector:
         kubernetes.io/hostname: catuai
       tolerations:
