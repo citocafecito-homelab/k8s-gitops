@@ -44,37 +44,41 @@ spec:
     spec:
       containers:
       - name: whisper
-        image: lscr.io/linuxserver/faster-whisper:latest
-        env:
-          - name: PUID
-            value: "1000"
-          - name: PUID
-            value: "1000"
-          - name: TZ
-            value: "America/Bogota"
-          - name: WHISPER_BEAM
-            value: "2"
-          - name: WHISPER_LANG
-            value: "es"
-          - name: WHISPER_MODEL
-            value: "turbo"
-          - name: WHISPER_CPU_THREADS
-            value: "4"
+        image: rhasspy/wyoming-whisper:latest
+        args:
+          - "--model"
+          - "turbo"
+          - "--language"
+          - "es"
+          - "--compute-type"
+          - "int8"
+          - "--device"
+          - "cpu"
+          - "--beam-size"
+          - "1"
         ports:
         - containerPort: 10300
         resources:
           requests:
-            cpu: 2
-            memory: "2Gi"
+            cpu: 1
+            memory: "1Gi"
           limits:
             cpu: 4
-            memory: "5Gi"
+            memory: "6Gi"
+        securityContext:
+          privileged: false
+          runAsUser: 0
         volumeMounts:
+        - name: dri
+          mountPath: /dev/dri
         - name: whisper-config
           mountPath: /config
       nodeSelector:
         kubernetes.io/hostname: castillo
       volumes:
+      - name: dri
+        hostPath:
+          path: /dev/dri
       - name: whisper-config
         persistentVolumeClaim:
           claimName: whisper-pvc

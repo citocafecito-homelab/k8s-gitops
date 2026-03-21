@@ -4,7 +4,7 @@ metadata:
   name: zigbee2mqtt-pv
 spec:
   capacity:
-    storage: 1Gi
+    storage: "1Gi"
   accessModes:
   - ReadWriteOnce
   storageClassName: "manual"
@@ -22,7 +22,7 @@ spec:
   storageClassName: "manual"
   resources:
     requests:
-      storage: 1Gi
+      storage: "1Gi"
 ---
 apiVersion: apps/v1
 kind: Deployment

@@ -13,3 +13,5 @@ data:
   DATABASE_USERNAME: "suwayomi"
   DATABASE_PASSWORD: "2K<GbzK[%96p;v%O"
   EXTENSION_REPOS: '["https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json"]'
+  FLARESOLVERR_ENABLED: "true"
+  FLARESOLVERR_URL: "http://cloudflare-solver.media.svc.cluster.local:8000"

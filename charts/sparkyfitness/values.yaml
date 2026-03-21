@@ -6,7 +6,7 @@ postgresql:
     database: sparkyfitness
     username: sparky
   persistence:
-    size: 8Gi
+    size: "8Gi"
 
 ingress:
   enabled: true

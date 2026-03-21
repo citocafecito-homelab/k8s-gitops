@@ -4,7 +4,7 @@ metadata:
   name: zwavejs2mqtt-pv
 spec:
   capacity:
-    storage: 1Gi
+    storage: "1Gi"
   accessModes:
   - ReadWriteOnce
   volumeMode: Filesystem

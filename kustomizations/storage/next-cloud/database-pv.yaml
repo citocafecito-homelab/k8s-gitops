@@ -6,7 +6,7 @@ metadata:
     type: postgresql-data
 spec:
   capacity:
-    storage: 1Gi
+    storage: "1Gi"
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
@@ -23,7 +23,7 @@ spec:
   storageClassName: ""
   resources:
     requests:
-      storage: 1Gi
+      storage: "1Gi"
   selector:
     matchLabels:
       type: postgresql-data

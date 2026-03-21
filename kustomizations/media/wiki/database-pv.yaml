@@ -4,7 +4,7 @@ metadata:
   name: wikijs-postgresql-pv
 spec:
   capacity:
-    storage: 5Gi
+    storage: "5Gi"
   accessModes:
   - ReadWriteOnce
   hostPath:
@@ -23,6 +23,6 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi
+      storage: "5Gi"
   storageClassName: ""
   volumeName: wikijs-postgresql-pv

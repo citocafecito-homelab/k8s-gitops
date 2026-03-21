@@ -4,7 +4,7 @@ metadata:
   name: dispatcharr-pv
 spec:
   capacity:
-    storage: 1Gi
+    storage: "1Gi"
   accessModes:
     - ReadWriteOnce
   hostPath:
@@ -20,6 +20,6 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: "1Gi"
   volumeName: dispatcharr-pv
   storageClassName: ""

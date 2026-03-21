@@ -4,7 +4,7 @@ metadata:
   name: suwayomi-pv
 spec:
   capacity:
-    storage: 5Gi
+    storage: "5Gi"
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
@@ -22,6 +22,6 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi
+      storage: "5Gi"
   storageClassName: ""
   volumeName: suwayomi-pv
