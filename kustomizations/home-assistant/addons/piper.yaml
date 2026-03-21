@@ -3,21 +3,26 @@ kind: PersistentVolume
 metadata:
   name: piper-pv
 spec:
+  accessModes:
+  - ReadWriteOnce
   capacity:
-    storage: "1Gi"
-  accessModes: [ "ReadWriteOnce" ]
+    storage: 5Gi
   hostPath:
     path: /mnt/piper
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: piper-pvc
 spec:
-  accessModes: [ "ReadWriteOnce" ]
+  accessModes:
+  - ReadWriteOnce
   resources:
     requests:
-      storage: "1Gi"
+      storage: 5Gi
+  storageClassName: ""
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -41,10 +46,10 @@ spec:
         env:
         - name: PUID
           value: "1000"
-        - name: PUID
+        - name: PGID
           value: "1000"
         - name: TZ
-          value: "America/Bogota
+          value: "America/Bogota"
         - name: PIPER_VOICE
           value: "es_MX-claude-high"
         ports:
@@ -55,6 +60,9 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: castillo
       volumes:
+      - name: dri
+        hostPath:
+          path: /dev/dri
       - name: piper-config
         persistentVolumeClaim:
           claimName: piper-pvc
