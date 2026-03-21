@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lightpanda
+  labels:
+    app: lightpanda
+spec:
+  selector:
+    matchLabels:
+      app: lightpanda
+  template:
+    metadata:
+      labels:
+        app: lightpanda
+    spec:
+      containers:
+      - name: lightpanda
+        image: lightpanda/browser:latest
+        ports:
+        - containerPort: 9222
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "32Mi"
+          limits:
+            cpu: "200m"
+            memory: "128Gi"

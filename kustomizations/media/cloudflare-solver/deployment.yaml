@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflare-solver
+  labels:
+    app: cloudflare-solver
+    app.kubernetes.io/name: "cloudflare-solver"
+spec:
+  selector:
+    matchLabels:
+      app: cloudflare-solver
+      app.kubernetes.io/name: cloudflare-solver
+  template:
+    metadata:
+      labels:
+        app: cloudflare-solver
+        app.kubernetes.io/name: cloudflare-solver
+    spec:
+      terminationGracePeriodSeconds: 30
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                - caturra
+      containers:
+      - name: cloudflare-solver
+        image: ghcr.io/nlevee/simple-cloudflare-solver:main
+        ports:
+        - containerPort: 8000
+        env:
+        - name: PUID
+          value: '1000'
+        - name: PGID
+          value: '1000'
+        - name: TZ
+          value: "America/Bogota"
+        - name: LOG_LEVEL
+          value: 'info'
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"

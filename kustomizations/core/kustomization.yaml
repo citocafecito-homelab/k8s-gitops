@@ -4,6 +4,8 @@ kind: Kustomization
 resources:
 - cloudflared
 - vault
-- chromium
+- lightpanda
+# Deprecated
+# - chromium
 
 namespace: core

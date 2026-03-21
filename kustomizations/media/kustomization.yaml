@@ -10,6 +10,8 @@ resources:
 - navidrome
 # - lidify
 # - excalidraw
-- flaresolverr
+- cloudflare-solver
+#Deprecated
+# - flaresolverr
 
 namespace: media
