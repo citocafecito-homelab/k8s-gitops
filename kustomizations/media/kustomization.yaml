@@ -8,7 +8,7 @@ resources:
 - suwayomi
 - linkstack
 - navidrome
-# - lidify
+- lidify
 # - excalidraw
 - cloudflare-solver
 #Deprecated

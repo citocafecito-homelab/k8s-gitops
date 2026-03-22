@@ -1,17 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: suwayomi
+  name: infisical
 spec:
   ingressClassName: cloudflare-tunnel
   rules:
-  - host: suwayomi.citocafecito.work
+  - host: infisical.citocafecito.work
     http:
       paths:
         - path: /
           pathType: Prefix
           backend:
             service:
-              name: suwayomi
+              name: infisical
               port:
                 number: 80

@@ -14,3 +14,4 @@ resources:
 # Infisical
 - server-deployment.yaml
 - server-svc.yaml
+- server-ingress.yaml

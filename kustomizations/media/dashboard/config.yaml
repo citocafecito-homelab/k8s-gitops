@@ -366,7 +366,6 @@ data:
 
     - Core Apps:
         - Self Hosted Runners: 
-            # id: k8s-gitops
             href: https://github.com/organizations/citocafecito-homelab/settings/actions/runners
             icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/github-light.svg
             namespace: actions
@@ -386,24 +385,17 @@ data:
             href: https://infisical.citocafecito.work/
             description: Gestión de secretos y variables de entorno
             icon: https://cdn-1.webcatalog.io/catalog/infisical/infisical-icon-unplated.png
-            ping: http://infisical.lan
+            ping: https://infisical.citocafecito.work/api/status
             namespace: storage
             app: infisical
             showStats: true
-
-        # - Infisical DB:
-        #     description: Base de datos de la aplicación Infisical
-        #     icon: https://cdn-icons-png.flaticon.com/512/9850/9850812.png
-        #     namespace: storage
-        #     app: infisical-postgresql
-        #     showStats: true
 
     - Domótica:
         - Home Assistant:
             href: https://home.citocafecito.work
             description: Centro de mando para la gestión y automatización del hogar
             icon: https://upload.wikimedia.org/wikipedia/en/thumb/4/49/Home_Assistant_logo_%282023%29.svg/1200px-Home_Assistant_logo_%282023%29.svg.png
-            ping: http://192.168.1.11:8123
+            ping: https://home.citocafecito.work
             namespace: home-assistant
             app: home-assistant
             showStats: true
@@ -447,22 +439,8 @@ data:
             showStats: true
 
     - Control de voz:
-        - Wake Word:
-            icon: https://raw.githubusercontent.com/OHF-Voice/piper1-gpl/refs/heads/main/etc/logo.svg
-            description: Convertidor de texto a voz
-            namespace: home-assistant
-            app: piper
-            showStats: true
-
-        - Rhasspy:
-            icon: https://play-lh.googleusercontent.com/hzDSG8bVSdrD_oMKHg5FijEMc_2KMH9bUucykpwBlSUvE_7fJZOdBBFJJ03_eNee0A
-            description: Asistente de voz
-            namespace: home-assistant
-            app: rhasspy
-            showStats: true
-
         - Piper:
-            icon: https://raw.githubusercontent.com/OHF-Voice/piper1-gpl/refs/heads/main/etc/logo.svg
+            icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/piper-tts-dark.svg
             description: Convertidor de texto a voz
             namespace: home-assistant
             app: piper
@@ -472,7 +450,7 @@ data:
             icon: https://avatars.githubusercontent.com/u/59055969?s=200&v=4
             description: Convertidor de voz a texto
             namespace: home-assistant
-            app: openwakeword
+            app: whisper
             showStats: true
 
     - Social & Media Content:
@@ -480,6 +458,7 @@ data:
             # href: https://*.citocafecito.work
             description: Plataforma personalizable para compartir enlaces
             icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/linkstack.svg
+            ping: https://linkstack.citocafecito.work
             namespace: media
             app: linkstack
             showStats: true
@@ -488,30 +467,25 @@ data:
             href: https://suwayomi.citocafecito.work
             description: Lector de Manga
             icon: https://raw.githubusercontent.com/Suwayomi/Suwayomi-Server/refs/heads/master/server/src/main/resources/icon/faviconlogo.png
+            ping: https://suwayomi.citocafecito.work
             namespace: media
             app: suwayomi
             showStats: true
-            widget:
-              type: suwayomi
-              url: http://suwayomi.media.svc.cluster.local:4567
-              username: "{{HOMEPAGE_VAR_SUWAYOMI_USERNAME}}"
-              password: "{{HOMEPAGE_VAR_SUWAYOMI_PASSWORD}}"
-              category: 1
+            # widget:
+            #   type: suwayomi
+            #   url: http://suwayomi.media.svc.cluster.local:4567
+            #   username: "{{HOMEPAGE_VAR_SUWAYOMI_USERNAME}}"
+            #   password: "{{HOMEPAGE_VAR_SUWAYOMI_PASSWORD}}"
+            #   category: "1"
 
         - "Wiki.js":
             href: https://wiki.citocafecito.work/
             description: Plataforma de gestión de conocimiento
             icon: https://raw.githubusercontent.com/requarks/wiki/refs/heads/main/server/themes/default/thumbnail.png
+            ping: https://wiki.citocafecito.work
             namespace: media
             app: wikijs
             showStats: true
-
-        # - "Wiki.js DB":
-        #     description: Base de datos de la wiki
-        #     icon: https://cdn-icons-png.flaticon.com/512/9850/9850812.png
-        #     namespace: media
-        #     app: wikijs-postgresql
-        #     showStats: true
 
         - Dashboard:
             description: Recursos usados por este dashboard
@@ -526,6 +500,7 @@ data:
             href: https://music.citocafecito.work
             description: Gestor de música local alias "HabiMusic"
             icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/navidrome.svg
+            ping: https://music.citocafecito.work/ping
             app: navidrome
             namespace: media
             showStats: true
@@ -540,7 +515,7 @@ data:
             href: https://jellyfin.citocafecito.work/
             description: Servidor de medios de código abierto
             icon: https://upload.wikimedia.org/wikipedia/commons/4/41/Jellyfin_-_icon-transparent.svg
-            # ping: http://jellyfin.streaming.svc.cluster.local:8096/health
+            ping: https://habiflix.citocafecito.work/health
             showStats: true
             namespace: streaming
             app: jellyfin
@@ -552,9 +527,10 @@ data:
               enableNowPlaying: false
 
         - dispatcharr:
-            href: https://dispatcharr.citocafecito.work/
+            href: https://dispatcharr.citocafecito.work
             description: Gestor de canales IPTV
             icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/dispatcharr.svg
+            ping: https://dispatcharr.citocafecito.work/swagger
             showStats: true
             namespace: streaming
             app: dispatcharr
@@ -567,8 +543,10 @@ data:
 
     - "*Arr Managers":
         - Bazarr:
+            href: https://bazarr.citocafecito.work
             description: Descarga y gestiona subtítulos automáticamente
             icon: https://raw.githubusercontent.com/loganmarchione/homelab-svg-assets/refs/heads/main/assets/bazarr.svg
+            ping: https://bazarr.citocafecito.work/api/swagger.json
             showStats: true
             namespace: streaming
             app: bazarr
@@ -578,8 +556,10 @@ data:
               key: "{{HOMEPAGE_VAR_BAZARR_API_KEY}}"
 
         - Radarr:
+            href: https://radarr.citocafecito.work
             description: Descarga y gestiona automáticamente películas
             icon: https://raw.githubusercontent.com/Radarr/Radarr/develop/Logo/512.png
+            ping: https://radarr.citocafecito.work/ping
             showStats: true
             namespace: streaming
             app: radarr
@@ -590,8 +570,10 @@ data:
               enableQueue: false
 
         - Sonarr:
+            href: https://sonarr.citocafecito.work
             description: Descarga y gestiona automáticamente series de TV
             icon: https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/512.png
+            ping: https://sonarr.citocafecito.work/ping
             showStats: true
             namespace: streaming
             app: sonarr
@@ -602,8 +584,10 @@ data:
               enableQueue: false
         
         - Lidarr:
+            href: https://lidarr.citocafecito.work
             description: Descarga y gestiona automáticamente canciones
             icon: https://raw.githubusercontent.com/Lidarr/Lidarr/develop/Logo/512.png
+            ping: https://lidarr.citocafecito.work/ping
             showStats: true
             namespace: streaming
             app: lidarr
@@ -613,21 +597,25 @@ data:
               key: "{{HOMEPAGE_VAR_LIDARR_API_KEY}}"
               enableQueue: false 
 
-        - Jellyseerr:
+        - Seerr:
+            href: https://seerr.citocafecito.work
             description: Interfaz de solicitud de contenido para Jellyfin o Plex
             icon: https://raw.githubusercontent.com/Fallenbagel/jellyseerr/develop/public/android-chrome-512x512.png
+            ping: https://seerr.citocafecito.work
             showStats: true
             namespace: streaming
-            app: jellyseerr
+            app: seerr
             widget:
-              type: jellyseerr
-              url: http://jellyseerr.streaming.svc.cluster.local:5055
+              type: seerr
+              url: http://seerr.streaming.svc.cluster.local:5055
               key: "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}"
 
     - Torrents:
         - Prowlarr:
+            href: https://prowlarr.citocafecito.work
             description: Indexer manager para aplicaciones como Radarr, Sonarr y Lidarr
             icon: https://raw.githubusercontent.com/Prowlarr/Prowlarr/develop/Logo/512.png
+            ping: https://prowlarr.citocafecito.work/ping
             showStats: true
             namespace: streaming
             app: prowlarr
@@ -649,8 +637,10 @@ data:
         #       password: "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}"
 
         - Transmission:
+            href: https://transmission.citocafecito.work
             description: Cliente BitTorrent ligero y rápido
             icon: https://raw.githubusercontent.com/loganmarchione/homelab-svg-assets/refs/heads/main/assets/transmission.svg
+            ping: https://transmission.citocafecito.work/transmission/web/
             showStats: true
             namespace: streaming
             app: transmission
@@ -680,7 +670,7 @@ data:
         - Presupuesto 2025:
             href: https://docs.google.com/spreadsheets/d/1WkQEUSmbAceJsDM3PLn_cwSAMC_PQzjrqVRBOe_alNA/edit?gid=1758594645#gid=1758594645
             description: Presupuesto para el año 2025
-            icon: https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Google_Drive_icon_%282020%29.svg/1147px-Google_Drive_icon_%282020%29.svg.png
+            icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/google-drive.svg
   widgets.yaml: |
     - kubernetes:
         cluster:
