@@ -16,7 +16,7 @@ data:
 # > avahi-browse -rt _matter._tcp
 #
 ## Run in pod if restarts
-# > kubectl -n core exec -it openthread-0 -- ot-ctl
+# > kubectl -n home-assistant exec -it openthread-0 -c otbr -- ot-ctl
 #
 ## Setup Thread Network
 # > state
@@ -38,6 +38,7 @@ data:
 # PSKc: 9482e2bf32825f7ec31777d7aabe57f6
 # Security Policy: 672 onrc 0
 #
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -58,6 +59,19 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       restartPolicy: Always
+      initContainers:
+      - name: setup-host
+        image: alpine:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          # Habilitar reenvío de IP en el nodo
+          sysctl -w net.ipv4.ip_forward=1
+          sysctl -w net.ipv6.conf.all.forwarding=1
+          # Opcional: Podrías descargar y ejecutar el script aquí, 
+          # pero sysctl suele ser lo principal que hace el script de OTBR.
+        securityContext:
+          privileged: true
       containers:
       - name: otbr
         image: openthread/border-router:latest
@@ -77,7 +91,7 @@ spec:
             - SYS_RAWIO
         volumeMounts:
         - name: otbr-data
-          mountPath: /data
+          mountPath: /var/lib/otbr-agent
         - name: rcp
           mountPath: /dev/ttyUSB0
       nodeSelector:
