@@ -18,10 +18,10 @@ spec:
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
+        fsGroup: 1000
         # Group id (992) can be found running 
         # getent group render | cut -d: -f3
-        fsGroup: 1000
-        supplementalGroups: [44, 992]
+        supplementalGroups: [44, 107, 992]
       containers:
       - name: jellyfin
         image: jellyfin/jellyfin:latest
@@ -36,6 +36,8 @@ spec:
           value: "/config/metadata"
         - name: JELLYFIN_CACHE_DIR
           value: "/config/cache"
+        - name: JELLYFIN_PublishedServerUrl
+          value: http://habiflix.lan
         envFrom:
         - configMapRef:
             name: streaming-stack-config
@@ -51,7 +53,7 @@ spec:
         resources:
           requests:
             cpu: "1"
-            memory: "1Gi"
+            memory: "2Gi"
           limits:
             cpu: "4"
             memory: "8Gi"

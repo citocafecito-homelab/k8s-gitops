@@ -50,22 +50,32 @@ spec:
           value: "1000"
         - name: TZ
           value: "America/Bogota"
+        # Voices can be found here https://rhasspy.github.io/piper-samples/#es_MX-ald-medium
         - name: PIPER_VOICE
           value: "es_MX-claude-high"
         ports:
         - containerPort: 10200
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "512Mi"
+          limits:
+            cpu: "2"
+            memory: "2Gi"
         volumeMounts:
         - name: piper-config
           mountPath: /config
+        - name: tmp-cache
+          mountPath: /tmp
       nodeSelector:
         kubernetes.io/hostname: castillo
       volumes:
-      - name: dri
-        hostPath:
-          path: /dev/dri
       - name: piper-config
         persistentVolumeClaim:
           claimName: piper-pvc
+      - name: tmp-cache
+        emptyDir:
+          medium: Memory
 ---
 apiVersion: v1
 kind: Service
