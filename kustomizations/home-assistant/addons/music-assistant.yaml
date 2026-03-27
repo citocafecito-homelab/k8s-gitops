@@ -44,36 +44,60 @@ spec:
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
-      securityContext:
-        appArmorProfile:
-          type: Unconfined
-      nodeSelector:
-        kubernetes.io/hostname: castillo
       containers:
       - name: music-assistant
-        image: ghcr.io/music-assistant/server:stable
+        image: ghcr.io/music-assistant/server:beta
         env:
           - name: LOG_LEVEL
-            value: warning
+            value: info
+          - name: PYTHONASYNCIODEBUG
+            value: "0"
+          - name: PYCHROMECAST_DEBUG
+            value: "0"
+          - name: TMPDIR
+            value: /data/temp
+          - name: MASS_IP_ADDRESS
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+          - name: MASS_BASE_URL
+            value: http://musicassistant.lan
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "2"
+            memory: "2Gi"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8095
+          initialDelaySeconds: 30
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8095
+          initialDelaySeconds: 15
+          periodSeconds: 10
         securityContext:
           privileged: true
-          capabilities:
-            add:
-            - DAC_READ_SEARCH 
-            - SYS_ADMIN
-            - NET_ADMIN
+          # capabilities:
+          #   add:
+          #   - DAC_READ_SEARCH 
+          #   - SYS_ADMIN
+          #   - NET_ADMIN
+          #   - NET_RAW
+          #   - SYS_NICE
         volumeMounts:
         - name: dri
           mountPath: /dev/dri
         - name: music-assistant-data
           mountPath: /data
-        resources:
-          requests:
-            cpu: "100m"
-            memory: "1Gi"
-          limits:
-            cpu: "1"
-            memory: "1.5Gi"
+      nodeSelector:
+        kubernetes.io/hostname: castillo
+      securityContext: {}
       volumes:
       - name: dri
         hostPath:
@@ -90,15 +114,23 @@ spec:
   selector:
     app: music-assistant
   ports:
-  - name: http
+  - name: web
     protocol: TCP
     port: 8095
     targetPort: 8095
+  - name: stream
+    protocol: TCP
+    port: 8097
+    targetPort: 8097
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: music-assistant
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/transport.respondingtimeouts.readtimeout: "3600s"
+    traefik.ingress.kubernetes.io/transport.respondingtimeouts.idletimeout: "3600s"
 spec:
   rules:
   - host: musicassistant.lan

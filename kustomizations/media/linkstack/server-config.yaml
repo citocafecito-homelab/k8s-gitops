@@ -20,7 +20,7 @@ data:
   DB_PASSWORD:    "linkstack"
 
   # Session & Cache. Run php artisan cache:redis inside the container
-  CACHE_DRIVER:   "database"
-  SESSION_DRIVER: "database"
-  # REDIS_HOST:     "linkstack-redis"
-  # REDIS_PORT:     "6379"
+  CACHE_DRIVER:   "redis"
+  # SESSION_DRIVER: "table"
+  REDIS_HOST:     "linkstack-valkey"
+  REDIS_PORT:     "6379"

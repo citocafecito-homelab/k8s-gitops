@@ -39,11 +39,7 @@ spec:
         - containerPort: 5656
         - containerPort: 8001
         securityContext:
-          privileged: true
-          capabilities:
-            add:
-             - SYS_NICE
-             - SYS_RAWIO
+          privileged: true 
         volumeMounts:
         - mountPath: /dev/dri
           name: dri
@@ -51,6 +47,9 @@ spec:
           name: dispatcharr-data
       nodeSelector:
         kubernetes.io/hostname: castillo
+      securityContext:
+        fsGroup: 1000
+        supplementalGroups: [44, 107, 992]
       volumes:
       - name: dri
         hostPath:

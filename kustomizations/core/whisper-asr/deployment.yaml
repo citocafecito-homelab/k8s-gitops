@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whisper-asr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whisper-asr
+  template:
+    metadata:
+      labels:
+        app: whisper-asr
+    spec:
+      containers:
+      - name: whisper
+        image: ghcr.io/speaches-ai/speaches:latest-cpu
+        env:
+        - name: WHISPER__COMPUTE_TYPE
+          value: "int8"
+        - name: ASYNCHRONOUS_TASKS
+          value: "true"
+        ports:
+        - containerPort: 8000
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "2"

@@ -44,11 +44,11 @@ spec:
             name: suwayomi-config
         resources:
           requests:
-            cpu: 300m
-            memory: 512Mi
+            cpu: "100m"
+            memory: "512Mi"
           limits:
-            cpu: 1          
-            memory: 1024Mi
+            cpu: "300m"
+            memory: "1024Mi"
         volumeMounts:
         - name: suwayomi-storage
           mountPath: /home/suwayomi/.local/share/Tachidesk

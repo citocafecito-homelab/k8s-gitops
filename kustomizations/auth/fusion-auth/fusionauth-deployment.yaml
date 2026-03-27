@@ -7,6 +7,7 @@ metadata:
     app.kubernetes.io/name: fusionauth
     app.kubernetes.io/part-of: fusionauth
 spec:
+  replicas: 0
   selector:
     matchLabels:
       app: fusionauth
@@ -49,8 +50,8 @@ spec:
               key: DATABASE_PASSWORD
         resources:
           requests:
-            cpu: "500m"
+            cpu: "100m"
             memory: "128Mi"
           limits:
-            cpu: "1"
+            cpu: "500m"
             memory: "512Mi"

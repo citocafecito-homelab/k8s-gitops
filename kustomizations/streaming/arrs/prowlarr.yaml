@@ -28,11 +28,11 @@ spec:
             name: streaming-stack-config
         resources:
           requests:
-            cpu: 250m
-            memory: 512Mi
+            cpu: 50m
+            memory: 128Mi
           limits:
-            cpu: 1
-            memory: 1024Mi
+            cpu: 500m
+            memory: 750Mi
         securityContext:
           runAsUser: 0
           runAsGroup: 0

@@ -77,13 +77,13 @@ spec:
           mountPath: /dev/dri
         - name: whisper-config
           mountPath: /data
+      nodeSelector:
+        kubernetes.io/hostname: castillo
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
         supplementalGroups: [44, 107, 992]
-      nodeSelector:
-        kubernetes.io/hostname: castillo
       volumes:
       - name: dri
         hostPath:

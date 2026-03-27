@@ -109,3 +109,20 @@ spec:
     port: 8554
     targetPort: 8554
     name: rtsp
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ring-mqtt
+spec:
+  rules:
+  - host: ringmqtt.lan
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: ring-mqtt
+              port:
+                number: 55123

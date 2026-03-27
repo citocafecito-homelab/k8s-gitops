@@ -1,7 +1,7 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: dispatcharr
+  name: dispatcharr-hpa
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -15,7 +15,7 @@ spec:
       policies:
         - type: Pods
           value: 1
-          periodSeconds: 60
+          periodSeconds: 80
     scaleDown:
       stabilizationWindowSeconds: 300
       policies:

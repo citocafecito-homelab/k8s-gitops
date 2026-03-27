@@ -24,11 +24,11 @@ spec:
           name: http
         resources:
           requests:
-            cpu: 100m
+            cpu: 50m
             memory: 128Mi
           limits:
-            cpu: 500m
-            memory: 1Gi
+            cpu: 250m
+            memory: 0.5Gi
         envFrom:
           - configMapRef:
               name: navidrome-config
@@ -43,7 +43,12 @@ spec:
               secretKeyRef:
                 name: navidrome-lastfm-secret
                 key: ND_LASTFM_SECRET
+        securityContext:
+          privileged: true
         volumeMounts:
+        - name: dri
+          mountPath: /dev/dri
+          readOnly: false
         - name: cache
           mountPath: /data/cache
         - name: navidrome-data
@@ -56,11 +61,21 @@ spec:
           mountPath: /music/playlists
       nodeSelector:
         kubernetes.io/hostname: caturra
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        # Group id (992) can be found running 
+        # getent group render | cut -d: -f3
+        supplementalGroups: [44, 107, 992]
       volumes:
+      - name: dri
+        hostPath:
+          path: /dev/dri
       - name: cache
         emptyDir:
           medium: Memory
-          sizeLimit: 750Mi
+          sizeLimit: "1Gi"
       - name: navidrome-data
         hostPath:
           path: /mnt/navidrome

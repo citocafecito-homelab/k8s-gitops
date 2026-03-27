@@ -32,15 +32,16 @@ spec:
             name: streaming-stack-config
         resources:
           requests:
-            memory: 64Mi
-            cpu: 5m
-        securityContext:
-          runAsUser: 0
-          runAsGroup: 0
-          allowPrivilegeEscalation: true
-          capabilities:
-            drop: [ "ALL" ]
-            add: [ "CHOWN", "SETGID", "SETUID" ]
+            memory: 256Mi
+            cpu: 100m
+          limits:
+            memory: 512Mi
+        # securityContext:
+        #   privileged: true
+        #   allowPrivilegeEscalation: true
+        #   capabilities:
+        #     drop: [ "ALL" ]
+        #     add: [ "CHOWN", "SETGID", "SETUID", "SETPCAP" ]
         livenessProbe:
           httpGet:
             path: /
@@ -58,6 +59,8 @@ spec:
           timeoutSeconds: 5
           failureThreshold: 3
         volumeMounts:
+        - name: dri
+          mountPath: /dev/dri
         - name: config
           mountPath: /config
         - name: downloads
@@ -66,9 +69,23 @@ spec:
           mountPath: /movies
         - name: series
           mountPath: /tv
+        - name: animes
+          mountPath: /animes
+        - name: animations
+          mountPath: /animations
+        - name: cartoons
+          mountPath: /cartoons
       nodeSelector:
         kubernetes.io/hostname: castillo
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        supplementalGroups: [44, 107, 992]
       volumes:
+      - name: dri
+        hostPath:
+          path: /dev/dri
       - name: config
         hostPath:
           path: /mnt/bazarr
@@ -82,6 +99,18 @@ spec:
       - name: series
         persistentVolumeClaim:
           claimName: series-pvc
+      - name: animes
+        hostPath:
+          path: /mnt/multimedia/animes
+          type: DirectoryOrCreate
+      - name: animations
+        hostPath:
+          path: /mnt/animations
+          type: DirectoryOrCreate
+      - name: cartoons
+        hostPath:
+          path: /mnt/multimedia/cartoons
+          type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: Service

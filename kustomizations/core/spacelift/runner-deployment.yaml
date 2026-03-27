@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spacelift-runner
+  labels:
+    app: spacelift-runner
+spec:
+  selector:
+    matchLabels:
+      app: spacelift-runner
+  template:
+    metadata:
+      labels:
+        app: spacelift-runner
+    spec:
+      containers:
+      - name: spacelift-runner
+        image: https://gallery.ecr.aws/spacelift/runner-terraform:latest

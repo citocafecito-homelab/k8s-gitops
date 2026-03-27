@@ -31,8 +31,11 @@ spec:
             - SYS_ADMIN
         resources:
           requests:
-            cpu: 50m
-            memory: 128Mi
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "2"
+            memory: "2Gi"
         readinessProbe:
           httpGet:
             path: /
