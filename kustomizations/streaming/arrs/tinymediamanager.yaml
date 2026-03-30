@@ -2,9 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tinymediamanager
-  namespace: streaming
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: tinymediamanager
@@ -24,34 +23,66 @@ spec:
           ports:
             - containerPort: 5800
             - containerPort: 4000
+          env:
+          - name: LIBVA_DRIVER_NAME
+            value: "iHD"
+          - name: DRI_NAME
+            value: "renderD128"
+          - name: GALLIUM_DRIVER
+            value: "iris"
+          - name: DISPLAY
+            value: ":0"
           envFrom:
             - configMapRef:
                 name: streaming-stack-config
+          securityContext:
+            privileged: true
+            allowPrivilegeEscalation: true
           volumeMounts:
-            - name: movies
-              mountPath: /media/movies
-            - name: series
-              mountPath: /media/series
-            - name: music
-              mountPath: /media/music
-            - name: config
-              mountPath: /config
+          - name: dri
+            mountPath: /dev/dri
+            readOnly: false
+          - name: tmp-x11
+            mountPath: /tmp
+          - name: animations
+            mountPath: /media/animations
+          - name: multimedia
+            mountPath: /media/multimedia
+          - name: multimedia2
+            mountPath: /media/multimedia2
+          - name: music
+            mountPath: /media/music
+          - name: config
+            mountPath: /config
       nodeSelector:
         kubernetes.io/hostname: castillo
+      securityContext:
+        fsGroup: 1000
+        # Group id (992) can be found running 
+        # getent group render | cut -d: -f3
+        supplementalGroups: [5, 44, 107, 992]
       volumes:
-        - name: movies
-          persistentVolumeClaim:
-            claimName: movies-pvc
-        - name: series
-          persistentVolumeClaim:
-            claimName: series-pvc
-        - name: music
-          persistentVolumeClaim:
-            claimName: music-pvc
-        - name: config
-          hostPath:
-            path: /mnt/tinymediamanager
-            type: DirectoryOrCreate
+      - name: dri
+        hostPath:
+          path: /dev/dri
+      - name: tmp-x11
+        emptyDir: {}
+      - name: config
+        hostPath:
+          path: /mnt/tinymediamanager
+          type: DirectoryOrCreate
+      - name: animations
+        hostPath:
+          path: /mnt/animations
+      - name: multimedia
+        hostPath:
+          path: /mnt/multimedia
+      - name: multimedia2
+        hostPath:
+          path: /mnt/multimedia2
+      - name: music
+        hostPath:
+          path: /mnt/music
 ---
 apiVersion: v1
 kind: Service
@@ -68,9 +99,26 @@ spec:
     app.kubernetes.io/name: tinymediamanager
     app.kubernetes.io/instance: streaming-stack
   ports:
-  - name: web
+  - name: vnc
     port: 5800
     targetPort: 5800
-  - name: http
+  - name: web
     port: 4000
     targetPort: 4000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tinymediamanager
+spec:
+  rules:
+  - host: manager.habiflix.lan
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: tinymediamanager
+              port:
+                number: 4000

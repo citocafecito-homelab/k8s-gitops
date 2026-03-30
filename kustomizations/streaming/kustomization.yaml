@@ -22,7 +22,7 @@ resources:
 - arrs/radarr.yaml
 - arrs/bazarr.yaml
 - arrs/lidarr.yaml
-- arrs/jellyserr.yaml
+- arrs/seerr.yaml
 - arrs/tinymediamanager.yaml
 
 # Not enough resources / uncompleted tests
