@@ -38,6 +38,25 @@ spec:
         - containerPort: 9191
         - containerPort: 5656
         - containerPort: 8001
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "1"
+            memory: "2Gi"
+        livenessProbe:
+          httpGet:
+            path: /  # O una ruta de salud específica si existe
+            port: 9191
+          initialDelaySeconds: 30
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 9191
+          initialDelaySeconds: 10
+          periodSeconds: 10
         securityContext:
           privileged: true 
         volumeMounts:

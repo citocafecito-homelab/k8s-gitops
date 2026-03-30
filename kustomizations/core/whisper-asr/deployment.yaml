@@ -16,10 +16,12 @@ spec:
       - name: whisper
         image: ghcr.io/speaches-ai/speaches:latest-cpu
         env:
+        - name: OTEL_SERVICE_NAME 
+          value: whisper-asr
         - name: WHISPER__COMPUTE_TYPE
-          value: "int8"
-        - name: ASYNCHRONOUS_TASKS
-          value: "true"
+          value: int8
+        # - name: ASYNCHRONOUS_TASKS
+        #   value: "true"
         ports:
         - containerPort: 8000
         resources:

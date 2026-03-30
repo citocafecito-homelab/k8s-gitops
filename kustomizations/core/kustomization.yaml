@@ -5,7 +5,7 @@ resources:
 - cloudflared
 - vault
 - lightpanda
-- whisper-asr
+# - whisper-asr
 # Deprecated
 # - chromium
 

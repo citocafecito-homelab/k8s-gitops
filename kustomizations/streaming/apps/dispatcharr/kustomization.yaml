@@ -21,4 +21,4 @@ resources:
 - server-svc.yaml
 - server-ingress.yaml
 # - server-scaler.yaml
-- server-hpa.yaml
+# - server-hpa.yaml

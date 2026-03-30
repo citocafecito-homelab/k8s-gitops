@@ -60,7 +60,8 @@ spec:
                   # Ejecución. Se añade -p "" para intentar forzar salida plana si el binario lo permite
                   # echo "Running '/split2flac/split2flac -nd -o . "$CUE_NAME" "$AUDIO_FILE"'"
                   # /split2flac/split2flac -nd -o . -colors "$CUE_NAME"
-                  /usr/bin/shnsplit -f "$CUE_NAME" -o flac "$AUDIO_FILE"
+                  # /usr/bin/shnsplit -f "$CUE_NAME" -o flac "$AUDIO_FILE"
+                  /usr/bin/shnsplit -f "$CUE_NAME" -t "%n %t" -o flac "$AUDIO_FILE"
 
                   if [ $? -eq 0 ]; then
                     touch "${AUDIO_FILE}.split2flacdone"
