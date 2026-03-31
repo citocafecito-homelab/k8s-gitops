@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: unmanic
+spec:
+  rules:
+  - host: unmanic.habiflix.lan
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: unmanic
+              port:
+                number: 8888

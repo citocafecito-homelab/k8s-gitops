@@ -38,6 +38,8 @@ spec:
           securityContext:
             privileged: true
             allowPrivilegeEscalation: true
+            capabilities:
+              add: ["CHOWN", "SETUID", "SETGID"]
           volumeMounts:
           - name: dri
             mountPath: /dev/dri
@@ -57,6 +59,8 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: castillo
       securityContext:
+        # runAsUser: 1000
+        # runAsGroup: 1000
         fsGroup: 1000
         # Group id (992) can be found running 
         # getent group render | cut -d: -f3
