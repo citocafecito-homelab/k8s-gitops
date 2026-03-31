@@ -1,8 +1,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: garage-ingress
+  name: garage
 spec:
+  ingressClassName: traefik
   rules:
   - host: s3.garage.lan
     http:

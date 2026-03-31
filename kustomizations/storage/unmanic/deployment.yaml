@@ -1,106 +1,88 @@
-# https://docs.unmanic.app/docs/installation/kubernetes 
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: unmanic
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: unmanic
-  template:
-    metadata:
-      labels:
+  # https://docs.unmanic.app/docs/installation/kubernetes 
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: unmanic
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
         app: unmanic
-    spec:
-      containers:
-      - name: unmanic
-        image: josh5/unmanic:latest
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: PUID
-          value: "1000"
-        - name: PGID
-          value: "1000"
-        - name: TZ
-          value: America/Bogota
-        - name: HOME
-          value: "/config"
-        - name: DEBUGGING
-          value: "true"
-        # - name: BASE_URL
-        #   value: "/"
-        ports:
-        - containerPort: 8888
-          name: web
-          protocol: TCP
-        resources:
-          requests:
-            cpu: 100m
-            memory: 256M
-          limits:
-            cpu: 4
-            memory: 8G
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 8888
-          initialDelaySeconds: 60
-          periodSeconds: 15
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 8888
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        # securityContext:
-        #   privileged: true
-        #   allowPrivilegeEscalation: true
-        volumeMounts:
+    template:
+      metadata:
+        labels:
+          app: unmanic
+      spec:
+        containers:
+        - name: unmanic
+          image: josh5/unmanic:latest
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: PUID
+            value: "1000"
+          - name: PGID
+            value: "1000"
+          - name: TZ
+            value: America/Bogota
+          - name: HOME
+            value: "/config"
+          ports:
+          - containerPort: 8888
+            name: webui
+            protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256M
+            limits:
+              cpu: 4
+              memory: 8G
+          livenessProbe:
+            httpGet:
+              path: /
+              port: webui
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: webui
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          volumeMounts:
+          - name: dri
+            mountPath: /dev/dri
+            readOnly: false
+          - name: config
+            mountPath: /config
+          - name: cache
+            mountPath: /tmp/unmanic
+          - name: animations
+            mountPath: /media/animations
+          - name: multimedia
+            mountPath: /media/multimedia
+          - name: multimedia2
+            mountPath: /media/multimedia2
+        nodeSelector:
+          kubernetes.io/hostname: castillo
+        securityContext:
+          supplementalGroups: [44, 107, 992]
+        volumes:
         - name: dri
-          mountPath: /dev/dri
-          readOnly: false
+          hostPath:
+            path: /dev/dri
         - name: config
-          mountPath: /config
+          hostPath:
+            path: /mnt/unmanic
         - name: cache
-          mountPath: /tmp/unmanic
-        - name: library
-          mountPath: /library
-        # - name: animations
-        #   mountPath: /media/animations
-        # - name: multimedia
-        #   mountPath: /media/multimedia
-        # - name: multimedia2
-        #   mountPath: /media/multimedia2
-      nodeSelector:
-        kubernetes.io/hostname: castillo
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        # Group id (992) can be found running 
-        # getent group render | cut -d: -f3
-        supplementalGroups: [44, 107, 992]
-      volumes:
-      - name: dri
-        hostPath:
-          path: /dev/dri
-      - name: config
-        # hostPath:
-        #   path: /mnt/unmanic
-        emptyDir: {}
-      - name: cache
-        emptyDir: {}
-      - name: library
-        hostPath: 
-          path: /mnt/multimedia2
-      # - name: animations
-      #   hostPath:
-      #     path: /mnt/animations
-      # - name: multimedia
-      #   hostPath:
-      #     path: /mnt/multimedia
-      # - name: multimedia2
-      #   hostPath:
-      #     path: /mnt/multimedia2
+          emptyDir: {}
+        - name: animations
+          hostPath:
+            path: /mnt/animations
+        - name: multimedia
+          hostPath:
+            path: /mnt/multimedia
+        - name: multimedia2
+          hostPath:
+            path: /mnt/multimedia2
