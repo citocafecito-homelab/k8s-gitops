@@ -32,6 +32,8 @@ spec:
             value: "iris"
           - name: DISPLAY
             value: ":0"
+          - name: ALLOW_DIRECT_VNC
+            value: "true"
           envFrom:
             - configMapRef:
                 name: streaming-stack-config
@@ -55,7 +57,7 @@ spec:
           - name: music
             mountPath: /media/music
           - name: config
-            mountPath: /config
+            mountPath: /data
       nodeSelector:
         kubernetes.io/hostname: castillo
       securityContext:

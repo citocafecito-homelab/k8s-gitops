@@ -4,7 +4,7 @@
   metadata:
     name: unmanic
   spec:
-    replicas: 1
+    replicas: 0
     selector:
       matchLabels:
         app: unmanic
@@ -32,11 +32,11 @@
             protocol: TCP
           resources:
             requests:
-              cpu: 100m
-              memory: 256M
+              cpu: 1
+              memory: 1Gi
             limits:
               cpu: 4
-              memory: 8G
+              memory: 8Gi
           livenessProbe:
             httpGet:
               path: /
@@ -50,6 +50,8 @@
               port: webui
             initialDelaySeconds: 30
             periodSeconds: 10
+          securityContext:
+            privileged: true
           volumeMounts:
           - name: dri
             mountPath: /dev/dri

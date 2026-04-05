@@ -40,7 +40,7 @@ spec:
           failureThreshold: 3
         resources:
           requests:
-            cpu: 50m
+            cpu: 100m
             memory: 128Mi
       nodeSelector:
         kubernetes.io/hostname: catuai
