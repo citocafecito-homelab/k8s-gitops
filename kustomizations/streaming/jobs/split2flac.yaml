@@ -23,33 +23,28 @@ spec:
 
                 echo "==== split2flac recursive scan ===="
 
-                # Usamos un bucle estándar compatible con /bin/sh
                 find /workdir -type f -iname "*.cue" | while read -r CUE; do
-                  # Validar que la línea no esté vacía
                   [ -z "$CUE" ] && continue
 
                   DIR=$(dirname "$CUE")
                   CUE_NAME=$(basename "$CUE")
-                  
+
                   # Extraer audio, quitar comillas y limpiar el \r de Windows
+                  # Importante: Usamos la ruta completa $CUE para el grep inicial
                   AUDIO_FILE=$(grep -m 1 "FILE" "$CUE" | sed -e 's/FILE "\(.*\)" .*/\1/' | tr -d '\r')
 
-                  # Cambiar al directorio usando comillas para los espacios
                   cd "$DIR" || continue
 
-                  # Validar que encontramos un archivo de audio en el CUE
-                  if [ -z "$AUDIO_FILE" ]; then 
+                  if [ -z "$AUDIO_FILE" ]; then
                     echo "No FILE entry in $CUE_NAME"
                     continue
                   fi
 
-                  # Si ya existe la marca, saltar
                   if [ -f "${AUDIO_FILE}.split2flacdone" ]; then
                     echo "Skipping (Done): $AUDIO_FILE"
                     continue
                   fi
 
-                  # Validar que el archivo físico existe
                   if [ ! -f "$AUDIO_FILE" ]; then
                     echo "Audio not found: $AUDIO_FILE"
                     continue
@@ -57,11 +52,8 @@ spec:
 
                   echo "Processing: $AUDIO_FILE"
 
-                  # Ejecución. Se añade -p "" para intentar forzar salida plana si el binario lo permite
-                  # echo "Running '/split2flac/split2flac -nd -o . "$CUE_NAME" "$AUDIO_FILE"'"
-                  # /split2flac/split2flac -nd -o . -colors "$CUE_NAME"
-                  # /usr/bin/shnsplit -f "$CUE_NAME" -o flac "$AUDIO_FILE"
-                  /usr/bin/shnsplit -f "$CUE_NAME" -t "%n %t" -o flac "$AUDIO_FILE"
+                  # /usr/bin/shnsplit -m "áaéeííóoúuñnÁAÉEIÍÓOÚUÑN" -f "$CUE_NAME" -t "tracks/%n - %a [%n] %t" -o flac "$AUDIO_FILE"
+                  /usr/bin/shnsplit -f "$CUE_NAME" -t "%n - %a [%n] %t" -o flac "$AUDIO_FILE"
 
                   if [ $? -eq 0 ]; then
                     touch "${AUDIO_FILE}.split2flacdone"
@@ -71,23 +63,30 @@ spec:
                   fi
 
                   echo "==== Post-process check ===="
-                  ls -R "$DIR"
+                  ls -R "tracks" 2>/dev/null || ls -R .
                 done
-                
+
                 echo "==== Process Complete ===="
                 exit 0
             envFrom:
             - configMapRef:
                 name: streaming-stack-config
             volumeMounts:
+            - name: dri
+              mountPath: /dev/dri
+              readOnly: false
             - name: music
               mountPath: /workdir
           securityContext:
             runAsUser: 0
             runAsGroup: 0
+            supplementalGroups: [44, 107, 992]
           nodeSelector:
             kubernetes.io/hostname: castillo
           volumes:
+          - name: dri
+            hostPath:
+              path: /dev/dri
           - name: music
             persistentVolumeClaim:
               claimName: downloads-pvc
