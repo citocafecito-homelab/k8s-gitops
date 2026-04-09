@@ -87,22 +87,8 @@ spec:
           mountPath: /cache/transcodes
         - name: config
           mountPath: /config
-        - name: movies
-          mountPath: /media/movies
-        - name: series
-          mountPath: /media/series
-        - name: animes
-          mountPath: /media/animes
-        - name: animations
-          mountPath: /media/animations
-        - name: cartoons
-          mountPath: /media/cartoons
-        - name: records
-          mountPath: /media/records
-        - name: intros
-          mountPath: /media/intros
-        - name: concerts
-          mountPath: /media/concerts
+        - name: media
+          mountPath: /media
         - name: music
           mountPath: /music
         - name: playlists
@@ -133,35 +119,9 @@ spec:
         hostPath:
           path: /mnt/jellyfin
           type: DirectoryOrCreate
-      - name: intros
+      - name: media
         hostPath:
-          path: /mnt/multimedia/intros
-          type: DirectoryOrCreate
-      - name: records
-        hostPath:
-          path: /mnt/multimedia2/records
-          type: DirectoryOrCreate
-      - name: movies
-        persistentVolumeClaim:
-          claimName: movies-pvc
-      - name: series
-        persistentVolumeClaim:
-          claimName: series-pvc
-      - name: animes
-        hostPath:
-          path: /mnt/multimedia/animes
-          type: DirectoryOrCreate
-      - name: animations
-        hostPath:
-          path: /mnt/animations
-          type: DirectoryOrCreate
-      - name: cartoons
-        hostPath:
-          path: /mnt/multimedia/cartoons
-          type: DirectoryOrCreate
-      - name: concerts
-        hostPath:
-          path: /mnt/multimedia/concerts
+          path: /media
           type: DirectoryOrCreate
       - name: music
         nfs:

@@ -218,6 +218,8 @@ spec:
           mountPath: /downloads
       nodeSelector:
         kubernetes.io/hostname: castillo
+      securityContext:
+        fsGroup: 1000
       volumes:
       - name: settings
         configMap:

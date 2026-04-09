@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stremio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stremio
+  template:
+    metadata:
+      labels:
+        app: stremio
+    spec:
+      containers:
+      - name: stremio-server
+        image: stremio/server:latest
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: NO_CORS
+            value: "1"
+        ports:
+          - containerPort: 11470
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "1"
+        volumeMounts:
+        - name: dri
+          mountPath: /dev/dri
+          readOnly: false
+        - name: shm
+          mountPath: /dev/shm
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        supplementalGroups: [44, 107, 992]
+      volumes:
+      - name: dri
+        hostPath:
+          path: /dev/dri
+      - name: shm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 2Gi

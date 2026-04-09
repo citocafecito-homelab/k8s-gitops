@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: ring-mqtt
   labels:
@@ -9,65 +9,12 @@ spec:
   selector:
     matchLabels:
       app: ring-mqtt
-      app.kubernetes.io/name: ring-mqtt
-      app.kubernetes.io/part-of: home-assistant
-  serviceName: ring-mqtt
   template:
     metadata:
       labels:
         app: ring-mqtt
         app.kubernetes.io/name: ring-mqtt
         app.kubernetes.io/part-of: home-assistant
-      annotations:
-        vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/role: vault
-        vault.hashicorp.com/secret-volume-path: "/data"
-        
-        vault.hashicorp.com/agent-inject-secret-config.json: "secret/data/ring"
-        vault.hashicorp.com/agent-inject-template-config.json: |
-          {{- with secret "secret/data/ring" -}}
-          {
-            "mqtt_url": "mqtt://mosquitto:1883",
-            "mqtt_user": "",
-            "mqtt_pass": "",
-            "ring_username": "{{ .Data.data.USERNAME }}",
-            "ring_password": "{{ .Data.data.PASSWORD }}",
-            "enable_modes": false,
-            "discovery": true,
-            "log_level": "info",
-            "livestream_user": "{{ .Data.data.CAMERA_USERNAME }}",
-            "livestream_pass": "{{ .Data.data.CAMERA_PASSWORD }}",
-            "enable_cameras": true,
-            "mqtt_client_id": "ring-mqtt"
-          }
-          {{- end }}
-        
-        vault.hashicorp.com/agent-inject-secret-ring-state.json: "secret/data/ring"
-        vault.hashicorp.com/agent-inject-template-ring-state.json: |
-          {{- with secret "secret/data/ring" -}}
-            {
-              "ring_token": "{{ .Data.data.TOKEN }}",
-              "systemId": "{{ .Data.data.SYSTEM_ID }}",
-              "devices": {
-                  "5c475e0dde74": {
-                      "snapshot": {
-                          "mode": "Auto",
-                          "autoInterval": true,
-                          "interval": 600
-                      },
-                      "event_select": {
-                          "state": "Motion 1"
-                      },
-                      "motion": {
-                          "duration": 180
-                      },
-                      "ding": {
-                          "duration": 180
-                      }
-                  }
-              }
-            }
-          {{- end }}
     spec:
       containers:
       - name: ring-mqtt
@@ -80,13 +27,25 @@ spec:
           name: auth-ui
         - containerPort: 8554
           name: rtsp
+        volumeMounts:
+        - name: data
+          mountPath: /data
         resources:
           requests:
-            cpu: 50m
+            cpu: 100m
             memory: 256Mi
           limits:
-            cpu: 200m
+            cpu: 500m
             memory: 512Mi
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      volumes:
+      - name: data
+        nfs:
+          server: 192.168.1.10
+          path: /mnt/ring-mqtt
 ---
 apiVersion: v1 
 kind: Service

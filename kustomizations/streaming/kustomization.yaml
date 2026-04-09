@@ -35,6 +35,7 @@ resources:
 - apps/jellystat
 - apps/jellyfin
 - apps/plex
+- apps/stremio
 
 ## Jobs
 - jobs/split2flac.yaml

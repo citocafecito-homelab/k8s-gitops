@@ -46,32 +46,23 @@ spec:
           mountPath: /config
         - name: downloads
           mountPath: /downloads
-        - name: movies
-          mountPath: /movies
-        - name: animations
-          mountPath: /animations
-        # - name: series
-        #   mountPath: /tv
-        # - name: animes
-        #   mountPath: /animes
-        # - name: cartoons
-        #   mountPath: /cartoons
+        - name: media
+          mountPath: /media
       nodeSelector:
         kubernetes.io/hostname: castillo
+      securityContext:
+        fsGroup: 1000
       volumes:
       - name: config
         hostPath:
           path: /mnt/radarr
           type: DirectoryOrCreate
-      - name: movies
-        persistentVolumeClaim:
-          claimName: movies-pvc
       - name: downloads
         persistentVolumeClaim:
           claimName: downloads-pvc
-      - name: animations
+      - name: media
         hostPath:
-          path: /mnt/animations/movies
+          path: /media
           type: DirectoryOrCreate
 ---
 apiVersion: v1

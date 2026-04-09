@@ -8,7 +8,7 @@ spec:
   accessModes:
   - ReadWriteMany
   hostPath:
-    path: /mnt/downloads
+    path: /media/downloads
   persistentVolumeReclaimPolicy: Retain
   volumeMode: Filesystem
 ---

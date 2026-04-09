@@ -35,10 +35,8 @@ spec:
               mountPath: /config
             - name: dri
               mountPath: /dev/dri
-            - name: movies
-              mountPath: /movies
-            - name: series
-              mountPath: /tv
+            - name: media
+              mountPath: /media
       nodeSelector:
         kubernetes.io/hostname: castillo
       volumes:
@@ -49,9 +47,7 @@ spec:
           hostPath:
             path: /mnt/plex
             type: DirectoryOrCreate
-        - name: movies
-          persistentVolumeClaim:
-            claimName: movies-pvc
-        - name: series
-          persistentVolumeClaim:
-            claimName: series-pvc
+        - name: media
+          hostPath:
+            path: /media
+            type: DirectoryOrCreate
