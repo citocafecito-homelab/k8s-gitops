@@ -25,8 +25,3 @@ data:
   # Jellyfin
   JELLYFIN_HOST: "jellyfin"
   JELLYFIN_PORT: "8096"
-
-  # Shared paths
-  DOWNLOADS_PATH: "/downloads"
-  MOVIES_PATH: "/movies"
-  SERIES_PATH: "/series"
