@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beets
+  labels:
+    app: beets
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: beets
+  template:
+    metadata:
+      labels:
+        app: beets
+    spec:
+      containers:
+      - name: beets
+        image: lscr.io/linuxserver/beets:latest
+        env:
+        - name: DOCKER_MODS
+          value: "linuxserver/mods:universal-package-install"
+        - name: INSTALL_PACKAGES
+          value: "aubio"
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: "America/Bogota"
+        ports:
+        - containerPort: 8337
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: music
+          mountPath: /music
+        - name: downloads
+          mountPath: /downloads
+      nodeSelector:
+        kubernetes.io/hostname: caturra
+      volumes:
+      - name: config
+        hostPath:
+          path: /mnt/beets
+          type: Directory
+      - name: music
+        hostPath:
+          path: /mnt/music
+          type: Directory
+      - name: downloads
+        nfs:
+          server: 192.168.1.12
+          path: /media/downloads
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: beets
+  namespace: media
+spec:
+  selector:
+    app: beets
+  ports:
+    - protocol: TCP
+      port: 8337
+      targetPort: 8337
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: beets
+  namespace: media
+spec:
+  rules:
+  - host: beets.lan
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: beets
+              port:
+                number: 8337

@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metadata-remote
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metadata-remote
+  template:
+    metadata:
+      labels:
+        app: metadata-remote
+    spec:
+      containers:
+      - name: metadata-remote
+        image: ghcr.io/wow-signal-dev/metadata-remote:latest
+        ports:
+        - containerPort: 8338
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: MUSIC_DIR
+          value: "/music"
+        - name: SHOW_HIDDEN_FILES
+          value: "true"
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        - name: FLASK_SKIP_DOTENV
+          value: "1"
+        - name: GUNICORN_CMD_ARGS
+          value: "--bind=0.0.0.0:8338 --limit-request-line 8190 --forwarded-allow-ips='*' --proxy-allow-from='*'"
+        - name: PYTHONIOENCODING
+          value: "UTF-8"
+        - name: LANG
+          value: "C.UTF-8"
+        volumeMounts:
+        - name: music-storage
+          mountPath: /music
+      nodeSelector:
+        kubernetes.io/hostname: caturra
+      volumes:
+      - name: music-storage
+        hostPath:
+          path: /mnt/music
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: metadata-remote
+spec:
+  selector:
+    app: metadata-remote
+  ports:
+    - protocol: TCP
+      port: 8338
+      targetPort: 8338
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: keep-encoded-url
+  namespace: media
+spec:
+  replacePathRegex:
+    regex: "^/(.*)"
+    replacement: "/$1"
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: metadata-remote
+  namespace: media
+  annotations:
+    # traefik.ingress.kubernetes.io/router.middlewares: media-keep-encoded-url@kubernetescrd
+    traefik.ingress.kubernetes.io/router.priority: "100"
+    traefik.ingress.kubernetes.io/router.pathmatcher: "PathPrefix"
+spec:
+  rules:
+  - host: manager.music.lan
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: metadata-remote
+            port:
+              number: 8338

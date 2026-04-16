@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
 - ../../shared-playlists
 - config.yaml
-- config-smartplaylists.yaml
+# - config-smartplaylists.yaml
 - deployment.yaml
 - svc.yaml
 - ingress.yaml

@@ -1,0 +1,25 @@
+{
+  "name": "Mamalonas Mood Stricto",
+  "all": [
+    {
+      "any": [
+        { "contains": { "grouping": "Mamalona" } },
+        { "contains": { "mood": "Mamalona" } },
+        { 
+          "all": [
+            { "lt": { "bpm": 90 } },
+            { "gt": { "bpm": 1 } }
+          ]
+        }
+      ]
+    }
+  ],
+  "none": [
+    { "contains": { "title": "Live" } },
+    { "contains": { "title": "live" } },
+    { "contains": { "title": "Vivo" } },
+    { "contains": { "title": "vivo" } }
+  ],
+  "sort": "random",
+  "limit": 100
+}

@@ -10,6 +10,8 @@ configMapGenerator:
       # Smart
       - smarts/supermix.nsp
       - smarts/supersupermix.nsp
+      - smarts/mamalonas.nsp
+      - smarts/forgotten.nsp
       - smarts/discovery.nsp
       - smarts/top_1980s.nsp
       - smarts/top_1990s.nsp
