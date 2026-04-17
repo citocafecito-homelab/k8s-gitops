@@ -33,7 +33,7 @@ data:
           *.m4a|*.mp4)
               # AtomicParsley edita el campo 'tmpo' (Tempo/BPM)
               # --overWrite es para que no cree un archivo temporal .bak
-              AtomicParsley "$TARGET" --tempo "$BPM" --overWrite
+              AtomicParsley "$FILE" --bpm "$BPM" --overWrite
               ;;
       esac
 
