@@ -25,3 +25,9 @@ data:
   # Jellyfin
   JELLYFIN_HOST: "jellyfin"
   JELLYFIN_PORT: "8096"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: streaming-stack-scripts
+data: {}
