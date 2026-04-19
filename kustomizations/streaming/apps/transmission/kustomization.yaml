@@ -11,6 +11,7 @@ configMapGenerator:
   files:
   - scripts/01-setup-config.sh
   - scripts/added.sh
+  - scripts/finished.sh
   - scripts/tagger-daemon.sh
 
 resources:

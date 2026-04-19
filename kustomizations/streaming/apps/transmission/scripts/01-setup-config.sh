@@ -21,6 +21,10 @@ if [ -f "$JSON_FILE" ]; then
     # 3. Desactivar el renombrado de archivos .part (recomendado para consistencia)
     sed -i 's/"rename-partial-files": true/"rename-partial-files": false/g' "$JSON_FILE"
 
+    # Habilitar script al terminar descarga y apuntar a finished.sh
+    sed -i 's/"script-torrent-done-enabled": false/"script-torrent-done-enabled": true/g' "$JSON_FILE"
+    sed -i 's|"script-torrent-done-filename": ".*"|"script-torrent-done-filename": "/scripts/finished.sh"|g' "$JSON_FILE"
+
     echo "[CUSTOM-INIT] Configuración aplicada: Scripts ACTIVOS y Directorio Incompleto DESACTIVADO."
 else
     echo "[CUSTOM-INIT] ERROR: No se encontró settings.json en /config."
