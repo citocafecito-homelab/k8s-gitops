@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: puppysignal-postgresql
+spec:
+  serviceName: puppysignal-postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: puppysignal-postgresql
+      app.kubernetes.io/name: puppysignal-postgresql
+  template:
+    metadata:
+      labels:
+        app: puppysignal-postgresql
+        app.kubernetes.io/name: puppysignal-postgresql
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:17
+        ports:
+        - containerPort: 5432
+        envFrom:
+        - configMapRef:
+            name: puppysignal-config 
+        volumeMounts:
+        - name: puppysignal-postgresql-storage
+          mountPath: /var/lib/postgresql/data
+        livenessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "puppysignal" ]
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "puppysignal" ]
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 5m
+            memory: 256Mi
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      volumes:
+      - name: puppysignal-postgresql-storage
+        persistentVolumeClaim:
+          claimName: puppysignal-postgresql-pvc

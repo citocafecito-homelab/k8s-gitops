@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: puppysignal-webapp
+spec:
+  ingressClassName: cloudflare-tunnel
+  rules:
+  - host: puppysignal.citocafecito.work
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: puppysignal-webserver
+              port:
+                number: 3000

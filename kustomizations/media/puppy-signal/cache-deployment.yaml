@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: puppysignal-valkey
+  labels:
+    app: puppysignal-valkey
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: puppysignal-valkey
+  template:
+    metadata:
+      labels:
+        app: puppysignal-valkey
+    spec:
+      containers:
+      - name: valkey
+        image: valkey/valkey:latest
+        args:
+          - "--save"
+          - ""
+          - "--appendonly"
+          - "no"
+        ports:
+        - containerPort: 6379
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+          limits:
+            cpu: 50m
+            memory: 128Mi

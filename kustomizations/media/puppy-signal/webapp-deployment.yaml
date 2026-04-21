@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: puppysignal-webapp
+  labels:
+    app: puppysignal-webapp
+    app.kubernetes.io/name: puppysignal-webapp
+    app.kubernetes.io/instance: puppysignal-stack
+    app.kubernetes.io/part-of: puppysignal-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: puppysignal-webapp
+      app.kubernetes.io/name: puppysignal-webapp
+      app.kubernetes.io/instance: puppysignal-stack
+      app.kubernetes.io/part-of: puppysignal-stack
+  template:
+    metadata:
+      labels:
+        app: puppysignal-webapp
+        app.kubernetes.io/name: puppysignal-webapp
+        app.kubernetes.io/instance: puppysignal-stack
+        app.kubernetes.io/part-of: puppysignal-stack
+    spec:
+      containers:
+      - name: puppysignal-webapp
+        image: ghcr.io/citocafecito-homelab/puppysignal-webapp:latest
+        env: 
+          - name: VITE_API_BASE_PATH
+            value: "/api"
+        ports:
+        - containerPort: 3000
+        # resources:
+        #   requests:
+        #     cpu: "500m"
+        #     memory: "512Mi"
+        #   limits:
+        #     cpu: "1"
+        #     memory: "2Gi"
+        # livenessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 9191
+        #   initialDelaySeconds: 30
+        #   periodSeconds: 15
+        # readinessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 9191
+        #   initialDelaySeconds: 10
+        #   periodSeconds: 10

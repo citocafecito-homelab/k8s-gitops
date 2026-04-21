@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: puppysignal-config
+data:
+  # ───────────────
+  # PostgreSQL
+  # ───────────────
+  POSTGRES_DB: puppysignal
+  POSTGRES_HOST: puppysignal-postgresql
+  POSTGRES_PASSWORD: superpassword
+  POSTGRES_PORT: "5432"
+  POSTGRES_USER: puppysignal
+
+  # ───────────────
+  # Redis / Valkey
+  # ───────────────
+  REDIS_HOST: puppysignal-valkey
+  REDIS_PORT: "6379"

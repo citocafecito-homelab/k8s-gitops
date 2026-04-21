@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: puppysignal-backend
+  labels:
+    app: puppysignal-backend
+    app.kubernetes.io/name: puppysignal-backend
+    app.kubernetes.io/instance: puppysignal-stack
+    app.kubernetes.io/part-of: puppysignal-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: puppysignal-backend
+      app.kubernetes.io/name: puppysignal-backend
+      app.kubernetes.io/instance: puppysignal-stack
+      app.kubernetes.io/part-of: puppysignal-stack
+  template:
+    metadata:
+      labels:
+        app: puppysignal-backend
+        app.kubernetes.io/name: puppysignal-backend
+        app.kubernetes.io/instance: puppysignal-stack
+        app.kubernetes.io/part-of: puppysignal-stack
+    spec:
+      containers:
+      - name: puppysignal
+        image: ghcr.io/citocafecito-homelab/puppysignal-backend:latest
+        env:
+        - name: db_engine
+          value: "postgresql"
+        - name: JWT_SECRET
+          value: b11724a9ebd09b5924f28bc2728b0e1d739349daa57a7708dc90eb080a387de1
+        - name: db_username
+          valueFrom:
+            configMapKeyRef:
+              name: puppysignal-config
+              key: POSTGRES_USER
+        - name: db_password
+          valueFrom:
+            configMapKeyRef:
+              name: puppysignal-config
+              key: POSTGRES_PASSWORD
+        - name: db_host
+          valueFrom:
+            configMapKeyRef:
+              name: puppysignal-config
+              key: POSTGRES_HOST
+        - name: db_name
+          valueFrom:
+            configMapKeyRef:
+              name: puppysignal-config
+              key: POSTGRES_DB
+        - name: redis_host
+          value: puppysignal-valkey
+        - name: redis_port
+          value: "6379"
+        ports:
+        - containerPort: 8000
+        volumeMounts:
+        - name: sa-volume
+          mountPath: "/srv/ps_backend/firebase_admin_key.json" # Esta es la ruta del directorio
+          subPath: "firebase_admin_key.json"
+          readOnly: true
+      volumes:
+      - name: sa-volume
+        secret:
+          secretName: puppysignal-firebase
+          items:
+          - key: "sa-credentials.json"
+            path: "firebase_admin_key.json"
+        # - containerPort: 5656
+        # - containerPort: 8001
+        # resources:
+        #   requests:
+        #     cpu: "500m"
+        #     memory: "512Mi"
+        #   limits:
+        #     cpu: "1"
+        #     memory: "2Gi"
+        # livenessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 9191
+        #   initialDelaySeconds: 30
+        #   periodSeconds: 15
+        # readinessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 9191
+        #   initialDelaySeconds: 10
+        #   periodSeconds: 10

@@ -44,16 +44,18 @@ spec:
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
+      nodeSelector:
+        kubernetes.io/hostname: castillo
+      securityContext:
+        fsGroup: 1000
+        supplementalGroups: [44, 107, 992]
       containers:
       - name: music-assistant
-        image: ghcr.io/music-assistant/server:beta
+        image: ghcr.io/music-assistant/server:latest
+        imagePullPolicy: Always
         env:
           - name: LOG_LEVEL
             value: info
-          - name: PYTHONASYNCIODEBUG
-            value: "0"
-          - name: PYCHROMECAST_DEBUG
-            value: "0"
           - name: TMPDIR
             value: /data/temp
           - name: MASS_IP_ADDRESS
@@ -62,6 +64,15 @@ spec:
                 fieldPath: status.hostIP
           - name: MASS_BASE_URL
             value: http://musicassistant.lan
+        # Configuración de Seguridad alineada con Docker Compose
+        securityContext:
+          privileged: true
+          appArmorProfile:
+            type: Unconfined
+          capabilities:
+            add:
+            - DAC_READ_SEARCH 
+            - SYS_ADMIN
         resources:
           requests:
             cpu: "500m"
@@ -81,23 +92,11 @@ spec:
             port: 8095
           initialDelaySeconds: 15
           periodSeconds: 10
-        securityContext:
-          privileged: true
-          # capabilities:
-          #   add:
-          #   - DAC_READ_SEARCH 
-          #   - SYS_ADMIN
-          #   - NET_ADMIN
-          #   - NET_RAW
-          #   - SYS_NICE
         volumeMounts:
         - name: dri
           mountPath: /dev/dri
         - name: music-assistant-data
           mountPath: /data
-      nodeSelector:
-        kubernetes.io/hostname: castillo
-      securityContext: {}
       volumes:
       - name: dri
         hostPath:

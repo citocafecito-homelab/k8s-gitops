@@ -21,9 +21,15 @@ if [ -f "$JSON_FILE" ]; then
     # 3. Desactivar el renombrado de archivos .part (recomendado para consistencia)
     sed -i 's/"rename-partial-files": true/"rename-partial-files": false/g' "$JSON_FILE"
 
-    # Habilitar script al terminar descarga y apuntar a finished.sh
-    sed -i 's/"script-torrent-done-enabled": false/"script-torrent-done-enabled": true/g' "$JSON_FILE"
-    sed -i 's|"script-torrent-done-filename": ".*"|"script-torrent-done-filename": "/scripts/finished.sh"|g' "$JSON_FILE"
+    # 4. Deshabilitar script al terminar descarga
+    sed -i 's/"script-torrent-done-enabled": false/"script-torrent-done-enabled": false/g' "$JSON_FILE"
+    sed -i 's|"script-torrent-done-filename": ".*"|"script-torrent-done-filename": ""|g' "$JSON_FILE"
+
+    # 45. Habilitar script al terminar seeding y apuntar a finished.sh
+    sed -i 's/"ratio-limit": .*/"ratio-limit": 3.0,/g' "$JSON_FILE"
+    sed -i 's/"ratio-limit-enabled": false/"ratio-limit-enabled": true/g' "$JSON_FILE"
+    sed -i 's/"script-torrent-done-seeding-enabled": false/"script-torrent-done-seeding-enabled": true/g' "$JSON_FILE"
+    sed -i 's|"script-torrent-done-seeding-filename": ".*"|"script-torrent-done-seeding-filename": "/scripts/finished.sh"|g' "$JSON_FILE"
 
     echo "[CUSTOM-INIT] Configuración aplicada: Scripts ACTIVOS y Directorio Incompleto DESACTIVADO."
 else
