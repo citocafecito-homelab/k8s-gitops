@@ -79,3 +79,20 @@ kube-prometheus-stack:
       - key: node-role.kubernetes.io/control-plane
         operator: Exists
         effect: NoSchedule
+
+  prometheusExporter:
+    prometheusRules:
+      additionalRuleLabels: {}
+      rules:
+        - alert: ContainerMemoryUsageReal
+          expr: |
+            (
+              container_memory_working_set_bytes{container!=""} 
+              / 
+              container_spec_memory_limit_bytes{container!=""}
+            ) * 100 > 80
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Uso de memoria real alto en {{ $labels.pod }}"
