@@ -19,7 +19,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v5
 
-      - uses: yokawasa/action-setup-kube-tools@v0.13.1
+      - uses: yokawasa/action-setup-kube-tools@v0.13.5
         with:
           setup-tools: |
             kubectl
