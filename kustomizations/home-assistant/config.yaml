@@ -56,6 +56,10 @@ data:
 
     default_config:
 
+    prometheus:
+
+    wake_on_lan:
+
     api:
 
     http:

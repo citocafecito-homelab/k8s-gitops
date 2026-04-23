@@ -6,4 +6,7 @@ resources:
 - external-dns
 # - speedtest.yaml
 
+# - middlewares/local-only.yaml
+# - middlewares/block-metrics.yaml
+
 namespace: networking

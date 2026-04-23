@@ -1,7 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: garage-bridge
+  namespace: media
+spec:
+  type: ExternalName
+  externalName: garage.storage.svc.cluster.local
+  ports:
+  - port: 3902
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: puppysignal
+  annotations:
+    cloudflare-tunnel.ingress.kubernetes.io/backend-protocol: "http"
 spec:
   ingressClassName: cloudflare-tunnel
   rules:
@@ -19,6 +32,6 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: puppysignal-webapp
+              name: garage-bridge
               port:
-                number: 3000
+                number: 3902

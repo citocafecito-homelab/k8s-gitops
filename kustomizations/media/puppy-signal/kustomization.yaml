@@ -19,8 +19,8 @@ resources:
 # - server-ingress.yaml
 
 # WebApp
-- webapp-deployment.yaml
-- webapp-svc.yaml
+# - webapp-deployment.yaml
+# - webapp-svc.yaml
 # - webapp-ingress.yaml
 
 - ingress.yaml

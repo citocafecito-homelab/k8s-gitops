@@ -2,19 +2,22 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: jellyfin
+  annotations:
+    # traefik.ingress.kubernetes.io/router.middlewares: networking-local-only@kubernetescrd
+    traefik.ingress.kubernetes.io/service.notsure: noop@internal
 spec:
   ingressClassName: cloudflare-tunnel
   rules:
   - host: habiflix.citocafecito.work
     http:
       paths:
-        - path: /metrics
-          pathType: Exact
-          backend:
-            service:
-              name: non-existent-service
-              port:
-                number: 80
+        # - path: /metrics
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: traefik-noop
+        #       port:
+        #         number: 80
         - path: /
           pathType: Prefix
           backend:

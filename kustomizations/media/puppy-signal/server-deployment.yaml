@@ -55,6 +55,9 @@ spec:
           value: puppysignal-valkey
         - name: redis_port
           value: "6379"
+        envFrom:
+        - secretRef:
+            name: puppysignal-storage
         ports:
         - containerPort: 8000
         volumeMounts:

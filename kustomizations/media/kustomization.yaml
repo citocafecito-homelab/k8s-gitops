@@ -6,9 +6,9 @@ resources:
 - dashboard
 - wiki
 - suwayomi
-- linkstack
+# - linkstack
 - navidrome
-- lidify
+# - lidify
 # - excalidraw
 - cloudflare-solver
 #Deprecated

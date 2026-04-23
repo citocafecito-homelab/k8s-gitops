@@ -2,6 +2,9 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: garage
+  namespace: storage
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
   ingressClassName: traefik
   rules:
@@ -35,3 +38,35 @@ spec:
             name: garage-webui
             port:
               number: 3909
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: garage-external
+  namespace: storage
+  annotations:
+    cloudflare-tunnel-ingress-controller.clbs.io/origin-disable-chunked-encoding: "false"
+    cloudflare-tunnel-ingress-controller.clbs.io/origin-connect-timeout: "30s"
+spec:
+  ingressClassName: cloudflare-tunnel
+  rules:
+  - host: "s3.citocafecito.work"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: garage
+            port:
+              number: 3900
+  # - host: "*.citocafecito.work"
+  #   http:
+  #     paths:
+  #     - path: /
+  #       pathType: Prefix
+  #       backend:
+  #         service:
+  #           name: garage
+  #           port:
+  #             number: 3902

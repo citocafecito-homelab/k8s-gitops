@@ -6,34 +6,24 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
-  rules:
-  - host: kubetail.lan
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: kubetail-dashboard
-            port:
-              number: 8080
-  - host: kite.lan
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: kite
-            port:
-              number: 8080
-  - host: prometheus.lan
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: prometheus
-            port:
-              number: 9090
+  rules: []
+  # - host: kubetail.lan
+  #   http:
+  #     paths:
+  #     - path: /
+  #       pathType: Prefix
+  #       backend:
+  #         service:
+  #           name: kubetail-dashboard
+  #           port:
+  #             number: 8080
+  # - host: prometheus.lan
+  #   http:
+  #     paths:
+  #     - path: /
+  #       pathType: Prefix
+  #       backend:
+  #         service:
+  #           name: prometheus
+  #           port:
+  #             number: 9090

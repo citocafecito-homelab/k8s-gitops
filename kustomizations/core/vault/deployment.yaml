@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: vault
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: vault
@@ -64,6 +64,10 @@ spec:
             cpu: 5m
       nodeSelector:
         kubernetes.io/hostname: caturra
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       volumes:
       - name: config
         configMap:

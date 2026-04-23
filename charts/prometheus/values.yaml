@@ -1,0 +1,81 @@
+kube-prometheus-stack:
+  namespaceOverride: monitoring
+
+  coreDns:
+    enabled: true
+  
+  kubeApiServer:
+    enabled: true
+
+  kubeControllerManager:
+    enabled: true
+    service:
+      enabled: true
+      port: 10257
+      targetPort: 10257
+
+  kubeEtcd:
+    enabled: true
+    service:
+      enabled: true
+      port: 2381
+      targetPort: 2381
+
+  kubeScheduler:
+    enabled: true
+    service:
+      enabled: true
+      port: 10259
+      targetPort: 10259
+
+  kubeProxy:
+    enabled: true
+    
+  grafana:
+    ingress:
+      enabled: true
+      ingressClassName: "traefik"
+      hosts:
+        - grafana.lan
+      pathType: Prefix
+
+  prometheus:
+    enabled: true
+
+    ingress:
+      enabled: true
+      ingressClassName: "traefik"
+      annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: web
+      hosts:
+        - prometheus.lan
+      paths:
+        - /
+      pathType: Prefix
+
+    prometheusSpec:
+      additionalScrapeConfigs:
+        - job_name: 'jellyfin'
+          static_configs:
+            - targets: ['jellyfin.streaming.svc.cluster.local:8096']
+        - job_name: 'navidrome'
+          static_configs:
+            - targets: ['navidrome.media.svc.cluster.local:4533']
+
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+    
+      retention: 30d
+
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 2000
+        runAsNonRoot: true
+        fsGroup: 2000
+        seccompProfile:
+          type: RuntimeDefault
+
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule

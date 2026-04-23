@@ -28,7 +28,7 @@ spec:
         image: ghcr.io/citocafecito-homelab/puppysignal-webapp:latest
         env: 
           - name: VITE_API_BASE_PATH
-            value: "/api"
+            value: "/api/v2"
         ports:
         - containerPort: 3000
         # resources:

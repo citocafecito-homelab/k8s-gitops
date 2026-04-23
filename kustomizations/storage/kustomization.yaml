@@ -7,7 +7,7 @@ resources:
 # - reactive-resume
 # - unmanic (no enable till i get a new GPU)
 - infisical
-- pyload
+# - pyload
 
 # Work in progress. Stoped due no enough hardware
 # - next-cloud

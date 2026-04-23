@@ -18,6 +18,11 @@ data:
       path = "/vault/data"
     }
 
+    telemetry {
+      disable_hostname = true
+      prometheus_retention_time = "12h"
+    }
+
     api_addr = "http://vault.core.svc.cluster.local:8200"
 ---
 apiVersion: v1

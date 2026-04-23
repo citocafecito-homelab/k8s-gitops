@@ -1,4 +1,21 @@
-# kustomizations/monitoring/kite.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kite
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: kite
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: kite
+  namespace: monitoring
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,9 +33,11 @@ spec:
       labels:
         app.kubernetes.io/name: kite
     spec:
+      serviceAccountName: kite
       containers:
         - name: kite
-          image: ghcr.io/zxh326/kite:v0.9.0
+          image: ghcr.io/kite-org/kite:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 8080
@@ -29,6 +48,25 @@ spec:
               value: /data/kite.db
             - name: ANONYMOUS_USER_ENABLED
               value: 'true'
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 1000m
+              memory: 512Mi
           volumeMounts:
             - name: kite-storage
               mountPath: /data
@@ -43,3 +81,23 @@ spec:
           hostPath:
             path: /mnt/kite
             type: DirectoryOrCreate
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kite
+  namespace: monitoring
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  rules:
+  - host: kite.lan
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: kite
+            port:
+              number: 8080
