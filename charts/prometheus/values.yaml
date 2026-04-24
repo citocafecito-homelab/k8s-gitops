@@ -30,7 +30,23 @@ kube-prometheus-stack:
 
   kubeProxy:
     enabled: true
-    
+  
+  kubelet:
+    serviceMonitor:
+      https: true
+      attachMetadata:
+        node: true
+      cAdvisorMetricRelabelings:
+        - sourceLabels: [__name__]
+          regex: 'container_memory_usage_bytes'
+          targetLabel: __name__
+          replacement: 'container_memory_usage_bytes_old'
+          action: replace
+        - sourceLabels: [__name__]
+          regex: 'container_memory_working_set_bytes'
+          targetLabel: __name__
+          replacement: 'container_memory_usage_bytes'
+          action: replace
   grafana:
     ingress:
       enabled: true
@@ -76,23 +92,9 @@ kube-prometheus-stack:
           type: RuntimeDefault
 
       tolerations:
-      - key: node-role.kubernetes.io/control-plane
-        operator: Exists
-        effect: NoSchedule
-
-  prometheusExporter:
-    prometheusRules:
-      additionalRuleLabels: {}
-      rules:
-        - alert: ContainerMemoryUsageReal
-          expr: |
-            (
-              container_memory_working_set_bytes{container!=""} 
-              / 
-              container_spec_memory_limit_bytes{container!=""}
-            ) * 100 > 80
-          for: 5m
-          labels:
-            severity: warning
-          annotations:
-            summary: "Uso de memoria real alto en {{ $labels.pod }}"
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
