@@ -35,6 +35,6 @@ spec:
       volumes:
       - name: host-storage
         hostPath:
-          path: /mnt
+          path: /
       - name: config-db
         emptyDir: {}
