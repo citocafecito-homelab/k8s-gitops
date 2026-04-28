@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -38,3 +39,5 @@ spec:
           path: /
       - name: config-db
         emptyDir: {}
+=======
+>>>>>>> 8a8e890 (fix(streaming): jellystat fixes)

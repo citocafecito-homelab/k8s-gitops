@@ -27,6 +27,13 @@ spec:
     spec:
       securityContext:
         fsGroup: 1000
+        sysctls:
+        - name: net.ipv4.tcp_keepalive_time
+          value: "60"
+        - name: net.ipv4.tcp_keepalive_intvl
+          value: "10"
+        - name: net.ipv4.tcp_keepalive_probes
+          value: "6"
       containers:
       - name: jellystat
         image: ghcr.io/cyfershepard/jellystat:latest
