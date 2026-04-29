@@ -17,6 +17,16 @@ spec:
         app: cloudflare-solver
         app.kubernetes.io/name: cloudflare-solver
     spec:
+      terminationGracePeriodSeconds: 30
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                - caturra
       containers:
       - name: cloudflare-solver
         image: ghcr.io/nlevee/simple-cloudflare-solver:main
@@ -37,7 +47,7 @@ spec:
             memory: "128Mi"
           limits:
             cpu: "1"
-            memory: "1Gi"
+            memory: "1.5Gi"
       tolerations:
       - key: node-role.kubernetes.io/control-plane
         operator: Exists
