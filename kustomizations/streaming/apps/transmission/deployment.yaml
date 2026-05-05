@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transmission
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transmission
+      app.kubernetes.io/name: transmission
+  template:
+    metadata:
+      labels:
+        app: transmission
+        app.kubernetes.io/name: transmission
+        app.kubernetes.io/part-of: streaming-stack
+      annotations:
+        app.kubernetes.io/documentation: "https://docs.linuxserver.io/images/docker-transmission/"
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: vault
+        vault.hashicorp.com/agent-inject-secret-transmission: "secret/data/transmission"
+        vault.hashicorp.com/agent-inject-template-transmission: |
+          {{- with secret "secret/data/transmission" -}}
+          {{ .Data.data.USERNAME | writeToFile "/vault/secrets/user" "vault" "vault" "0600" }}
+          {{ .Data.data.PASSWORD | writeToFile "/vault/secrets/password" "vault" "vault" "0600" }}
+          {{- end -}}
+    spec:
+      dnsPolicy: ClusterFirstWithHostNet
+      terminationGracePeriodSeconds: 60
+      containers:
+      - name: transmission
+        image: lscr.io/linuxserver/transmission:latest
+        ports:
+        - containerPort: 9091
+          protocol: TCP
+        - containerPort: 51413
+          protocol: TCP
+        - containerPort: 51413
+          protocol: UDP
+        env:
+          - name: "FILE__USER"
+            value: "/vault/secrets/user"
+          - name: "FILE__PASS"
+            value: "/vault/secrets/password"
+        envFrom:
+        - configMapRef:
+            name: streaming-stack-config
+        resources:
+          requests:
+            cpu: 50m
+            memory: 256Mi
+          limits:
+            cpu: 250m
+            memory: 1Gi
+        volumeMounts:
+        - name: scripts
+          mountPath: /custom-cont-init.d/01-setup-config.sh
+          subPath: 01-setup-config.sh
+        - name: scripts
+          mountPath: /scripts
+        - name: config
+          mountPath: /config
+        - name: watch
+          mountPath: /watch
+        - name: downloads
+          mountPath: /downloads
+      - name: tagger
+        image: lscr.io/linuxserver/transmission:latest
+        command: ["/bin/bash", "-c"]
+        args:
+          - |
+            echo "[SIDECAR] Esperando inicialización..."
+            # Aseguramos que el archivo exista antes de empezar
+            touch /config/pending_tags.txt
+            # Ejecutamos tu script robusto
+            /scripts/tagger-daemon.sh
+        env:
+          - name: "FILE__USER"
+            value: "/vault/secrets/user"
+          - name: "FILE__PASS"
+            value: "/vault/secrets/password"
+        envFrom:
+        - configMapRef:
+            name: streaming-stack-config
+        volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+        - name: config
+          mountPath: /config
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      securityContext:
+        fsGroup: 1000
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      volumes:
+      - name: scripts
+        configMap:
+          name: transmission-scripts
+          defaultMode: 0755
+      - name: config
+        hostPath:
+          path: /mnt/transmission
+          type: Directory
+      - name: watch
+        hostPath:
+          path: /mnt/transmission/watch
+          type: DirectoryOrCreate
+      - name: downloads
+        persistentVolumeClaim:
+          claimName: downloads-pvc
