@@ -64,7 +64,6 @@ spec:
                 fieldPath: status.hostIP
           - name: MASS_BASE_URL
             value: http://musicassistant.lan
-        # Configuración de Seguridad alineada con Docker Compose
         securityContext:
           privileged: true
           appArmorProfile:

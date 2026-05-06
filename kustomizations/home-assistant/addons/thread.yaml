@@ -56,8 +56,11 @@ spec:
             name: otbr-env
         resources:
           requests:
-            cpu: 1m
+            cpu: 50m
             memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 512Mi
         securityContext:
           privileged: true
           runAsUser: 0
@@ -66,12 +69,25 @@ spec:
             - NET_ADMIN
             - SYS_RAWIO
         volumeMounts:
+        - name: modules
+          mountPath: /lib/modules
+          readOnly: true
         - name: otbr-data
           mountPath: /data
         - name: rcp
           mountPath: /dev/ttyUSB0
         - name: tun
           mountPath: /dev/net/tun
+      initContainers:
+      - name: load-kernel-modules
+        image: busybox
+        command: ["sh", "-c", "modprobe ip_set && modprobe ip_set_hash_net && modprobe ip_set_hash_ip"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: modules
+          mountPath: /lib/modules
+          readOnly: true
       nodeSelector:
         kubernetes.io/hostname: catuai
       tolerations:
@@ -79,6 +95,10 @@ spec:
         operator: Exists
         effect: NoSchedule
       volumes:
+      - name: modules
+        hostPath:
+          path: /lib/modules
+          type: Directory
       - name: otbr-data
         hostPath:
           path: /mnt/openthread
