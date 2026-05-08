@@ -3,21 +3,34 @@ kind: ConfigMap
 metadata:
   name: navidrome-config
 data:
-  ND_SCANSCHEDULE: "1h"
-  ND_UIWELCOMEMESSAGE: "Bienvenidos a HabiMusic - Música en alta definición"
-  ND_SHAREURL: "https://music.citocafecito.work"
-  ND_BACKUP_COUNT: "3"
-  ND_BACKUP_PATH: "/data/backup"
-  ND_ENABLEGRAVATAR: "true"
+  # --- Configuración General y UI ---
   ND_DEFAULTLANGUAGE: "es"
-  ND_ENABLESHARING: "true"
-  ND_LASTFM_LANGUAGE: "es"
+  ND_DEFAULTTHEME: "Spotify-ish"
+  ND_ENABLEGRAVATAR: "true"
+  ND_UIWELCOMEMESSAGE: "Bienvenidos a HabiMusic - Música en alta definición"
+
+  # --- Audio y ReplayGain ---
+  ND_ENABLEREPLAYGAIN: "true"
+  ND_TRANSCODINGCACHESIZE: "1GB"
+
+  # --- Biblioteca y Escaneo ---
   ND_AUTOIMPORTPLAYLISTS: "true"
+  ND_LYRICSPRIORITY: "lrc,embedded"
   ND_PLAYLISTSPATH: "playlists"
   ND_PREFERSORTTAGS: "true"
+  ND_SCANSCHEDULE: "1h"
   ND_SCANNER_PURGEMISSING: "always"
-  ND_LYRICSPRIORITY: "lrc,embedded"
+
+  # --- Almacenamiento y Backups ---
+  ND_BACKUP_COUNT: "3"
+  ND_BACKUP_PATH: "/data/backup"
   ND_IMAGECACHESIZE: "500MB"
-  ND_TRANSCODINGCACHESIZE: "1GB"
+
+  # --- Conectividad y Compartir ---
+  ND_ENABLESHARING: "true"
+  ND_LASTFM_LANGUAGE: "es"
+  ND_SHAREURL: "https://music.citocafecito.work"
+
+  # --- Métricas y Monitoreo ---
   ND_PROMETHEUS_ENABLED: "true"
   ND_PROMETHEUS_METRICSPATH: "/metrics"
