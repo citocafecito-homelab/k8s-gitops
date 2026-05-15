@@ -1,37 +1,41 @@
 #!/bin/bash
 JSON_FILE="/config/settings.json"
-echo "[CUSTOM-INIT] Ajustando settings.json para automatización y rutas limpias..."
+PIA_STATUS="/config/pia_port.txt"
 
-# Esperar a que el sistema de archivos esté listo
-sleep 2
+echo "[CUSTOM-INIT] Configurando Transmission..."
+
+# Esperar a que Gluetun cree el archivo del puerto (máximo 10 segundos)
+for i in {1..10}; do
+    [ -f "$PIA_STATUS" ] && break
+    echo "[CUSTOM-INIT] Esperando puerto de PIA..."
+    sleep 1
+done
 
 if [ -f "$JSON_FILE" ]; then
-    # 1. Habilitar scripts de automatización (Added y Done)
-    sed -i 's/"script-torrent-added-enabled": false/"script-torrent-added-enabled": true/g' "$JSON_FILE"
-    sed -i 's|"script-torrent-added-filename": ""|"script-torrent-added-filename": "/scripts/added.sh"|g' "$JSON_FILE"
-    sed -i 's/"script-torrent-done-enabled": false/"script-torrent-done-enabled": true/g' "$JSON_FILE"
-    sed -i 's|"script-torrent-done-filename": ""|"script-torrent-done-filename": "/scripts/added.sh"|g' "$JSON_FILE"
+    # --- Configuración de Automatización ---
+    sed -i 's/"script-torrent-added-enabled":.*/"script-torrent-added-enabled": true,/g' "$JSON_FILE"
+    sed -i 's|"script-torrent-added-filename":.*|"script-torrent-added-filename": "/scripts/added.sh",|g' "$JSON_FILE"
     
-    # 2. Desactivar el directorio 'incomplete'
-    # Cambiamos el booleano a false
-    sed -i 's/"incomplete-dir-enabled": true/"incomplete-dir-enabled": false/g' "$JSON_FILE"
-    # Opcional: Limpiar la ruta para evitar ruido en logs
-    sed -i 's|"incomplete-dir": "/downloads/incomplete"|"incomplete-dir": ""|g' "$JSON_FILE"
-    
-    # 3. Desactivar el renombrado de archivos .part (recomendado para consistencia)
-    sed -i 's/"rename-partial-files": true/"rename-partial-files": false/g' "$JSON_FILE"
+    # --- Configuración de Incompletos y Ratio ---
+    sed -i 's/"incomplete-dir-enabled":.*/"incomplete-dir-enabled": false,/g' "$JSON_FILE"
+    sed -i 's/"rename-partial-files":.*/"rename-partial-files": false,/g' "$JSON_FILE"
+    sed -i 's/"ratio-limit":.*/"ratio-limit": 3.0,/g' "$JSON_FILE"
+    sed -i 's/"ratio-limit-enabled":.*/"ratio-limit-enabled": true,/g' "$JSON_FILE"
 
-    # 4. Deshabilitar script al terminar descarga
-    sed -i 's/"script-torrent-done-enabled": false/"script-torrent-done-enabled": false/g' "$JSON_FILE"
-    sed -i 's|"script-torrent-done-filename": ".*"|"script-torrent-done-filename": ""|g' "$JSON_FILE"
-
-    # 45. Habilitar script al terminar seeding y apuntar a finished.sh
-    sed -i 's/"ratio-limit": .*/"ratio-limit": 3.0,/g' "$JSON_FILE"
-    sed -i 's/"ratio-limit-enabled": false/"ratio-limit-enabled": true/g' "$JSON_FILE"
-    sed -i 's/"script-torrent-done-seeding-enabled": false/"script-torrent-done-seeding-enabled": true/g' "$JSON_FILE"
-    sed -i 's|"script-torrent-done-seeding-filename": ".*"|"script-torrent-done-seeding-filename": "/scripts/finished.sh"|g' "$JSON_FILE"
-
-    echo "[CUSTOM-INIT] Configuración aplicada: Scripts ACTIVOS y Directorio Incompleto DESACTIVADO."
+    # --- Inyección de Puerto Dinámico ---
+    if [ -f "$PIA_STATUS" ]; then
+        PIA_PORT=$(cat "$PIA_STATUS")
+        if [[ "$PIA_PORT" =~ ^[0-9]+$ ]]; then
+            echo "[INIT] Aplicando puerto de PIA: $PIA_PORT"
+            # Si "peer-port" ya existe, lo actualiza. Si no, lo agrega después de la primera llave.
+            if grep -q '"peer-port"' "$JSON_FILE"; then
+                sed -i "s/\"peer-port\": [0-9]*/\"peer-port\": $PIA_PORT/" "$JSON_FILE"
+            else
+                sed -i "s/{/{\n    \"peer-port\": $PIA_PORT,/" "$JSON_FILE"
+            fi
+        fi
+    fi
+    echo "[CUSTOM-INIT] Configuración aplicada exitosamente."
 else
-    echo "[CUSTOM-INIT] ERROR: No se encontró settings.json en /config."
+    echo "[CUSTOM-INIT] settings.json no encontrado. Se creará con valores por defecto al arrancar."
 fi

@@ -10,6 +10,7 @@ configMapGenerator:
 - name: transmission-scripts
   files:
   - scripts/01-setup-config.sh
+  - scripts/check-port-status.sh
   - scripts/added.sh
   - scripts/finished.sh
   - scripts/tagger-daemon.sh

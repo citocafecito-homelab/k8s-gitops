@@ -24,46 +24,50 @@ spec:
                 echo "==== split2flac recursive scan ===="
 
                 find /workdir -type f -iname "*.cue" | while read -r CUE; do
-                  [ -z "$CUE" ] && continue
+                    [ -z "$CUE" ] && continue
 
-                  DIR=$(dirname "$CUE")
-                  CUE_NAME=$(basename "$CUE")
+                    # 1. Validar que el archivo CUE sea legible y no esté vacío
+                    if [ ! -r "$CUE" ] || [ ! -s "$CUE" ]; then
+                        echo "Skipping (Invalid CUE: Empty or no permission): $CUE"
+                        continue
+                    fi
 
-                  # Extraer audio, quitar comillas y limpiar el \r de Windows
-                  # Importante: Usamos la ruta completa $CUE para el grep inicial
-                  AUDIO_FILE=$(grep -m 1 "FILE" "$CUE" | sed -e 's/FILE "\(.*\)" .*/\1/' | tr -d '\r')
+                    DIR=$(dirname "$CUE")
+                    CUE_NAME=$(basename "$CUE")
 
-                  cd "$DIR" || continue
+                    AUDIO_FILE=$(grep -m 1 "FILE" "$CUE" | sed -e 's/FILE "\(.*\)" .*/\1/' | tr -d '\r')
 
-                  if [ -z "$AUDIO_FILE" ]; then
-                    echo "No FILE entry in $CUE_NAME"
-                    continue
-                  fi
+                    cd "$DIR" || continue
 
-                  if [ -f "${AUDIO_FILE}.split2flacdone" ]; then
-                    echo "Skipping (Done): $AUDIO_FILE"
-                    continue
-                  fi
+                    if [ -z "$AUDIO_FILE" ]; then
+                        echo "No FILE entry in $CUE_NAME"
+                        continue
+                    fi
 
-                  if [ ! -f "$AUDIO_FILE" ]; then
-                    echo "Audio not found: $AUDIO_FILE"
-                    continue
-                  fi
+                    if [ -f "${AUDIO_FILE}.split2flacdone" ]; then
+                        echo "Skipping (Done): $AUDIO_FILE"
+                        continue
+                    fi
 
-                  echo "Processing: $AUDIO_FILE"
+                    # 2. Validar que el archivo de AUDIO sea legible y no esté vacío
+                    if [ ! -r "$AUDIO_FILE" ] || [ ! -s "$AUDIO_FILE" ]; then
+                        echo "Skipping (Audio empty or no permission): $AUDIO_FILE"
+                        continue
+                    fi
 
-                  # /usr/bin/shnsplit -m "áaéeííóoúuñnÁAÉEIÍÓOÚUÑN" -f "$CUE_NAME" -t "tracks/%n - %a [%n] %t" -o flac "$AUDIO_FILE"
-                  /usr/bin/shnsplit -f "$CUE_NAME" -t "%n - %a [%n] %t" -o flac "$AUDIO_FILE"
+                    echo "Processing: $AUDIO_FILE"
 
-                  if [ $? -eq 0 ]; then
+                    # Se usa || true para que 'set -e' no mate el script si shnsplit falla
+                    /usr/bin/shnsplit -f "$CUE_NAME" -t "%n - %a [%n] %t" -o flac "$AUDIO_FILE" || {
+                        echo "Error processing: $AUDIO_FILE"
+                        continue
+                    }
+
                     touch "${AUDIO_FILE}.split2flacdone"
                     echo "Success: $AUDIO_FILE"
-                  else
-                    echo "Error processing: $AUDIO_FILE"
-                  fi
 
-                  echo "==== Post-process check ===="
-                  ls -R "tracks" 2>/dev/null || ls -R .
+                    echo "==== Post-process check ===="
+                    ls -R "tracks" 2>/dev/null || ls -R .
                 done
 
                 echo "==== Process Complete ===="

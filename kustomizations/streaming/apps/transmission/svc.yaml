@@ -10,14 +10,14 @@ spec:
     port: 9091
     targetPort: 9091
     protocol: TCP
-  - name: tcp
-    port: 51413
-    targetPort: 51413
-    protocol: TCP
-  - name: udp
-    port: 51413
-    targetPort: 51413
-    protocol: UDP
+  # - name: tcp
+  #   port: 51413
+  #   targetPort: 51413
+  #   protocol: TCP
+  # - name: udp
+  #   port: 51413
+  #   targetPort: 51413
+  #   protocol: UDP
 ---
 apiVersion: v1
 kind: Service
@@ -33,13 +33,13 @@ spec:
     port: 80
     targetPort: 9091
     protocol: TCP
-  - name: tcp
-    port: 51413
-    targetPort: 51413
-    protocol: TCP
-  - name: udp
-    port: 51413
-    targetPort: 51413
-    protocol: UDP
+  # - name: tcp
+  #   port: 51413
+  #   targetPort: 51413
+  #   protocol: TCP
+  # - name: udp
+  #   port: 51413
+  #   targetPort: 51413
+  #   protocol: UDP
   selector:
     app: transmission
