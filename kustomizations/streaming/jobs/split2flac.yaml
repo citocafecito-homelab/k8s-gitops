@@ -6,6 +6,7 @@ metadata:
   namespace: streaming
 spec:
   schedule: "0 2 * * *"
+  concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
   jobTemplate:
@@ -24,50 +25,53 @@ spec:
                 echo "==== split2flac recursive scan ===="
 
                 find /workdir -type f -iname "*.cue" | while read -r CUE; do
-                    [ -z "$CUE" ] && continue
+                  [ -z "$CUE" ] && continue
 
-                    # 1. Validar que el archivo CUE sea legible y no esté vacío
-                    if [ ! -r "$CUE" ] || [ ! -s "$CUE" ]; then
-                        echo "Skipping (Invalid CUE: Empty or no permission): $CUE"
-                        continue
-                    fi
+                  DIR=$(dirname "$CUE")
+                  CUE_NAME=$(basename "$CUE")
+                  
+                  # Extraer audio, soportando comillas estándar y tipográficas sin escapar barras
+                  AUDIO_FILE=$(grep -m 1 "FILE" "$CUE" | sed -e 's/FILE ["“‘]\(.*\)["”’] .*/\1/' | tr -d '\r')
 
-                    DIR=$(dirname "$CUE")
-                    CUE_NAME=$(basename "$CUE")
+                  # Validar que encontramos un archivo de audio en el CUE
+                  if [ -z "$AUDIO_FILE" ]; then 
+                    echo "No FILE entry in $CUE_NAME"
+                    continue
+                  fi
 
-                    AUDIO_FILE=$(grep -m 1 "FILE" "$CUE" | sed -e 's/FILE "\(.*\)" .*/\1/' | tr -d '\r')
+                  # Subshell aislado para manejar las transiciones de directorio limpiamente
+                  (
+                    cd "$DIR" || exit 1
 
-                    cd "$DIR" || continue
-
-                    if [ -z "$AUDIO_FILE" ]; then
-                        echo "No FILE entry in $CUE_NAME"
-                        continue
-                    fi
-
+                    # Si ya existe la marca, saltar
                     if [ -f "${AUDIO_FILE}.split2flacdone" ]; then
-                        echo "Skipping (Done): $AUDIO_FILE"
-                        continue
+                      echo "Skipping (Done): $AUDIO_FILE"
+                      exit 0
                     fi
 
-                    # 2. Validar que el archivo de AUDIO sea legible y no esté vacío
-                    if [ ! -r "$AUDIO_FILE" ] || [ ! -s "$AUDIO_FILE" ]; then
-                        echo "Skipping (Audio empty or no permission): $AUDIO_FILE"
-                        continue
+                    # Validar que el archivo físico existe
+                    if [ ! -f "$AUDIO_FILE" ]; then
+                      echo "Audio not found: $AUDIO_FILE"
+                      exit 1
                     fi
 
                     echo "Processing: $AUDIO_FILE"
 
-                    # Se usa || true para que 'set -e' no mate el script si shnsplit falla
-                    /usr/bin/shnsplit -f "$CUE_NAME" -t "%n - %a [%n] %t" -o flac "$AUDIO_FILE" || {
-                        echo "Error processing: $AUDIO_FILE"
-                        continue
-                    }
+                    # Comando con sobreescritura automática para evitar bloqueos interactivos en el Pod
+                    /usr/bin/shnsplit -f "$CUE_NAME" -t "%n %t" -D -o flac -O always "$AUDIO_FILE"
 
-                    touch "${AUDIO_FILE}.split2flacdone"
-                    echo "Success: $AUDIO_FILE"
+                    if [ $? -eq 0 ]; then
+                      touch "${AUDIO_FILE}.split2flacdone"
+                      echo "Success: $AUDIO_FILE"
+                    else
+                      echo "Error processing: $AUDIO_FILE"
+                      exit 1
+                    fi
 
                     echo "==== Post-process check ===="
-                    ls -R "tracks" 2>/dev/null || ls -R .
+                    ls -R .
+                  )
+
                 done
 
                 echo "==== Process Complete ===="
@@ -81,12 +85,17 @@ spec:
               readOnly: false
             - name: music
               mountPath: /workdir
+              subPath: lidarr
           securityContext:
             runAsUser: 0
             runAsGroup: 0
             supplementalGroups: [44, 107, 992]
           nodeSelector:
-            kubernetes.io/hostname: castillo
+            kubernetes.io/hostname: catuai
+          tolerations:
+          - key: node-role.kubernetes.io/control-plane
+            operator: Exists
+            effect: NoSchedule
           volumes:
           - name: dri
             hostPath:

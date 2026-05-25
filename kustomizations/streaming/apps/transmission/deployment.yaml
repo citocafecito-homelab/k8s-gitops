@@ -4,6 +4,8 @@ metadata:
   name: transmission
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: transmission
@@ -17,6 +19,7 @@ spec:
       annotations:
         app.kubernetes.io/documentation: "https://docs.linuxserver.io/images/docker-transmission/"
         vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-init-first: "true"
         #
         ## --- Transmission
         #
@@ -38,6 +41,94 @@ spec:
           {{- end -}}
     spec:
       dnsPolicy: ClusterFirst
+      # initContainers:
+      # - name: vpn
+      #   image: qmcgaw/gluetun:latest
+      #   restartPolicy: Always
+      #   ports:
+      #   - containerPort: 8000
+      #     name: api
+      #     protocol: TCP
+      #   - containerPort: 9091
+      #     name: webui
+      #     protocol: TCP
+      #   readinessProbe:
+      #     exec:
+      #       command:
+      #       - sh
+      #       - -c
+      #       - |
+      #         [ -s /config/pia_port.txt ]
+      #   # readinessProbe:
+      #   #   exec:
+      #   #     command:
+      #   #     - sh
+      #   #     - -c
+      #   #     - |
+      #   #       [ -s /config/pia_port.txt ]
+      #     initialDelaySeconds: 30
+      #     periodSeconds: 60
+      #   securityContext:
+      #     capabilities:
+      #       add: ["NET_ADMIN"]
+      #   env:
+      #   - name: FIREWALL_INPUT_PORTS
+      #     value: "9091"
+      #   - name: FIREWALL_OUTBOUND_SUBNETS
+      #     value: "192.168.1.0/24,10.244.0.0/16,10.96.0.0/12"
+        
+      #   # --- Open VPN
+      #   - name: OPENVPN_USER_SECRETFILE
+      #     value: "/vault/secrets/vpn_user"
+      #   - name: OPENVPN_PASSWORD_SECRETFILE
+      #     value: "/vault/secrets/vpn_pass"
+      #   - name: OPENVPN_PROTOCOL
+      #     value: "udp"
+        
+      #   # --- PIA
+      #   - name: PRIVATE_INTERNET_ACCESS_OPENVPN_ENCRYPTION_PRESET
+      #     value: "normal"
+        
+      #   # --- Gluetun Configuration
+      #   - name: VPN_TYPE
+      #     value: "openvpn"
+      #   - name: PORT_FORWARD_ONLY
+      #     value: "true"
+      #   - name: VPN_PORT_FORWARDING
+      #     value: "on"
+      #   - name: VPN_PORT_FORWARDING_STATUS_FILE
+      #     value: "/config/pia_port.txt"
+      #   - name: VPN_SERVICE_PROVIDER
+      #     value: "private internet access"
+      #   volumeMounts:
+      #   - name: tun
+      #     mountPath: /dev/net/tun
+      #   - name: config
+      #     mountPath: /config
+      # - name: wait-for-vpn
+      #   image: alpine:latest
+      #   command: ["/bin/sh", "-c"]
+      #   args:
+      #     - |
+      #       echo "[INIT] Esperando a que la API de Gluetun esté saludable y el túnel VPN esté UP..."
+            
+      #       # Bucle infinito hasta que Gluetun responda HTTP 200 y entregue la IP pública
+      #       while ! wget -q -O- http://localhost:8000/v1/publicip/ip > /dev/null 2>&1; do
+      #         echo "[INIT] La VPN aún no está lista. Reintentando en 3 segundos..."
+      #         sleep 3
+      #       done
+            
+      #       # Opcional: Extraemos la IP y el puerto asignado desde la API de Gluetun para el log
+      #       PUBLIC_IP=$(wget -q -O- http://localhost:8000/v1/publicip/ip)
+      #       VPN_STATUS=$(wget -q -O- http://localhost:8000/v1/vpn/status | grep -o '"status":"[^"]*' | cut -d'"' -f4)
+            
+      #       echo "[INIT] ¡Gluetun Confirmado!"
+      #       echo "[INIT] Estado VPN: $VPN_STATUS"
+      #       echo "[INIT] IP Pública VPN: $PUBLIC_IP"
+      #       echo "[INIT] Dando paso al arranque seguro de Transmission..."
+      #   volumeMounts:
+      #   - name: config
+      #     mountPath: /config
       containers:
       - name: transmission
         image: lscr.io/linuxserver/transmission:latest
@@ -56,7 +147,7 @@ spec:
         livenessProbe:
           exec:
             command: ["/bin/bash", "/scripts/check-port-status.sh"]
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 60
         resources:
           requests:
@@ -103,6 +194,9 @@ spec:
       - name: vpn
         image: qmcgaw/gluetun:latest
         ports:
+        - containerPort: 8000
+          name: api
+          protocol: TCP
         - containerPort: 9091
           name: webui
           protocol: TCP

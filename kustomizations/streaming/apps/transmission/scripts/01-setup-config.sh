@@ -4,11 +4,11 @@ PIA_STATUS="/config/pia_port.txt"
 
 echo "[CUSTOM-INIT] Configurando Transmission..."
 
-# Esperar a que Gluetun cree el archivo del puerto (máximo 10 segundos)
-for i in {1..10}; do
+# Esperar a que Gluetun cree el archivo del puerto (máximo 1 min)
+for i in {1..6}; do
     [ -f "$PIA_STATUS" ] && break
     echo "[CUSTOM-INIT] Esperando puerto de PIA..."
-    sleep 1
+    sleep 10
 done
 
 if [ -f "$JSON_FILE" ]; then
@@ -21,6 +21,13 @@ if [ -f "$JSON_FILE" ]; then
     sed -i 's/"rename-partial-files":.*/"rename-partial-files": false,/g' "$JSON_FILE"
     sed -i 's/"ratio-limit":.*/"ratio-limit": 3.0,/g' "$JSON_FILE"
     sed -i 's/"ratio-limit-enabled":.*/"ratio-limit-enabled": true,/g' "$JSON_FILE"
+
+    # --- Configuración para trackers privados
+    sed -i 's/"encryption": .*/"encryption": 2,/g' "$JSON_FILE"
+    sed -i 's/"cache-size-mb": .*/"cache-size-mb": 256,/g' "$JSON_FILE"
+    sed -i 's/"peer-limit-global": .*/"peer-limit-global": 500,/g' "$JSON_FILE"
+    sed -i 's/"upload-slots-per-torrent": .*/"upload-slots-per-torrent": 8,/g' "$JSON_FILE"
+    
 
     # --- Inyección de Puerto Dinámico ---
     if [ -f "$PIA_STATUS" ]; then
