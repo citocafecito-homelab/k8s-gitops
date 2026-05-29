@@ -1,15 +1,8 @@
 #!/bin/bash
+# See more https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md
 JSON_FILE="/config/settings.json"
-PIA_STATUS="/config/pia_port.txt"
 
 echo "[CUSTOM-INIT] Configurando Transmission..."
-
-# Esperar a que Gluetun cree el archivo del puerto (máximo 1 min)
-for i in {1..6}; do
-    [ -f "$PIA_STATUS" ] && break
-    echo "[CUSTOM-INIT] Esperando puerto de PIA..."
-    sleep 10
-done
 
 if [ -f "$JSON_FILE" ]; then
     # --- Configuración de Automatización ---
@@ -22,26 +15,20 @@ if [ -f "$JSON_FILE" ]; then
     sed -i 's/"ratio-limit":.*/"ratio-limit": 3.0,/g' "$JSON_FILE"
     sed -i 's/"ratio-limit-enabled":.*/"ratio-limit-enabled": true,/g' "$JSON_FILE"
 
-    # --- Configuración para trackers privados
-    sed -i 's/"encryption": .*/"encryption": 2,/g' "$JSON_FILE"
-    sed -i 's/"cache-size-mb": .*/"cache-size-mb": 256,/g' "$JSON_FILE"
-    sed -i 's/"peer-limit-global": .*/"peer-limit-global": 500,/g' "$JSON_FILE"
-    sed -i 's/"upload-slots-per-torrent": .*/"upload-slots-per-torrent": 8,/g' "$JSON_FILE"
-    
+    # --- Configuración para trackers privados y estabilidad de red ---
+    sed -i 's/"encryption":.*/"encryption": 2,/g' "$JSON_FILE"
+    sed -i 's/"cache-size-mb":.*/"cache-size-mb": 256,/g' "$JSON_FILE"
+    sed -i 's/"peer-limit-global":.*/"peer-limit-global": 500,/g' "$JSON_FILE"
+    sed -i 's/"peer-limit-per-torrent":.*/"peer-limit-per-torrent": 50,/g' "$JSON_FILE"
+    sed -i 's/"upload-slots-per-torrent":.*/"upload-slots-per-torrent": 8,/g' "$JSON_FILE"
+    sed -i 's/"scrape-paused-torrents-enabled":.*/"scrape-paused-torrents-enabled": false,/g' "$JSON_FILE"
 
-    # --- Inyección de Puerto Dinámico ---
-    if [ -f "$PIA_STATUS" ]; then
-        PIA_PORT=$(cat "$PIA_STATUS")
-        if [[ "$PIA_PORT" =~ ^[0-9]+$ ]]; then
-            echo "[INIT] Aplicando puerto de PIA: $PIA_PORT"
-            # Si "peer-port" ya existe, lo actualiza. Si no, lo agrega después de la primera llave.
-            if grep -q '"peer-port"' "$JSON_FILE"; then
-                sed -i "s/\"peer-port\": [0-9]*/\"peer-port\": $PIA_PORT/" "$JSON_FILE"
-            else
-                sed -i "s/{/{\n    \"peer-port\": $PIA_PORT,/" "$JSON_FILE"
-            fi
-        fi
-    fi
+    # --- Parches Anti-Ban (Soporte para v3, v4 y v5) ---
+    sed -i 's/"scrape-paused-torrents-enabled":.*/"scrape-paused-torrents-enabled": false,/g' "$JSON_FILE"
+    sed -i 's/"scrape_paused_torrents_enabled":.*/"scrape_paused_torrents_enabled": false,/g' "$JSON_FILE"
+    sed -i 's/"scrape_paused_torrents":.*/"scrape_paused_torrents": false,/g' "$JSON_FILE"
+    sed -i 's/"announcement_timeout":.*/"announcement_timeout": 30,/g' "$JSON_FILE"
+    
     echo "[CUSTOM-INIT] Configuración aplicada exitosamente."
 else
     echo "[CUSTOM-INIT] settings.json no encontrado. Se creará con valores por defecto al arrancar."

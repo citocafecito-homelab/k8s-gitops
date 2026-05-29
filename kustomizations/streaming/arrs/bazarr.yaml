@@ -30,13 +30,22 @@ spec:
         envFrom:
         - configMapRef:
             name: streaming-stack-config
+        env:
+        - name: LIBVA_DRIVER_NAME
+          value: "iHD"
         resources:
           requests:
-            memory: 256Mi
-            cpu: 100m
+            memory: 512Mi
+            cpu: 200m
           limits:
-            cpu: 1
-            memory: 2Gi
+            cpu: 2
+            memory: 4Gi
+        securityContext:
+          privileged: false
+          allowPrivilegeEscalation: true
+          capabilities:
+            drop: ["ALL"]
+            add: ["SYS_RAWIO", "SETPCAP", "SYS_ADMIN", "CHOWN", "SETUID", "SETGID"]
         livenessProbe:
           httpGet:
             path: /
@@ -63,8 +72,6 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: castillo
       securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
         fsGroup: 1000
         supplementalGroups: [44, 107, 992]
       volumes:

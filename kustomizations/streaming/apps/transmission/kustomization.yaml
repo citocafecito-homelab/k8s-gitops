@@ -10,12 +10,18 @@ configMapGenerator:
 - name: transmission-scripts
   files:
   - scripts/01-setup-config.sh
-  - scripts/check-port-status.sh
   - scripts/added.sh
   - scripts/finished.sh
+
+configMapGenerator:
+- name: transmission-jobs
+  files:
   - scripts/tagger-daemon.sh
+  - scripts/check-port-daemon.sh
 
 resources:
 - deployment.yaml
 - svc.yaml
 - ingress.yaml
+- cronjobs/check-port.yaml
+- cronjobs/tagger.yaml
