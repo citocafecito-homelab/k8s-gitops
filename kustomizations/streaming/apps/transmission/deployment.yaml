@@ -33,22 +33,22 @@ spec:
         # #
         # ## --- PIA VPN
         # #
-        vault.hashicorp.com/agent-inject-secret-vpn: "secret/data/pia"
-        vault.hashicorp.com/agent-inject-template-vpn: |
-          {{- with secret "secret/data/pia" -}}
-          {{ .Data.data.username | writeToFile "/vault/secrets/vpn_user" "vault" "vault" "0640" }}
-          {{ .Data.data.password | writeToFile "/vault/secrets/vpn_pass" "vault" "vault" "0640" }}
-          {{- end -}}
+        # vault.hashicorp.com/agent-inject-secret-vpn: "secret/data/pia"
+        # vault.hashicorp.com/agent-inject-template-vpn: |
+        #   {{- with secret "secret/data/pia" -}}
+        #   {{ .Data.data.username | writeToFile "/vault/secrets/vpn_user" "vault" "vault" "0640" }}
+        #   {{ .Data.data.password | writeToFile "/vault/secrets/vpn_pass" "vault" "vault" "0640" }}
+        #   {{- end -}}
     spec:
       dnsPolicy: ClusterFirst
       containers:
       - name: transmission
         image: lscr.io/linuxserver/transmission:latest
+        ports:
+        - containerPort: 9091
+          name: webui
+          protocol: TCP
         env:
-          - name: PUID
-            value: "1000"
-          - name: PGID
-            value: "1000"
           - name: "FILE__USER"
             value: "/vault/secrets/user"
           - name: "FILE__PASS"
@@ -64,63 +64,74 @@ spec:
             cpu: 250m
             memory: 1Gi
         volumeMounts:
-        # - name: scripts
-        #   mountPath: /custom-cont-init.d/01-setup-config.sh
-        #   subPath: 01-setup-config.sh
+        - name: scripts
+          mountPath: /custom-cont-init.d/01-setup-config.sh
+          subPath: 01-setup-config.sh
         - name: scripts
           mountPath: /scripts
         - name: config
-          mountPath: /config
-        - name: watch
+          mountPath: /config/torrents
+          subPath: torrents
+        - name: config
+          mountPath: /config/resume
+          subPath: resume
+        - name: config
+          mountPath: /config/watch
+          subPath: watch
+        - name: config
+          mountPath: /config/pending_tags.txt
+          subPath: pending_tags.txt
+        - name: config
           mountPath: /watch
+          subPath: watch
         - name: downloads
           mountPath: /downloads
-      - name: vpn
-        image: qmcgaw/gluetun:latest
-        ports:
-        - containerPort: 8000
-          name: api
-          protocol: TCP
-        - containerPort: 9091
-          name: webui
-          protocol: TCP
-        securityContext:
-          capabilities:
-            add: ["NET_ADMIN"]
-        env:
-        - name: FIREWALL_INPUT_PORTS
-          value: "9091"
-        - name: FIREWALL_OUTBOUND_SUBNETS
-          value: "192.168.1.0/24,10.244.0.0/16,10.96.0.0/12"
+      # - name: vpn
+      #   image: qmcgaw/gluetun:latest
+      #   ports:
+      #   - containerPort: 8000
+      #     name: api
+      #     protocol: TCP
+      #   - containerPort: 9091
+      #     name: webui
+      #     protocol: TCP
+      #   securityContext:
+      #     capabilities:
+      #       add: ["NET_ADMIN"]
+      #   env:
+      #   - name: FIREWALL_INPUT_PORTS
+      #     value: "9091"
+      #   - name: FIREWALL_OUTBOUND_SUBNETS
+      #     value: "192.168.1.0/24,10.244.0.0/16,10.96.0.0/12"
         
-        # --- Open VPN
-        - name: OPENVPN_USER_SECRETFILE
-          value: "/vault/secrets/vpn_user"
-        - name: OPENVPN_PASSWORD_SECRETFILE
-          value: "/vault/secrets/vpn_pass"
-        - name: OPENVPN_PROTOCOL
-          value: "udp"
+      #   # --- Open VPN
+      #   - name: OPENVPN_USER_SECRETFILE
+      #     value: "/vault/secrets/vpn_user"
+      #   - name: OPENVPN_PASSWORD_SECRETFILE
+      #     value: "/vault/secrets/vpn_pass"
+      #   - name: OPENVPN_PROTOCOL
+      #     value: "udp"
         
-        # --- PIA
-        - name: PRIVATE_INTERNET_ACCESS_OPENVPN_ENCRYPTION_PRESET
-          value: "normal"
+      #   # --- PIA
+      #   - name: PRIVATE_INTERNET_ACCESS_OPENVPN_ENCRYPTION_PRESET
+      #     value: "normal"
         
-        # --- Gluetun Configuration
-        - name: VPN_TYPE
-          value: "openvpn"
-        - name: PORT_FORWARD_ONLY
-          value: "true"
-        - name: VPN_PORT_FORWARDING
-          value: "on"
-        - name: VPN_PORT_FORWARDING_STATUS_FILE
-          value: "/config/pia_port.txt"
-        - name: VPN_SERVICE_PROVIDER
-          value: "private internet access"
-        volumeMounts:
-        - name: tun
-          mountPath: /dev/net/tun
-        - name: config
-          mountPath: /config
+      #   # --- Gluetun Configuration
+      #   - name: VPN_TYPE
+      #     value: "openvpn"
+      #   - name: PORT_FORWARD_ONLY
+      #     value: "true"
+      #   - name: VPN_PORT_FORWARDING
+      #     value: "on"
+      #   - name: VPN_PORT_FORWARDING_STATUS_FILE
+      #     value: "/config/pia_port.txt"
+      #   - name: VPN_SERVICE_PROVIDER
+      #     value: "private internet access"
+      #   volumeMounts:
+      #   - name: tun
+      #     mountPath: /dev/net/tun
+      #   - name: config
+      #     mountPath: /config
       nodeSelector:
         kubernetes.io/hostname: catuai
       tolerations:
@@ -128,9 +139,9 @@ spec:
         operator: Exists
         effect: NoSchedule
       volumes:
-      - name: tun
-        hostPath:
-          path: /dev/net/tun
+      # - name: tun
+      #   hostPath:
+      #     path: /dev/net/tun
       - name: scripts
         configMap:
           name: transmission-scripts

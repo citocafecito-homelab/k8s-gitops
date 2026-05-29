@@ -13,7 +13,6 @@ configMapGenerator:
   - scripts/added.sh
   - scripts/finished.sh
 
-configMapGenerator:
 - name: transmission-jobs
   files:
   - scripts/tagger-daemon.sh

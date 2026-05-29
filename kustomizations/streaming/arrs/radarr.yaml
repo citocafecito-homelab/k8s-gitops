@@ -49,8 +49,6 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
-        - name: scripts
-          mountPath: /scripts
         - name: downloads
           mountPath: /downloads
         - name: media
@@ -64,10 +62,6 @@ spec:
         hostPath:
           path: /mnt/radarr
           type: DirectoryOrCreate
-      - name: scripts
-        configMap:
-          name: streaming-stack-scripts
-          defaultMode: 0755
       - name: downloads
         persistentVolumeClaim:
           claimName: downloads-pvc
