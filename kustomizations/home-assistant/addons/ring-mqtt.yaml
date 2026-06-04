@@ -52,8 +52,6 @@ kind: Service
 metadata:
   name: ring-mqtt
 spec:
-  selector:
-    app: ring-mqtt
   type: ClusterIP
   ports:
   - protocol: TCP
@@ -64,10 +62,14 @@ spec:
     port: 55123
     targetPort: 55123
     name: auth-ui
+  # Nedded for Home Assistant Stateless connection
+  # E.g.: rtsp://username:password@ring-mqtt.home-assistant.svc.cluster.local:8554/camid_live
   - protocol: TCP
     port: 8554
     targetPort: 8554
     name: rtsp
+  selector:
+    app: ring-mqtt
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

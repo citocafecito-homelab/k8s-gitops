@@ -10,10 +10,10 @@ resources:
 - pvc.yaml
 
 ## Media Downloaders
-# - downloaders/nzbget.yaml
-# - downloaders/flood.yaml
+# - downloaders/nzbget.yaml (no nzb in use)
+# - downloaders/flood.yaml (deprecated)
 # - downloaders/deluge.yaml (deprecated)
-# - downloaders/qbittorrent.yaml (deprecated)
+- downloaders/qbittorrent.yaml
 
 ## Arr* arrs
 - arrs/prowlarr.yaml
@@ -34,8 +34,8 @@ resources:
 - apps/dispatcharr
 - apps/jellystat
 - apps/jellyfin
-- apps/plex
-- apps/stremio
+# - apps/plex
+# - apps/stremio
 
 ## Jobs
 - jobs/split2flac.yaml
