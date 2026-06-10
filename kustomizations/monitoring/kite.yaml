@@ -36,7 +36,7 @@ spec:
       serviceAccountName: kite
       containers:
         - name: kite
-          image: ghcr.io/kite-org/kite:v0.12.2
+          image: ghcr.io/kite-org/kite:v0.12.3
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -81,6 +81,22 @@ spec:
           hostPath:
             path: /mnt/kite
             type: DirectoryOrCreate
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kite
+  namespace: monitoring
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: http
+  selector:
+    app.kubernetes.io/instance: kite
+    app.kubernetes.io/name: kite
+  type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
