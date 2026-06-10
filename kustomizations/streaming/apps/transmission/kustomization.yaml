@@ -12,6 +12,7 @@ configMapGenerator:
   - scripts/01-setup-config.sh
   - scripts/added.sh
   - scripts/finished.sh
+  - scripts/completed.sh
 
 - name: transmission-jobs
   files:

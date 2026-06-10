@@ -53,6 +53,44 @@ spec:
             value: "/vault/secrets/user"
           - name: "FILE__PASS"
             value: "/vault/secrets/password"
+          # Base Config
+          - name: TRANSMISSION_DOWNLOAD_DIR
+            value: "/downloads"
+          # Automation
+          - name: TRANSMISSION_SCRIPT_TORRENT_ADDED_ENABLED
+            value: "true"
+          - name: TRANSMISSION_SCRIPT_TORRENT_ADDED_FILENAME
+            value: "/scripts/added.sh"
+          - name: TRANSMISSION_SCRIPT_TORRENT_DONE_ENABLED
+            value: "true"
+          - name: TRANSMISSION_SCRIPT_TORRENT_DONE_FILENAME
+            value: "/scripts/finished.sh"
+          - name: TRANSMISSION_SCRIPT_TORRENT_DONE_SEEDING_ENABLED
+            value: "true"
+          - name: TRANSMISSION_SCRIPT_TORRENT_DONE_SEEDING_FILENAME
+            value: "/scripts/completed.sh"
+          # Ratios & Queue
+          - name: TRANSMISSION_INCOMPLETE_DIR_ENABLED
+            value: "false"
+          - name: TRANSMISSION_RENAME_PARTIAL_FILES
+            value: "false"
+          - name: TRANSMISSION_RATIO_LIMIT
+            value: "3.0"
+          - name: TRANSMISSION_RATIO_LIMIT_ENABLED
+            value: "true"
+          - name: TRANSMISSION_DOWNLOAD_QUEUE_ENABLED
+            value: "false"
+          - name: TRANSMISSION_SEED_QUEUE_ENABLED
+            value: "false"
+          - name: TRANSMISSION_DOWNLOAD_QUEUE_SIZE
+            value: "999"
+          - name: TRANSMISSION_SEED_QUEUE_SIZE
+            value: "999"
+          # Networking
+          - name: TRANSMISSION_PEER_PORT_RANDOM_ON_START
+            value: "true"
+          - name: TRANSMISSION_PEER_LIMIT_PER_TORRENT
+            value: "20"
         envFrom:
         - configMapRef:
             name: streaming-stack-config
@@ -81,6 +119,9 @@ spec:
         - name: config
           mountPath: /config/pending_tags.txt
           subPath: pending_tags.txt
+        - name: config
+          mountPath: /config/queue.json
+          subPath: queue.json
         - name: config
           mountPath: /watch
           subPath: watch
