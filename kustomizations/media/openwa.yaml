@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openwa-api
+  namespace: media
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: openwa-api
+  template:
+    metadata:
+      labels:
+        app: openwa-api
+    spec:
+      serviceAccountName: suwayomi
+      containers:
+        - name: openwa
+          image: openwa/wa-automate:latest
+          command: ["node"]
+          args: 
+            - "./node_modules/@open-wa/wa-automate/bin/server.js"
+            - "--port"
+            - "8080"
+            - "--api-key"
+            - "test"
+            - "--use-chrome"
+            - "--in-docker"
+            - "--no-popup"
+            - "--disable-chrome-check"
+            - "--session-data-path"
+            - "/tmp/session"
+            - "--only-api"
+            # Dejamos aquí solo los flags indispensables de aislamiento
+            - "--chromium-args=--no-sandbox --disable-setuid-sandbox --disable-dev-shm-usage"
+          env:
+            # --- FORZADO DE MOTOR HEADLESS VIA PUPPETEER ---
+            - name: PUPPETEER_PRODUCT
+              value: "chrome"
+            # Forzamos la desactivación de la interfaz gráfica vieja a nivel interno de la librería
+            - name: WA_HEADLESS
+              value: "true"
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1.5Gi
+            requests:
+              cpu: 500m
+              memory: 768Mi
+          volumeMounts:
+            - name: dshm
+              mountPath: /dev/shm
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
+---
+apiVersion: v1
+kind: V1
+kind: Service
+metadata:
+  name: openwa
+  namespace: media
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30080
+      protocol: TCP
+  selector:
+    app: openwa-api
+---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: openwa
+#   namespace: media
+#   annotations:
+#     traefik.ingress.kubernetes.io/router.entrypoints: "web"
+# spec:
+#   ingressClassName: "traefik"
+#   rules:
+#     - host: openwa.lan
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: openwa
+#                 port:
+#                   number: 8080

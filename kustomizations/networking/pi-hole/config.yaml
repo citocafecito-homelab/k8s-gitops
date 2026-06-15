@@ -5,8 +5,10 @@ metadata:
 data:
   # Default Configuration
   TZ: "America/Bogota"
-  # WEBPASSWORD_FILE: "/vault/secrets/admin_password"
+  WEBPASSWORD_FILE: "/vault/secrets/admin_password"
   DNSMASQ_LISTENING: "all"
+  FTLCONF_webserver_api_enabled: "true"
+  FTLCONF_webserver_api_password: ""
   
   # FTL
   FTLCONF_misc_etc_dnsmasq_d: "true"

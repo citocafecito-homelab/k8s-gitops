@@ -21,10 +21,10 @@ spec:
         env:
         - name: LIBVA_DRIVER_NAME
           value: "iHD"
-        - name: JELLYFIN_CONFIG_DIR
-          value: "/config/config"
         - name: JELLYFIN_DATA_DIR
           value: "/config"
+        - name: JELLYFIN_CONFIG_DIR
+          value: "/config/config"
         - name: JELLYFIN_METADATA_DIR
           value: "/config/metadata"
         - name: JELLYFIN_CACHE_DIR

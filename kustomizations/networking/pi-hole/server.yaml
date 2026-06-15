@@ -1,15 +1,15 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: pihole
+  namespace: networking
 spec:
-  replicas: 1
+  serviceName: "pihole"
+  replicas: 2
   selector:
     matchLabels:
       app: pihole
       app.kubernetes.io/name: pihole
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
@@ -21,12 +21,50 @@ spec:
         vault.hashicorp.com/agent-inject-secret-admin_password: "secret/data/pihole"
         vault.hashicorp.com/agent-inject-template-admin_password: |
           {{- with secret "secret/data/pihole" -}}
-          {{ .Data.data.ADMIN_PASSWORD }}
+          {{ .Data.data.WEBPASSWORD }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-api_key: "secret/data/pihole"
+        vault.hashicorp.com/agent-inject-template-api_key: |
+          {{- with secret "secret/data/pihole" -}}
+          {{ .Data.data.API_KEY }}
           {{- end }}
     spec:
-      hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
       terminationGracePeriodSeconds: 10
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - catuai
+                - castillo
+      # initContainers:
+      # - name: pihole-api-provisioner
+      #   image: alpine:latest
+      #   command: ["/bin/sh", "-c"]
+      #   args:
+      #   - |
+      #     # Asegurar que el directorio de datos exista
+      #     mkdir -p /etc/pihole
+          
+      #     # Instalar sqlite3 de forma temporal en el initContainer
+      #     apk add --no-cache sqlite-dev sqlite
+          
+      #     if [ -f /vault/secrets/api_key ]; then
+      #       TOKEN=$(cat /vault/secrets/api_key)
+      #       echo "Inyectando API_KEY compartida en gravity.db..."
+            
+      #       # Pi-hole v6 almacena los App Tokens autorizados en la tabla 'auth'
+      #       sqlite3 /etc/pihole/gravity.db "CREATE TABLE IF NOT EXISTS auth (id INTEGER PRIMARY KEY, token TEXT UNIQUE, name TEXT);"
+      #       sqlite3 /etc/pihole/gravity.db "INSERT OR REPLACE INTO auth (id, token, name) VALUES (1, '$TOKEN', 'nebula-sync-token');"
+      #     fi
+      #   volumeMounts:
+      #   - name: pihole-etc
+      #     mountPath: /etc/pihole
       containers:
       - name: pihole
         image: pihole/pihole:latest
@@ -73,16 +111,11 @@ spec:
         - name: adlists
           mountPath: /etc/pihole/adlists.list
           subPath: adlists.list
-      nodeSelector:
-        kubernetes.io/hostname: catuai
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
         effect: "NoSchedule"
       volumes:
-      - name: pihole-etc
-        persistentVolumeClaim:
-          claimName: pihole-pvc
       - name: shm-volume
         emptyDir:
           medium: Memory
@@ -93,4 +126,7 @@ spec:
       - name: adlists
         configMap:
           name: pihole-adlists
-      
+      - name: pihole-etc
+        hostPath:
+          path: /mnt/pihole
+          type: DirectoryOrCreate

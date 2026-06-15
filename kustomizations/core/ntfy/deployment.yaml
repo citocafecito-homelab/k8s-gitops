@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ntfy-deployment
+  labels:
+    app: ntfy-deployment
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ntfy
+  template:
+    metadata:
+      labels:
+        app: ntfy
+    spec:
+      containers:
+      - name: ntfy 
+        image: binwiederhier/ntfy:latest
+        args: ["serve"]
+        env:
+        - name: TZ
+          value: "America/Bogota"
+        - name: NTFY_DEBUG
+          value: "false"
+        - name: NTFY_LOG_LEVEL
+          value: INFO
+        - name: NTFY_BASE_URL
+          value: ntfy.lan 
+        ports: 
+          - containerPort: 80
+            name: http-ntfy
+        resources:
+          limits:
+            memory: 300Mi
+            cpu:  200m
+          requests:
+            cpu: 150m
+            memory: 150Mi
+        volumeMounts:
+        - mountPath: /etc/ntfy/server.yml
+          subPath: server.yml
+          name: config-volume
+        - mountPath: /var/cache/ntfy
+          name: cache-volume
+      volumes:
+      - name: config-volume
+        configMap:
+          name: server-config
+      - name: cache-volume
+        emptyDir: {}
+        # persistentVolumeClaim:
+        #   claimName: ntfy-pvc

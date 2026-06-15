@@ -15,6 +15,7 @@ spec:
         app: suwayomi-postgresql
         app.kubernetes.io/name: suwayomi-postgresql
     spec:
+      serviceAccountName: suwayomi
       containers:
       - name: postgres
         image: postgres:15

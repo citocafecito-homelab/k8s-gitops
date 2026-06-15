@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pihole-nebula-sync
+  namespace: networking
+spec:
+  schedule: "*/30 * * * *" # El cron lo maneja Kubernetes directamente
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          annotations:
+            vault.hashicorp.com/agent-inject: "true"
+            vault.hashicorp.com/role: "vault"
+            vault.hashicorp.com/agent-inject-secret-nebula.env: "secret/data/pihole"
+            vault.hashicorp.com/agent-inject-template-nebula.env: |
+              {{- with secret "secret/data/pihole" -}}
+              PRIMARY="http://192.168.1.10:80|{{ .Data.data.ADMIN_PASSWORD }}"
+              REPLICAS="http://192.168.1.12:80|{{ .Data.data.ADMIN_PASSWORD }}"
+              FULL_SYNC="false"
+              SYNC_GROUPS="true"
+              SYNC_CLIENTS="true"
+              SYNC_DOMAINS="true"
+              SYNC_ADLISTS="true"
+              SYNC_DNS_RECORDS="false"
+              SYNC_CNAME_RECORDS="false"
+              SYNC_SETTINGS="false"
+              SYNC_DHCP="false"
+              TZ="America/Bogota"
+              {{- end }}
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: nebula-sync
+            image: ghcr.io/lovelaze/nebula-sync:latest
+            args:
+            - "run"
+            - "--env-file=/vault/secrets/nebula.env"

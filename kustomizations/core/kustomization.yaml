@@ -5,6 +5,7 @@ resources:
 - cloudflared
 - vault
 - lightpanda
+# - ntf (Working progress)
 # - whisper-asr
 # Deprecated
 # - chromium
