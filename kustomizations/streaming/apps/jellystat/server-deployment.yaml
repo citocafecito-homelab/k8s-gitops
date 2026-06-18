@@ -25,15 +25,7 @@ spec:
           {{ .Data.data.ADMIN_PASS | writeToFile "/vault/secrets/password" "vault" "vault" "0600" }}
           {{- end -}}
     spec:
-      securityContext:
-        fsGroup: 1000
-        sysctls:
-        - name: net.ipv4.tcp_keepalive_time
-          value: "60"
-        - name: net.ipv4.tcp_keepalive_intvl
-          value: "10"
-        - name: net.ipv4.tcp_keepalive_probes
-          value: "6"
+      automountServiceAccountToken: true
       containers:
       - name: jellystat
         image: ghcr.io/cyfershepard/jellystat:latest
@@ -71,3 +63,12 @@ spec:
             port: 3000
           initialDelaySeconds: 5
           periodSeconds: 10
+      securityContext:
+        fsGroup: 1000
+        sysctls:
+        - name: net.ipv4.tcp_keepalive_time
+          value: "60"
+        - name: net.ipv4.tcp_keepalive_intvl
+          value: "10"
+        - name: net.ipv4.tcp_keepalive_probes
+          value: "6"
