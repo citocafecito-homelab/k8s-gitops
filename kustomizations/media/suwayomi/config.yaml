@@ -15,3 +15,5 @@ data:
   EXTENSION_REPOS: '["https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json"]'
   FLARESOLVERR_ENABLED: "true"
   FLARESOLVERR_URL: "http://cloudflare-solver.media.svc.cluster.local:8000"
+  KCEF_ENABLED: "false"
+  

@@ -24,11 +24,10 @@ spec:
           {{ .Data.data.PASSWORD | writeToFile "/vault/secrets/AUTH_PASSWORD" "vault" "vault" "0644" }}
           {{- end -}}
     spec:
-      securityContext:
-        fsGroup: 1000
+      automountServiceAccountToken: true
       containers:
       - name: suwayomi
-        image: ghcr.io/suwayomi/suwayomi-server:v2.1.2049
+        image: ghcr.io/suwayomi/suwayomi-server:Latest
         command: [ "/bin/sh", "-c" ]
         args:
         - |
@@ -47,8 +46,8 @@ spec:
             cpu: "100m"
             memory: "512Mi"
           limits:
-            cpu: "300m"
-            memory: "1024Mi"
+            cpu: "0.5"
+            memory: "1.5Gi"
         volumeMounts:
         - name: suwayomi-storage
           mountPath: /home/suwayomi/.local/share/Tachidesk
@@ -56,6 +55,8 @@ spec:
           mountPath: /home/suwayomi/.local/share/Tachidesk/cache
       nodeSelector:
         kubernetes.io/hostname: castillo
+      securityContext:
+        fsGroup: 1000
       volumes:
       - name: suwayomi-storage
         persistentVolumeClaim:
@@ -63,3 +64,4 @@ spec:
       - name: suwayomi-cache
         emptyDir:
           medium: Memory 
+          sizeLimit: "256Mi"
