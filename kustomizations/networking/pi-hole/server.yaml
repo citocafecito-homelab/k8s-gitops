@@ -42,29 +42,6 @@ spec:
                 values:
                 - catuai
                 - castillo
-      # initContainers:
-      # - name: pihole-api-provisioner
-      #   image: alpine:latest
-      #   command: ["/bin/sh", "-c"]
-      #   args:
-      #   - |
-      #     # Asegurar que el directorio de datos exista
-      #     mkdir -p /etc/pihole
-          
-      #     # Instalar sqlite3 de forma temporal en el initContainer
-      #     apk add --no-cache sqlite-dev sqlite
-          
-      #     if [ -f /vault/secrets/api_key ]; then
-      #       TOKEN=$(cat /vault/secrets/api_key)
-      #       echo "Inyectando API_KEY compartida en gravity.db..."
-            
-      #       # Pi-hole v6 almacena los App Tokens autorizados en la tabla 'auth'
-      #       sqlite3 /etc/pihole/gravity.db "CREATE TABLE IF NOT EXISTS auth (id INTEGER PRIMARY KEY, token TEXT UNIQUE, name TEXT);"
-      #       sqlite3 /etc/pihole/gravity.db "INSERT OR REPLACE INTO auth (id, token, name) VALUES (1, '$TOKEN', 'nebula-sync-token');"
-      #     fi
-      #   volumeMounts:
-      #   - name: pihole-etc
-      #     mountPath: /etc/pihole
       containers:
       - name: pihole
         image: pihole/pihole:latest
@@ -86,11 +63,11 @@ spec:
           protocol: UDP
         resources:
           requests:
-            cpu: 100m
-            memory: 1024Mi
+            cpu: 50m
+            memory: 128Mi
           limits:
-            cpu: 300m
-            memory: 2048Mi
+            cpu: 100m
+            memory: 512Mi
         securityContext:
           capabilities:
             add:

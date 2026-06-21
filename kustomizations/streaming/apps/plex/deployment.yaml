@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: plex
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: plex
@@ -22,32 +22,51 @@ spec:
           - name: VERSION
             value: "docker"
           - name: PLEX_CLAIM
-            value: claim-DQMsWFNz7TrFNEzV921y
+            value: claim-8iEtGSFKQecs_W5AHFQ5
           - name: LIBVA_DRIVER_NAME
             value: "iHD"
           envFrom:
           - configMapRef:
               name: streaming-stack-config
           ports:
-            - containerPort: 32400
+          - containerPort: 32400
+          securityContext:
+            privileged: true
+            allowPrivilegeEscalation: true
+            capabilities:
+              add: ["SYS_RAWIO", "SETPCAP", "SYS_ADMIN"]
           volumeMounts:
-            - name: config
-              mountPath: /config
-            - name: dri
-              mountPath: /dev/dri
-            - name: media
-              mountPath: /media
+          - name: dri
+            mountPath: /dev/dri
+            readOnly: false
+          - name: transcodes
+            mountPath: /cache/transcodes
+          - name: config
+            mountPath: /config
+          - name: media
+            mountPath: /media
       nodeSelector:
         kubernetes.io/hostname: castillo
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        # Group id (992) can be found running 
+        # getent group render | cut -d: -f3
+        supplementalGroups: [44, 107, 992]
       volumes:
-        - name: dri
-          hostPath:
-            path: /dev/dri
-        - name: config
-          hostPath:
-            path: /mnt/plex
-            type: DirectoryOrCreate
-        - name: media
-          hostPath:
-            path: /media
-            type: DirectoryOrCreate
+      - name: dri
+        hostPath:
+          path: /dev/dri
+      - name: transcodes
+        emptyDir:
+          medium: Memory
+          sizeLimit: 4Gi
+      - name: config
+        hostPath:
+          path: /mnt/plex
+          type: DirectoryOrCreate
+      - name: media
+        hostPath:
+          path: /media
+          type: DirectoryOrCreate
