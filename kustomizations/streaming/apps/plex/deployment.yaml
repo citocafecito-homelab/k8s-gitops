@@ -15,6 +15,7 @@ spec:
         app.kubernetes.io/name: plex
         app.kubernetes.io/part-of: streaming-stack
     spec:
+      hostNetwork: true
       containers:
         - name: plex
           image: lscr.io/linuxserver/plex:latest
@@ -32,7 +33,7 @@ spec:
           - containerPort: 32400
           securityContext:
             privileged: true
-            allowPrivilegeEscalation: true
+            allowPrivilegeEscalation: false
             capabilities:
               add: ["SYS_RAWIO", "SETPCAP", "SYS_ADMIN"]
           volumeMounts:

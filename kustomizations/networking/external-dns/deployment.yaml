@@ -17,18 +17,6 @@ spec:
         app.kubernetes.io/documentation: "https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/pihole.md"
     spec:
       serviceAccountName: external-dns
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - external-dns-cloudflare
-              topologyKey: "kubernetes.io/hostname"
       containers:
       - name: external-dns
         image: registry.k8s.io/external-dns/external-dns:v0.20.0
@@ -41,7 +29,7 @@ spec:
           - --provider=pihole
         env:
         - name:  EXTERNAL_DNS_PIHOLE_SERVER
-          value: "http://pihole.networking.svc.cluster.local"
+          value: "http://192.168.1.10"
         - name: EXTERNAL_DNS_PIHOLE_API_VERSION
           value: "6"
         - name: EXTERNAL_DNS_PIHOLE_PASSWORD
@@ -51,9 +39,7 @@ spec:
               key: WEBPASSWORD
       securityContext:
         fsGroup: 65534
-      # nodeSelector:
-      #   kubernetes.io/hostname: catuai
-      # tolerations:
-      # - key: "node-role.kubernetes.io/control-plane"
-      #   operator: "Exists"
-      #   effect: "NoSchedule"
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"

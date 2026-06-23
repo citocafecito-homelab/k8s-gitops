@@ -52,7 +52,7 @@ spec:
             memory: "8Gi"
         securityContext:
           privileged: true
-          allowPrivilegeEscalation: true
+          allowPrivilegeEscalation: false
           capabilities:
             add: ["SYS_RAWIO", "SETPCAP", "SYS_ADMIN"]
         startupProbe:

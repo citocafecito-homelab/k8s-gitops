@@ -18,17 +18,19 @@ spec:
             vault.hashicorp.com/agent-inject-secret-nebula.env: "secret/data/pihole"
             vault.hashicorp.com/agent-inject-template-nebula.env: |
               {{- with secret "secret/data/pihole" -}}
-              PRIMARY="http://192.168.1.10:80|{{ .Data.data.ADMIN_PASSWORD }}"
-              REPLICAS="http://192.168.1.12:80|{{ .Data.data.ADMIN_PASSWORD }}"
-              FULL_SYNC="false"
-              SYNC_GROUPS="true"
-              SYNC_CLIENTS="true"
-              SYNC_DOMAINS="true"
-              SYNC_ADLISTS="true"
-              SYNC_DNS_RECORDS="false"
-              SYNC_CNAME_RECORDS="false"
-              SYNC_SETTINGS="false"
+              PRIMARY="http://192.168.1.10|{{ .Data.data.ADMIN_PASSWORD }}"
+              REPLICAS="http://192.168.1.12|{{ .Data.data.ADMIN_PASSWORD }}"
+              # FULL_SYNC="false"
+              # SYNC_GROUPS="true"
+              # SYNC_CLIENTS="true"
+              # SYNC_DOMAINS="true"
+              # SYNC_ADLISTS="true"
+              # SYNC_DNS_RECORDS="false"
+              # SYNC_CNAME_RECORDS="false"
+              # SYNC_SETTINGS="true"
               SYNC_DHCP="false"
+              FULL_SYNC=true
+              RUN_GRAVITY=true
               TZ="America/Bogota"
               {{- end }}
         spec:
