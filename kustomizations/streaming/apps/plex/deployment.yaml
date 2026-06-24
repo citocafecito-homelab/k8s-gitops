@@ -33,7 +33,7 @@ spec:
           - containerPort: 32400
           securityContext:
             privileged: true
-            allowPrivilegeEscalation: false
+            # allowPrivilegeEscalation: false
             capabilities:
               add: ["SYS_RAWIO", "SETPCAP", "SYS_ADMIN"]
           volumeMounts:
