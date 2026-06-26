@@ -13,6 +13,7 @@ spec:
       labels:
         app: ytdl-pot
     spec:
+      hostNetwork: true
       containers:
       - name: generator
         image: brainicism/bgutil-ytdlp-pot-provider:latest
