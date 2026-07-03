@@ -42,28 +42,24 @@ spec:
         app: music-assistant
         app.kubernetes.io/name: music-assistant
     spec:
+      automountServiceAccountToken: false
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
-      nodeSelector:
-        kubernetes.io/hostname: castillo
-      securityContext:
-        fsGroup: 1000
-        supplementalGroups: [44, 107, 992]
       containers:
       - name: music-assistant
         image: ghcr.io/music-assistant/server:latest
         imagePullPolicy: Always
         env:
-          - name: LOG_LEVEL
-            value: info
-          - name: TMPDIR
-            value: /data/temp 
-          - name: MASS_IP_ADDRESS
-            valueFrom:
-              fieldRef:
-                fieldPath: status.hostIP
-          - name: MASS_BASE_URL
-            value: http://musicassistant.lan
+        - name: LOG_LEVEL
+          value: info
+        - name: TMPDIR
+          value: /data/temp 
+        - name: MASS_IP_ADDRESS
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: MASS_BASE_URL
+          value: http://musicassistant.lan
         securityContext:
           privileged: true
           appArmorProfile:
@@ -74,28 +70,35 @@ spec:
             - SYS_ADMIN
         resources:
           requests:
-            cpu: "100m"
+            cpu: "200m"
             memory: "512Mi"
           limits:
             cpu: "2"
-            memory: "4Gi"
+            memory: "6Gi"
         livenessProbe:
           httpGet:
             path: /
             port: 8095
-          initialDelaySeconds: 30
-          periodSeconds: 15
+            scheme: HTTP
+          initialDelaySeconds: 45
+          periodSeconds: 20
         readinessProbe:
           httpGet:
             path: /
             port: 8095
-          initialDelaySeconds: 15
-          periodSeconds: 10
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 15
         volumeMounts:
         - name: dri
           mountPath: /dev/dri
         - name: music-assistant-data
           mountPath: /data
+      nodeSelector:
+        kubernetes.io/hostname: castillo
+      securityContext:
+        fsGroup: 1000
+        supplementalGroups: [44, 107, 992]
       volumes:
       - name: dri
         hostPath:
