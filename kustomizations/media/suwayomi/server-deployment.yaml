@@ -27,14 +27,7 @@ spec:
       automountServiceAccountToken: true
       containers:
       - name: suwayomi
-        image: ghcr.io/suwayomi/suwayomi-server:Latest
-        command: [ "/bin/sh", "-c" ]
-        args:
-        - |
-          export AUTH_USERNAME=$(cat /vault/secrets/AUTH_USERNAME)
-          export AUTH_PASSWORD=$(cat /vault/secrets/AUTH_PASSWORD)
-
-          /home/suwayomi/startup_script.sh
+        image: ghcr.io/suwayomi/suwayomi-server:latest
         ports:
         - containerPort: 4567
         - containerPort: 8181
@@ -46,8 +39,16 @@ spec:
             cpu: "100m"
             memory: "512Mi"
           limits:
-            cpu: "0.5"
-            memory: "1.5Gi"
+            cpu: "500m"
+            memory: "1Gi"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          runAsUser: 1000
+          capabilities:
+            drop:
+            - ALL
         volumeMounts:
         - name: suwayomi-storage
           mountPath: /home/suwayomi/.local/share/Tachidesk

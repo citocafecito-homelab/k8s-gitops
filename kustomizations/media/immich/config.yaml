@@ -24,7 +24,6 @@ data:
   IMMICH_PORT: "2283"
   IMMICH_MEDIA_LOCATION: "/data"
   IMMICH_SKIP_FOLDER_CHECKS: "true"
-  IMMICH_MACHINE_LEARNING_ENABLED: "false"
   IMMICH_VIDEO_TRANSCODING_HWACCEL: "qsv"
   IMMICH_WORKERS: "4"
 
@@ -36,4 +35,5 @@ data:
   REDIS_PORT: "6379"
   
   # Machine Learning 
+  IMMICH_MACHINE_LEARNING_ENABLED: "false"
   # IMMICH_MACHINE_LEARNING_URL: "http://immich-machine-learning:3003"
