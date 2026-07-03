@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: immich-database
+data:
+  # General
+  TZ:            "America/Bogota"
+
+  # Database
+  POSTGRES_DB:          "immich"
+  POSTGRES_USER:        "immich"
+  POSTGRES_PASSWORD:    "1K5OpmK2KkFm3ZKZWqAOjpv7O3T0Bw"
+  POSTGRES_PORT:        "5432"
+  POSTGRES_INITDB_ARGS: '--data-checksums'
+---
+# See https://docs.immich.app/install /environment-variables
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: immich-config
+data: 
+  # Global 
+  UPLOAD_LOCATION: "/data/uploads"
+  IMMICH_PORT: "2283"
+  IMMICH_MEDIA_LOCATION: "/data"
+  IMMICH_SKIP_FOLDER_CHECKS: "true"
+  IMMICH_MACHINE_LEARNING_ENABLED: "false"
+  IMMICH_VIDEO_TRANSCODING_HWACCEL: "qsv"
+  IMMICH_WORKERS: "4"
+
+  # Database
+  DB_HOSTNAME: "immich-postgresql"
+  
+  # Cache
+  REDIS_HOSTNAME: "immich-valkey"
+  REDIS_PORT: "6379"
+  
+  # Machine Learning 
+  # IMMICH_MACHINE_LEARNING_URL: "http://immich-machine-learning:3003"

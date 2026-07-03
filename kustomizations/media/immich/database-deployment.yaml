@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: immich-postgresql
+spec:
+  serviceName: immich-postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-postgresql
+      app.kubernetes.io/name: immich-postgresql
+  template:
+    metadata:
+      labels:
+        app: immich-postgresql
+        app.kubernetes.io/name: immich-postgresql
+    spec:
+      containers:
+      - name: postgres
+        image: ghcr.io/immich-app/postgres:17-vectorchord0.5.3
+        ports:
+        - containerPort: 5432
+        envFrom:
+        - configMapRef:
+            name: immich-database
+        volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
+        - name: immich-postgresql-storage
+          mountPath: /var/lib/postgresql/data
+        livenessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "immich" ]
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "immich" ]
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 200m
+            memory: 1.5Gi
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 1Gi
+      - name: immich-postgresql-storage
+        persistentVolumeClaim:
+          claimName: immich-postgresql-pvc

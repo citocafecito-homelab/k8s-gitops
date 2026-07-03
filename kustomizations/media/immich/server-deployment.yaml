@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich
+      app.kubernetes.io/name: immich
+  template:
+    metadata:
+      labels:
+        app: immich
+        app.kubernetes.io/name: immich
+      annotations:
+        app.kubernetes.io/documentation: "https://github.com/immich-app/immich/tree/main/deployment"
+    spec:
+      containers:
+      - name: immich
+        image: ghcr.io/immich-app/immich-server:release
+        ports:
+        - containerPort: 2283
+        env:
+        - name: DB_DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: immich-database
+              key: POSTGRES_DB
+        - name: DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: immich-database
+              key: POSTGRES_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: immich-database
+              key: POSTGRES_PASSWORD
+        envFrom:
+        - configMapRef:
+            name: immich-database
+        - configMapRef:
+            name: immich-config
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+          limits:
+            cpu: 2          
+            memory: 4Gi
+        securityContext:
+          privileged: true 
+        volumeMounts:
+        - mountPath: /dev/dri
+          name: dri
+        - name: immich-data
+          mountPath: /data
+      securityContext:
+        fsGroup: 1000
+        supplementalGroups: [44, 107, 992]
+      volumes:
+      - name: dri
+        hostPath:
+          path: /dev/dri
+      - name: immich-data
+        hostPath:
+          path: /media/memories
+          type: DirectoryOrCreate
