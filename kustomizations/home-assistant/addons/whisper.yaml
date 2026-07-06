@@ -78,7 +78,7 @@ spec:
         - name: whisper-config
           mountPath: /data
       nodeSelector:
-        kubernetes.io/hostname: castillo
+        kubernetes.io/hostname: catimore
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000

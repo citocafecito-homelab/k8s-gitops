@@ -68,7 +68,7 @@ spec:
         - name: tmp-cache
           mountPath: /tmp
       nodeSelector:
-        kubernetes.io/hostname: castillo
+        kubernetes.io/hostname: catimore
       volumes:
       - name: piper-config
         persistentVolumeClaim:
