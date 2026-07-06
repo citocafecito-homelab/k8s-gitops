@@ -15,18 +15,25 @@ spec:
     spec:
       hostPID: true
       containers:
-        - name: glances
-          image: nicolargo/glances:latest
-          env:
-            - name: GLANCES_OPT
-              value: "-w -B 0.0.0.0 --disable-plugin processlist --fs-free-space"
-          ports:
-            - containerPort: 61208
-              hostPort: 61208
-          volumeMounts:
-            - name: host-root
-              mountPath: /host
-              readOnly: true
+      - name: glances
+        image: nicolargo/glances:latest
+        env:
+        - name: GLANCES_OPT
+          value: "-w -B 0.0.0.0 --disable-plugin processlist --fs-free-space"
+        ports:
+        - containerPort: 61208
+          hostPort: 61208
+        resources:
+          requests:
+            cpu: 50m
+            memory: 32Mi
+          limits:
+            cpu: 200m
+            memory: 192Mi
+        volumeMounts:
+        - name: host-root
+          mountPath: /host
+          readOnly: true
       tolerations:
       - key: node-role.kubernetes.io/control-plane
         operator: Exists

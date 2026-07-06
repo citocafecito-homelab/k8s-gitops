@@ -60,8 +60,11 @@ spec:
           mountPath: /vault/scripts
         resources:
           requests:
+            memory: 32Mi
+            cpu: 50m
+          limits:
             memory: 128Mi
-            cpu: 5m
+            cpu: 100m
       nodeSelector:
         kubernetes.io/hostname: caturra
       securityContext:

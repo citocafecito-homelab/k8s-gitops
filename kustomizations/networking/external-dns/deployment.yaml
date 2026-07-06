@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: external-dns
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     type: Recreate
   selector:
@@ -37,6 +37,13 @@ spec:
             secretKeyRef:
               name: pihole-secret
               key: WEBPASSWORD
+        resources:
+          requests:
+            cpu: 5m
+            memory: 32Mi
+          limits:
+            cpu: 50m
+            memory: 100Mi
       securityContext:
         fsGroup: 65534
       tolerations:

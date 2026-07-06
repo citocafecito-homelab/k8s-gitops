@@ -22,3 +22,4 @@ data:
   FILE__JWT_SECRET:   "/vault/secrets/jwt"
   FILE__JS_USER:      "/vault/secrets/user"
   FILE__JS_PASSWORD:  "/vault/secrets/password"
+  MINIMUM_SECONDS_TO_INCLUDE_PLAYBACK: "240"

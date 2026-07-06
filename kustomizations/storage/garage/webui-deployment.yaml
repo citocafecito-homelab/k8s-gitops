@@ -28,6 +28,13 @@ spec:
           value: "garage"
         - name: GARAGE_S3_ENDPOINT
           value: "http://garage:3900"
+        resources:
+          requests:
+            cpu: 50m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
         volumeMounts:
         - name: config-volume
           mountPath: /etc/garage.toml

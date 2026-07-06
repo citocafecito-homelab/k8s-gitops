@@ -21,13 +21,20 @@ spec:
           - --noauth
           - --address=0.0.0.0
           - --port=9000
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 50m
+            memory: 128Mi
+        securityContext:
+          runAsUser: 0
         volumeMounts:
         - name: host-storage
           mountPath: /host-mnt
         - name: config-db
           mountPath: /database
-        securityContext:
-          runAsUser: 0
       tolerations:
       - key: node-role.kubernetes.io/control-plane
         operator: Exists

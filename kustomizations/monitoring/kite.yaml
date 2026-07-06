@@ -65,17 +65,11 @@ spec:
               cpu: 100m
               memory: 128Mi
             limits:
-              cpu: 1000m
+              cpu: 200m
               memory: 512Mi
           volumeMounts:
             - name: kite-storage
               mountPath: /data
-      nodeSelector:
-        kubernetes.io/hostname: catuai
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
       volumes:
         - name: kite-storage
           hostPath:

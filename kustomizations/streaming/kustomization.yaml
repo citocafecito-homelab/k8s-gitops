@@ -34,7 +34,7 @@ resources:
 - apps/dispatcharr
 - apps/jellystat
 - apps/jellyfin
-- apps/plex
+# - apps/plex
 # - apps/stremio
 
 ## Jobs
