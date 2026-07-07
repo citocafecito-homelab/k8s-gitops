@@ -71,7 +71,7 @@ metadata:
     app.kubernetes.io/instance: streaming-stack
     app.kubernetes.io/part-of: streaming-stack
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: lidarr
