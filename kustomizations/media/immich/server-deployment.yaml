@@ -56,6 +56,8 @@ spec:
           name: dri
         - name: immich-data
           mountPath: /data
+      nodeSelector:
+        kubernetes.io/hostname: catimore
       securityContext:
         fsGroup: 1000
         supplementalGroups: [44, 107, 992]

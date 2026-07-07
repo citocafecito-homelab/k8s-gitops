@@ -19,7 +19,6 @@ spec:
       annotations:
         app.kubernetes.io/documentation: "https://docs.linuxserver.io/images/docker-transmission/"
         vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/agent-init-first: "true"
         #
         ## --- Transmission
         #
@@ -41,6 +40,7 @@ spec:
         #   {{- end -}}
     spec:
       dnsPolicy: ClusterFirst
+      serviceAccountName: transmission
       containers:
       - name: transmission
         image: lscr.io/linuxserver/transmission:latest
@@ -190,6 +190,7 @@ spec:
       - name: config
         hostPath:
           path: /mnt/transmission
+          type: DirectoryOrCreate
       - name: watch
         hostPath:
           path: /mnt/transmission/watch

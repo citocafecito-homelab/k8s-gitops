@@ -25,6 +25,7 @@ spec:
               {{- end -}}
         spec:
           restartPolicy: OnFailure
+          serviceAccountName: transmission  
           containers:
           - name: transmission
             image: lscr.io/linuxserver/transmission:latest

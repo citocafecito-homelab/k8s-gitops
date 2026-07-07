@@ -49,12 +49,6 @@ spec:
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        supplementalGroups:
-        - 106
       containers:
       - name: matter
         image: ghcr.io/matter-js/python-matter-server:stable
@@ -120,6 +114,14 @@ spec:
           mountPath: /sys
         - name: bluetooth-dev
           mountPath: /dev/bus/usb
+      nodeSelector:
+        kubernetes.io/hostname: caturra
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        supplementalGroups:
+        - 106
       volumes:
       - name: matter-config
         persistentVolumeClaim:

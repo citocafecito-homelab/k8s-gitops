@@ -95,7 +95,7 @@ spec:
         - name: music-assistant-data
           mountPath: /data
       nodeSelector:
-        kubernetes.io/hostname: castillo
+        kubernetes.io/hostname: catimore
       securityContext:
         fsGroup: 1000
         supplementalGroups: [44, 107, 992]

@@ -20,6 +20,7 @@ configMapGenerator:
   - scripts/check-port-daemon.sh
 
 resources:
+- sa.yaml
 - deployment.yaml
 - svc.yaml
 - ingress.yaml
