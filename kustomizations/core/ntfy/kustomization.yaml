@@ -3,12 +3,20 @@ kind: Kustomization
 
 # see https://docs.ntfy.sh/install/#__tabbed_9_6
 resources:
-  - deployment.yaml 
-  - svc.yaml
-  - pvc.yaml
-  - ingress.yaml
-  
-configMapGenerator:
-    - name: server-config
-      files: 
-        - server.yml
+- sa.yaml
+
+# Database
+- database-pv.yaml
+- database-deployment.yaml
+- database-svc.yaml
+
+# Server
+- server-deployment.yaml 
+- server-svc.yaml
+- server-ingress.yaml
+
+# Discarted due only works on docker
+# Watchover
+# - watchtower-deployment.yaml 
+# - watchtower-svc.yaml
+# - watchtower-ingress.yaml

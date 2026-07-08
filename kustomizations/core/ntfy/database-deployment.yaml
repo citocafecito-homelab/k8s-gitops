@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ntfy-postgresql
+spec:
+  serviceName: ntfy-postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ntfy-postgresql
+      app.kubernetes.io/name: ntfy-postgresql
+  template:
+    metadata:
+      labels:
+        app: ntfy-postgresql
+        app.kubernetes.io/name: ntfy-postgresql
+    spec:
+      serviceAccountName: ntfy
+      containers:
+      - name: postgres
+        image: postgres:18
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: "ntfy"
+        - name: POSTGRES_USER
+          value: "ntfy"
+        - name: POSTGRES_PASSWORD
+          value: "8LycKt1iv79Uzyq3V1am"
+        volumeMounts:
+        - name: ntfy-postgresql-storage
+          mountPath: /var/lib/postgresql
+        livenessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "ntfy" ]
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "ntfy" ]
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      volumes:
+      - name: ntfy-postgresql-storage
+        persistentVolumeClaim:
+          claimName: ntfy-postgresql-pvc

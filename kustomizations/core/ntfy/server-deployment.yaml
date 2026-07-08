@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ntfy
+  labels:
+    app: ntfy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ntfy
+  template:
+    metadata:
+      labels:
+        app: ntfy
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-inject-secret-server.yml: "secret/data/ntfy"
+        vault.hashicorp.com/agent-inject-template-server.yml: |
+          {{- with secret "secret/data/ntfy" -}}
+          listen-http: ":80"
+          base-url: "https://ntfy.citocafecito.work"
+          cache-file: ""
+          database-url: "postgres://ntfy:8LycKt1iv79Uzyq3V1am@ntfy-postgresql.core.svc.cluster.local:5432/ntfy?sslmode=disable"
+          attachment-cache-dir: "s3://{{ .Data.data.S3_USER }}:{{ .Data.data.S3_PASSWORD }}@ntfy?region=garage&endpoint=http://garage.storage.svc.cluster.local:3900&disable_http2=true"
+          attachment-file-size-limit: "15M"
+          attachment-expiry-duration: "3h"
+          auth-default-access: "deny-all"
+          auth-users:
+            - "{{ .Data.data.ADMIN_USER }}:{{ .Data.data.ADMIN_PASSWORD }}:admin"
+
+          auth-tokens:
+            - "{{ .Data.data.ADMIN_USER }}:{{ .Data.data.ADMIN_TOKEN }}"
+          {{- end -}}
+    spec:
+      serviceAccountName: ntfy
+      containers:
+      - name: ntfy
+        image: binwiederhier/ntfy
+        args: ["serve", "-c", "/vault/secrets/server.yml"]
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+          name: http
