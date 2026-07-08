@@ -61,6 +61,7 @@ jobs:
           # 4. Enviar a ntfy con un botón de acción dedicado para ver logs
           curl -H "Authorization: Bearer ${{ secrets.NTFY_TOKEN }}" \
                -H "Title: ${{ github.repository }}"" \
+               -H "Icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/png/github.png" \
                -H "Tags: ${STATUS_TAGS}" \
                -H "Priority: ${STATUS_PRIORITY}" \
                -H "Actions: view, Ver ejecución en GitHub, ${RUN_URL}" \
