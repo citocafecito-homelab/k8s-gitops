@@ -28,3 +28,27 @@ jobs:
       - name: Apply Kustomizations
         run: |
           kubectl  apply -k kustomizations
+
+      - name: Notify ntfy
+        if: always() # Garantiza que se ejecute si funciona o si falla
+        run: |
+          # Definir variables dinámicas según el estado del job
+          if [ "${{ job.status }}" = "success" ]; then
+            STATUS_TITLE="✅ Deployment Exitoso"
+            STATUS_TAGS="white_check_mark,kubernetes"
+            STATUS_PRIORITY="default"
+          else
+            STATUS_TITLE="❌ Deployment Fallido"
+            STATUS_TAGS="x,rotating_light"
+            STATUS_PRIORITY="high"
+          fi
+
+          # Enviar la notificación vía curl usando tu token de Vault expuesto en GitHub Secrets
+          curl -H "Authorization: Bearer ${{ secrets.NTFY_TOKEN }}" \
+               -H "Title: ${STATUS_TITLE}" \
+               -H "Tags: ${STATUS_TAGS}" \
+               -H "Priority: ${STATUS_PRIORITY}" \
+               -H "X-Repository: ${{ github.repository }}" \
+               -H "X-Commit: ${{ github.sha }}" \
+               -d "El workflow de GitOps para kustomizations ha terminado con estado: ${{ job.status }}." \
+               http://ntfy.core.svc.cluster.local/github-actions
