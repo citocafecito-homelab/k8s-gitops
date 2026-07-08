@@ -48,6 +48,7 @@ jobs:
                -H "Title: ${STATUS_TITLE}" \
                -H "Tags: ${STATUS_TAGS}" \
                -H "Priority: ${STATUS_PRIORITY}" \
+               -H "Actions: view, Ver Logs, ${RUN_URL}" \
                -H "X-Repository: ${{ github.repository }}" \
                -H "X-Commit: ${{ github.sha }}" \
                -d "El workflow de GitOps para kustomizations ha terminado con estado: ${{ job.status }}." \
