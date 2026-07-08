@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - "kustomizations/**"
-      - ".github/workflows/kustomizations.yml"
+      - ".github/workflows/kustomizations.yaml"
 
 jobs:
   deploy:
