@@ -29,29 +29,24 @@ jobs:
         run: |
           kubectl  apply -k kustomizations
 
-      - name: Notify ntfy
+      - name: Notify
         if: always()
         run: |
-          # 1. Obtener variables de contexto legibles
           COMMIT_MSG="${{ github.event.head_commit.message || 'Ejecución Manual' }}"
           AUTHOR="${{ github.event.head_commit.author.name || github.triggering_user }}"
           SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
           RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           
-          # 2. Definir estados dinámicos
           if [ "${{ job.status }}" = "success" ]; then
-            STATUS_TITLE="☕ Ansible: Despliegue Exitoso"
             STATUS_TAGS="coffee,white_check_mark"
             STATUS_PRIORITY="default"
             RESULT_EMOJI="✅ SUCCESS"
           else
-            STATUS_TITLE="🚨 Ansible: Despliegue Fallido"
             STATUS_TAGS="coffee,x"
             STATUS_PRIORITY="high"
             RESULT_EMOJI="❌ FAILURE"
           fi
 
-          # 3. Construir un cuerpo detallado usando saltos de línea limpios
           REPORT_BODY=$(cat <<EOF
           Estatus: $RESULT_EMOJI
           Rama: ${{ github.ref_name }}
@@ -65,7 +60,7 @@ jobs:
 
           # 4. Enviar a ntfy con un botón de acción dedicado para ver logs
           curl -H "Authorization: Bearer ${{ secrets.NTFY_TOKEN }}" \
-               -H "Title: ${STATUS_TITLE}" \
+               -H "Title: ${{ github.repository }}"" \
                -H "Tags: ${STATUS_TAGS}" \
                -H "Priority: ${STATUS_PRIORITY}" \
                -H "Actions: view, Ver ejecución en GitHub, ${RUN_URL}" \
