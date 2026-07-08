@@ -30,7 +30,7 @@ jobs:
           kubectl  apply -k kustomizations
 
       - name: Notify ntfy
-        if: always() # Garantiza que se ejecute si funciona o si falla
+        if: always()
         run: |
           # Definir variables dinámicas según el estado del job
           if [ "${{ job.status }}" = "success" ]; then
