@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openwa-valkey
+  labels:
+    app: openwa-valkey
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openwa-valkey
+  template:
+    metadata:
+      labels:
+        app: openwa-valkey
+    spec:
+      serviceAccountName: openwa
+      containers:
+      - name: valkey
+        image: valkey/valkey:latest
+        args:
+          - "--save"
+          - ""
+          - "--appendonly"
+          - "no"
+        ports:
+        - containerPort: 6379
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+          limits:
+            cpu: 50m
+            memory: 128Mi

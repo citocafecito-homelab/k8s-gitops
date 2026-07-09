@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openwa-database
+data:
+  # General
+  TZ:            "America/Bogota"
+
+  # Database
+  POSTGRES_DB:          "openwa"
+  POSTGRES_USER:        "openwa"
+  POSTGRES_PASSWORD:    "1K5OpmK2KkFm3ZKZWqAOjpv7O3T0Bw"
+  POSTGRES_PORT:        "5432"
+---
+# See https://github.com/rmyndharis/OpenWA/blob/main/.env.example
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openwa-config
+data:
+  # Server
+  PORT: "2785"
+  NODE_ENV: "production"
+  DOMAIN: openwa.lan
+  BASE_URL: "http://openwa.lan"
+  DASHBOARD_URL: "http://openwa.lan"
+  CORS_ORIGINS: "http://openwa.lan"
+  CSP_UPGRADE_INSECURE_REQUESTS: "false"
+  AUTO_START_SESSIONS: "false"
+  WEBHOOK_SSRF_PROTECT: "false"
+  POSTGRES_BUILTIN: "false"
+  MINIO_BUILTIN: "false"
+
+  # Database (Postgres)
+  DATABASE_TYPE: "postgres"
+  DATABASE_HOST: "openwa-postgresql"
+  DATABASE_SYNCHRONIZE: "false"
+
+  # WhatsApp Engine & Puppeteer
+  ENGINE_TYPE: "whatsapp-web.js"
+  PLUGINS_ENABLED: "false"
+  PUPPETEER_HEADLESS: "true"
+
+  # Webhook
+  WEBHOOK_TIMEOUT: "10000"
+  WEBHOOK_MAX_RETRIES: "3"
+  WEBHOOK_RETRY_DELAY: "5000"
+
+  # Storage
+  STORAGE_TYPE: "s3"
+  S3_ENDPOINT: http://garage.storage.svc.cluster.local:3900/openwa
+  S3_BUCKET: "openwa"
+  S3_REGION: "catuai"
+  S3_FORCE_PATH_STYLE: "true"
+  AWS_S3_FORCE_PATH_STYLE: "true"
+  S3_SSL_ENABLED: "false"
+  AWS_USE_SSL: "false"
+
+  # Redis & Queue
+  REDIS_ENABLED: "true"
+  REDIS_BUILTIN: "false"
+  QUEUE_ENABLED: "true"
+  CACHE_ENABLED: "true"
+  REDIS_HOST: "openwa-valkey"
+  REDIS_PORT: "6379"

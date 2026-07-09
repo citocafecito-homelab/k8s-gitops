@@ -108,7 +108,7 @@ spec:
         volumeMounts:
         - name: dshm
           mountPath: /dev/shm
-        - name: openwa-session
+        - name: openwa
           mountPath: /app/data
         - name: openwa-tmp
           mountPath: /tmp
@@ -125,7 +125,7 @@ spec:
       - name: openwa-tmp
         emptyDir:
           medium: Memory
-      - name: openwa-session
+      - name: openwa
         hostPath:
           path: /mnt/openwa
 ---

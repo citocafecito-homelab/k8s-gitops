@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openwa-api
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openwa-api
+  template:
+    metadata:
+      labels:
+        app: openwa-api
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-inject-secret-credentials: "secret/data/openwa"
+        vault.hashicorp.com/agent-inject-template-credentials: |
+          {{- with secret "secret/data/openwa" -}}
+          S3_ACCESS_KEY="{{ .Data.data.S3_ACCESS_KEY_ID }}"
+          S3_SECRET_KEY="{{ .Data.data.S3_SECRET_ACCESS_KEY }}"
+          API_MASTER_KEY="{{ .Data.data.ADMIN_TOKEN }}"
+          API_KEY_PEPPER="{{ .Data.data.API_KEY_PEPPER }}"
+          {{- end -}}
+    spec:
+      serviceAccountName: openwa
+      containers:
+      - name: openwa
+        image: ghcr.io/rmyndharis/openwa:latest
+        command: ["node", "--env-file=/vault/secrets/credentials", "dist/main.js"]
+        envFrom:
+        - configMapRef:
+            name: openwa-config
+        - configMapRef:
+            name: openwa-database
+        env:
+        - name: DATABASE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: openwa-database
+              key: POSTGRES_PORT
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: openwa-database
+              key: POSTGRES_DB
+        - name: DATABASE_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: openwa-database
+              key: POSTGRES_USER
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: openwa-database
+              key: POSTGRES_PASSWORD
+        ports:
+        - containerPort: 2785
+        # securityContext:
+        #   runAsUser: 0
+        #   runAsGroup: 0
+        #   runAsNonRoot: false
+        #   readOnlyRootFilesystem: true
+        #   allowPrivilegeEscalation: true
+        #   capabilities:
+        #     drop:
+        #     - ALL
+        #     add:
+        #     - CHOWN
+        #     - DAC_OVERRIDE
+        #     - FOWNER
+        #     - SETUID
+        #     - SETGID
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1.5Gi
+          requests:
+            cpu: 500m
+            memory: 768Mi
+        # volumeMounts:
+        # - name: dshm
+        #   mountPath: /dev/shm
+        # - name: openwa
+        #   mountPath: /app/data
+        # - name: openwa-tmp
+        #   mountPath: /tmp
+      # nodeSelector:
+      #   kubernetes.io/hostname: castillo
+      # securityContext:
+      #   fsGroup: 1000
+      #   runAsUser: 1000
+      #   runAsGroup: 1000
+      # volumes:
+      # - name: dshm
+      #   emptyDir:
+      #     medium: Memory
+      # - name: openwa-tmp
+      #   emptyDir:
+      #     medium: Memory
+      # - name: openwa
+      #   hostPath:
+      #     path: /mnt/openwa
