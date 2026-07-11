@@ -16,7 +16,7 @@ resources:
 #Deprecated
 # - flaresolverr
 
-- yt-po-server.yaml
-- puppy-signal
+# - yt-po-server.yaml
+# - puppy-signal
 
 namespace: media

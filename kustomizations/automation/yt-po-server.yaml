@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yt-ytdl-pot
+  labels:
+    tier: disposable
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ytdl-pot
+  template:
+    metadata:
+      labels:
+        app: ytdl-pot
+    spec:
+      hostNetwork: false
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: generator
+        image: brainicism/bgutil-ytdlp-pot-provider:latest
+        ports:
+        - containerPort: 4416
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "128Mi"
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ytdl-pot
+  namespace: media
+spec:
+  selector:
+    app: ytdl-pot
+  ports:
+    - protocol: TCP
+      port: 4416
+      targetPort: 4416

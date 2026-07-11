@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: wikijs
+  labels:
+    tier: disposable
 spec:
   replicas: 0
   selector:

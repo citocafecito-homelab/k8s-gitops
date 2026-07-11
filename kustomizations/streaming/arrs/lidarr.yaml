@@ -70,6 +70,7 @@ metadata:
     app.kubernetes.io/name: lidarr
     app.kubernetes.io/instance: streaming-stack
     app.kubernetes.io/part-of: streaming-stack
+    tier: disposable
 spec:
   replicas: 1
   selector:

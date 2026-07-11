@@ -4,6 +4,7 @@ metadata:
   name: lidify
   labels:
     app: lidify
+    tier: disposable
 spec:
   replicas: 0
   selector:

@@ -4,6 +4,7 @@ metadata:
   name: ntfy
   labels:
     app: ntfy
+    tier: disposable
 spec:
   replicas: 1
   selector:

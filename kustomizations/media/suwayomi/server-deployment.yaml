@@ -13,6 +13,7 @@ spec:
       labels:
         app: suwayomi
         app.kubernetes.io/name: suwayomi
+        tier: disposable
       annotations:
         app.kubernetes.io/documentation: "https://github.com/Suwayomi/Suwayomi-Server-docker/pkgs/container/tachidesk"
         vault.hashicorp.com/agent-inject: "true"

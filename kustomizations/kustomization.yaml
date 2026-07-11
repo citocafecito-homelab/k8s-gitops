@@ -6,10 +6,10 @@ resources:
 - actions
 - networking
 - core
+- automation
 - auth
 - home-assistant
 - storage
 - media
 - monitoring
 - streaming
-# - jenkins.yaml

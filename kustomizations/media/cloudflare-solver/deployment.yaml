@@ -4,7 +4,8 @@ metadata:
   name: cloudflare-solver
   labels:
     app: cloudflare-solver
-    app.kubernetes.io/name: "cloudflare-solver"
+    app.kubernetes.io/name: cloudflare-solver
+    tier: disposable
 spec:
   replicas: 2
   selector:

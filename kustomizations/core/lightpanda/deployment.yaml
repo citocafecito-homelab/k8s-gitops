@@ -4,6 +4,7 @@ metadata:
   name: lightpanda
   labels:
     app: lightpanda
+    tier: disposable
 spec:
   selector:
     matchLabels:

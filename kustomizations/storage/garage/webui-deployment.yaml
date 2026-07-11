@@ -4,6 +4,7 @@ metadata:
   name: garage-webui
   labels:
     app: garage-webui
+    tier: disposable
 spec:
   replicas: 1
   selector:
