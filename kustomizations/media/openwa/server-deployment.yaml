@@ -25,6 +25,15 @@ spec:
           {{- end -}}
     spec:
       serviceAccountName: openwa
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                - catimore
       containers:
       - name: openwa
         image: ghcr.io/rmyndharis/openwa:latest
@@ -57,21 +66,6 @@ spec:
               key: POSTGRES_PASSWORD
         ports:
         - containerPort: 2785
-        # securityContext:
-        #   runAsUser: 0
-        #   runAsGroup: 0
-        #   runAsNonRoot: false
-        #   readOnlyRootFilesystem: true
-        #   allowPrivilegeEscalation: true
-        #   capabilities:
-        #     drop:
-        #     - ALL
-        #     add:
-        #     - CHOWN
-        #     - DAC_OVERRIDE
-        #     - FOWNER
-        #     - SETUID
-        #     - SETGID
         resources:
           limits:
             cpu: "1"
@@ -79,26 +73,12 @@ spec:
           requests:
             cpu: 500m
             memory: 768Mi
-        # volumeMounts:
-        # - name: dshm
-        #   mountPath: /dev/shm
-        # - name: openwa
-        #   mountPath: /app/data
-        # - name: openwa-tmp
-        #   mountPath: /tmp
-      # nodeSelector:
-      #   kubernetes.io/hostname: castillo
-      # securityContext:
-      #   fsGroup: 1000
-      #   runAsUser: 1000
-      #   runAsGroup: 1000
-      # volumes:
-      # - name: dshm
-      #   emptyDir:
-      #     medium: Memory
-      # - name: openwa-tmp
-      #   emptyDir:
-      #     medium: Memory
-      # - name: openwa
-      #   hostPath:
-      #     path: /mnt/openwa
+        volumeMounts:
+        - name: openwa
+          mountPath: /app/data
+      nodeSelector:
+        kubernetes.io/hostname: castillo
+      volumes:
+      - name: openwa
+        persistentVolumeClaim:
+          claimName: openwa-pvc

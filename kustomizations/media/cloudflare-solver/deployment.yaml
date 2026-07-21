@@ -28,7 +28,7 @@ spec:
                 operator: NotIn
                 values:
                 - caturra
-                - castillo
+                - catimore
       containers:
       - name: cloudflare-solver
         image: ghcr.io/nlevee/simple-cloudflare-solver:main

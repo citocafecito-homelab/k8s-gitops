@@ -4,7 +4,7 @@ metadata:
   name: puppysignal-postgresql
 spec:
   serviceName: puppysignal-postgresql
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: puppysignal-postgresql

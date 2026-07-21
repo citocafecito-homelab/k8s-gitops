@@ -15,6 +15,7 @@ resources:
 - cache-svc.yaml
 
 # Server
+- server-pv.yaml
 - server-deployment.yaml
 - server-svc.yaml
 - server-ingress.yaml

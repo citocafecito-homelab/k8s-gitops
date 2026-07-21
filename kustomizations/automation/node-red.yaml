@@ -16,13 +16,15 @@ spec:
     spec:
       hostNetwork: false
       automountServiceAccountToken: false
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        seccompProfile:
-          type: RuntimeDefault
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                - catimore
       containers:
       - name: node-red
         image: nodered/node-red:latest
@@ -47,6 +49,13 @@ spec:
           requests:
             cpu: "100m"
             memory: "256Mi"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       volumes:
       - name: node-red-data
         emptyDir: {}

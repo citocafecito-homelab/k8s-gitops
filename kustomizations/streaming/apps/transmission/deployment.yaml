@@ -174,11 +174,11 @@ spec:
       #   - name: config
       #     mountPath: /config
       nodeSelector:
-        kubernetes.io/hostname: catuai
-      tolerations:
-      - key: node-role.kubernetes.io/control-plane
-        operator: Exists
-        effect: NoSchedule
+        kubernetes.io/hostname: catimore
+      # tolerations:
+      # - key: node-role.kubernetes.io/control-plane
+      #   operator: Exists
+      #   effect: NoSchedule
       volumes:
       # - name: tun
       #   hostPath:

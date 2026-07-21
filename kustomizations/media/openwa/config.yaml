@@ -26,7 +26,7 @@ data:
   DASHBOARD_URL: "http://openwa.lan"
   CORS_ORIGINS: "http://openwa.lan"
   CSP_UPGRADE_INSECURE_REQUESTS: "false"
-  AUTO_START_SESSIONS: "false"
+  AUTO_START_SESSIONS: "true"
   WEBHOOK_SSRF_PROTECT: "false"
   POSTGRES_BUILTIN: "false"
   MINIO_BUILTIN: "false"

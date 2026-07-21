@@ -63,11 +63,7 @@ spec:
         - name: latteam
           mountPath: /LatTeam
       nodeSelector:
-        kubernetes.io/hostname: catuai
-      tolerations:
-      - key: node-role.kubernetes.io/control-plane
-        operator: Exists
-        effect: NoSchedule
+        kubernetes.io/hostname: catimore
       volumes:
       - name: config
         hostPath:

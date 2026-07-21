@@ -26,6 +26,7 @@ spec:
                 operator: NotIn
                 values:
                 - caturra
+                - catimore
       containers:
       - name: flaresolverr
         image: ghcr.io/flaresolverr/flaresolverr:latest

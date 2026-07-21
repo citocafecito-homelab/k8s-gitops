@@ -110,11 +110,11 @@ spec:
       - name: shm
         emptyDir:
           medium: Memory
-          sizeLimit: 2Gi
+          sizeLimit: 512Mi
       - name: transcodes
         emptyDir:
           medium: Memory
-          sizeLimit: 4Gi
+          sizeLimit: 6Gi
       - name: config
         hostPath:
           path: /mnt/jellyfin
@@ -124,10 +124,8 @@ spec:
           path: /media
           type: DirectoryOrCreate
       - name: music
-        nfs:
-          server: 192.168.1.13
+        hostPath:
           path: /mnt/music
-          readOnly: false
       - name: playlists
         configMap:
           name: shared-playlists

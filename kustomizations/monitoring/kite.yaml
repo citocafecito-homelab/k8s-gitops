@@ -37,7 +37,7 @@ spec:
       serviceAccountName: kite
       containers:
         - name: kite
-          image: ghcr.io/kite-org/kite:v0.13.0
+          image: ghcr.io/kite-org/kite:v0.14.0
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -89,7 +89,6 @@ spec:
       port: 8080
       targetPort: http
   selector:
-    app.kubernetes.io/instance: kite
     app.kubernetes.io/name: kite
   type: ClusterIP
 ---
