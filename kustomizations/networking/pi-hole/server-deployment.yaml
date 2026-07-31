@@ -1,19 +1,25 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: pihole
+  name: pihole-primary
   namespace: networking
+  labels:
+    app: pihole
+    instance: primary
+    app.kubernetes.io/name: pihole
 spec:
-  serviceName: "pihole"
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: pihole
-      app.kubernetes.io/name: pihole
+      instance: primary
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
         app: pihole
+        instance: primary
         app.kubernetes.io/name: pihole
       annotations:
         vault.hashicorp.com/agent-inject: "true"
@@ -32,34 +38,23 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       hostNetwork: true
       terminationGracePeriodSeconds: 10
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: In
-                values:
-                - catuai
-                - castillo
       containers:
       - name: pihole
         image: pihole/pihole:latest
         envFrom:
         - configMapRef:
-            name: pihole-env
+            name: pihole-global
+        - configMapRef:
+            name: pihole-primary
         ports:
         - name: dhcp
           containerPort: 67
-          hostPort: 67
           protocol: UDP
         - name: dns-tcp
           containerPort: 53
-          hostPort: 53
           protocol: TCP
         - name: dns-udp
           containerPort: 53
-          hostPort: 53
           protocol: UDP
         resources:
           requests:
@@ -88,6 +83,8 @@ spec:
         - name: adlists
           mountPath: /etc/pihole/adlists.list
           subPath: adlists.list
+      nodeSelector:
+        kubernetes.io/hostname: catuai
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"

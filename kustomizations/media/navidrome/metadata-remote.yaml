@@ -75,7 +75,6 @@ metadata:
   name: metadata-remote
   namespace: media
   annotations:
-    # traefik.ingress.kubernetes.io/router.middlewares: media-keep-encoded-url@kubernetescrd
     traefik.ingress.kubernetes.io/router.priority: "100"
     traefik.ingress.kubernetes.io/router.pathmatcher: "PathPrefix"
 spec:

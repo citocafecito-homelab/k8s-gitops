@@ -4,9 +4,10 @@ metadata:
   name: pihole-nebula-sync
   namespace: networking
 spec:
-  schedule: "*/30 * * * *" # El cron lo maneja Kubernetes directamente
+  schedule: "*/30 * * * *"
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 3
+  suspend: false
   jobTemplate:
     spec:
       template:
@@ -20,16 +21,15 @@ spec:
               {{- with secret "secret/data/pihole" -}}
               PRIMARY="http://192.168.1.10|{{ .Data.data.ADMIN_PASSWORD }}"
               REPLICAS="http://192.168.1.12|{{ .Data.data.ADMIN_PASSWORD }}"
-              # FULL_SYNC="false"
-              # SYNC_GROUPS="true"
-              # SYNC_CLIENTS="true"
-              # SYNC_DOMAINS="true"
-              # SYNC_ADLISTS="true"
-              # SYNC_DNS_RECORDS="false"
-              # SYNC_CNAME_RECORDS="false"
-              # SYNC_SETTINGS="true"
+              FULL_SYNC="false"
+              SYNC_GROUPS="true"
+              SYNC_CLIENTS="true"
+              SYNC_DOMAINS="true"
+              SYNC_ADLISTS="true"
+              SYNC_DNS_RECORDS="true"
+              SYNC_CNAME_RECORDS="false"
+              SYNC_SETTINGS="true"
               SYNC_DHCP="false"
-              FULL_SYNC=true
               RUN_GRAVITY=true
               TZ="America/Bogota"
               {{- end }}

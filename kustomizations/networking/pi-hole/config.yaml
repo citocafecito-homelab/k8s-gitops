@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: pihole-env
+  name: pihole-global
 data:
   # Default Configuration
   TZ: "America/Bogota"
@@ -14,8 +14,13 @@ data:
   FTLCONF_misc_etc_dnsmasq_d: "true"
   FTLCONF_dns_revServers: "true,192.168.1.0/16,192.168.1.1"
   FTLCONF_dns_upstreams: "1.1.1.1;1.0.0.1;8.8.8.8;8.8.4.4"
-
-  # DHCP Server
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pihole-primary
+data:
+  # --- DHCPv4 ---
   FTLCONF_dhcp_active: "true"
   FTLCONF_dhcp_start: "192.168.1.160"
   FTLCONF_dhcp_end: "192.168.1.253"
@@ -23,7 +28,11 @@ data:
   FTLCONF_dhcp_netmask: "255.255.255.0"
   FTLCONF_dhcp_leaseTime: "86400"
   FTLCONF_dhcp_rapidCommit: "true"
-  FTLCONF_dhcp_ipv6: "true"
+
+  # --- DHCPv6 ---
+  FTLCONF_dhcp_ipv6: "false"
+  FTLCONF_dns_listeningMode: "all"
+  FTLCONF_LOCAL_IPV6: "fe80::6a1d:efff:fe4a:3da6"
 ---
 apiVersion: v1
 kind: ConfigMap

@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole-replica
+  namespace: networking
+  labels:
+    app: pihole
+    instance: replica
+    app.kubernetes.io/name: pihole
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pihole
+      instance: replica
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: pihole
+        instance: replica
+        app.kubernetes.io/name: pihole
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-inject-secret-admin_password: "secret/data/pihole"
+        vault.hashicorp.com/agent-inject-template-admin_password: |
+          {{- with secret "secret/data/pihole" -}}
+          {{ .Data.data.WEBPASSWORD }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-api_key: "secret/data/pihole"
+        vault.hashicorp.com/agent-inject-template-api_key: |
+          {{- with secret "secret/data/pihole" -}}
+          {{ .Data.data.API_KEY }}
+          {{- end }}
+    spec:
+      dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+      terminationGracePeriodSeconds: 10
+      nodeSelector:
+        kubernetes.io/hostname: castillo
+      containers:
+      - name: pihole
+        image: pihole/pihole:latest
+        envFrom:
+        - configMapRef:
+            name: pihole-global
+        ports:
+        - name: dhcp
+          containerPort: 67
+          hostPort: 67
+          protocol: UDP
+        - name: dns-tcp
+          containerPort: 53
+          hostPort: 53
+          protocol: TCP
+        - name: dns-udp
+          containerPort: 53
+          hostPort: 53
+          protocol: UDP
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 256Mi
+        securityContext:
+          capabilities:
+            add:
+            - CHOWN
+            - NET_ADMIN
+            - NET_BIND_SERVICE
+            - NET_RAW
+            - SYS_NICE
+            - SYS_TIME
+        volumeMounts:
+        - name: pihole-etc
+          mountPath: /etc/pihole
+        - name: shm-volume
+          mountPath: /dev/shm
+      volumes:
+      - name: shm-volume
+        emptyDir:
+          medium: Memory
+          sizeLimit: 256Mi
+      - name: pihole-etc
+        hostPath:
+          path: /mnt/pihole
+          type: DirectoryOrCreate

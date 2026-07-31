@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kea-config
+  namespace: networking
+data:
+  kea-dhcp6.conf: |
+    {
+      "Dhcp6": {
+        "interfaces-config": {
+          "interfaces": [ "enp1s0/ip-address=" ]
+        },
+        "lease-database": {
+          "type": "memfile",
+          "persist": false
+        },
+        "option-data": [
+          {
+            "name": "dns-servers",
+            "data": "fe80::6a1d:efff:fe4a:3da6"
+          }
+        ],
+        "subnet6": [
+          {
+            "id": 1,
+            "subnet": "fd00::/64"
+          }
+        ]
+      }
+    }

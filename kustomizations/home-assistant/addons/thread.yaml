@@ -27,13 +27,14 @@ data:
   OT_LOG_LEVEL: "7"
   OT_REST_LISTEN_ADDR: "0.0.0.0"
   OTBR_USE_NCP_SETTINGS: "false"
+  MDNS_RESPONDER: "disabled"
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: openthread
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: openthread
@@ -69,25 +70,12 @@ spec:
             - NET_ADMIN
             - SYS_RAWIO
         volumeMounts:
-        - name: modules
-          mountPath: /lib/modules
-          readOnly: true
         - name: otbr-data
           mountPath: /data
         - name: rcp
           mountPath: /dev/ttyUSB0
         - name: tun
           mountPath: /dev/net/tun
-      initContainers:
-      - name: load-kernel-modules
-        image: busybox
-        command: ["sh", "-c", "modprobe ip_set && modprobe ip_set_hash_net && modprobe ip_set_hash_ip"]
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - name: modules
-          mountPath: /lib/modules
-          readOnly: true
       nodeSelector:
         kubernetes.io/hostname: catuai
       tolerations:
@@ -95,10 +83,6 @@ spec:
         operator: Exists
         effect: NoSchedule
       volumes:
-      - name: modules
-        hostPath:
-          path: /lib/modules
-          type: Directory
       - name: otbr-data
         hostPath:
           path: /mnt/openthread

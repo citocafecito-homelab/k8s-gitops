@@ -6,7 +6,7 @@ spec:
   accessModes:
   - ReadWriteOnce
   capacity:
-    storage: 2Gi
+    storage: 10Gi
   hostPath:
     path: /mnt/music-assistant
   persistentVolumeReclaimPolicy: Retain
@@ -21,7 +21,7 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 2Gi
+      storage: 10Gi
   storageClassName: ""
 ---
 apiVersion: apps/v1
@@ -47,19 +47,43 @@ spec:
       automountServiceAccountToken: false
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
+      initContainers:
+      - name: detect-interface
+        image: busybox:latest
+        command: ["sh", "-c", "ip route show default | awk '/default/ {print $5}' | head -n1 > /tmp/config/iface"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp/config
       containers:
       - name: music-assistant
         image: ghcr.io/music-assistant/server:latest
         imagePullPolicy: Always
+        command: ["sh", "-c"]
+        args:
+        - |
+          export BIND_INTERFACE=$(cat /tmp/config/iface)
+          echo "BIND_INTERFACE detectada dinámicamente: $BIND_INTERFACE"
+          exec /usr/local/bin/entrypoint.sh --data-dir /data --cache-dir /data/.cache
         env:
+        - name: PUID
+          value: "1000"
+        - name: PUID
+          value: "1000"
+        - name: TZ
+          value: "America/Bogota"
         - name: LOG_LEVEL
           value: info
         - name: MASS_IP_ADDRESS
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        - name: MASS_BASE_URL
-          value: http://musicassistant.lan
+        ports:
+        - name: web
+          containerPort: 8095
+        - name: stream
+          containerPort: 8097
         securityContext:
           privileged: true
           appArmorProfile:
@@ -94,6 +118,10 @@ spec:
           mountPath: /dev/dri
         - name: music-assistant-data
           mountPath: /data
+        - name: music
+          mountPath: /music
+        - name: tmp
+          mountPath: /tmp/config
       nodeSelector:
         kubernetes.io/hostname: catimore
       securityContext:
@@ -106,6 +134,13 @@ spec:
       - name: music-assistant-data
         persistentVolumeClaim:
           claimName: music-assistant-pvc
+      - name: music
+        hostPath:
+          path: /mnt/music
+      - name: tmp
+        emptyDir:
+          medium: Memory
+          sizeLimit: 2Gi
 ---
 apiVersion: v1
 kind: Service
@@ -130,9 +165,8 @@ metadata:
   name: music-assistant
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
-    traefik.ingress.kubernetes.io/transport.respondingtimeouts.readtimeout: "3600s"
-    traefik.ingress.kubernetes.io/transport.respondingtimeouts.idletimeout: "3600s"
 spec:
+  ingressClassName: traefik
   rules:
   - host: musicassistant.lan
     http:

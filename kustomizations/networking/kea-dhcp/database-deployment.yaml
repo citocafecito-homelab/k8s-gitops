@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kea-postgresql
+spec:
+  serviceName: kea-postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kea-postgresql
+      app.kubernetes.io/name: kea-postgresql
+  template:
+    metadata:
+      labels:
+        app: kea-postgresql
+        app.kubernetes.io/name: kea-postgresql
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:18
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: kea-config
+              key: DATABASE_NAME
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              name: kea-config
+              key: DATABASE_USERNAME
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: kea-config
+              key: DATABASE_PASSWORD
+        volumeMounts:
+        - name: kea-postgresql-storage
+          mountPath: /var/lib/postgresql
+        livenessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "kea" ]
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "kea" ]
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      volumes:
+      - name: kea-postgresql-storage
+        persistentVolumeClaim:
+          claimName: kea-postgresql-pvc

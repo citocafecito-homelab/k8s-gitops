@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
 - config.yaml
-- deployment.yaml
+- server-deployment.yaml
+- replica-deployment.yaml
 - svc.yaml
 - addons/nebula-sync.yaml
