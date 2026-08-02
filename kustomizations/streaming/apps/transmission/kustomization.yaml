@@ -9,6 +9,7 @@ generatorOptions:
 configMapGenerator:
 - name: transmission-scripts
   files:
+  - scripts/common.sh
   - scripts/01-setup-config.sh
   - scripts/added.sh
   - scripts/finished.sh

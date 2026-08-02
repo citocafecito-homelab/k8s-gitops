@@ -1,4 +1,7 @@
 #!/bin/bash
+
+source /scripts/common.sh
+
 echo "[CRON-TAGGER] Iniciando ciclo de procesamiento de etiquetas..."
 
 STATUS_FILE="/config/pending_tags.txt"
@@ -11,15 +14,23 @@ RPC_URL="transmission.streaming.svc.cluster.local"
 
 export TR_AUTH="${USER}:${PASS}"
 
-echo 
-if [ ! -s "$STATUS_FILE" ]; then
+# Limpiar posibles saltos \r del archivo de estado antes de evaluar
+if [ -f "$STATUS_FILE" ]; then
+    sed -i 's/\r$//' "$STATUS_FILE"
+fi
+
+# Verificar si existe y NO está vacío (ignorando líneas en blanco)
+if [ ! -f "$STATUS_FILE" ] || [ -z "$(grep -v '^[[:space:]]*$' "$STATUS_FILE")" ]; then
     echo "[CRON-TAGGER] No hay hashes pendientes. Finalizando de forma limpia."
     exit 0
 fi
 
-cp "$STATUS_FILE" "$TMP_FILE"
+# Copiar y limpiar cola
+grep -v '^[[:space:]]*$' "$STATUS_FILE" | sort -u > "$TMP_FILE"
 
-for HASH in $(sort -u "$TMP_FILE"); do
+while IFS= read -r HASH || [ -n "$HASH" ]; do
+    # Limpiar cualquier residuo de retorno de carro
+    HASH=$(echo "$HASH" | tr -d '\r\n')
     [ -z "$HASH" ] && continue
     
     echo "[CRON-TAGGER] Procesando hash: $HASH"
@@ -34,6 +45,8 @@ for HASH in $(sort -u "$TMP_FILE"); do
         continue
     fi
 
+    TORRENT_NAME=$(echo "$INFO" | grep "Name:" | sed 's/.*Name: //' | xargs)
+
     # 1. Privacidad
     IS_PUBLIC=$(echo "$INFO" | grep -i "Public torrent:" | awk '{print $3}')
     [ "$IS_PUBLIC" == "Yes" ] && PRIVACY="public" || PRIVACY="private"
@@ -42,24 +55,18 @@ for HASH in $(sort -u "$TMP_FILE"); do
     ORIGIN=$(echo "$INFO" | grep -i "Source:" | sed 's/.*Source: //' | awk '{print $1}' | tr '[:upper:]' '[:lower:]')
     
     if [ -z "$ORIGIN" ] || [ "$ORIGIN" == "none" ]; then
-        # Intento A: Announce URL
         TRACKER_URL=$(echo "$INFO" | grep -i "Announce URL" | head -1 | awk '{print $3}')
         
-        # Intento B: Extraer del Magnet
         if [ -z "$TRACKER_URL" ]; then
             TRACKER_URL=$(echo "$INFO" | grep -o 'tr=[^&]*' | head -1 | sed 's/tr=//')
         fi
 
-        if [ ! -z "$TRACKER_URL" ]; then
-            # 1. Descodificar caracteres URL (%3A -> :, %2F -> /)
+        if [ -n "$TRACKER_URL" ]; then
             CLEAN_URL=$(echo "$TRACKER_URL" | sed 's/%3A/:/g; s/%2F/\//g')
             
-            # 2. Validar si tiene formato de URL (contiene // o un punto)
             if echo "$CLEAN_URL" | grep -E -q '//|\.'; then
-                # Extrae el host, remueve subdominios comunes (www, torrent) y el TLD (.com, .org, etc.)
                 ORIGIN=$(echo "$CLEAN_URL" | awk -F/ '{print $3}' | cut -d':' -f1 | sed -E 's/^(torrent|www|tracker)\.//i' | rev | cut -d'.' -f2- | rev | cut -d'.' -f1)
             else
-                # Si no es una URL, se mantiene el string intacto (ej. lat-team)
                 ORIGIN=$(echo "$CLEAN_URL" | tr '[:upper:]' '[:lower:]')
             fi
         fi
@@ -67,12 +74,11 @@ for HASH in $(sort -u "$TMP_FILE"); do
 
     # 3. Construir etiquetas
     NEW_TAGS="$PRIVACY"
-    [ ! -z "$ORIGIN" ] && [ "$ORIGIN" != "none" ] && NEW_TAGS="${NEW_TAGS},${ORIGIN}"
+    [ -n "$ORIGIN" ] && [ "$ORIGIN" != "none" ] && NEW_TAGS="${NEW_TAGS},${ORIGIN}"
 
-    # Obtener etiquetas existentes (inyectadas por Radarr/Sonarr)
     CURRENT=$(echo "$INFO" | grep "Labels:" | sed 's/.*Labels: //' | xargs)
     
-    if [ ! -z "$CURRENT" ] && [ "$CURRENT" != "None" ]; then
+    if [ -n "$CURRENT" ] && [ "$CURRENT" != "None" ]; then
         FINAL_LABELS=$(echo "${CURRENT},${NEW_TAGS}" | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//')
     else
         FINAL_LABELS="$NEW_TAGS"
@@ -85,16 +91,17 @@ for HASH in $(sort -u "$TMP_FILE"); do
     
     if [ $EXIT_CODE -eq 0 ] || [[ "$OUTPUT" == *"success"* ]]; then
         echo "[DEBUG] Éxito. Removiendo $HASH de la cola de forma segura."
-        
-        # Reescribir la cola de forma segura para no romper permisos (1000:1000) en el storage
-        # Excluimos el hash actual y actualizamos el archivo vivo
         sed -i "/$HASH/d" "$STATUS_FILE"
+
+        send_ntfy "Transmission - Etiquetas Asignadas" \
+                  "Torrent: ${TORRENT_NAME:-$HASH}\nEtiquetas: [$FINAL_LABELS]" \
+                  "label,tag" \
+                  "low"
     else
         echo "[ERROR] Falló actualización de $HASH: $OUTPUT"
     fi
-done
+done < "$TMP_FILE"
 
-# Limpieza final del archivo temporal
-[ -f "$TMP_FILE" ] && rm "$TMP_FILE"
+[ -f "$TMP_FILE" ] && rm -f "$TMP_FILE"
 echo "[CRON-TAGGER] Ejecución finalizada correctamente."
 exit 0

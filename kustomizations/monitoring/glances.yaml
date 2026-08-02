@@ -12,6 +12,24 @@ spec:
       labels:
         app: glances
         app.kubernetes.io/name: glances
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-inject-secret-glances.conf: "secret/data/ntfy"
+        vault.hashicorp.com/agent-inject-template-glances.conf: |
+          {{- with secret "secret/data/ntfy" -}}
+          [global]
+          check_interval=60
+
+          [outputs]
+          global_limits=TRUE
+
+          [webhooks]
+          url=http://ntfy.core.svc.cluster.local/glances
+          method=POST
+          headers=Title:Alerta de Sistema en Glances,Tags:warning,Authorization: Bearer {{ .Data.data.ADMIN_TOKEN }}
+          body={"topic": "glances", "title": "Glances {{ "{{type}}" }} en {{ "{{hostname}}" }}", "message": "El recurso {{ "{{plugin}}" }} superó el límite: {{ "{{msg}}" }}", "tags": ["warning"]}
+          {{- end -}}
     spec:
       hostPID: true
       containers:
@@ -19,7 +37,7 @@ spec:
         image: nicolargo/glances:latest
         env:
         - name: GLANCES_OPT
-          value: "-w -B 0.0.0.0 --disable-plugin processlist --fs-free-space"
+          value: "-w -B 0.0.0.0 -C /vault/secrets/glances.conf --disable-plugin processlist --fs-free-space"
         ports:
         - containerPort: 61208
           hostPort: 61208
