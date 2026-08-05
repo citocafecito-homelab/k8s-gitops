@@ -18,6 +18,8 @@ spec:
         vault.hashicorp.com/agent-inject-secret-credentials: "secret/data/openwa"
         vault.hashicorp.com/agent-inject-template-credentials: |
           {{- with secret "secret/data/openwa" -}}
+          S3_ACCESS_KEY_ID="{{ .Data.data.S3_ACCESS_KEY_ID }}"
+          S3_SECRET_ACCESS_KEY="{{ .Data.data.S3_SECRET_ACCESS_KEY }}"
           S3_ACCESS_KEY="{{ .Data.data.S3_ACCESS_KEY_ID }}"
           S3_SECRET_KEY="{{ .Data.data.S3_SECRET_ACCESS_KEY }}"
           API_MASTER_KEY="{{ .Data.data.ADMIN_TOKEN }}"

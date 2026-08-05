@@ -21,6 +21,9 @@ data:
   ND_SCANSCHEDULE: "1h"
   ND_SCANNER_PURGEMISSING: "always"
 
+  # --- Transcodding ---
+  ND_ENABLETRANSCODINGCONFIG: "true"
+
   # --- Almacenamiento y Backups ---
   ND_BACKUP_COUNT: "3"
   ND_BACKUP_PATH: "/data/backup"

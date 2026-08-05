@@ -56,6 +56,12 @@ spec:
         - name: dns-udp
           containerPort: 53
           protocol: UDP
+        - name: dhcp
+          containerPort: 67
+          protocol: UDP
+        - name: dhcpv6
+          containerPort: 547
+          protocol: UDP
         resources:
           requests:
             cpu: 50m

@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: replaygain-calculator
+spec:
+  schedule: "0 2 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: rsgain
+            image: ghcr.io/codenamek83/rsgain:latest
+            command:
+            - rsgain
+            - easy
+            - -p
+            - custom-preset01
+            - -S
+            - /music
+            volumeMounts:
+            - name: music
+              mountPath: /music
+          nodeSelector:
+            kubernetes.io/hostname: caturra
+          volumes:
+          - name: music
+            hostPath:
+              path: /mnt/music
+              type: DirectoryOrCreate
