@@ -16,10 +16,45 @@ spec:
         app.kubernetes.io/name: ring-mqtt
         app.kubernetes.io/part-of: home-assistant
     spec:
+      initContainers:
+      - name: init-ring-state
+        image: alpine:latest
+        command:
+        - /bin/sh
+        - -c
+        - |
+          # Define el systemId deseado (los últimos 5 caracteres definen el nombre del dispositivo)
+          FIXED_SYSTEM_ID="00000000000000000000000000000000000000000000000000000000000k8sio"
+          STATE_FILE="/data/ring-state.json"
+
+          if [ ! -f "$STATE_FILE" ]; then
+            echo "Creando $STATE_FILE con systemId fijo..."
+            echo "{\"systemId\": \"$FIXED_SYSTEM_ID\"}" > "$STATE_FILE"
+          else
+            echo "Asegurando systemId en $STATE_FILE..."
+            # Si el archivo ya existe pero no tiene systemId, o si quieres sobrescribir/preservar el token:
+            # Reemplaza o agrega el systemId usando sed / awk / jq
+            if grep -q "systemId" "$STATE_FILE"; then
+              sed -i 's/"systemId": *"[^"]*"/"systemId": "'"$FIXED_SYSTEM_ID"'"/' "$STATE_FILE"
+            else
+              # Agrega el campo si el JSON ya tiene contenido
+              sed -i 's/{/{"systemId": "'"$FIXED_SYSTEM_ID"'", /' "$STATE_FILE"
+            fi
+          fi
+        volumeMounts:
+        - name: data
+          mountPath: /data
       containers:
       - name: ring-mqtt
         image: tsightler/ring-mqtt:latest
         imagePullPolicy: IfNotPresent
+        env:
+        - name: TZ
+          value: "America/Bogota"
+        - name: PUID  
+          value: "1000"
+        - name: PGID
+          value: "1000"
         ports:
         - containerPort: 51824
           name: web-ui
@@ -35,16 +70,21 @@ spec:
             cpu: 100m
             memory: 256Mi
           limits:
-            cpu: 300m
+            cpu: 500m
             memory: 512Mi
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
       volumes:
       - name: data
-        nfs:
-          server: 192.168.1.10
+        hostPath: 
           path: /mnt/ring-mqtt
 ---
 apiVersion: v1 
