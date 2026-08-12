@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ntfy-internal-proxy
+  namespace: core
+  labels:
+    app: ntfy-internal-proxy
+    tier: disposable
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ntfy-internal-proxy
+  template:
+    metadata:
+      labels:
+        app: ntfy-internal-proxy
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-inject-secret-proxy: "secret/data/ntfy"
+        vault.hashicorp.com/secret-volume-path-proxy: "/etc/nginx/conf.d"
+        vault.hashicorp.com/agent-inject-file-proxy: "default.conf"
+        vault.hashicorp.com/agent-inject-perms-proxy: "0644"
+        vault.hashicorp.com/agent-inject-template-proxy: |
+          {{- with secret "secret/data/ntfy" -}}
+          server {
+              listen 80;
+              server_name _;
+
+              location / {
+                  proxy_set_header Authorization "Bearer {{ .Data.data.ADMIN_TOKEN }}";
+                  proxy_pass http://ntfy.core.svc.cluster.local:80;
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto $scheme;
+                  
+                  # Soporte WebSockets
+                  proxy_http_version 1.1;
+                  proxy_set_header Upgrade $http_upgrade;
+                  proxy_set_header Connection "upgrade";
+              }
+          }
+          {{- end -}}
+    spec:
+      serviceAccountName: ntfy
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 80
+          name: http

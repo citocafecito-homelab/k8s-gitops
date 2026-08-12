@@ -15,8 +15,6 @@ resources:
 - server-svc.yaml
 - server-ingress.yaml
 
-# Discarted due only works on docker
-# Watchover
-# - watchtower-deployment.yaml 
-# - watchtower-svc.yaml
-# - watchtower-ingress.yaml
+# Proxy
+- proxy-deployment.yaml 
+- proxy-svc.yaml
