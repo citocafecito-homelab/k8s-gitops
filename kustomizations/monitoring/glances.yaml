@@ -21,6 +21,10 @@ spec:
           [global]
           check_interval=60
 
+          [network]
+          # Ignorar interfaces virtuales de Kubernetes que rompen la API
+          hide=lo,veth.*,cni.*,flannel.*,calico.*,tun.*
+
           [outputs]
           global_limits=TRUE
 
@@ -32,22 +36,24 @@ spec:
           {{- end -}}
     spec:
       hostPID: true
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: glances
         image: nicolargo/glances:latest
         env:
         - name: GLANCES_OPT
-          value: "-w -B 0.0.0.0 -C /vault/secrets/glances.conf --disable-plugin processlist --fs-free-space"
+          value: "-w -B 0.0.0.0 -C /vault/secrets/glances.conf --disable-plugin processlist,docker,containers,irq --fs-free-space"
         ports:
         - containerPort: 61208
           hostPort: 61208
         resources:
           requests:
-            cpu: 50m
+            cpu: 100m
             memory: 32Mi
           limits:
-            cpu: 200m
-            memory: 192Mi
+            cpu: 500m
+            memory: 256Mi
         volumeMounts:
         - name: host-root
           mountPath: /host
