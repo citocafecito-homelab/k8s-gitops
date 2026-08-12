@@ -8,3 +8,8 @@ data:
   DATABASE_NAME: "vaultwarden"
   DATABASE_USERNAME: "vaultwarden"
   DATABASE_PASSWORD: "2K<GbzK[%96p;v%O"
+  
+  # Notifications
+  PUSH_ENABLED: "true"
+  PUSH_INSTALLATION_ID: "b0489f66-1851-4d94-bcf3-b4a400148afd"
+  PUSH_INSTALLATION_KEY: "p5eXmc65lV5M9zANoRh2"
