@@ -15,7 +15,7 @@ spec:
           annotations:
             vault.hashicorp.com/agent-inject: "true"
             vault.hashicorp.com/role: "vault"
-            vault.hashicorp.com/agent-pre-populate-only : "true"
+            vault.hashicorp.com/agent-pre-populate-only: "true"
             vault.hashicorp.com/agent-inject-secret-nebula.env: "secret/data/pihole"
             vault.hashicorp.com/agent-inject-template-nebula.env: |
               {{- with secret "secret/data/pihole" -}}
@@ -32,6 +32,17 @@ spec:
               SYNC_DHCP="false"
               RUN_GRAVITY=true
               TZ="America/Bogota"
+
+              # Webhooks de ntfy (Texto plano sin headers personalizados adicionales)
+              WEBHOOK_SYNC_SUCCESS_URL="http://ntfy-internal.core.svc.cluster.local/pihole"
+              WEBHOOK_SYNC_SUCCESS_METHOD="POST"
+              WEBHOOK_SYNC_SUCCESS_BODY="[Nebula Sync] Sincronización exitosa entre nodos Pi-hole."
+              WEBHOOK_SYNC_SUCCESS_HEADERS="Title:Nebula Sync OK,Priority:low,Tags:green_circle"
+
+              WEBHOOK_SYNC_FAILURE_URL="http://ntfy-internal.core.svc.cluster.local/pihole"
+              WEBHOOK_SYNC_FAILURE_METHOD="POST"
+              WEBHOOK_SYNC_FAILURE_BODY="[Nebula Sync] Error al sincronizar nodos Pi-hole. Revisar logs del pod."
+              WEBHOOK_SYNC_FAILURE_HEADERS="Title:Error en Nebula Sync,Priority:high,Tags:red_circle"
               {{- end }}
         spec:
           restartPolicy: OnFailure

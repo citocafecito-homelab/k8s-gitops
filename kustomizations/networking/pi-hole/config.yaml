@@ -21,6 +21,10 @@ kind: ConfigMap
 metadata:
   name: pihole-primary
 data:
+  # --- Global Config ---
+  FTLCONF_dns_listeningMode: "all"
+  FTLCONF_dns_interface: "enp1s0"
+
   # --- DHCPv4 ---
   FTLCONF_dhcp_active: "true"
   FTLCONF_dhcp_start: "192.168.1.160"
@@ -32,27 +36,29 @@ data:
 
   # --- DHCPv6 & RA (Nativo FTL v6) ---
   FTLCONF_dhcp_ipv6: "true"
-  FTLCONF_dns_listeningMode: "all"
   FTLCONF_dhcp_start6: "fd00:192:168:1::2"
   FTLCONF_dhcp_end6: "fd00:192:168:1::ffff"
   FTLCONF_dhcp_router6: "fe80::6a1d:efff:fe4a:3da6"
-  FTLCONF_dns_interface: "enp1s0"
   FTLCONF_LOCAL_IPV6: "fe80::6a1d:efff:fe4a:3da6"
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: pihole-custom-dns
+  namespace: networking
 data:
   custom.conf: |
-    # Anunciar Pi-hole como servidor DNS IPv6 (Opción 23 / RDNSS)
-    dhcp-option=option6:dns-server,[fe80::6a1d:efff:fe4a:3da6]
+    # Rango IPv6 + RA (SLAAC + DHCPv6)
+    # Nota: dnsmasq/FTL incluye automáticamente la opción DNSv6 (23) hacia este host.
+    dhcp-range=::2,::ffff,constructor:enp1s0,ra-names,slaac,64,86400s
 
-    # Forzar prioridad alta en Anuncios de Router frente al GPON
+    # Prioridad de RA en la interfaz
     ra-param=enp1s0,high,10,600
 
-    # Desactivar respuestas AAAA externas para prevenir timeouts en parlantes/Chromecast
-    address=/#/::
+    quiet-dhcp6
+
+    # Evita la inspección de interfaces VRF no utilizadas
+    bind-interfaces
 
     # Network
     address=/router.lan/192.168.1.1
@@ -74,7 +80,8 @@ metadata:
 data:
   adlists.list: |
     https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
-      https://raw.githubusercontent.com/hagezi/dns-blocklists/refs/heads/main/adblock/pro.plus.txt
+    # https://raw.githubusercontent.com/hagezi/dns-blocklists/refs/heads/main/adblock/pro.plus.txt
+    https://raw.githubusercontent.com/stevejenkins/pi-hole-lists/refs/heads/main/blocklists.txt
     https://someonewhocares.org/hosts/zero/hosts
 ---
 
