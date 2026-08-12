@@ -28,7 +28,7 @@ spec:
       automountServiceAccountToken: true
       containers:
       - name: suwayomi
-        image: ghcr.io/suwayomi/suwayomi-server:latest
+        image: ghcr.io/suwayomi/suwayomi-server:preview
         ports:
         - containerPort: 4567
         - containerPort: 8181
@@ -38,10 +38,10 @@ spec:
         resources:
           requests:
             cpu: "100m"
-            memory: "512Mi"
+            memory: "1Gi"
           limits:
             cpu: "500m"
-            memory: "1Gi"
+            memory: "2Gi"
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: false
@@ -52,13 +52,27 @@ spec:
             - ALL
         volumeMounts:
         - name: suwayomi-storage
-          mountPath: /home/suwayomi/.local/share/Tachidesk
+          mountPath: /home/suwayomi/.local/share/Tachidesk/downloads
+          subPath: downloads
+        - name: suwayomi-storage
+          mountPath: /home/suwayomi/.local/share/Tachidesk/extensions
+          subPath: extensions
+        - name: suwayomi-storage
+          mountPath: /home/suwayomi/.local/share/Tachidesk/backups
+          subPath: backups
+        - name: suwayomi-storage
+          mountPath: /home/suwayomi/.local/share/Tachidesk/local
+          subPath: local
+        - name: suwayomi-storage
+          mountPath: /home/suwayomi/.local/share/Tachidesk/settings
+          subPath: settings
         - name: suwayomi-cache
           mountPath: /home/suwayomi/.local/share/Tachidesk/cache
       nodeSelector:
         kubernetes.io/hostname: castillo
       securityContext:
         fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
       volumes:
       - name: suwayomi-storage
         persistentVolumeClaim:

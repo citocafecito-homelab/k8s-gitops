@@ -12,9 +12,8 @@ data:
   DATABASE_URL: "postgresql://suwayomi-postgresql.media.svc.cluster.local:5432/suwayomi"
   DATABASE_USERNAME: "suwayomi"
   DATABASE_PASSWORD: "2K<GbzK[%96p;v%O"
-  EXTENSION_REPOS: '["https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json"]'
+  EXTENSION_STORES: '["https://github.com/keiyoushi/extensions/raw/repo/index.pb", "https://github.com/yuzono/manga-repo/raw/repo/index.pb"]'
   FLARESOLVERR_ENABLED: "true"
   FLARESOLVERR_URL: "http://cloudflare-solver.media.svc.cluster.local:8000"
-  # KCEF_ENABLED: "false"
   AUTH_USERNAME_FILE: "/vault/secrets/AUTH_USERNAME"
   AUTH_PASSWORD_FILE: "/vault/secrets/AUTH_PASSWORD"
