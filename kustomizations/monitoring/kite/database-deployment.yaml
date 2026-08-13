@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kite-postgresql
+spec:
+  serviceName: kite-postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kite-postgresql
+      app.kubernetes.io/name: kite-postgresql
+  template:
+    metadata:
+      labels:
+        app: kite-postgresql
+        app.kubernetes.io/name: kite-postgresql
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:18
+        ports:
+        - containerPort: 5432
+        envFrom:
+        - configMapRef:
+            name: kite-database
+        volumeMounts:
+        - name: kite-postgresql-storage
+          mountPath: /var/lib/postgresql
+        livenessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "kite" ]
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "kite" ]
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      volumes:
+      - name: kite-postgresql-storage
+        persistentVolumeClaim:
+          claimName: kite-postgresql-pvc

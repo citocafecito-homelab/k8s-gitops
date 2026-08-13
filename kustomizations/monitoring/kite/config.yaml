@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kite-database
+data:
+  POSTGRES_DB: "kite"
+  POSTGRES_USER: "kite"
+  POSTGRES_PASSWORD: "3TOUjcOx40Yi"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kite-config
+data:
+  # Global
+  ENABLE_ANALYTICS: "true"
+  ANONYMOUS_USER_ENABLED: "true"
+
+  # Database
+  # see https://kite.zzde.me/faq#persistence-issues
+  DB_TYPE: "postgres"
+  DB_DSN: "postgres://kite:3TOUjcOx40Yi@kite-postgresql:5432/kite?sslmode=disable"
+
+  # Cluster configuration
+  CONFIG_PATH: "/etc/kite/config.yaml"
+  config.yaml: |
+    clusters:
+      - name: local
+        inCluster: true
+        prometheusURL: "http://prometheus-k8s.monitoring.svc.cluster.local:9090"
+        default: true

@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: kite-postgresql-pv
+spec:
+  capacity:
+    storage: "5Gi"
+  accessModes:
+  - ReadWriteOnce
+  hostPath:
+    path: /mnt/kite-postgresql
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kite-postgresql-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: "5Gi"
+  storageClassName: ""
+  volumeName: kite-postgresql-pv

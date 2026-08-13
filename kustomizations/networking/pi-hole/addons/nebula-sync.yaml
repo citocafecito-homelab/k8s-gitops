@@ -34,10 +34,10 @@ spec:
               TZ="America/Bogota"
 
               # Webhooks de ntfy (Texto plano sin headers personalizados adicionales)
-              WEBHOOK_SYNC_SUCCESS_URL="http://ntfy-internal.core.svc.cluster.local/pihole"
-              WEBHOOK_SYNC_SUCCESS_METHOD="POST"
-              WEBHOOK_SYNC_SUCCESS_BODY="[Nebula Sync] Sincronización exitosa entre nodos Pi-hole."
-              WEBHOOK_SYNC_SUCCESS_HEADERS="Title:Nebula Sync OK,Priority:low,Tags:green_circle"
+              # WEBHOOK_SYNC_SUCCESS_URL="http://ntfy-internal.core.svc.cluster.local/pihole"
+              # WEBHOOK_SYNC_SUCCESS_METHOD="POST"
+              # WEBHOOK_SYNC_SUCCESS_BODY="[Nebula Sync] Sincronización exitosa entre nodos Pi-hole."
+              # WEBHOOK_SYNC_SUCCESS_HEADERS="Title:Nebula Sync OK,Priority:low,Tags:green_circle"
 
               WEBHOOK_SYNC_FAILURE_URL="http://ntfy-internal.core.svc.cluster.local/pihole"
               WEBHOOK_SYNC_FAILURE_METHOD="POST"

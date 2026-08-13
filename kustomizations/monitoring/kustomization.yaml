@@ -6,9 +6,9 @@ resources:
 # - node-exporter.yaml
 # - kube-state-metrics.yaml
 # - prometheus.yaml
-- kite.yaml
 - filebrowser.yaml
 # - ingress.yaml
+- kite
 
 namespace: monitoring
 
