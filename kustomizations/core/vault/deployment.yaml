@@ -31,6 +31,8 @@ spec:
         envFrom:
         - secretRef:
             name: vault-bootstrap
+        - secretRef:
+            name: vault-garage-creds
         ports:
         - containerPort: 8200
         securityContext:
@@ -54,8 +56,6 @@ spec:
         - name: config
           mountPath: /vault/config
           readOnly: true
-        - name: data
-          mountPath: /vault/data
         - name: vault-scripts
           mountPath: /vault/scripts
         resources:
@@ -64,9 +64,7 @@ spec:
             cpu: 50m
           limits:
             memory: 128Mi
-            cpu: 100m
-      nodeSelector:
-        kubernetes.io/hostname: caturra
+            cpu: 200m
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
@@ -75,17 +73,6 @@ spec:
       - name: config
         configMap:
           name: vault-config
-          items:
-          - key: vault.hcl
-            path: vault.hcl
-      - name: data
-        hostPath:
-          path: /mnt/vault/data
-          type: DirectoryOrCreate
-      - name: secrets
-        hostPath:
-          path: /mnt/vault/secrets
-          type: DirectoryOrCreate
       - name: vault-scripts
         configMap:
           name: vault-scripts

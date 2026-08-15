@@ -14,8 +14,11 @@ data:
       tls_disable = true
     }
 
-    storage "file" {
-      path = "/vault/data"
+    storage "s3" {
+      bucket              = "vault"
+      endpoint            = "http://garage.storage.svc.cluster.local:3900"
+      region              = "garage"
+      s3_force_path_style = "true"
     }
 
     telemetry {
@@ -24,6 +27,19 @@ data:
     }
 
     api_addr = "http://vault.core.svc.cluster.local:8200"
+
+  # Migrated from  vault operator migrate -config /vault/config/migrate.hcl
+  migrate.hcl: |
+    storage_source "file" {
+      path = "/vault/data"
+    }
+
+    storage_destination "s3" {
+      bucket              = "vault"
+      endpoint            = "http://garage.storage.svc.cluster.local:3900"
+      region              = "garage"
+      s3_force_path_style = "true"
+    }
 ---
 apiVersion: v1
 kind: ConfigMap
