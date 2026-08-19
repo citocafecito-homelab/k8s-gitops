@@ -17,6 +17,7 @@ configMapGenerator:
 
 - name: transmission-jobs
   files:
+  - scripts/common.sh
   - scripts/tagger-daemon.sh
   - scripts/check-port-daemon.sh
 

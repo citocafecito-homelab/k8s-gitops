@@ -19,9 +19,6 @@ spec:
       annotations:
         app.kubernetes.io/documentation: "https://docs.linuxserver.io/images/docker-transmission/"
         vault.hashicorp.com/agent-inject: "true"
-        #
-        ## --- Transmission
-        #
         vault.hashicorp.com/role: vault
         vault.hashicorp.com/agent-inject-secret-transmission: "secret/data/transmission"
         vault.hashicorp.com/agent-inject-template-transmission: |

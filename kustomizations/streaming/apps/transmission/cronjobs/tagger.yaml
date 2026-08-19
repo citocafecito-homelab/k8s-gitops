@@ -20,8 +20,12 @@ spec:
             vault.hashicorp.com/agent-inject-secret-transmission: "secret/data/transmission"
             vault.hashicorp.com/agent-inject-template-transmission: |
               {{- with secret "secret/data/transmission" -}}
-              {{ .Data.data.USERNAME | writeToFile "/vault/secrets/user" "vault" "vault" "0640" }}
-              {{ .Data.data.PASSWORD | writeToFile "/vault/secrets/password" "vault" "vault" "0640" }}
+              {{ .Data.data.USERNAME | writeToFile "/vault/secrets/user" "vault" "1000" "0640" }}
+              {{ .Data.data.PASSWORD | writeToFile "/vault/secrets/password" "vault" "1000" "0640" }}
+              {{- end -}}
+
+              {{- with secret "secret/data/ntfy" -}}
+              {{ .Data.data.ADMIN_TOKEN | writeToFile "/vault/secrets/ntfy" "vault" "1000" "0640" }}
               {{- end -}}
         spec:
           restartPolicy: OnFailure
@@ -47,7 +51,7 @@ spec:
             - name: config
               mountPath: /config
           nodeSelector:
-            kubernetes.io/hostname: catuai
+            kubernetes.io/hostname: catimore
           tolerations:
           - key: node-role.kubernetes.io/control-plane
             operator: Exists
