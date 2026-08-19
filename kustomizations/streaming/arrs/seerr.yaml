@@ -34,22 +34,27 @@ spec:
             cpu: 5m
           limits:
             memory: 512Mi
-            cpu: 200m
-        livenessProbe:
-          httpGet:
-            path: /api/v1/status
-            port: 5055
-          initialDelaySeconds: 20
-          periodSeconds: 30
-          timeoutSeconds: 5
-          failureThreshold: 5
-        readinessProbe:
+            cpu: 500m
+        startupProbe:
           httpGet:
             path: /api/v1/status
             port: 5055
           initialDelaySeconds: 10
-          periodSeconds: 15
-          timeoutSeconds: 5
+          periodSeconds: 5
+          failureThreshold: 30
+        livenessProbe:
+          httpGet:
+            path: /api/v1/status
+            port: 5055
+          periodSeconds: 20
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/v1/status
+            port: 5055
+          periodSeconds: 10
+          timeoutSeconds: 10
           failureThreshold: 3
         securityContext:
           allowPrivilegeEscalation: false

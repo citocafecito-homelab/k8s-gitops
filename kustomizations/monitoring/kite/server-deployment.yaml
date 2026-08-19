@@ -20,7 +20,7 @@ spec:
       containers:
         - name: kite
           image: ghcr.io/kite-org/kite:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           - name: http
             containerPort: 8080

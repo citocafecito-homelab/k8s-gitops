@@ -30,7 +30,7 @@ spec:
         - name: JELLYFIN_CACHE_DIR
           value: "/config/cache"
         - name: JELLYFIN_PublishedServerUrl
-          value: "internal=http://habiflix.lan, external=habiflix.citocafecito.work, external=jellyfin.citocafecito.work"
+          value: "internal=http://habiflix.lan, external=habiflix.citocafecito.work"
         envFrom:
         - configMapRef:
             name: streaming-stack-config

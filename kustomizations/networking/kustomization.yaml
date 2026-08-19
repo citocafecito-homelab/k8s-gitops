@@ -5,7 +5,7 @@ resources:
 - pi-hole
 - external-dns
 # - kea-dhcp
-# - avahi-daemon.yaml
+- avahi-daemon.yaml
 # - speedtest.yaml
 
 # - middlewares/local-only.yaml
