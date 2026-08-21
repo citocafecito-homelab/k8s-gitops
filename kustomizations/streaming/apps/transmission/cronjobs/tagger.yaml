@@ -52,10 +52,6 @@ spec:
               mountPath: /config
           nodeSelector:
             kubernetes.io/hostname: catimore
-          tolerations:
-          - key: node-role.kubernetes.io/control-plane
-            operator: Exists
-            effect: NoSchedule
           volumes:
           - name: scripts
             configMap:

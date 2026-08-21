@@ -28,24 +28,94 @@ spec:
         app.kubernetes.io/part-of: streaming-stack
     spec:
       containers:
+      # VPN Sidecar
+      - name: gluetun
+        image: qmcgaw/gluetun:latest
+        securityContext:
+          capabilities:
+            add:
+              - NET_ADMIN
+        env:
+        # Permitir entrada al puerto de la WebUI y subredes locales
+        - name: FIREWALL_INPUT_PORTS
+          value: "8080"
+        - name: FIREWALL_OUTBOUND_SUBNETS
+          value: "192.168.1.0/24,10.244.0.0/16,10.96.0.0/12"
+
+        # Autenticación PIA desde Secrets
+        - name: OPENVPN_USER
+          valueFrom:
+            secretKeyRef:
+              name: pia-credentials
+              key: VPN_SERVICE_USER
+        - name: OPENVPN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pia-credentials
+              key: VPN_SERVICE_PASSWORD
+
+        # Configuración PIA y Port Forwarding
+        - name: VPN_SERVICE_PROVIDER
+          value: "private internet access"
+        - name: VPN_TYPE
+          value: "openvpn"
+        - name: OPENVPN_PROTOCOL
+          value: "udp"
+        - name: PRIVATE_INTERNET_ACCESS_OPENVPN_ENCRYPTION_PRESET
+          value: "normal"
+        - name: PORT_FORWARD_ONLY
+          value: "true"
+        - name: VPN_PORT_FORWARDING
+          value: "on"
+        - name: VPN_PORT_FORWARDING_STATUS_FILE
+          value: "/tmp/gluetun/forwarded_port"
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        volumeMounts:
+        - name: gluetun-data
+          mountPath: /tmp/gluetun
+        - name: tun
+          mountPath: /dev/net/tun
+
+      # Port Sync Sidecar (PIA Port -> qBittorrent API)
+      - name: port-forward-sync
+        image: curlimages/curl:latest
+        command:
+          - /bin/sh
+          - -c
+          - |
+            echo "Iniciando monitor de puerto PIA..."
+            OLD_PORT=""
+            while true; do
+              if [ -f /tmp/gluetun/forwarded_port ]; then
+                PORT=$(cat /tmp/gluetun/forwarded_port)
+                if [ -n "$PORT" ] && [ "$PORT" != "$OLD_PORT" ]; then
+                  echo "Nuevo puerto detectado en PIA: $PORT. Actualizando qBittorrent..."
+                  curl -s -X POST "http://localhost:8080/api/v2/app/setPreferences" \
+                    --data-urlencode 'json={"listen_port": '$PORT'}'
+                  OLD_PORT=$PORT
+                fi
+              fi
+              sleep 60
+            done
+        volumeMounts:
+        - name: gluetun-data
+          mountPath: /tmp/gluetun
+
+      # Torrent Downloader
       - name: qbittorrent
         image: lscr.io/linuxserver/qbittorrent:latest
-        ports:
-        - containerPort: 8080
-          protocol: TCP
-        - containerPort: 6881
-          protocol: TCP
-        - containerPort: 6881
-          protocol: UDP
         envFrom:
         - configMapRef:
             name: streaming-stack-config
         env:
         - name: WEBUI_PORT
-          valueFrom:
-            configMapKeyRef:
-              name: streaming-stack-config
-              key: QBITTORRENT_PORT
+          value: "8080"
         - name: TORRENTING_PORT
           value: "6881"
         resources:
@@ -62,9 +132,15 @@ spec:
           mountPath: /downloads
         - name: latteam
           mountPath: /LatTeam
+
       nodeSelector:
         kubernetes.io/hostname: catimore
       volumes:
+      - name: tun
+        hostPath:
+          path: /dev/net/tun
+      - name: gluetun-data
+        emptyDir: {}
       - name: config
         hostPath:
           path: /mnt/qbittorrent
@@ -108,14 +184,6 @@ spec:
   - name: webui
     port: 8080
     targetPort: 8080
-  - name: bittorrent-tcp
-    port: 6881
-    targetPort: 6881
-    protocol: TCP
-  - name: bittorrent-udp
-    port: 6881
-    targetPort: 6881
-    protocol: UDP
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
