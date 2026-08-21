@@ -1,0 +1,185 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: frigate
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frigate
+  labels:
+    app: frigate
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: frigate
+  template:
+    metadata:
+      labels:
+        app: frigate
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-inject-secret-config.yaml: "secret/data/frigate"
+        vault.hashicorp.com/agent-inject-template-config.yml: |
+          {{- with secret "secret/data/frigate" -}}
+          mqtt:
+            enabled: true
+            host: mosquitto.home-assistant.svc.cluster.local
+            port: 1883
+            topic_prefix: frigate
+            client_id: frigate
+
+          ffmpeg:
+            hwaccel_args: preset-vaapi
+
+          auth:
+            enabled: false
+
+          record:
+            enabled: false
+
+          ui:
+            timezone: America/Bogota
+
+          cameras:
+            {{- range $name, $cam := .Data.data.cameras }}
+            {{ $name }}:
+              enabled: {{ if ne (index $cam "enabled") nil }}{{ $cam.enabled }}{{ else }}true{{ end }}
+              ffmpeg:
+                inputs:
+                  - path: rtsp://{{ $cam.username }}:{{ $cam.password }}@{{ $cam.ip }}:{{ or $cam.port 554 }}/stream1
+                    roles:
+                      - record
+                  - path: rtsp://{{ $cam.username }}:{{ $cam.password }}@{{ $cam.ip }}:{{ or $cam.port 554 }}/stream2
+                    roles:
+                      - detect
+              live:
+                height: 1080
+                quality: 8
+
+              detect:
+                width: {{ or $cam.width 1280 }}
+                height: {{ or $cam.height 720 }}
+                fps: {{ or $cam.fps 5 }}
+                enabled: {{ if ne (index $cam "detect") nil }}{{ $cam.detect }}{{ else if ne (index $cam "detect_enabled") nil }}{{ $cam.detect_enabled }}{{ else }}true{{ end }}
+
+              objects:
+                track:
+                  - person
+                  - dog
+                  - cat
+                filters:
+                  person:
+                    min_score: 0.80
+                    threshold: 0.85
+                  dog:
+                    min_score: 0.70
+                    min_area: 2500
+                  cat:
+                    min_score: 0.55
+            {{- end }}
+          {{- end }}
+    spec:
+      serviceAccountName: frigate
+      automountServiceAccountToken: true
+      containers:
+      - name: frigate
+        image: ghcr.io/blakeblackshear/frigate:stable
+        imagePullPolicy: IfNotPresent
+        command:
+        - /bin/bash
+        - -c
+        - |
+          mkdir -p /config
+          cp /vault/secrets/config.yml /config/config.yml
+          exec /init
+        env:
+        - name: LIBVA_DRIVER_NAME
+          value: "radeonsi"
+        resources:
+          limits:
+            cpu: "2"
+            memory: 2Gi
+          requests:
+            cpu: "500m"
+            memory: 1Gi
+        securityContext:
+          privileged: true
+        ports:
+        - name: http
+          containerPort: 5000
+        - name: rtsp
+          containerPort: 8554
+        volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
+        - name: media
+          mountPath: /media/frigate
+        - name: dri
+          mountPath: /dev/dri
+        - name: localtime
+          mountPath: /etc/localtime
+          readOnly: true
+        - name: timezone
+          mountPath: /etc/timezone
+          readOnly: true
+      nodeSelector:
+        kubernetes.io/hostname: catimore
+      securityContext:
+        fsGroup: 1000
+        supplementalGroups: [44, 46, 107, 109, 110, 992]
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 1Gi
+      - name: localtime
+        hostPath:
+          path: /etc/localtime
+          type: File
+      - name: timezone
+        hostPath:
+          path: /etc/timezone
+          type: FileOrCreate
+      - name: media
+        emptyDir: {} 
+      - name: dri
+        hostPath:
+          path: /dev/dri
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frigate
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5000
+      targetPort: 5000
+      name: http
+    - port: 8554
+      targetPort: 8554
+      name: rtsp
+  selector:
+    app: frigate
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frigate
+spec:
+  rules:
+  - host: frigate.lan
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: frigate
+              port:
+                number: 5000

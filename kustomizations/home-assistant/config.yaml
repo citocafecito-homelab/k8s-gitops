@@ -26,34 +26,6 @@ data:
         snapshots: /config/www/snapshots
         timbre: /config/www/timbre
 
-    # ingress:
-    #   pihole:
-    #     ui_mode: toolbar
-    #     title: Pi-Hole
-    #     icon: mdi:pi-hole
-    #     # url: http://pihole.networking.svc.cluster.local
-    #     # url: http://192.168.1.10
-    #     url: http://192.168.1.26
-
-    #   kubernetesss:
-    #     ui_mode: toolbar
-    #     title: K8s
-    #     icon: mdi:kubernetes
-    #     url: http://kite.monitoring.svc.cluster.local:8080
-
-    #   kite:
-    #     ui_mode: toolbar
-    #     title: Kite
-    #     icon: mdi:kubernetes
-    #     url: http://kite.lan
-
-    #   bazarr:
-    #     ui_mode: toolbar
-    #     title: Bazarr
-    #     icon: mdi:tts
-    #     # url: http://bazarr.streaming.svc.cluster.local:6767
-    #     url: http://bazarr.citocafecito.work
-
     default_config:
 
     prometheus:
@@ -61,15 +33,6 @@ data:
     wake_on_lan:
 
     api:
-
-    http:
-      server_host: 0.0.0.0
-      server_port: 8123
-      use_x_forwarded_for: true
-      trusted_proxies:
-        - 10.0.0.0/8
-        - 172.16.0.0/12
-        - 192.168.0.0/16
 
     logger:
       default: warning

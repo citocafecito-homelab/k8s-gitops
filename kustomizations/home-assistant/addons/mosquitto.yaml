@@ -27,6 +27,9 @@ spec:
       containers:
       - name: mosquitto
         image: eclipse-mosquitto
+        env:
+        - name: TZ
+          value: "America/Bogota"
         ports:
         - containerPort: 1883
         - containerPort: 9001
