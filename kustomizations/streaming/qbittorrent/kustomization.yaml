@@ -1,0 +1,28 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: streaming
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+- name: qbittorrent-port-updater
+  files:
+  - scripts/common.sh
+  - scripts/check-port-daemon.sh
+
+configMapGenerator:
+- name: qbittorrent-scripts
+  files:
+  - scripts/common.sh
+  - scripts/01-setup-config.sh
+  - scripts/torrent-added.sh
+  - scripts/torrent-finished.sh
+  - scripts/torrent-completed.sh
+
+resources:
+- cronjobs/check-port.yaml
+- server-deployment.yaml
+- server-svc.yaml
+- server-ingress.yaml

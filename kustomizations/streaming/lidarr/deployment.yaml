@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lidarr
+  labels:
+    app: lidarr
+    app.kubernetes.io/name: lidarr
+    app.kubernetes.io/instance: streaming-stack
+    app.kubernetes.io/part-of: streaming-stack
+    tier: disposable
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lidarr
+      app.kubernetes.io/name: lidarr
+      app.kubernetes.io/instance: streaming-stack
+  template:
+    metadata:
+      labels:
+        app: lidarr
+        app.kubernetes.io/name: lidarr
+        app.kubernetes.io/instance: streaming-stack
+        app.kubernetes.io/part-of: streaming-stack
+    spec:
+      containers:
+      - name: lidarr
+        image: lscr.io/linuxserver/lidarr:latest
+        ports:
+        - containerPort: 8686
+        envFrom:
+        - configMapRef:
+            name: streaming-stack-config
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8686
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8686
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: scripts
+          mountPath: /scripts
+        - name: scripts
+          mountPath: /custom-cont-init.d/install-deps.sh
+          subPath: install-deps.sh
+        - name: downloads
+          mountPath: /downloads
+        - name: music 
+          mountPath: /music
+      nodeSelector:
+        kubernetes.io/hostname: catimore
+      securityContext:
+        fsGroup: 1000
+      volumes:
+      - name: downloads
+        persistentVolumeClaim:
+          claimName: downloads-pvc
+      - name: config
+        hostPath:
+          path: /mnt/lidarr
+          type: DirectoryOrCreate
+      - name: scripts
+        configMap:
+          name: lidarr-scripts
+          defaultMode: 0755
+      - name: music
+        hostPath:
+          path: /mnt/music
+          type: DirectoryOrCreate

@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seerr
+  labels:
+    app: seerr
+    app.kubernetes.io/name: seerr
+    app.kubernetes.io/part-of: streaming-stack
+    tier: disposable
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: seerr
+      app.kubernetes.io/name: seerr
+  template:
+    metadata:
+      labels:
+        app: seerr
+        app.kubernetes.io/name: seerr
+        app.kubernetes.io/part-of: streaming-stack
+    spec:
+      containers:
+      - name: seerr
+        image: ghcr.io/seerr-team/seerr:latest
+        ports:
+        - containerPort: 5055
+        envFrom:
+        - configMapRef:
+            name: streaming-stack-config
+        resources:
+          requests:
+            memory: 64Mi
+            cpu: 5m
+          limits:
+            memory: 512Mi
+            cpu: 500m
+        startupProbe:
+          httpGet:
+            path: /api/v1/status
+            port: 5055
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          failureThreshold: 30
+        livenessProbe:
+          httpGet:
+            path: /api/v1/status
+            port: 5055
+          periodSeconds: 20
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/v1/status
+            port: 5055
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 3
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          privileged: false
+          runAsUser: 1000
+          runAsGroup: 1000
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - name: seerr-config
+          mountPath: /app/config
+      nodeSelector:
+        kubernetes.io/hostname: castillo
+      volumes:
+      - name: seerr-config
+        hostPath:
+          path: /mnt/seerr
+          type: DirectoryOrCreate

@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr
+  labels:
+    app: radarr
+    app.kubernetes.io/name: radarr
+    app.kubernetes.io/part-of: streaming-stack
+    tier: disposable
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: radarr
+      app.kubernetes.io/name: radarr
+  template:
+    metadata:
+      labels:
+        app: radarr
+        app.kubernetes.io/name: radarr
+        app.kubernetes.io/part-of: ming-stack
+    spec:
+      containers:
+      - name: radarr
+        image: linuxserver/radarr:latest
+        ports:
+        - containerPort: 7878
+        env:
+          - name: DOCKER_MODS
+            value: "linuxserver/mods:universal-package-install"
+          - name: INSTALL_PACKAGES
+            value: "transmission-cli sqlite-utils sqlite3"
+        envFrom:
+        - configMapRef:
+            name: streaming-stack-config
+        resources:
+          requests:
+            memory: 64Mi
+            cpu: 5m
+        livenessProbe:
+          tcpSocket:
+            port: 7878
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          tcpSocket:
+            port: 7878
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: downloads
+          mountPath: /downloads
+        - name: media
+          mountPath: /media
+      nodeSelector:
+        kubernetes.io/hostname: castillo
+      securityContext:
+        fsGroup: 1000
+      volumes:
+      - name: config
+        hostPath:
+          path: /mnt/radarr
+          type: DirectoryOrCreate
+      - name: downloads
+        persistentVolumeClaim:
+          claimName: downloads-pvc
+      - name: media
+        hostPath:
+          path: /media
+          type: DirectoryOrCreate

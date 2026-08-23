@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr
+  labels:
+    app: sonarr
+    app.kubernetes.io/name: sonarr
+    app.kubernetes.io/part-of: streaming-stack
+    tier: disposable
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarr
+      app.kubernetes.io/name: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+        app.kubernetes.io/name: sonarr
+        app.kubernetes.io/part-of: streaming-stack
+    spec:
+      containers:
+      - name: sonarr
+        image: linuxserver/sonarr:latest
+        ports:
+        - containerPort: 8989
+        envFrom:
+        - configMapRef:
+            name: streaming-stack-config
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: media
+          mountPath: /media
+        - name: downloads
+          mountPath: /downloads
+        resources:
+          requests:
+            memory: 64Mi
+            cpu: 5m
+        livenessProbe:
+          tcpSocket:
+            port: 8989
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          tcpSocket:
+            port: 8989
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+      nodeSelector:
+        kubernetes.io/hostname: castillo
+      securityContext:
+        fsGroup: 1000
+      volumes:
+      - name: config
+        hostPath:
+          path: /mnt/sonarr
+          type: DirectoryOrCreate
+      - name: media
+        hostPath:
+          path: /media
+          type: DirectoryOrCreate
+      - name: downloads
+        persistentVolumeClaim:
+          claimName: downloads-pvc

@@ -4,38 +4,26 @@ kind: Kustomization
 namespace: streaming
 
 resources:
-## Base
+# Base
 - ../shared-playlists
 - config.yaml
 - pvc.yaml
 
-## Media Downloaders
-# - downloaders/nzbget.yaml (no nzb in use)
-# - downloaders/flood.yaml (deprecated)
-# - downloaders/deluge.yaml (deprecated)
-- downloaders/qbittorrent
-- downloaders/transmission
+# Downloaders
+- qbittorrent
+- transmission
 
 ## Arr* arrs
-- arrs/prowlarr.yaml
-- arrs/sonarr.yaml
-- arrs/radarr.yaml
-- arrs/bazarr.yaml
-- arrs/lidarr.yaml
-- arrs/seerr.yaml
-# - arrs/tinymediamanager.yaml
+- prowlarr
+- sonarr
+- radarr
+- bazarr
+- lidarr
+- seerr
 
-# Not enough resources / uncompleted tests
-
-# - arrs/tdarr.yaml
-# - arrs/autobrr.yaml
-
-## Complex Apps
-- apps/dispatcharr
-- apps/jellystat
-- apps/jellyfin
-# - apps/plex
-# - apps/stremio
-
-## Jobs
-- jobs/split2flac.yaml
+# Habiflix Stack
+- dispatcharr
+- jellystat
+- jellyfin
+# - plex # (deprecated)
+# - stremio # (Not ready yet)
