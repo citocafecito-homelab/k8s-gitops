@@ -34,6 +34,61 @@ spec:
       dnsPolicy: ClusterFirst
       serviceAccountName: transmission
       containers:
+      - name: gluetun
+        image: qmcgaw/gluetun:latest
+        env:
+        # Permitir entrada al puerto de la WebUI y subredes locales
+        - name: FIREWALL_INPUT_PORTS
+          value: "8080"
+        - name: FIREWALL_OUTBOUND_SUBNETS
+          value: "192.168.1.0/24,10.244.0.0/16,10.96.0.0/12"
+
+        # Autenticación PIA desde Secrets
+        - name: OPENVPN_USER
+          valueFrom:
+            secretKeyRef:
+              name: pia-credentials
+              key: VPN_SERVICE_USER
+        - name: OPENVPN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pia-credentials
+              key: VPN_SERVICE_PASSWORD
+
+        # Configuración PIA y Port Forwarding
+        - name: VPN_SERVICE_PROVIDER
+          value: "private internet access"
+        - name: VPN_TYPE
+          value: "openvpn"
+        - name: OPENVPN_PROTOCOL
+          value: "udp"
+        - name: PRIVATE_INTERNET_ACCESS_OPENVPN_ENCRYPTION_PRESET
+          value: "normal"
+        - name: PORT_FORWARD_ONLY
+          value: "true"
+        - name: VPN_PORT_FORWARDING
+          value: "on"
+        - name: VPN_PORT_FORWARDING_STATUS_FILE
+          value: "/config/forwarded_port"
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        securityContext:
+          runAsUser: 0
+          capabilities:
+            add:
+            - NET_ADMIN
+            - NET_RAW
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: tun
+          mountPath: /dev/net/tun
+
       - name: transmission
         image: lscr.io/linuxserver/transmission:latest
         ports:
@@ -41,6 +96,10 @@ spec:
           name: webui
           protocol: TCP
         env:
+        - name: DOCKER_MODS
+          value: ""
+        - name: DISABLE_IPTABLES
+          value: "true"
         - name: "FILE__USER"
           value: "/vault/secrets/user"
         - name: "FILE__PASS"
@@ -93,6 +152,11 @@ spec:
           limits:
             cpu: 200m
             memory: 512Mi
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+            - NET_RAW
         volumeMounts:
         - name: scripts
           mountPath: /custom-cont-init.d/01-setup-config.sh
@@ -105,7 +169,12 @@ spec:
           mountPath: /downloads
       nodeSelector:
         kubernetes.io/hostname: catimore
+      securityContext:
+        fsGroup: 1000
       volumes:
+      - name: tun
+        hostPath:
+          path: /dev/net/tun
       - name: scripts
         configMap:
           name: transmission-scripts

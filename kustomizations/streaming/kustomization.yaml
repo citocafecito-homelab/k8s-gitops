@@ -13,7 +13,8 @@ resources:
 # - downloaders/nzbget.yaml (no nzb in use)
 # - downloaders/flood.yaml (deprecated)
 # - downloaders/deluge.yaml (deprecated)
-- downloaders/qbittorrent.yaml
+- downloaders/qbittorrent
+- downloaders/transmission
 
 ## Arr* arrs
 - arrs/prowlarr.yaml
@@ -30,7 +31,6 @@ resources:
 # - arrs/autobrr.yaml
 
 ## Complex Apps
-- apps/transmission
 - apps/dispatcharr
 - apps/jellystat
 - apps/jellyfin

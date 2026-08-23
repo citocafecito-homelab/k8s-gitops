@@ -26,6 +26,20 @@ spec:
           {{- end -}}
     spec:
       automountServiceAccountToken: true
+      initContainers:
+      - name: wait-for-postgres
+        image: postgres:17-alpine
+        command:
+        - sh
+        - -c
+        - |
+          until pg_isready -h jellystat-postgresql -p 5432 -U $POSTGRES_USER; do
+            echo "Esperando a que PostgreSQL esté listo..."
+            sleep 2
+          done
+        envFrom:
+        - configMapRef:
+            name: jellystat-database
       containers:
       - name: jellystat
         image: ghcr.io/cyfershepard/jellystat:latest
@@ -68,9 +82,9 @@ spec:
         fsGroup: 1000
         sysctls:
         - name: net.ipv4.tcp_keepalive_time
-          value: "60"
+          value: "120"
         - name: net.ipv4.tcp_keepalive_intvl
-          value: "10"
+          value: "60"
         - name: net.ipv4.tcp_keepalive_probes
           value: "6"
       tolerations:

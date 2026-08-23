@@ -47,7 +47,7 @@ spec:
             - name: config
               mountPath: /config
           nodeSelector:
-            kubernetes.io/hostname: catuai
+            kubernetes.io/hostname: catimore
           tolerations:
           - key: node-role.kubernetes.io/control-plane
             operator: Exists

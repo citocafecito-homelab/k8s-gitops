@@ -6,11 +6,20 @@ source /scripts/common.sh
 echo "[CUSTOM-INIT] Configurando Transmission..."
 
 JSON_FILE="/config/settings.json"
+PORT_FILE="/config/forwarded_port"
 
 # Asegurar que la carpeta exista y que haya un JSON válido de base
 mkdir -p /config
 if [ ! -f "$JSON_FILE" ] || [ ! -s "$JSON_FILE" ]; then
     echo "{}" > "$JSON_FILE"
+fi
+
+PORT=51413
+if [ -f "$PORT_FILE" ] && [ -s "$PORT_FILE" ]; then
+    PORT=$(cat "$PORT_FILE" | tr -d '\r\n')
+    echo "[CUSTOM-INIT] Puerto forwarding detectado: $PORT"
+else
+    echo "[CUSTOM-INIT] No se encontró $PORT_FILE, usando puerto por defecto: $PORT"
 fi
 
 tmp=$(mktemp)
@@ -31,7 +40,8 @@ jq \
   --argjson seed_queue_enabled false \
   --argjson download_queue_size 999 \
   --argjson seed_queue_size 999 \
-  --argjson peer_port_random true \
+  --argjson peer_port_random false \
+  --argjson peer_port $PORT \
   --argjson peer_limit 20 \
   '.["download-dir"] = $download_dir |
    .["script-torrent-added-enabled"] = $script_added_enabled |
