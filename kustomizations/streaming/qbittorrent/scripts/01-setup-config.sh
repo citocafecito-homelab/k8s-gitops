@@ -16,34 +16,43 @@ if [ ! -f "$CONF_FILE" ]; then
 [Preferences]
 EOF
 elif ! grep -q "^\[Preferences\]" "$CONF_FILE"; then
-    echo -e "\n[Preferences]" >> "$CONF_FILE"
+    echo "" >> "$CONF_FILE"
+    echo "[Preferences]" >> "$CONF_FILE"
 fi
 
-# Función para actualizar o insertar claves en [Preferences]
+# Función segura para actualizar/insertar claves INI que contienen '\'
 set_ini_key() {
     local key="$1"
     local value="$2"
     
-    if grep -q "^${key}=" "$CONF_FILE"; then
-        sed -i "s|^${key}=.*|${key}=${value}|" "$CONF_FILE"
+    # Uso de grep -F para buscar el texto literal de la clave
+    if grep -F -q "${key}=" "$CONF_FILE"; then
+        # Escapar la clave para usarla de forma segura dentro de la Regex de sed
+        local safe_key
+        safe_key=$(printf '%s\n' "$key" | sed 's/[[\.*^$()/]/\\&/g')
+        sed -i "s|^${safe_key}=.*|${key}=${value}|" "$CONF_FILE"
     else
+        # Insertar directamente debajo de [Preferences]
         sed -i "/^\[Preferences\]/a ${key}=${value}" "$CONF_FILE"
     fi
 }
 
-# 1. Configurar hook de script al añadir torrent
-set_ini_key "AutoRun\\\\Enabled" "true"
-set_ini_key "AutoRun\\\\program" "/scripts/torrent-added.sh \"%N\" \"%L\" \"%F\""
+# 1. Configurar hooks de scripts
+set_ini_key "AutoRun\\Enabled" "true"
+set_ini_key "AutoRun\\program" "/scripts/torrent-added.sh \"%N\" \"%L\" \"%F\""
 
-# 2. Configurar puerto de PIA únicamente si el archivo existe y no está vacío
+set_ini_key "AutoRunOnTorrentFinished\\Enabled" "true"
+set_ini_key "AutoRunOnTorrentFinished\\program" "/scripts/torrent-completed.sh \"%N\" \"%L\" \"%F\""
+
+# 2. Configurar puerto de PIA si el archivo existe
 if [ -f "$PORT_FILE" ] && [ -s "$PORT_FILE" ]; then
     PORT=$(cat "$PORT_FILE" | tr -d '[:space:]')
     if [ -n "$PORT" ]; then
         echo "[CUSTOM-INIT] Puerto forwarding de PIA detectado: $PORT"
-        set_ini_key "Connection\\\\PortRangeMin" "$PORT"
+        set_ini_key "Connection\\PortRangeMin" "$PORT"
     fi
 else
-    echo "[CUSTOM-INIT] No se encontró $PORT_FILE. Se mantiene la configuración de puerto existente."
+    echo "[CUSTOM-INIT] No se encontró $PORT_FILE. Se mantiene la configuración existente."
 fi
 
 echo "[CUSTOM-INIT] Configuración aplicada con éxito."

@@ -87,9 +87,12 @@ spec:
               name: qbittorrent
               key: token
         lifecycle:
-          postStart:
+          # postStart:
+          #   exec:
+          #     command: ["/bin/sh", /scripts/pod-post-start.sh"]
+          preStop:
             exec:
-              command: ["/bin/sh", "-c", "sleep 10 && /scripts/check-port-daemon.sh &"]
+              command: ["/bin/bash", "/scripts/pod-pre-stop.sh"]
         resources:
           requests:
             cpu: 100m
@@ -116,10 +119,6 @@ spec:
       - name: tun
         hostPath:
           path: /dev/net/tun
-      - name: script-volume
-        configMap:
-          name: qbittorrent-port-updater
-          defaultMode: 0755
       - name: config
         hostPath:
           path: /mnt/qbittorrent
