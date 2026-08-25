@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: folder-exporter
+  namespace: monitoring
+  labels:
+    app: folder-exporter
+spec:
+  selector:
+    matchLabels:
+      app: folder-exporter
+  template:
+    metadata:
+      labels:
+        app: folder-exporter
+    spec:
+      containers:
+      - name: exporter
+        image: alpine:latest
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            apk add --no-cache mosquitto-clients bash
+            while true; do
+              bash /scripts/exporter.sh
+              sleep 600
+            done
+        env:
+        - name: MQTT_HOST
+          value: "mosquitto.home-assistant.svc.cluster.local"
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        volumeMounts:
+        - name: script-vol
+          mountPath: /scripts
+        - name: host-storage
+          mountPath: /host_storage
+          readOnly: true
+      volumes:
+      - name: script-vol
+        configMap:
+          name: folder-script
+          defaultMode: 0755
+      - name: host-storage
+        hostPath:
+          path: /media
+          type: DirectoryOrCreate
