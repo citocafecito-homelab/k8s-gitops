@@ -58,7 +58,7 @@ spec:
           mountPath: /tmp/config
       containers:
       - name: music-assistant
-        image: ghcr.io/music-assistant/server:latest
+        image: ghcr.io/music-assistant/server:beta
         imagePullPolicy: Always
         command: ["sh", "-c"]
         args:
