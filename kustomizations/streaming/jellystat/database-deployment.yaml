@@ -31,6 +31,10 @@ spec:
           - "tcp_keepalives_count=6"
           - "-c"
           - "statement_timeout=0"
+          - "-c"
+          - "shared_buffers=256MB"
+          - "-c"
+          - "work_mem=16MB"
         ports:
         - containerPort: 5432
         envFrom:

@@ -95,10 +95,10 @@ spec:
               command: ["/bin/bash", "/scripts/pod-pre-stop.sh"]
         resources:
           requests:
-            cpu: 100m
-            memory: 256Mi
+            cpu: 500m
+            memory: 512Mi
           limits:
-            cpu: 1
+            cpu: 2
             memory: 2Gi
         volumeMounts:
         - name: config
