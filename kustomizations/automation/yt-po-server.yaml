@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: yt-ytdl-pot
+  namespace: media
   labels:
     tier: disposable
 spec:
@@ -26,16 +27,40 @@ spec:
                 values:
                 - catimore
       containers:
+      # Sidecar de VPN
+      # - name: vpn
+      #   image: qmcgaw/gluetun:latest
+      #   securityContext:
+      #     capabilities:
+      #       add:
+      #         - NET_ADMIN
+      #     allowPrivilegeEscalation: false
+      #   env:
+      #     - name: VPN_SERVICE_PROVIDER
+      #       value: "custom" # Cambiar según tu proveedor (wireguard, protonvpn, mullvad, etc.)
+      #     - name: VPN_TYPE
+      #       value: "wireguard"
+      #     # Agrega aquí tus credenciales/configuración de entorno de Gluetun
+      #   ports:
+      #     - containerPort: 4416
+      #       name: pot-port
+      #   resources:
+      #     limits:
+      #       cpu: "100m"
+      #       memory: "128Mi"
+      #     requests:
+      #       cpu: "20m"
+      #       memory: "32Mi"
+
+      # Generador POT
       - name: generator
         image: brainicism/bgutil-ytdlp-pot-provider:latest
-        ports:
-        - containerPort: 4416
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
           capabilities:
             drop:
-            - ALL
+              - ALL
         resources:
           limits:
             cpu: "200m"
@@ -44,10 +69,6 @@ spec:
             cpu: "50m"
             memory: "64Mi"
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 10001
-        runAsGroup: 10001
-        fsGroup: 10001
         seccompProfile:
           type: RuntimeDefault
 ---
