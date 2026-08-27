@@ -6,7 +6,7 @@ metadata:
 spec:
   schedule: "*/10 * * * *"
   concurrencyPolicy: Forbid
-  suspend: true
+  suspend: false
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 3
   jobTemplate:
@@ -54,9 +54,13 @@ spec:
             kubernetes.io/hostname: catimore
           volumes:
           - name: scripts
-            configMap:
-              name: transmission-jobs
+            projected:
               defaultMode: 0755
+              sources:
+              - configMap:
+                  name: transmission-jobs
+              - configMap:
+                  name: shared-scripts
           - name: config
             hostPath:
               path: /mnt/transmission

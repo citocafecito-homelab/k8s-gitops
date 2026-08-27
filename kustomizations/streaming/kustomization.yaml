@@ -3,9 +3,10 @@ kind: Kustomization
 
 namespace: streaming
 
+components:
+  - ../../components/scripts
+
 resources:
-# Base
-- ../shared-playlists
 - config.yaml
 - pvc.yaml
 

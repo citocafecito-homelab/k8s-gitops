@@ -7,31 +7,23 @@ generatorOptions:
   disableNameSuffixHash: true
 
 configMapGenerator:
-- name: qbittorrent-jobs
-  files:
-  - scripts/common.sh
-  - scripts/check-port-daemon.sh
-  
 - name: qbittorrent-scripts
   files:
-  # Shared
-  - scripts/common.sh
-
   # Init
   - scripts/01-setup-config.sh
-  - scripts/check-port-daemon.sh
 
   # Torrent Hooks
   - scripts/torrent-added.sh
   - scripts/torrent-finished.sh
-  - scripts/torrent-completed.sh
 
   # Pod Lifecycle
-  - scripts/pod-post-start.sh
   - scripts/pod-pre-stop.sh
 
+  # Pia VPN
+  - scripts/update-port.sh
+
 resources:
-- cronjobs/check-port.yaml
+# - cronjobs/check-port.yaml
 - statefulset.yaml
 - svc.yaml
 - ingress.yaml

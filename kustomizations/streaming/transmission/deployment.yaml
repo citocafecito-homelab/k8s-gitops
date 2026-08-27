@@ -26,10 +26,6 @@ spec:
           {{ .Data.data.USERNAME | writeToFile "/vault/secrets/user" "vault" "1000" "0640" }}
           {{ .Data.data.PASSWORD | writeToFile "/vault/secrets/password" "vault" "1000" "0640" }}
           {{- end -}}
-
-          {{- with secret "secret/data/ntfy" -}}
-          {{ .Data.data.ADMIN_TOKEN | writeToFile "/vault/secrets/ntfy" "vault" "1000" "0640" }}
-          {{- end -}}
     spec:
       dnsPolicy: ClusterFirst
       serviceAccountName: transmission
@@ -37,13 +33,10 @@ spec:
       - name: gluetun
         image: qmcgaw/gluetun:latest
         env:
-        # Permitir entrada al puerto de la WebUI y subredes locales
-        - name: FIREWALL_INPUT_PORTS
-          value: "8080"
-        - name: FIREWALL_OUTBOUND_SUBNETS
-          value: "192.168.1.0/24,10.244.0.0/16,10.96.0.0/12"
-
-        # Autenticación PIA desde Secrets
+        - name: "FILE__USER"
+          value: "/vault/secrets/user"
+        - name: "FILE__PASS"
+          value: "/vault/secrets/password"
         - name: OPENVPN_USER
           valueFrom:
             secretKeyRef:
@@ -54,22 +47,9 @@ spec:
             secretKeyRef:
               name: pia-credentials
               key: VPN_SERVICE_PASSWORD
-
-        # Configuración PIA y Port Forwarding
-        - name: VPN_SERVICE_PROVIDER
-          value: "private internet access"
-        - name: VPN_TYPE
-          value: "openvpn"
-        - name: OPENVPN_PROTOCOL
-          value: "udp"
-        - name: PRIVATE_INTERNET_ACCESS_OPENVPN_ENCRYPTION_PRESET
-          value: "normal"
-        - name: PORT_FORWARD_ONLY
-          value: "true"
-        - name: VPN_PORT_FORWARDING
-          value: "on"
-        - name: VPN_PORT_FORWARDING_STATUS_FILE
-          value: "/config/forwarded_port"
+        envFrom:
+        - configMapRef:
+            name: vpn-config
         resources:
           requests:
             cpu: 50m
@@ -86,6 +66,8 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
+        - name: scripts
+          mountPath: /scripts
         - name: tun
           mountPath: /dev/net/tun
 
@@ -176,9 +158,13 @@ spec:
         hostPath:
           path: /dev/net/tun
       - name: scripts
-        configMap:
-          name: transmission-scripts
+        projected:
           defaultMode: 0755
+          sources:
+          - configMap:
+              name: transmission-scripts
+          - configMap:
+              name: shared-scripts
       - name: config
         hostPath:
           path: /mnt/transmission

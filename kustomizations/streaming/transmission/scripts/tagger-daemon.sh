@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /scripts/common.sh
+source /scripts/ntfy.sh
 
 echo "[CRON-TAGGER] Iniciando ciclo de procesamiento de etiquetas..."
 
@@ -96,7 +96,8 @@ while IFS= read -r HASH || [ -n "$HASH" ]; do
         send_ntfy "Transmission - Etiquetas Asignadas" \
                   "Torrent: ${TORRENT_NAME:-$HASH}\nEtiquetas: [$FINAL_LABELS]" \
                   "label,tag" \
-                  "low"
+                  "low" \
+                  "transmission"
     else
         echo "[ERROR] Falló actualización de $HASH: $OUTPUT"
     fi

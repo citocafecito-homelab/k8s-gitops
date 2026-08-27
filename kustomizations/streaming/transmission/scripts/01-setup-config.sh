@@ -1,7 +1,7 @@
 #!/bin/bash
 # See more https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md
 
-source /scripts/common.sh
+source /scripts/ntfy.sh
 
 echo "[CUSTOM-INIT] Configurando Transmission..."
 
@@ -65,6 +65,6 @@ jq \
 echo "[CUSTOM-INIT] Configuración modificada con éxito."
 
 send_ntfy "Transmission - Init" \
-          "Configuración de inicio configuraca con éxito" \
+          "Configuración de inicio realizada con éxito" \
           "seedling,lock" \
           "low"

@@ -1,5 +1,5 @@
 #!/bin/bash
-. /scripts/common.sh
+source /scripts/ntfy.sh
 
 TORRENT_NAME="$1"
 TORRENT_CATEGORY="$2"
@@ -9,7 +9,13 @@ BODY="Torrent: ${TORRENT_NAME:-Desconocido}
 Categoría: ${TORRENT_CATEGORY:-Ninguna}
 Ruta: ${TORRENT_PATH:-Desconocida}"
 
-send_ntfy "qBittorrent: Torrent Añadido" \
-          "$BODY" \
-          "inbox,arrow_down" \
-          "low"
+# Ejecución en segundo plano para evitar bloqueos
+(
+  send_ntfy "qBittorrent: Torrent Añadido" \
+            "$BODY" \
+            "inbox,arrow_down" \
+            "low" \
+            "qbittorrent"
+) &
+
+exit 0

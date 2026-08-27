@@ -24,13 +24,6 @@ spec:
             add:
               - NET_ADMIN
         env:
-        # Permitir entrada al puerto de la WebUI y subredes locales
-        - name: FIREWALL_INPUT_PORTS
-          value: "8080"
-        - name: FIREWALL_OUTBOUND_SUBNETS
-          value: "192.168.1.0/24,10.244.0.0/16,10.96.0.0/12"
-
-        # Autenticación PIA desde Secrets
         - name: OPENVPN_USER
           valueFrom:
             secretKeyRef:
@@ -41,22 +34,14 @@ spec:
             secretKeyRef:
               name: pia-credentials
               key: VPN_SERVICE_PASSWORD
-
-        # Configuración PIA y Port Forwarding
-        - name: VPN_SERVICE_PROVIDER
-          value: "private internet access"
-        - name: VPN_TYPE
-          value: "openvpn"
-        - name: OPENVPN_PROTOCOL
-          value: "udp"
-        - name: PRIVATE_INTERNET_ACCESS_OPENVPN_ENCRYPTION_PRESET
-          value: "normal"
-        - name: PORT_FORWARD_ONLY
-          value: "true"
-        - name: VPN_PORT_FORWARDING
-          value: "on"
-        - name: VPN_PORT_FORWARDING_STATUS_FILE
-          value: "/config/qBittorrent/gluetun/forwarded_port"
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: qbittorrent
+              key: token
+        envFrom:
+        - configMapRef:
+            name: vpn-config
         resources:
           requests:
             cpu: 50m
@@ -66,7 +51,9 @@ spec:
             memory: 128Mi
         volumeMounts:
         - name: config
-          mountPath: /config/qBittorrent
+          mountPath: /config
+        - name: scripts
+          mountPath: /scripts
         - name: tun
           mountPath: /dev/net/tun
 
@@ -81,15 +68,7 @@ spec:
           value: "8080"
         - name: TORRENTING_PORT
           value: "6881"
-        - name: API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: qbittorrent
-              key: token
         lifecycle:
-          # postStart:
-          #   exec:
-          #     command: ["/bin/sh", /scripts/pod-post-start.sh"]
           preStop:
             exec:
               command: ["/bin/bash", "/scripts/pod-pre-stop.sh"]
@@ -124,9 +103,13 @@ spec:
           path: /mnt/qbittorrent
           type: DirectoryOrCreate
       - name: scripts
-        configMap:
-          name: qbittorrent-scripts
+        projected:
           defaultMode: 0755
+          sources:
+          - configMap:
+              name: qbittorrent-scripts
+          - configMap:
+              name: shared-scripts
       - name: downloads
         persistentVolumeClaim:
           claimName: downloads-pvc

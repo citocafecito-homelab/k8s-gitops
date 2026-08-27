@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # See more https://github.com/transmission/transmission/blob/main/docs/Scripts.md#on-torrent-completion
-source /scripts/common.sh
+source /scripts/ntfy.sh
 
 echo "$(date): Procesando torrent $TR_TORRENT_NAME (ID: $TR_TORRENT_ID)"
 
@@ -21,11 +21,13 @@ if [[ ! "$TR_TORRENT_LABELS" =~ "private" ]]; then
     send_ntfy "Transmission - Torrent Eliminado" \
               "El torrent público '$TR_TORRENT_NAME' cumplió ratio y fue eliminado." \
               "wastebasket,public" \
-              "low"
+              "low" \
+              "transmission"
 else
     echo "$(date): El torrent es PRIVADO. Se mantiene en seed."
     send_ntfy "Transmission - Seeding Finalizado" \
               "El torrent privado '$TR_TORRENT_NAME' ha alcanzado la meta de ratio." \
               "seedling,lock" \
-              "low"
+              "low" \
+              "transmission"
 fi

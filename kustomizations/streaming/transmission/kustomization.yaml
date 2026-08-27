@@ -5,26 +5,23 @@ namespace: streaming
 
 generatorOptions:
   disableNameSuffixHash: true
-
+  
 configMapGenerator:
-- name: transmission-scripts
-  files:
-  - scripts/common.sh
-  - scripts/01-setup-config.sh
-  - scripts/torrent-added.sh
-  - scripts/torrent-finished.sh
-  - scripts/torrent-completed.sh
+  - name: transmission-scripts
+    files:
+    - scripts/01-setup-config.sh
+    - scripts/update-port.sh
+    - scripts/torrent-added.sh
+    - scripts/torrent-finished.sh
+    - scripts/torrent-completed.sh
 
-- name: transmission-jobs
-  files:
-  - scripts/common.sh
-  - scripts/tagger-daemon.sh
-  - scripts/check-port-daemon.sh
+  - name: transmission-jobs
+    files:
+    - scripts/tagger-daemon.sh
 
 resources:
 - sa.yaml
 - deployment.yaml
 - svc.yaml
 - ingress.yaml
-- cronjobs/check-port.yaml
 - cronjobs/tagger.yaml

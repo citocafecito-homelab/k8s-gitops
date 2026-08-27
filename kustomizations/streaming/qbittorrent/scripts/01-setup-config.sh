@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /scripts/common.sh
+source /scripts/ntfy.sh
 
 echo "[CUSTOM-INIT] Configurando qBittorrent..."
 
@@ -60,4 +60,5 @@ echo "[CUSTOM-INIT] Configuración aplicada con éxito."
 send_ntfy "qBittorrent: Configuración de Inicio" \
           "Script de entrada y estado de puerto procesados correctamente." \
           "gear,wrench" \
-          "low"
+          "low" \
+          "qbittorrent"

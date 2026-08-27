@@ -1,7 +1,7 @@
 #!/bin/bash
 # See more https://github.com/transmission/transmission/blob/main/docs/Scripts.md
 
-source /scripts/common.sh
+source /scripts/ntfy.sh
 
 if [ -n "$TR_TORRENT_HASH" ]; then
     /bin/echo "$TR_TORRENT_HASH" >> /config/pending_tags.txt
@@ -26,7 +26,8 @@ Ruta: $LOCATION"
     send_ntfy "Transmission: Torrent Añadido" \
               "$BODY" \
               "inbox,arrow_down" \
-              "low"
+              "low" \
+              "transmission"
 else
     /bin/echo "[TRIGGER] Error: Variable TR_TORRENT_HASH no detectada."
 fi
