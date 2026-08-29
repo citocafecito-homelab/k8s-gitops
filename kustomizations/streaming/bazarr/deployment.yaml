@@ -23,6 +23,7 @@ spec:
         app.kubernetes.io/instance: streaming-stack
         app.kubernetes.io/part-of: streaming-stack
     spec:
+      enableServiceLinks: false
       containers:
       - name: bazarr
         image: lscr.io/linuxserver/bazarr:latest

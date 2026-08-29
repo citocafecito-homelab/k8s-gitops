@@ -26,6 +26,7 @@ spec:
           {{- end -}}
     spec:
       automountServiceAccountToken: true
+      enableServiceLinks: false
       initContainers:
       - name: wait-for-postgres
         image: postgres:17-alpine

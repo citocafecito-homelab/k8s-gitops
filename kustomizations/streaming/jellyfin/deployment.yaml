@@ -15,6 +15,7 @@ spec:
         app.kubernetes.io/name: jellyfin
         app.kubernetes.io/part-of: streaming-stack
     spec:
+      enableServiceLinks: false
       containers:
       - name: jellyfin
         image: jellyfin/jellyfin:latest
