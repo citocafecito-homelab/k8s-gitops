@@ -8,7 +8,4 @@ resources:
 - avahi-daemon.yaml
 # - speedtest.yaml
 
-# - middlewares/local-only.yaml
-# - middlewares/block-metrics.yaml
-
 namespace: networking

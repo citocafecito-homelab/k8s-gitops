@@ -41,7 +41,8 @@ jq \
   --argjson download_queue_size 999 \
   --argjson seed_queue_size 999 \
   --argjson peer_port_random false \
-  --argjson peer_port $PORT \
+  --argjson port_forwarding false \
+  --argjson peer_port "$PORT" \
   --argjson peer_limit 20 \
   '.["download-dir"] = $download_dir |
    .["script-torrent-added-enabled"] = $script_added_enabled |
@@ -59,12 +60,14 @@ jq \
    .["download-queue-size"] = $download_queue_size |
    .["seed-queue-size"] = $seed_queue_size |
    .["peer-port-random-on-start"] = $peer_port_random |
+   .["port-forwarding-enabled"] = $port_forwarding |
+   .["peer-port"] = $peer_port |
    .["peer-limit-per-torrent"] = $peer_limit' \
   "$JSON_FILE" > "$tmp" && mv "$tmp" "$JSON_FILE"
 
 echo "[CUSTOM-INIT] Configuración modificada con éxito."
 
 send_ntfy "Transmission - Init" \
-          "Configuración de inicio realizada con éxito" \
+          "Configuración de inicio realizada con éxito (Puerto: $PORT)" \
           "seedling,lock" \
           "low"

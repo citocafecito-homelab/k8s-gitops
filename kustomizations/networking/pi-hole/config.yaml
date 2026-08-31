@@ -15,6 +15,10 @@ data:
   FTLCONF_dns_revServers: "true,192.168.1.0/16,192.168.1.1"
   FTLCONF_dns_upstreams: "1.1.1.1;1.0.0.1;8.8.8.8;8.8.4.4"
   FTLCONF_dns_AAAA: "false"
+
+  # Optimizaciones de Base de Datos para evitar deadlocks de arranque en K8s:
+  FTLCONF_database_maxDBdays: "7"
+  FTLCONF_database_DBimport: "false"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -23,7 +27,6 @@ metadata:
 data:
   # --- Global Config ---
   FTLCONF_dns_listeningMode: "all"
-  FTLCONF_dns_interface: "enp1s0"
 
   # --- DHCPv4 ---
   FTLCONF_dhcp_active: "true"
@@ -34,12 +37,8 @@ data:
   FTLCONF_dhcp_leaseTime: "86400"
   FTLCONF_dhcp_rapidCommit: "true"
 
-  # --- DHCPv6 & RA (Nativo FTL v6) ---
+  # --- DHCPv6 ---
   FTLCONF_dhcp_ipv6: "true"
-  FTLCONF_dhcp_start6: "fd00:192:168:1::2"
-  FTLCONF_dhcp_end6: "fd00:192:168:1::ffff"
-  FTLCONF_dhcp_router6: "fe80::6a1d:efff:fe4a:3da6"
-  FTLCONF_LOCAL_IPV6: "fe80::6a1d:efff:fe4a:3da6"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -49,16 +48,12 @@ metadata:
 data:
   custom.conf: |
     # Rango IPv6 + RA (SLAAC + DHCPv6)
-    # Nota: dnsmasq/FTL incluye automáticamente la opción DNSv6 (23) hacia este host.
     dhcp-range=::2,::ffff,constructor:enp1s0,ra-names,slaac,64,86400s
 
     # Prioridad de RA en la interfaz
     ra-param=enp1s0,high,10,600
 
     quiet-dhcp6
-
-    # Evita la inspección de interfaces VRF no utilizadas
-    bind-interfaces
 
     # Network
     address=/router.lan/192.168.1.1

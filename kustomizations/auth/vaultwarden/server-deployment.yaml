@@ -24,7 +24,7 @@ spec:
         - name: DOMAIN
           value: "https://passwords.citocafecito.work"
         - name: SIGNUPS_ALLOWED
-          value: "true"
+          value: "false"
         - name: IP_HEADER
           value: "CF-Connecting-IP"
         ports:

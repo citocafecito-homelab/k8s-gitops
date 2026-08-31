@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: transmission-config
+data:
+  # Transmission Base Config & Automation
+  TRANSMISSION_DOWNLOAD_DIR: "/downloads"
+  TRANSMISSION_SCRIPT_TORRENT_ADDED_ENABLED: "true"
+  TRANSMISSION_SCRIPT_TORRENT_ADDED_FILENAME: "/scripts/added.sh"
+  TRANSMISSION_SCRIPT_TORRENT_DONE_ENABLED: "true"
+  TRANSMISSION_SCRIPT_TORRENT_DONE_FILENAME: "/scripts/finished.sh"
+  TRANSMISSION_SCRIPT_TORRENT_DONE_SEEDING_ENABLED: "true"
+  TRANSMISSION_SCRIPT_TORRENT_DONE_SEEDING_FILENAME: "/scripts/completed.sh"
+
+  # Transmission Ratios & Queue
+  TRANSMISSION_INCOMPLETE_DIR_ENABLED: "false"
+  TRANSMISSION_RENAME_PARTIAL_FILES: "false"
+  TRANSMISSION_RATIO_LIMIT: "3.0"
+  TRANSMISSION_RATIO_LIMIT_ENABLED: "true"
+  TRANSMISSION_DOWNLOAD_QUEUE_ENABLED: "false"
+  TRANSMISSION_SEED_QUEUE_ENABLED: "false"
+  TRANSMISSION_DOWNLOAD_QUEUE_SIZE: "999"
+  TRANSMISSION_SEED_QUEUE_SIZE: "999"
+
+  # Transmission Networking & System
+  TRANSMISSION_PEER_PORT_RANDOM_ON_START: "true"
+  TRANSMISSION_PEER_LIMIT_PER_TORRENT: "20"
+  DISABLE_IPTABLES: "true"
+  DOCKER_MODS: ""
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: transmission-auth
+data:
+  # Gluetun / Secret paths
+  FILE__USER: "/vault/secrets/user"
+  FILE__PASS: "/vault/secrets/password"
