@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frigate
+  labels:
+    app: frigate
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: frigate
+  template:
+    metadata:
+      labels:
+        app: frigate
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-extra-secret: "frigate-templates"
+        vault.hashicorp.com/agent-inject-secret-config.yml: "secret/data/frigate"
+        vault.hashicorp.com/agent-inject-template-file-config.yml: "/vault/custom/config.yml.tpl"
+    spec:
+      serviceAccountName: frigate
+      automountServiceAccountToken: true
+      containers:
+      - name: frigate
+        image: ghcr.io/blakeblackshear/frigate:stable
+        imagePullPolicy: IfNotPresent
+        command:
+        - /bin/bash
+        - -c
+        - |
+          mkdir -p /config
+          cp /vault/secrets/config.yml /config/config.yml
+          exec /init
+        env:
+        - name: LIBVA_DRIVER_NAME
+          value: "radeonsi"
+        resources:
+          limits:
+            cpu: "2"
+            memory: 2Gi
+          requests:
+            cpu: "500m"
+            memory: 1Gi
+        securityContext:
+          privileged: true
+        ports:
+        - name: http
+          containerPort: 5000
+        - name: rtsp
+          containerPort: 8554
+        volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
+        - name: media
+          mountPath: /media/frigate
+        - name: dri
+          mountPath: /dev/dri
+        - name: localtime
+          mountPath: /etc/localtime
+          readOnly: true
+        - name: timezone
+          mountPath: /etc/timezone
+          readOnly: true
+      nodeSelector:
+        kubernetes.io/hostname: catimore
+      securityContext:
+        fsGroup: 1000
+        supplementalGroups: [44, 46, 107, 109, 110, 992]
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 1Gi
+      - name: localtime
+        hostPath:
+          path: /etc/localtime
+          type: File
+      - name: timezone
+        hostPath:
+          path: /etc/timezone
+          type: FileOrCreate
+      - name: media
+        emptyDir: {} 
+      - name: dri
+        hostPath:
+          path: /dev/dri
+          type: Directory

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kokoro-fastapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kokoro-fastapi
+  template:
+    metadata:
+      labels:
+        app: kokoro-fastapi
+    spec:
+      containers:
+      - name: kokoro
+        image: ghcr.io/remsky/kokoro-fastapi-cpu:latest
+        ports:
+        - containerPort: 8880
+          name: http
+        env:
+        - name: PORT
+          value: "8880"
+        - name: DEFAULT_VOICE
+          value: "am_adam"

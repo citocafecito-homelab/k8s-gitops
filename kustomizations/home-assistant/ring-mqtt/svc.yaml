@@ -1,0 +1,23 @@
+apiVersion: v1 
+kind: Service
+metadata:
+  name: ring-mqtt
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 51824
+    targetPort: 51824
+    name: web-ui
+  - protocol: TCP
+    port: 55123
+    targetPort: 55123
+    name: auth-ui
+  # Nedded for Home Assistant Stateless connection
+  # E.g.: rtsp://username:password@ring-mqtt.home-assistant.svc.cluster.local:8554/camid_live
+  - protocol: TCP
+    port: 8554
+    targetPort: 8554
+    name: rtsp
+  selector:
+    app: ring-mqtt

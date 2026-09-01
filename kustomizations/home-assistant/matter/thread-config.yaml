@@ -1,0 +1,30 @@
+# Check https://openthread.io/guides/border-router/form-network?hl=es-419 for more context
+## Run on node if state is Detached
+# > avahi-browse -rt _matterc._udp
+# > avahi-browse -rt _matter._tcp
+#
+## Run in pod if restarts
+# > kubectl -n home-assistant exec -it openthread-0 -c otbr -- ot-ctl
+#
+## Setup Thread Network
+# > state
+# > ifconfig up
+# > thread start
+#
+# Finish 
+# > dataset active commit
+# TLV Dataset info
+# > dataset active -x
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: otbr-env
+data:
+  OT_RCP_DEVICE: "spinel+hdlc+uart:///dev/ttyUSB0?uart-baudrate=115200"
+  # Caturra OT_INFRA_IF: "enp2s0"
+  OT_INFRA_IF: "enp1s0"
+  OT_THREAD_IF: "wpan0"
+  OT_LOG_LEVEL: "7"
+  OT_REST_LISTEN_ADDR: "0.0.0.0"
+  OTBR_USE_NCP_SETTINGS: "false"
+  MDNS_RESPONDER: "disabled"

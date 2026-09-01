@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: matter
+  labels:
+    app.kubernetes.io/name: matter
+    app.kubernetes.io/part-of: home-assistant
+spec:
+  type: ClusterIP
+  selector:
+    app: matter
+    app.kubernetes.io/name: matter
+  ports:
+  - port: 5582
+    targetPort: 5582
+    protocol: TCP
+    name: websocket
+  - port: 5580
+    targetPort: 5580
+    protocol: TCP
+    name: http
