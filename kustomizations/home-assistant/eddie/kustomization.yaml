@@ -16,4 +16,5 @@ resources:
 labels:
   - pairs:
       app.kubernetes.io/part-of: eddie-voice-assistant
+      tier: disposable
     includeSelectors: true
