@@ -1,0 +1,17 @@
+template:
+- binary_sensor:
+  - name: "Familia en casa"
+    unique_id: familia_en_casa
+    device_class: presence
+    icon: mdi:home-group
+    state: >-
+      {{ (is_state('person.habid_manzur', 'home')
+          or is_state('person.julieth_sarmiento', 'home')) }}
+
+  - name: "Casa ocupada"
+    unique_id: casa_ocupada
+    device_class: presence
+    icon: mdi:home-account
+    state: >-
+      {{ is_state('binary_sensor.familia_en_casa', 'on')
+          or is_state('person.visitas', 'home') }}

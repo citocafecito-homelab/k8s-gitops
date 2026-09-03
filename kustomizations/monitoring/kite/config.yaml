@@ -21,8 +21,12 @@ data:
   DB_TYPE: "postgres"
   DB_DSN: "postgres://kite:3TOUjcOx40Yi@kite-postgresql:5432/kite?sslmode=disable"
 
+  # Networking
+  TRUSTED_PROXIES: "10.42.0.0/16,192.168.1.0/24"
+
   # Cluster configuration
   CONFIG_PATH: "/etc/kite/config.yaml"
+
   config.yaml: |
     clusters:
       - name: local

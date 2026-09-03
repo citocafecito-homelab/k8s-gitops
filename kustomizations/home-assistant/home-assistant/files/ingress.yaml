@@ -1,0 +1,36 @@
+ingress:
+  mass:
+    title: "Music Assistant"
+    icon: "mdi:music"
+    url: "http://music-assistant.home-assistant.svc.cluster.local:8095"
+    ui_mode: toolbar
+
+  # ## Probar Router Gateway
+  # # kubectl exec -it -n home-assistant deployment/home-assistant -- curl -I http://192.168.1.1
+  # router:
+  #   title: "Router Gateway"
+  #   icon: "mdi:router-wireless"
+  #   url: "https://192.168.1.1"
+  #   ui_mode: replace
+
+  ## Probar Kite (K8s)
+  # kubectl exec -it -n home-assistant deployment/home-assistant -- curl -I http://kite.monitoring.svc.cluster.local:8080
+  kite:
+    title: "Kite (K8s)"
+    icon: "mdi:kubernetes"
+    url: "http://kite.monitoring.svc.cluster.local:8080"
+    ui_mode: toolbar
+
+  habiflix:
+    title: "Habiflix Stats"
+    icon: "mdi:movie"
+    url: "http://jellystat.streaming.svc.cluster.local"
+    ui_mode: toolbar
+
+  # ## Probar Garage (S3)
+  # # kubectl exec -it -n home-assistant deployment/home-assistant -- curl -I http://garage-webui.storage.svc.cluster.local:3909
+  # garage:
+  #   title: "Garage (S3)"
+  #   icon: "mdi:storage"
+  #   url: "http://garage-webui.storage.svc.cluster.local:3909"
+  #   ui_mode: normal

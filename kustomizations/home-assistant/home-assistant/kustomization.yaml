@@ -5,6 +5,11 @@ generatorOptions:
   disableNameSuffixHash: true
 
 configMapGenerator:
+  - name: home-assistant-packages
+    files:
+      - files/ingress.yaml
+      - files/shell.yaml
+      - files/templates.yaml
   - name: home-assistant-config
     files:
       - configuration.yaml=files/configuration.yaml

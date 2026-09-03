@@ -66,6 +66,9 @@ spec:
         - name: ha-configmap
           mountPath: /config/configuration.yaml
           subPath: configuration.yaml
+        - name: ha-packages
+          mountPath: /config/packages
+          readOnly: true
         - name: dbus-socket
           mountPath: /var/run/dbus
           readOnly: true
@@ -87,6 +90,9 @@ spec:
       - name: ha-configmap
         configMap:
           name: home-assistant-config
+      - name: ha-packages
+        configMap:
+          name: home-assistant-packages
       - name: dbus-socket
         hostPath:
           path: /var/run/dbus
