@@ -6,7 +6,6 @@ metadata:
     app: seerr
     app.kubernetes.io/name: seerr
     app.kubernetes.io/part-of: streaming-stack
-    tier: disposable
 spec:
   replicas: 1
   selector:
