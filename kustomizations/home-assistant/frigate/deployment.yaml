@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frigate
+  namespace: home-assistant
   labels:
     app: frigate
 spec:
@@ -25,7 +26,7 @@ spec:
       automountServiceAccountToken: true
       containers:
       - name: frigate
-        image: ghcr.io/blakeblackshear/frigate:stable
+        image: ghcr.io/blakeblackshear/frigate:stable-rocm
         imagePullPolicy: IfNotPresent
         command:
         - /bin/bash
@@ -35,6 +36,8 @@ spec:
           cp /vault/secrets/config.yml /config/config.yml
           exec /init
         env:
+        - name: TZ
+          value: "America/Bogota"
         - name: LIBVA_DRIVER_NAME
           value: "radeonsi"
         resources:
@@ -44,20 +47,43 @@ spec:
           requests:
             cpu: "500m"
             memory: 1Gi
-        securityContext:
-          privileged: true
         ports:
         - name: http
           containerPort: 5000
         - name: rtsp
           containerPort: 8554
+        - name: go2rtc
+          containerPort: 1984
+        - name: https-ui
+          containerPort: 8971
+        - name: webrtc-tcp
+          containerPort: 8555
+        - name: webrtc-udp
+          containerPort: 8555
+          protocol: UDP
+        securityContext:
+          privileged: true
+          capabilities:
+            drop:
+            - ALL
+            add:
+            - CAP_PERFMON
+            - CHOWN
+            - DAC_OVERRIDE
+            - FOWNER
+            - SETGID
+            - SETUID
+            - SYS_ADMIN
         volumeMounts:
         - name: dshm
           mountPath: /dev/shm
+        - name: cache
+          mountPath: /tmp/cache
+        - name: dri 
+          mountPath: /dev/dri
+          readOnly: false
         - name: media
           mountPath: /media/frigate
-        - name: dri
-          mountPath: /dev/dri
         - name: localtime
           mountPath: /etc/localtime
           readOnly: true
@@ -67,13 +93,22 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: catimore
       securityContext:
-        fsGroup: 1000
-        supplementalGroups: [44, 46, 107, 109, 110, 992]
+        runAsUser: 0
+        runAsNonRoot: false
+        fsGroup: 107
+        supplementalGroups: [44, 104, 107, 992]
       volumes:
       - name: dshm
         emptyDir:
           medium: Memory
+          sizeLimit: 512Mi
+      - name: cache
+        emptyDir:
+          medium: Memory
           sizeLimit: 1Gi
+      - name: dri
+        hostPath:
+          path: /dev/dri
       - name: localtime
         hostPath:
           path: /etc/localtime
@@ -83,8 +118,4 @@ spec:
           path: /etc/timezone
           type: FileOrCreate
       - name: media
-        emptyDir: {} 
-      - name: dri
-        hostPath:
-          path: /dev/dri
-          type: Directory
+        emptyDir: {}

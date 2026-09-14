@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
 - ../../../components/playlists
 - config.yaml
+- pv.yaml
 - deployment.yaml
 - svc.yaml
 - ingress.yaml

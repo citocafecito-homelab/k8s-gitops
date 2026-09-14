@@ -8,3 +8,4 @@ resources:
 - webui-deployment.yaml
 - webui-svc.yaml
 - ingress.yaml
+- scaler.yaml

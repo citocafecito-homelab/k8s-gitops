@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: matter-hub
+  labels:
+    app: matter-hub
+spec:
+  selector:
+    app: matter-hub
+  ports:
+  - name: http
+    port: 8482
+    targetPort: 8482
+    protocol: TCP
+  type: ClusterIP

@@ -59,7 +59,12 @@ spec:
           initialDelaySeconds: 10
           periodSeconds: 10
         securityContext:
-          privileged: true 
+          privileged: true
+          capabilities:
+            drop:
+            - ALL
+            add:
+            - SYS_ADMIN
         volumeMounts:
         - mountPath: /dev/dri
           name: dri
@@ -69,7 +74,7 @@ spec:
         kubernetes.io/hostname: castillo
       securityContext:
         fsGroup: 1000
-        supplementalGroups: [44, 107, 992]
+        supplementalGroups: [44, 104, 107, 992]
       volumes:
       - name: dri
         hostPath:

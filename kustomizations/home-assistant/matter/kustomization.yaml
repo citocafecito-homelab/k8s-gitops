@@ -5,7 +5,7 @@ generatorOptions:
   disableNameSuffixHash: true
   
 configMapGenerator:
-#   - name: mosquitto-config
+#   - name: matter-bridge-config
 #     files:
 #       - files/matterbridge.toml
 
@@ -15,8 +15,14 @@ resources:
 - server-deployment.yaml
 - server-svc.yaml
 
-# Bridge (deprecated)
+# Bridge (deprecated needs a Home Assistant Matter Hub)
 # - bridge-deployment.yaml
+
+# Matter Hub (deprecated needs a Home Assistant Matter Hub)
+# https://github.com/RiDDiX/home-assistant-matter-hub/
+# - hub-deployment.yaml
+# - hub-svc.yaml
+# - hub-ingress.yaml
 
 namespace: home-assistant
 

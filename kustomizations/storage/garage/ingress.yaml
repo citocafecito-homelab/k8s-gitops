@@ -5,6 +5,9 @@ metadata:
   namespace: storage
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
+    # Indicar a Traefik que mande el tráfico al interceptor de KEDA
+    traefik.ingress.kubernetes.io/service.name: keda-add-on-http-interceptor.keda.svc.cluster.local
+    traefik.ingress.kubernetes.io/service.port: "8080"
 spec:
   ingressClassName: traefik
   rules:

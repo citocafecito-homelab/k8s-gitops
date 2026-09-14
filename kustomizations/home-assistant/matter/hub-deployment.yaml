@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matter-hub
+  labels:
+    app.kubernetes.io/name: matter-hub
+    app.kubernetes.io/part-of: home-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: matter-hub
+      app.kubernetes.io/name: matter-hub
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: matter-hub
+        app.kubernetes.io/name: matter-hub
+        app.kubernetes.io/part-of: home-assistant
+    spec:
+      dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+      containers:
+      - name: matter-hub
+        image: ghcr.io/riddix/home-assistant-matter-hub:latest
+        args:
+        - "home-assistant-matter-hub"
+        - "start"
+        - "--home-assistant-url"
+        - "http://home-assistant:8123"
+        - "--home-assistant-access-token"
+        - "****************"
+        ports:
+        - containerPort: 8482
+        - containerPort: 5540
+        volumeMounts:
+        - name: data
+          mountPath: /data
+      nodeSelector:
+        kubernetes.io/hostname: caturra
+      volumes:
+      - name: data
+        hostPath:
+          path: /mnt/matter-hub
+          type: DirectoryOrCreate

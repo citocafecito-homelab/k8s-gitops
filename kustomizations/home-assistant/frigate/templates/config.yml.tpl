@@ -8,6 +8,7 @@ mqtt:
 
 ffmpeg:
   hwaccel_args: preset-vaapi
+  # hwaccel_args: preset-amd-radeon
 
 auth:
   enabled: false
