@@ -8,6 +8,7 @@ on:
         required: true
         type: choice
         options:
+          - home-assistant
           - networking
           - media
           - monitoring
