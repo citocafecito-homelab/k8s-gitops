@@ -18,21 +18,7 @@ spec:
         #       name: traefik-noop
         #       port:
         #         number: 80
-        - path: /jfa
-          pathType: Prefix
-          backend:
-            service:
-              name: jfa-go
-              port:
-                number: 8056
-        - path: /invite
-          pathType: Prefix
-          backend:
-            service:
-              name: jfa-go
-              port:
-                number: 8056
-        - path: /my/account
+        - path: /accounts
           pathType: Prefix
           backend:
             service:
