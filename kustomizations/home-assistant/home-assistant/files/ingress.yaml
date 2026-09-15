@@ -27,12 +27,12 @@ ingress:
     url: "http://jellystat.streaming.svc.cluster.local"
     ui_mode: toolbar
 
- ssh_castillo:
+  filescastillo:
     title: "Castillo Explorer"
     icon: "mdi:movie"
     url: "http://192.168.1.12:9000"
     ui_mode: toolbar
-
+    
   # ## Probar Garage (S3)
   # # kubectl exec -it -n home-assistant deployment/home-assistant -- curl -I http://garage-webui.storage.svc.cluster.local:3909
   # garage:
