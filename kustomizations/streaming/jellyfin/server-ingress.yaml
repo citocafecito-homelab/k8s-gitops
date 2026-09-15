@@ -2,9 +2,9 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: jellyfin
+  namespace: streaming
   annotations:
-    # traefik.ingress.kubernetes.io/router.middlewares: networking-local-only@kubernetescrd
-    traefik.ingress.kubernetes.io/service.notsure: noop@internal
+    traefik.ingress.kubernetes.io/router.middlewares: streaming-redirect-forgot-password@kubernetescrd
 spec:
   ingressClassName: cloudflare-tunnel
   rules:
@@ -18,6 +18,20 @@ spec:
         #       name: traefik-noop
         #       port:
         #         number: 80
+        - path: /jfa
+          pathType: Prefix
+          backend:
+            service:
+              name: jfa-go
+              port:
+                number: 8056
+        - path: /web/#/forgotpassword
+          pathType: Prefix  
+          backend:
+            service:
+              name: jfa-go
+              port:
+                number: 8056
         - path: /
           pathType: Prefix
           backend:

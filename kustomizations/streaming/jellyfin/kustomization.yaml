@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
 # Shared components
 - ../../../components/playlists
+- middleware.yaml
 
 # Jellyfin Server
 - server-deployment.yaml

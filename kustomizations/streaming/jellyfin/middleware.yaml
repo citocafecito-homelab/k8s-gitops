@@ -1,0 +1,10 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-forgot-password
+  namespace: streaming
+spec:
+  redirectRegex:
+    regex: "^https?://habiflix\\.(citocafecito\\.work|lan)/web/#/forgotpassword"
+    replacement: "https://authflix.citocafecito.work/my/account/password/reset"
+    permanent: false
