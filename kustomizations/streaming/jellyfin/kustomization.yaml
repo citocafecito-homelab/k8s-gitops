@@ -2,7 +2,15 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+# Shared components
 - ../../../components/playlists
-- deployment.yaml
-- svc.yaml
-- ingress.yaml
+
+# Jellyfin Server
+- server-deployment.yaml
+- server-svc.yaml
+- server-ingress.yaml
+
+# Jellyfin User Administrator
+- jfa-deployment.yaml
+- jfa-svc.yaml
+- jfa-ingress.yaml

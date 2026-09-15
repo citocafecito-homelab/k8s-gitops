@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jfa-go
+  namespace: streaming
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jfa-go
+      app.kubernetes.io/name: jfa-go
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: jfa-go
+        app.kubernetes.io/name: jfa-go
+        app.kubernetes.io/part-of: streaming-stack
+    spec:
+      enableServiceLinks: false
+      containers:
+      - name: jfa-go
+        image: hrfee/jfa-go:latest
+        # args:
+        # - ./jfa-go
+        # - run
+        envFrom:
+        - configMapRef:
+            name: streaming-stack-config
+        ports:
+        - containerPort: 8056
+          protocol: TCP
+        - containerPort: 8057
+          protocol: TCP
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "128Mi"
+        volumeMounts:
+        - name: localtime
+          mountPath: /etc/localtime
+          readOnly: true
+        - name: jellyfin
+          mountPath: /jf
+        - name: data
+          mountPath: /data
+      nodeSelector:
+        kubernetes.io/hostname: castillo
+      securityContext:
+        fsGroup: 1000
+      volumes:
+      - name: localtime
+        hostPath:
+          path: /etc/localtime
+          type: File
+      - name: jellyfin
+        hostPath:
+          path: /mnt/jellyfin
+          type: DirectoryOrCreate
+      - name: data
+        hostPath:
+          path: /mnt/jfa-go
+          type: DirectoryOrCreate

@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellyfin
+  namespace: streaming
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: habiflix.lan
+  labels:
+    type: LoadBalancer
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.40
+  selector:
+    app: jellyfin
+  ports:
+  - name: lb
+    protocol: TCP
+    port: 80
+    targetPort: 8096
+  - name: http
+    port: 8096
+    targetPort: 8096
+  - name: udp
+    protocol: UDP
+    port: 7359
+    targetPort: 7359

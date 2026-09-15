@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: jellystat
+  namespace: streaming
   annotations:
     external-dns.alpha.kubernetes.io/hostname: stats.habiflix.lan
   labels:
