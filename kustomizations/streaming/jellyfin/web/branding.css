@@ -1,0 +1,135 @@
+@import url("https://cdn.jsdelivr.net/gh/n00bcodr/Jellyfish/indicators.css");
+@import url("https://cdn.jsdelivr.net/gh/n00bcodr/Jellyfish/ratings.css");
+@import url("https://cdn.jsdelivr.net/gh/n00bcodr/Jellyfish/colors/jellyflix.css");
+@import url("https://cdn.jsdelivr.net/gh/n00bcodr/Jellyfish/progress_bar.css");
+
+:root {
+  /* example */
+  --appBarHeight: 4.6em;
+}
+
+/* ============================
+   HabiFlix — Branding para Jellyfin
+   ============================ */
+
+/* Ocultar logo original */
+.pageTitleWithLogo img {
+  display: none !important;
+}
+
+.pageTitleWithDefaultLogo {
+  background-image: none !important;
+}
+
+/* Insertar logo HabiFlix */
+.pageTitle::before {
+  display: inline-block;
+  margin-right: 10px;
+  vertical-align: middle;
+  content: "HabiFlix";
+  font-size: 32px;
+  font-weight: 700;
+  color: #e50914;
+  /* Estilo Netflix */
+}
+
+/* ==========================================================
+   CUSTOM LOGIN
+   ========================================================== */
+.loginLogo {
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  width: 260px !important;
+  height: 140px !important;
+}
+
+#loginPage .inputLabel {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-weight: 500 !important;
+}
+
+#loginPage .raised,
+#loginPage .button-submit,
+#loginPage .fab {
+  border-radius: 50px !important;
+  background: linear-gradient(135deg, rgba(128, 0, 128, 0.7) 0%, rgba(218, 112, 214, 0.5) 100%) !important;
+  border: 1px solid rgba(238, 130, 238, 0.5) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 2px 2px rgba(255, 255, 255, 0.4) !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease !important;
+}
+
+#loginPage .raised:hover,
+#loginPage .button-submit:hover,
+#loginPage .fab:hover {
+  background: linear-gradient(135deg, rgba(128, 0, 128, 0.85) 0%, rgba(218, 112, 214, 0.7) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 6px 20px rgba(218, 112, 214, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.6) !important;
+  transform: translateY(-2px);
+}
+
+#loginPage .emby-input {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(218, 112, 214, 0.4) !important;
+  border-radius: 12px !important;
+  color: #ffffff !important;
+  padding: 12px 15px !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+#loginPage .emby-input:focus {
+  background: rgba(128, 0, 128, 0.2) !important;
+  border: 1px solid rgba(238, 130, 238, 0.9) !important;
+  box-shadow: 0 0 12px rgba(218, 112, 214, 0.6), inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  outline: none !important;
+}
+
+#loginPage .cardImageContainer {
+  border-radius: 8px !important;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+#loginPage .padded-left.padded-right.padded-bottom-page {
+  background: rgba(0, 0, 0, 0.7) !important;
+  border-radius: 12px !important;
+}
+
+/* ==========================================================
+   CUSTOM LOGIN - SOLO ESCRITORIO (>= 768px)
+   ========================================================== */
+@media (min-width: 768px) {
+  #loginPage:not(.hide) {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding-left: 8vw !important;
+  }
+
+  #loginPage .padded-left.padded-right.padded-bottom-page {
+    width: 100% !important;
+    max-width: 450px !important;
+    margin: 0 !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    padding: 40px 30px !important;
+    border-radius: 12px !important;
+  }
+
+  #loginPage .card {
+    width: 140px !important;
+  }
+
+  #loginPage .cardImageContainer {
+    width: 140px !important;
+    height: 140px !important;
+  }
+
+
+  #loginPage .padded-left.padded-right.padded-bottom-page {
+    width: 100% !important;
+    max-width: 450px !important;
+    margin: 0 !important;
+    padding: 40px 30px !important;
+  }
+}

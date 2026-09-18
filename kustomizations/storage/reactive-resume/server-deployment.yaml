@@ -16,21 +16,44 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: vault
-        vault.hashicorp.com/agent-inject-secret-home-assistant: "secret/data/reactive-resume"
-        vault.hashicorp.com/agent-inject-template-storage: |
+        vault.hashicorp.com/agent-inject-secret-.env: "secret/data/reactive-resume"
+        vault.hashicorp.com/agent-inject-perms-.env: "0644"
+        vault.hashicorp.com/agent-inject-template-.env: |
           {{ with secret "secret/data/reactive-resume" }}
-          export STORAGE_ACCESS_KEY="{{ .Data.data.S3_ACCESS_KEY }}"
-          export STORAGE_SECRET_KEY="{{ .Data.data.S3_SECRET_KEY }}"
+          S3_ACCESS_KEY_ID="{{ .Data.data.S3_ACCESS_KEY }}"
+          S3_SECRET_ACCESS_KEY="{{ .Data.data.S3_SECRET_KEY }}"
+          AUTH_SECRET="{{ .Data.data.AUTH_SECRET }}"
+          ENCRYPTION_SECRET="{{ .Data.data.ENCRYPTION_SECRET }}"
+          SMTP_HOST="{{ .Data.data.SMTP_HOST }}"
+          SMTP_PORT="{{ .Data.data.SMTP_PORT }}"
+          SMTP_USER="{{ .Data.data.SMTP_USER }}"
+          SMTP_PASS="{{ .Data.data.SMTP_PASS }}"
+          GITHUB_CLIENT_ID="{{ .Data.data.GITHUB_CLIENT_ID }}"
+          OAUTH_CLIENT_SECRET="{{ .Data.data.OAUTH_CLIENT_SECRET }}"
+          OAUTH_SCOPES="{{ .Data.data.OAUTH_SCOPES }}"
           {{ end }}
     spec:
+      serviceAccountName: reactive-resume
+      enableServiceLinks: false
+      initContainers:
+      - name: wait-for-postgres
+        image: postgres:18-alpine
+        command:
+        - sh
+        - -c
+        - |
+          until pg_isready -h reactive-resume-postgresql -p 5432 -U $DB_NAME; do
+            echo "Esperando a que PostgreSQL esté listo..."
+            sleep 2
+          done
+        envFrom:
+        - configMapRef:
+            name: reactive-db
       containers:
       - name: reactive-resume
-        image: ghcr.io/amruthpillai/reactive-resume
-        command: ["sh", "-c"]
-        args:
-          - |
-            . /vault/secrets/storage && \
-            dumb-init pnpm run start
+        image: ghcr.io/amruthpillai/reactive-resume:nightly
+        command: ["node"]
+        args: ["--env-file=/vault/secrets/.env", "apps/server/dist/index.mjs"]
         envFrom:
         - configMapRef:
             name: reactive-resume-config
@@ -38,21 +61,20 @@ spec:
         - containerPort: 3000
         resources:
           requests:
-            cpu: 50m
+            cpu: 100m
             memory: 256Mi
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 3000
-          periodSeconds: 30
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 3000
-          periodSeconds: 15
-          failureThreshold: 3
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        # livenessProbe:
+        #   httpGet:
+        #     path: /healthz
+        #     port: 3000
+        #   periodSeconds: 30
+        #   failureThreshold: 3
+        # readinessProbe:
+        #   httpGet:
+        #     path: /healthz
+        #     port: 3000
+        #   periodSeconds: 15
+        #   failureThreshold: 3

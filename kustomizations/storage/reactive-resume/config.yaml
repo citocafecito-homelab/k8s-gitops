@@ -13,17 +13,32 @@ metadata:
   name: reactive-resume-config
   namespace: default
 data:
+  # Global
   TZ: "America/Bogota"
   PORT: "3000"
   NODE_ENV: "production"
-  PUBLIC_URL: "http://192.168.1.24"
-  STORAGE_URL: "http://garage.storage.svc.cluster.local:3900/reactive-resume"
+  APP_URL: "http://resume.lan"
+
+  # Database
   DATABASE_URL: "postgresql://reactive-resume:yq=40sGkjbL76-G.@reactive-resume-postgresql:5432/reactive-resume"
-  CHROME_URL: "ws://chrome.core.svc.cluster.local:3000"
-  CHROME_TOKEN: "3nX6AjTZOMdJAFdR"
-  STORAGE_ENDPOINT: "garage.storage.svc.cluster.local"
-  STORAGE_PORT: "3900"
-  STORAGE_REGION: "catuai"
-  STORAGE_BUCKET: "reactive-resume"
-  STORAGE_USE_SSL: "false"
-  STORAGE_SKIP_BUCKET_CHECK: "false"
+  
+  # Chrome Config
+  CHROME_URL: "ws://lightpanda.core.svc.cluster.local:9222"
+
+  # Cache
+  REDIS_URL: "redis://reactive-resume-valkey:6379"
+
+  # SMTP
+  SMTP_SECURE: "true"
+  SMTP_FROM: "Citocafecito Resume <resume@citocafecito.work>"
+
+  # Oauth
+  OAUTH_PROVIDER_NAME: "Citocafecito Homelab"
+
+  # S3 Storage
+  S3_ENDPOINT: "http://garage.storage.svc.cluster.local:3900"
+  S3_PORT: "3900"
+  S3_REGION: "garage"
+  S3_BUCKET: "reactive-resume"
+  S3_USE_SSL: "false"
+  S3_FORCE_PATH_STYLE : "true"

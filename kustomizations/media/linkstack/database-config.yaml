@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: linkstack-database
+  namespace: media
+data:
+  MYSQL_DATABASE: "linkstack"
+  MYSQL_USER: "linkstack"
+  MYSQL_ROOT_PASSWORD: "linkstack"
+  MYSQL_PASSWORD: "linkstack"

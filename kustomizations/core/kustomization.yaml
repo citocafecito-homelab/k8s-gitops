@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
 - cloudflared
 - vault
-# - lightpanda (Done, but not in use)
+- lightpanda
 - ntfy
 # - whisper-asr
 # Deprecated

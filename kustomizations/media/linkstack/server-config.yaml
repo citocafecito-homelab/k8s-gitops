@@ -15,12 +15,9 @@ data:
   DB_CONNECTION:  "mysql"
   DB_HOST:        "linkstack-mysql.media.svc.cluster.local"
   DB_PORT:        "3306"
-  DB_DATABASE:    "linkstack"
-  DB_USERNAME:    "linkstack"
-  DB_PASSWORD:    "linkstack"
 
   # Session & Cache. Run php artisan cache:redis inside the container
-  CACHE_DRIVER:   "redis"
-  # SESSION_DRIVER: "table"
-  REDIS_HOST:     "linkstack-valkey"
-  REDIS_PORT:     "6379"
+  # CACHE_DRIVER:   "redis"
+  # # SESSION_DRIVER: "table"
+  # REDIS_HOST:     "linkstack-valkey"
+  # REDIS_PORT:     "6379"

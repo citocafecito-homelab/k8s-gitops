@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LiveTvOptions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <GuideDays xsi:nil="true" />
+  <EnableRecordingSubfolders>false</EnableRecordingSubfolders>
+  <EnableOriginalAudioWithEncodedRecordings>false</EnableOriginalAudioWithEncodedRecordings>
+  <TunerHosts>
+    <TunerHostInfo>
+      <Id>dfe2942bb5b64edd86d057b0d84d4523</Id>
+      <Url>http://dispatcharr.streaming.svc.cluster.local:9191/output/m3u?cachedlogos=false&amp;tvg_id_source=tvg_id&amp;output_format=fmp4&amp;output_profile=1</Url>
+      <Type>m3u</Type>
+      <ImportFavoritesOnly>false</ImportFavoritesOnly>
+      <AllowHWTranscoding>false</AllowHWTranscoding>
+      <AllowFmp4TranscodingContainer>false</AllowFmp4TranscodingContainer>
+      <AllowStreamSharing>false</AllowStreamSharing>
+      <FallbackMaxStreamingBitrate>30000000</FallbackMaxStreamingBitrate>
+      <EnableStreamLooping>true</EnableStreamLooping>
+      <TunerCount>0</TunerCount>
+      <IgnoreDts>true</IgnoreDts>
+      <ReadAtNativeFramerate>false</ReadAtNativeFramerate>
+    </TunerHostInfo>
+  </TunerHosts>
+  <ListingProviders>
+    <ListingsProviderInfo>
+      <Id>eb325d0dd91d4ce9bd2db02e37a89821</Id>
+      <Type>xmltv</Type>
+      <Path>http://dispatcharr.streaming.svc.cluster.local:9191/output/epg</Path>
+      <EnabledTuners />
+      <EnableAllTuners>true</EnableAllTuners>
+      <NewsCategories>
+        <string>news</string>
+        <string>journalism</string>
+        <string>documentary</string>
+        <string>current affairs</string>
+      </NewsCategories>
+      <SportsCategories>
+        <string>sports</string>
+        <string>basketball</string>
+        <string>baseball</string>
+        <string>football</string>
+      </SportsCategories>
+      <KidsCategories>
+        <string>kids</string>
+        <string>family</string>
+        <string>children</string>
+        <string>childrens</string>
+        <string>disney</string>
+      </KidsCategories>
+      <MovieCategories>
+        <string>movie</string>
+      </MovieCategories>
+      <ChannelMappings />
+    </ListingsProviderInfo>
+  </ListingProviders>
+  <PrePaddingSeconds>0</PrePaddingSeconds>
+  <PostPaddingSeconds>0</PostPaddingSeconds>
+  <MediaLocationsCreated />
+  <RecordingPostProcessorArguments>"{path}"</RecordingPostProcessorArguments>
+  <SaveRecordingNFO>true</SaveRecordingNFO>
+  <SaveRecordingImages>true</SaveRecordingImages>
+</LiveTvOptions>

@@ -6,7 +6,7 @@ resources:
 - dashboard
 - wiki
 - suwayomi
-# - linkstack
+- linkstack
 - openwa
 - immich
 - navidrome

@@ -3,8 +3,6 @@ kind: Ingress
 metadata:
   name: jellyfin
   namespace: streaming
-  # annotations:
-    # traefik.ingress.kubernetes.io/router.middlewares: streaming-redirect-forgot-password@kubernetescrd
 spec:
   ingressClassName: cloudflare-tunnel
   rules:
@@ -20,13 +18,6 @@ spec:
         #         number: 80
         - path: /accounts
           pathType: Prefix
-          backend:
-            service:
-              name: jfa-go
-              port:
-                number: 8056
-        - path: /web/#/forgotpassword
-          pathType: Prefix  
           backend:
             service:
               name: jfa-go

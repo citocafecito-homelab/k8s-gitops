@@ -27,12 +27,8 @@ spec:
           value: "iHD"
         - name: JELLYFIN_DATA_DIR
           value: "/config"
-        - name: JELLYFIN_CONFIG_DIR
-          value: "/config/config"
         - name: JELLYFIN_METADATA_DIR
-          value: "/config/metadata"
-        - name: JELLYFIN_CACHE_DIR
-          value: "/config/cache"
+          value: "/config/config/metadata"
         - name: JELLYFIN_PublishedServerUrl
           value: "internal=http://habiflix.lan, external=habiflix.citocafecito.work"
         envFrom:
@@ -91,6 +87,14 @@ spec:
           mountPath: /cache/transcodes
         - name: config
           mountPath: /config
+        - name: assets
+          mountPath: /jellyfin/jellyfin-web/custom
+        - name: configmap
+          mountPath: /config/config/branding.xml
+          subPath: branding.xml
+        - name: configmap
+          mountPath: /config/config/livetv.xml
+          subPath: livetv.xml
         - name: media
           mountPath: /media
         - name: music
@@ -123,6 +127,12 @@ spec:
         hostPath:
           path: /mnt/jellyfin
           type: DirectoryOrCreate
+      - name: configmap
+        configMap:
+          name: jellyfin-config
+      - name: assets
+        configMap:
+          name: jellyfin-web
       - name: media
         hostPath:
           path: /media

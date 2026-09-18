@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: linkstack-valkey
+  name: reactive-resume-valkey
   labels:
-    app: linkstack-valkey
-    app.kubernetes.io/name: linkstack-valkey
-    app.kubernetes.io/part-of: linkstack
+    app: reactive-resume-valkey
+    app.kubernetes.io/name: reactive-resume-valkey
+    app.kubernetes.io/part-of: reactive-resume
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: linkstack-valkey
-      app.kubernetes.io/name: linkstack-valkey
+      app: reactive-resume-valkey
+      app.kubernetes.io/name: reactive-resume-valkey
   template:
     metadata:
       labels:
-        app: linkstack-valkey
-        app.kubernetes.io/name: linkstack-valkey
-        app.kubernetes.io/part-of: linkstack
+        app: reactive-resume-valkey
+        app.kubernetes.io/name: reactive-resume-valkey
+        app.kubernetes.io/part-of: reactive-resume
     spec:
       containers:
       - name: valkey

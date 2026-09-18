@@ -1,6 +1,19 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+- name: jellyfin-config
+  files:
+  - config/branding.xml
+  - config/livetv.xml
+
+- name: jellyfin-web
+  files:
+  - branding.css=web/branding.css
+
 resources:
 # Shared components
 - ../../../components/playlists

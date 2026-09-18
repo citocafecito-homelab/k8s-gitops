@@ -37,9 +37,10 @@ data:
   DATABASE_SYNCHRONIZE: "false"
 
   # WhatsApp Engine & Puppeteer
-  ENGINE_TYPE: "whatsapp-web.js"
+  # ENGINE_TYPE: "whatsapp-web.js"
+  ENGINE_TYPE: "baileys"
   PLUGINS_ENABLED: "false"
-  PUPPETEER_HEADLESS: "true"
+  # PUPPETEER_HEADLESS: "true"
 
   # Webhook
   WEBHOOK_TIMEOUT: "10000"

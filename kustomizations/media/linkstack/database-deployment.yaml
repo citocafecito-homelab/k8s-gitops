@@ -2,12 +2,13 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: linkstack-mysql
+  namespace: media
   labels:
     app: linkstack-mysql
     app.kubernetes.io/name: linkstack-mysql
     app.kubernetes.io/part-of: linkstack
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: linkstack-mysql
@@ -23,15 +24,9 @@ spec:
       containers:
       - name: mysql
         image: mysql:9.6
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: linkstack 
-        - name: MYSQL_DATABASE
-          value: linkstack
-        - name: MYSQL_USER
-          value: linkstack
-        - name: MYSQL_PASSWORD
-          value: linkstack
+        envFrom:
+        - configMapRef:
+            name: linkstack-database
         ports:
         - containerPort: 3306
         resources:

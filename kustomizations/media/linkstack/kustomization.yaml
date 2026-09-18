@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
 # Postgresql
 - database-pv.yaml
+- database-config.yaml
 - database-deployment.yaml
 - database-svc.yaml
 
@@ -16,6 +17,3 @@ resources:
 - server-deployment.yaml
 - server-svc.yaml
 - server-ingress.yaml
-# - server-hpa.yaml
-# No working
-# - server-scale.yaml

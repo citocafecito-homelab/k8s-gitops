@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: postgres
-        image: postgres:15
+        image: postgres:18
         ports:
         - containerPort: 5432
         env:
@@ -38,7 +38,7 @@ spec:
               key: DB_PASSWORD
         volumeMounts:
         - name: reactive-resume-postgresql-storage
-          mountPath: /var/lib/postgresql/data
+          mountPath: /var/lib/postgresql
         livenessProbe:
           exec:
             command: [ "pg_isready", "-U", "reactive-resume" ]
@@ -55,6 +55,12 @@ spec:
           requests:
             cpu: 5m
             memory: 64Mi
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
       volumes:
       - name: reactive-resume-postgresql-storage
         persistentVolumeClaim:
