@@ -48,8 +48,8 @@ spec:
             cpu: "1"
             memory: "2Gi"
           limits:
-            cpu: "4"
-            memory: "8Gi"
+            cpu: "2"
+            memory: "6Gi"
         securityContext:
           privileged: true
           capabilities:
@@ -122,7 +122,7 @@ spec:
       - name: transcodes
         emptyDir:
           medium: Memory
-          sizeLimit: 6Gi
+          sizeLimit: 4Gi
       - name: config
         hostPath:
           path: /mnt/jellyfin

@@ -15,6 +15,7 @@ spec:
         app: suwayomi-postgresql
         app.kubernetes.io/name: suwayomi-postgresql
     spec:
+      enableServiceLinks: false
       serviceAccountName: suwayomi
       containers:
       - name: postgres

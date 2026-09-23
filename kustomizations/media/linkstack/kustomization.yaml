@@ -14,6 +14,7 @@ resources:
 
 # LinkStack
 - server-config.yaml
+- server-pvc.yaml
 - server-deployment.yaml
 - server-svc.yaml
 - server-ingress.yaml

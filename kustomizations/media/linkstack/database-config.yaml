@@ -8,3 +8,4 @@ data:
   MYSQL_USER: "linkstack"
   MYSQL_ROOT_PASSWORD: "linkstack"
   MYSQL_PASSWORD: "linkstack"
+  MYSQL_HOST: "linkstack-mysql"

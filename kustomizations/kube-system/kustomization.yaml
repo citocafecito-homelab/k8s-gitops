@@ -4,53 +4,56 @@ kind: Kustomization
 namespace: kube-system
 
 resources:
-  # AMD GPU Device Plugin (dejar solo un manifiesto base para el DaemonSet)
-  - https://raw.githubusercontent.com/ROCm/k8s-device-plugin/master/k8s-ds-amdgpu-dp.yaml
-  - https://raw.githubusercontent.com/ROCm/k8s-device-plugin/master/k8s-ds-amdgpu-labeller.yaml
+  - jobs/containerd-cleanup.yaml
 
-  # Intel GPU (NFD + GPU Plugin)
-  - https://github.com/intel/intel-device-plugins-for-kubernetes/deployments/nfd
-  - https://github.com/intel/intel-device-plugins-for-kubernetes/deployments/nfd/overlays/node-feature-rules
-  - https://github.com/intel/intel-device-plugins-for-kubernetes/deployments/gpu_plugin/overlays/nfd_labeled_nodes
+# Deprecated due no working as expected
+#   # AMD GPU Device Plugin (dejar solo un manifiesto base para el DaemonSet)
+#   - https://raw.githubusercontent.com/ROCm/k8s-device-plugin/master/k8s-ds-amdgpu-dp.yaml
+#   - https://raw.githubusercontent.com/ROCm/k8s-device-plugin/master/k8s-ds-amdgpu-labeller.yaml
 
-patches:
-  # AMD GPU Device Patches
-  - target:
-      group: apps
-      version: v1
-      kind: DaemonSet
-      name: .*amdgpu.*
-    options:
-      allowNamePatterns: true
-    path: patches/amd-gpu-nodes.yaml
+#   # Intel GPU (NFD + GPU Plugin)
+#   - https://github.com/intel/intel-device-plugins-for-kubernetes/deployments/nfd
+#   - https://github.com/intel/intel-device-plugins-for-kubernetes/deployments/nfd/overlays/node-feature-rules
+#   - https://github.com/intel/intel-device-plugins-for-kubernetes/deployments/gpu_plugin/overlays/nfd_labeled_nodes
 
-  - target:
-      kind: DaemonSet
-      name: amdgpu-device-plugin-daemonset
-      namespace: kube-system
-    patch: |-
-      apiVersion: apps/v1
-      kind: DaemonSet
-      metadata:
-        name: amdgpu-device-plugin-daemonset
-      spec:
-        template:
-          spec:
-            containers:
-              - name: amdgpu-dp-cntr
-                args:
-                  - "./k8s-device-plugin"
-                  - "-logtostderr=true"
-                  - "-stderrthreshold=INFO"
-                  - "-v=5"
-                  - "-resource_naming_strategy=mixed"
+# patches:
+#   # AMD GPU Device Patches
+#   - target:
+#       group: apps
+#       version: v1
+#       kind: DaemonSet
+#       name: .*amdgpu.*
+#     options:
+#       allowNamePatterns: true
+#     path: patches/amd-gpu-nodes.yaml
 
-  # Intel GPU Device Patches
-  - target:
-      group: apps
-      version: v1
-      kind: DaemonSet
-      name: .*intel-gpu.*
-    options:
-      allowNamePatterns: true
-    path: patches/intel-gpu-nodes.yaml
+#   - target:
+#       kind: DaemonSet
+#       name: amdgpu-device-plugin-daemonset
+#       namespace: kube-system
+#     patch: |-
+#       apiVersion: apps/v1
+#       kind: DaemonSet
+#       metadata:
+#         name: amdgpu-device-plugin-daemonset
+#       spec:
+#         template:
+#           spec:
+#             containers:
+#               - name: amdgpu-dp-cntr
+#                 args:
+#                   - "./k8s-device-plugin"
+#                   - "-logtostderr=true"
+#                   - "-stderrthreshold=INFO"
+#                   - "-v=5"
+#                   - "-resource_naming_strategy=mixed"
+
+#   # Intel GPU Device Patches
+#   - target:
+#       group: apps
+#       version: v1
+#       kind: DaemonSet
+#       name: .*intel-gpu.*
+#     options:
+#       allowNamePatterns: true
+#     path: patches/intel-gpu-nodes.yaml

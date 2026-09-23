@@ -17,7 +17,7 @@ data:
 
   # --- Biblioteca y Escaneo ---
   ND_AUTOIMPORTPLAYLISTS: "true"
-  ND_LYRICSPRIORITY: ".lrc,embedded"
+  ND_LYRICSPRIORITY: "nd-lyrics,.lrc,embedded"
   ND_PLAYLISTSPATH: "playlists"
   ND_PREFERSORTTAGS: "true"
   ND_SCANSCHEDULE: "1h"

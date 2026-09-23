@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: containerd-cleanup
+  namespace: kube-system
+spec:
+  schedule: "0 3 * * 0"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          tolerations:
+          - operator: Exists
+          restartPolicy: OnFailure
+          containers:
+          - name: crictl-cleanup
+            image: alpine:latest
+            command:
+            - /usr/local/bin/crictl
+            - --runtime-endpoint
+            - unix:///run/containerd/containerd.sock
+            - rmi
+            - --prune
+            volumeMounts:
+            - name: containerd-sock
+              mountPath: /run/containerd/containerd.sock
+            - name: crictl-bin
+              mountPath: /usr/local/bin/crictl
+              readOnly: true
+          volumes:
+          - name: containerd-sock
+            hostPath:
+              path: /run/containerd/containerd.sock
+              type: Socket
+          - name: crictl-bin
+            hostPath:
+              path: /usr/bin/crictl
+              type: File

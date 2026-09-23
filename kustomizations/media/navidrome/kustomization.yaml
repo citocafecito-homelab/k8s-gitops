@@ -1,9 +1,18 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+# generatorOptions:
+#   disableNameSuffixHash: true
+
+# configMapGenerator:
+#   - name: navidrome-plugins
+#     files:
+#       - plugins/nd-lyrics.ndp
+
 resources:
 - ../../../components/playlists
 - config.yaml
+# - plugins.yaml
 - pv.yaml
 - deployment.yaml
 - svc.yaml

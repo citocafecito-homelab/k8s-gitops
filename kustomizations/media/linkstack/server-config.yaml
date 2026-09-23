@@ -3,21 +3,34 @@ kind: ConfigMap
 metadata:
   name: linkstack-config
 data:
-  TZ:            "America/Bogota"
-  APP_KEY:       "base64:fMuiXz8wvkdTuTJhgseI8lluB1h2KPK4fthWsWA1fNk="
+  TZ: "America/Bogota"
+  APP_KEY: "base64:fMuiXz8wvkdTuTJhgseI8lluB1h2KPK4fthWsWA1fNk="
+  APP_DEBUG: "true"
+  APP_ENV: "local"
+  LOCALE: "en"
   REGISTER_AUTH: "verified"
+  ALLOW_REGISTRATION: "true"
+  LOG_LEVEL: "error"
 
   # Server name
-  HTTP_SERVER_NAME:   "linkstack.lan"
-  HTTPS_SERVER_NAME:  "linkstack.citocafecito.work"
+  HTTP_SERVER_NAME: "linkstack.lan"
+  HTTPS_SERVER_NAME: "linkstack.citocafecito.work"
+  SERVER_ADMIN: "linkstack@citocafecito.work"
   
   # Database
-  DB_CONNECTION:  "mysql"
-  DB_HOST:        "linkstack-mysql.media.svc.cluster.local"
-  DB_PORT:        "3306"
+  DB_CONNECTION: "mysql"
+  DB_HOST: "linkstack-mysql.media.svc.cluster.local"
+  DB_PORT: "3306"
 
-  # Session & Cache. Run php artisan cache:redis inside the container
-  # CACHE_DRIVER:   "redis"
-  # # SESSION_DRIVER: "table"
-  # REDIS_HOST:     "linkstack-valkey"
-  # REDIS_PORT:     "6379"
+  # Session & Cache
+  SESSION_DRIVER: "redis"
+  CACHE_DRIVER: "redis"
+  REDIS_HOST: "linkstack-valkey"
+  REDIS_PORT: "6379"
+
+  # S3 / Garage (Configuración general no sensible)
+  FILESYSTEM_DRIVER: "s3"
+  AWS_DEFAULT_REGION: "garage"
+  AWS_BUCKET: "linkstack"
+  AWS_ENDPOINT: "https://garage.storage.svc.cluster.local:3900"
+  AWS_USE_PATH_STYLE_ENDPOINT: "true"

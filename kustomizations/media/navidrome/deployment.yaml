@@ -18,6 +18,7 @@ spec:
         app: navidrome
         app.kubernetes.io/name: navidrome
     spec:
+      enableServiceLinks: false
       containers:
       - name: navidrome
         image: deluan/navidrome:latest
@@ -35,7 +36,7 @@ spec:
             amd.com/gpu: "1"
         envFrom:
         - configMapRef:
-              name: navidrome-config
+            name: navidrome-config
         env:
         - name: ND_LASTFM_APIKEY
           valueFrom:
@@ -54,13 +55,14 @@ spec:
           mountPath: /data/cache
         - name: dri
           mountPath: /dev/dri
-        - name: navidrome-data
+        - name: data
           mountPath: /data
-        - name: navidrome-music
+        - name: music
           mountPath: /music
           readOnly: true
         - name: playlists
-          mountPath: /music/playlists
+          mountPath: /htdocs/docker-entrypoint.sh
+          subPath: docker-entrypoint.sh
       nodeSelector:
         kubernetes.io/hostname: catimore
       securityContext:
@@ -77,10 +79,10 @@ spec:
         hostPath:
           path: /dev/dri
           type: Directory
-      - name: navidrome-data
+      - name: data
         persistentVolumeClaim:
           claimName: navidrome-pvc
-      - name: navidrome-music
+      - name: music
         persistentVolumeClaim:
           claimName: music-pvc
       - name: playlists
