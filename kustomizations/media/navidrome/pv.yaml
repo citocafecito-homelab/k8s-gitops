@@ -6,7 +6,7 @@ spec:
   capacity:
     storage: "5Gi"
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   hostPath:
     path: /mnt/navidrome
   persistentVolumeReclaimPolicy: Retain
@@ -20,7 +20,7 @@ metadata:
   namespace: media
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: "5Gi"
@@ -35,7 +35,7 @@ spec:
   capacity:
     storage: "120Gi"
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   hostPath:
     path: /mnt/music
   persistentVolumeReclaimPolicy: Retain
@@ -49,7 +49,7 @@ metadata:
   namespace: media
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: "120Gi"

@@ -29,11 +29,9 @@ spec:
           requests:
             cpu: 50m
             memory: 128Mi
-            amd.com/gpu: "1"
           limits:
             cpu: 500m
             memory: 1Gi
-            amd.com/gpu: "1"
         envFrom:
         - configMapRef:
             name: navidrome-config
@@ -64,7 +62,7 @@ spec:
           mountPath: /htdocs/docker-entrypoint.sh
           subPath: docker-entrypoint.sh
       nodeSelector:
-        kubernetes.io/hostname: catimore
+        kubernetes.io/hostname: caturra
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000

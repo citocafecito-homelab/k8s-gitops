@@ -17,7 +17,7 @@ data:
 
   # --- Biblioteca y Escaneo ---
   ND_AUTOIMPORTPLAYLISTS: "true"
-  ND_LYRICSPRIORITY: "nd-lyrics,.lrc,embedded"
+  ND_LYRICSPRIORITY: "nd-lyrics,lrc,embedded"
   ND_PLAYLISTSPATH: "playlists"
   ND_PREFERSORTTAGS: "true"
   ND_SCANSCHEDULE: "1h"
@@ -29,6 +29,7 @@ data:
   # --- Almacenamiento y Backups ---
   ND_BACKUP_COUNT: "3"
   ND_BACKUP_PATH: "/data/backup"
+  ND_BACKUP_SCHEDULE: "@every 24h"
   ND_IMAGECACHESIZE: "500MB"
 
   # --- Conectividad y Compartir ---
