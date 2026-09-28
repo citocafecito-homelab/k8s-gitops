@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jellyfin
+  name: jellyfin-replica
   namespace: streaming
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: jellyfin
-      app.kubernetes.io/name: jellyfin
+      app: jellyfin-replica
+      app.kubernetes.io/name: jellyfin-replica
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: jellyfin
-        app.kubernetes.io/name: jellyfin
+        app: jellyfin-replica
+        app.kubernetes.io/name: jellyfin-replica
         app.kubernetes.io/part-of: streaming-stack
     spec:
       enableServiceLinks: false
       containers:
-      - name: jellyfin
+      - name: jellyfin-replica
         image: jellyfin/jellyfin:latest
         env:
         - name: LIBVA_DRIVER_NAME
@@ -29,8 +29,6 @@ spec:
           value: "/config"
         - name: JELLYFIN_METADATA_DIR
           value: "/config/config/metadata"
-        - name: JELLYFIN_PublishedServerUrl
-          value: "internal=http://habiflix.lan, external=habiflix.citocafecito.work"
         envFrom:
         - configMapRef:
             name: streaming-stack-config
@@ -83,27 +81,12 @@ spec:
           readOnly: false
         - name: shm
           mountPath: /dev/shm
-        # - name: transcodes
-        #   mountPath: /cache/transcodes
         - name: config
           mountPath: /config
-        - name: assets
-          mountPath: /jellyfin/jellyfin-web/custom
-        - name: configmap
-          mountPath: /config/config/branding.xml
-          subPath: branding.xml
-        - name: configmap
-          mountPath: /config/config/livetv.xml
-          subPath: livetv.xml
         - name: media
           mountPath: /media
-        - name: music
-          mountPath: /music
-        - name: playlists
-          mountPath: /music/playlists
-          readOnly: true
       nodeSelector:
-        kubernetes.io/hostname: castillo
+        kubernetes.io/hostname: catimore
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
@@ -119,27 +102,11 @@ spec:
         emptyDir:
           medium: Memory
           sizeLimit: 512Mi
-      # - name: transcodes
-      #   emptyDir:
-      #     medium: Memory
-      #     sizeLimit: 4Gi
       - name: config
         hostPath:
           path: /mnt/jellyfin
           type: DirectoryOrCreate
-      - name: configmap
-        configMap:
-          name: jellyfin-config
-      - name: assets
-        configMap:
-          name: jellyfin-web
       - name: media
         hostPath:
           path: /media
           type: DirectoryOrCreate
-      - name: music
-        hostPath:
-          path: /mnt/music
-      - name: playlists
-        configMap:
-          name: shared-playlists

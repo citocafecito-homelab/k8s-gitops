@@ -15,11 +15,12 @@ Tamaño: ${HUMAN_SIZE}
 Ruta: ${SAVE_PATH:-Desconocida}"
 
 (
-  send_ntfy "qBittorrent: Descarga Completada" \
-            "$BODY" \
-            "check,package" \
-            "default" \
-            "qbittorrent"
-) &
+    send_ntfy "qBittorrent: Descarga Completada" \
+              "$BODY" \
+              "check,package" \
+              "default" \
+              "qbittorrent"
+) </dev/null >/dev/null 2>&1 &
+disown
 
 exit 0

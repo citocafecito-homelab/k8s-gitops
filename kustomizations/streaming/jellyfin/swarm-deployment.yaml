@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyswarm
+  namespace: streaming
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyswarm
+      app.kubernetes.io/name: jellyswarm
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: jellyswarm
+        app.kubernetes.io/name: jellyswarm
+        app.kubernetes.io/part-of: streaming-stack
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-inject-secret-jellyswarrm.toml: "secret/data/jellyfin"
+        vault.hashicorp.com/agent-inject-template-jellyswarrm.toml: |
+          {{- with secret "secret/data/jellyfin" -}}
+          auto_create_users_on_login = false
+
+          [debug_user]
+          username = "{{ .Data.data.USERNAME }}"
+          password = "{{ .Data.data.PASSWORD }}"
+
+          [[preconfigured_servers]]
+          url = "http://jellyfin:8096"
+          name = "Main Server"
+          priority = 101
+          media_streaming_mode = "Proxy"
+
+          [[preconfigured_servers]]
+          url = "http://jellyfin-replica:8096"
+          name = "Replica Server"
+          priority = 101
+          media_streaming_mode = "Proxy"
+          {{- end -}}
+    spec:
+      enableServiceLinks: false
+      serviceAccountName: jellyswarm
+      containers:
+      - name: jellyswarm
+        image: ghcr.io/llukas22/jellyswarrm:main
+        ports:
+        - containerPort: 3000
+          name: http

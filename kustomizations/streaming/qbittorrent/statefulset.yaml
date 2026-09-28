@@ -91,7 +91,6 @@ spec:
           mountPath: /downloads
         - name: latteam
           mountPath: /LatTeam
-
       nodeSelector:
         kubernetes.io/hostname: catimore
       volumes:

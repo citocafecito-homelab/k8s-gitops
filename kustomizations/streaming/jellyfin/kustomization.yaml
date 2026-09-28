@@ -24,7 +24,18 @@ resources:
 - server-svc.yaml
 - server-ingress.yaml
 
+# Jellyfin Replica
+- replica-deployment.yaml
+- replica-svc.yaml
+- replica-ingress.yaml
+
 # Jellyfin User Administrator
 - jfa-deployment.yaml
 - jfa-svc.yaml
 - jfa-ingress.yaml
+
+# JellySwarm
+- swarm-sa.yaml
+- swarm-deployment.yaml
+- swarm-svc.yaml
+- swarm-ingress.yaml
