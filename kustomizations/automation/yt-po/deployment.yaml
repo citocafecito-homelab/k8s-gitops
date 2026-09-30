@@ -71,16 +71,3 @@ spec:
       securityContext:
         seccompProfile:
           type: RuntimeDefault
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: ytdl-pot
-  namespace: media
-spec:
-  selector:
-    app: ytdl-pot
-  ports:
-    - protocol: TCP
-      port: 4416
-      targetPort: 4416
