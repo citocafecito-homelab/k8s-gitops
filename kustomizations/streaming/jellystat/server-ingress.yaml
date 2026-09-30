@@ -1,17 +1,16 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: qbittorrent
+  name: jellystat
 spec:
-  ingressClassName: cloudflare-tunnel
   rules:
-  - host: qbittorrent.citocafecito.work
+  - host: stats.habiflix.lan
     http:
       paths:
         - path: /
           pathType: Prefix
           backend:
             service:
-              name: qbittorrent
+              name: jellystat
               port:
-                number: 8080
+                number: 3000

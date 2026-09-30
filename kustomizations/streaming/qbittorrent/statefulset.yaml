@@ -3,7 +3,7 @@ kind: StatefulSet
 metadata:
   name: qbittorrent
 spec:
-  serviceName: "qbittorrent-headless"
+  serviceName: qbittorrent
   replicas: 1
   selector:
     matchLabels:

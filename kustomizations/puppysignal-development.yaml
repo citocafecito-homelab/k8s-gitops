@@ -63,15 +63,11 @@ kind: Service
 metadata:
   name: puppysignal-mongodb-dev
   namespace: puppysignal-development
-  annotations:
-    metallb.universe.tf/loadBalancerIPs: "192.168.1.19"
   labels:
     app: puppysignal-mongodb-dev
     app.kubernetes.io/name: puppysignal-mongodb-dev
     app.kubernetes.io/part-of: puppysignal-dev
 spec:
-  type: LoadBalancer
-  loadBalancerIP: 192.168.1.30
   selector:
     app: puppysignal-mongodb-dev
     app.kubernetes.io/name: puppysignal-mongodb-dev
@@ -80,36 +76,20 @@ spec:
     - name: mongodb
       port: 27017
       targetPort: 27017
-# ---
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: puppysignal-mongodb-dev
-#   namespace: puppysignal-development
-# spec:
-#   ingressClassName: traefik
-#   rules:
-#   - host: mongodb.puppysignal.dev.lan
-#     http:
-#       paths:
-#         - path: /
-#           pathType: Prefix
-#           backend:
-#             service:
-#               name: puppysignal-mongodb-dev
-#               port:
-#                 number: 27017
-# ---
-# apiVersion: traefik.io/v1alpha1
-# kind: IngressRouteTCP
-# metadata:
-#   name: puppysignal-mongodb-dev
-#   namespace: puppysignal-development
-# spec:
-#   entryPoints:
-#     - mongo # Nombre del entryPoint TCP en Traefik escuchando en el puerto 27017
-#   routes:
-#     - match: HostSNI(`*`)
-#       services:
-#         - name: puppysignal-mongodb-dev
-#           port: 27017
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: puppysignal-mongodb-dev
+spec:
+  rules:
+  - host: mongodb.puppysignal.dev.lan
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: puppysignal-mongodb-dev
+              port:
+                number: 27017

@@ -2,17 +2,17 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-# Postgresql
+# Database (Postgresql)
 - database-pv.yaml
 - database-config.yaml
 - database-deployment.yaml
 - database-svc.yaml
 
-# Redis (In progress, table in the meantime)
+# Cache (Valkey)
 - cache-deployment.yaml
 - cache-svc.yaml
 
-# LinkStack
+# Server (LinkStack)
 - server-config.yaml
 - server-pvc.yaml
 - server-deployment.yaml
