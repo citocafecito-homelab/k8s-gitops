@@ -38,4 +38,4 @@ resources:
 - swarm-sa.yaml
 - swarm-deployment.yaml
 - swarm-svc.yaml
-- swarm-ingress.yaml
+# - swarm-ingress.yaml

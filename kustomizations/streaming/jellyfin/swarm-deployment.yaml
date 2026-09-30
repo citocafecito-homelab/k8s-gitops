@@ -23,9 +23,9 @@ spec:
         vault.hashicorp.com/agent-inject-secret-jellyswarrm.toml: "secret/data/jellyfin"
         vault.hashicorp.com/agent-inject-template-jellyswarrm.toml: |
           {{- with secret "secret/data/jellyfin" -}}
-          auto_create_users_on_login = false
+          auto_create_users_on_login = true
 
-          [debug_user]
+          server_name = "Habiflix"
           username = "{{ .Data.data.USERNAME }}"
           password = "{{ .Data.data.PASSWORD }}"
 
@@ -47,6 +47,18 @@ spec:
       containers:
       - name: jellyswarm
         image: ghcr.io/llukas22/jellyswarrm:main
+        command:
+        - sh
+        - -c
+        - |
+          mkdir -p /app/data
+          cp /vault/secrets/jellyswarrm.toml /app/data/jellyswarrm.toml
+          exec /app/jellyswarrm-proxy
+        env:
+        # - name: JELLYSWARRM_PUBLIC_ADDRESS
+        #   value: "192.168.1.40"
+        - name: JELLYSWARRM_INCLUDE_SERVER_NAME_IN_MEDIA
+          value: "false"
         ports:
         - containerPort: 3000
           name: http
