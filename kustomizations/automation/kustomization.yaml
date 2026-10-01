@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
 - node-red
 - yt-po
-- buzzkit
+# - buzzkit
+- byparr
 
 namespace: automation

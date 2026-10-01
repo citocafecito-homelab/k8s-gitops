@@ -21,6 +21,7 @@ resources:
 - bazarr
 - lidarr
 - seerr
+- whisparr
 
 # Habiflix Stack
 - dispatcharr

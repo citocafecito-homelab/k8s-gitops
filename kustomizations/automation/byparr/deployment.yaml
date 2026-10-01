@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cloudflare-solver
+  name: byparr
   labels:
-    app: cloudflare-solver
-    app.kubernetes.io/name: cloudflare-solver
+    app: byparr
+    app.kubernetes.io/name: byparr
     tier: disposable
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: cloudflare-solver
-      app.kubernetes.io/name: cloudflare-solver
+      app: byparr
+      app.kubernetes.io/name: byparr
   template:
     metadata:
       labels:
-        app: cloudflare-solver
-        app.kubernetes.io/name: cloudflare-solver
+        app: byparr
+        app.kubernetes.io/name: byparr
     spec:
       terminationGracePeriodSeconds: 30
       affinity:
@@ -28,29 +28,34 @@ spec:
                 operator: NotIn
                 values:
                 - caturra
-                - catimore
       containers:
-      - name: cloudflare-solver
-        image: ghcr.io/nlevee/simple-cloudflare-solver:main
+      - name: byparr
+        image: ghcr.io/thephaseless/byparr:latest
         ports:
         - containerPort: 8000
         env:
-        - name: PUID
-          value: '1000'
-        - name: PGID
-          value: '1000'
+        - name: BROWSER_LOCALE
+          value: "es-CO"
         - name: TZ
           value: "America/Bogota"
         - name: LOG_LEVEL
           value: 'info'
         resources:
           requests:
-            cpu: 100m
-            memory: "128Mi"
+            cpu: 50m
+            memory: 256Mi
           limits:
-            cpu: 1000m
-            memory: "1.5Gi"
+            cpu: 1
+            memory: 1Gi
+        volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
       tolerations:
       - key: node-role.kubernetes.io/control-plane
         operator: Exists
         effect: NoSchedule
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 512Mi

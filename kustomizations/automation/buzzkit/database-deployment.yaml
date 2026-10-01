@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: buzzkit-postgresql
+spec:
+  serviceName: buzzkit-postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: buzzkit-postgresql
+      app.kubernetes.io/name: buzzkit-postgresql
+  template:
+    metadata:
+      labels:
+        app: buzzkit-postgresql
+        app.kubernetes.io/name: buzzkit-postgresql
+    spec:
+      serviceAccountName: buzzkit
+      containers:
+      - name: postgres
+        image: postgres:18
+        ports:
+        - containerPort: 5432
+        envFrom:
+        - configMapRef:
+            name: buzzkit-database
+        volumeMounts:
+        - name: buzzkit-postgresql-storage
+          mountPath: /var/lib/postgresql
+        livenessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "buzzkit" ]
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "buzzkit" ]
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      volumes:
+      - name: buzzkit-postgresql-storage
+        persistentVolumeClaim:
+          claimName: buzzkit-postgresql-pvc

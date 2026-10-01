@@ -12,11 +12,5 @@ resources:
 - navidrome
 # - lidify
 # - excalidraw
-- cloudflare-solver
-# Deprecated
-# - flaresolverr
-
-# - yt-po-server.yaml
-# - puppy-signal
 
 namespace: media

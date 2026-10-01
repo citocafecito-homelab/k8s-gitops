@@ -1,56 +1,50 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: prowlarr
+  name: whisparr
   labels:
-    app: prowlarr
-    app.kubernetes.io/name: prowlarr
+    app: whisparr
+    app.kubernetes.io/name: whisparr
     app.kubernetes.io/part-of: streaming-stack
     tier: disposable
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: prowlarr
+      app: whisparr
+      app.kubernetes.io/name: whisparr
   template:
     metadata:
       labels:
-        app: prowlarr
-        app.kubernetes.io/name: prowlarr
+        app: whisparr
+        app.kubernetes.io/name: whisparr
         app.kubernetes.io/part-of: streaming-stack
     spec:
       containers:
-      - name: prowlarr
-        image: lscr.io/linuxserver/prowlarr:2.6.5
+      - name: whisparr
+        image: ghcr.io/hotio/whisparr:v2
         ports:
-        - containerPort: 9696
+        - containerPort: 6969
+        env:
+        - env: WEBUI_PORTS
+          value: "6969/tcp"
         envFrom:
         - configMapRef:
             name: streaming-stack-config
         resources:
           requests:
-            cpu: 50m
-            memory: 128Mi
-          limits:
-            cpu: 1
-            memory: 512Mi
-        securityContext:
-          runAsUser: 0
-          runAsGroup: 0
-          allowPrivilegeEscalation: true
-          capabilities:
-            drop: [ "ALL" ]
-            add: [ "CHOWN", "SETGID", "SETUID" ]
+            memory: 64Mi
+            cpu: 5m
         livenessProbe:
           tcpSocket:
-            port: 9696
-          initialDelaySeconds: 20
+            port: 6969
+          initialDelaySeconds: 30
           periodSeconds: 30
           timeoutSeconds: 5
           failureThreshold: 5
         readinessProbe:
           tcpSocket:
-            port: 9696
+            port: 6969
           initialDelaySeconds: 10
           periodSeconds: 15
           timeoutSeconds: 5
@@ -58,10 +52,23 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
+        - name: downloads
+          mountPath: /downloads
+        - name: media
+          mountPath: /media
       nodeSelector:
         kubernetes.io/hostname: castillo
+      securityContext:
+        fsGroup: 1000
       volumes:
       - name: config
         hostPath:
-          path: /mnt/prowlarr
+          path: /mnt/whisparr
+          type: DirectoryOrCreate
+      - name: downloads
+        persistentVolumeClaim:
+          claimName: downloads-pvc
+      - name: media
+        hostPath:
+          path: /media
           type: DirectoryOrCreate

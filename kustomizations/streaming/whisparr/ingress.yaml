@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: whisparr
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: whisparr.lan
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: whisparr
+              port:
+                number: 6969

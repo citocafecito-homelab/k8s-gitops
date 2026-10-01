@@ -44,6 +44,16 @@ spec:
     spec:
       enableServiceLinks: false
       serviceAccountName: jellyswarm
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                - caturra
+                - catimore
       containers:
       - name: jellyswarm
         image: ghcr.io/llukas22/jellyswarrm:main
@@ -55,10 +65,12 @@ spec:
           cp /vault/secrets/jellyswarrm.toml /app/data/jellyswarrm.toml
           exec /app/jellyswarrm-proxy
         env:
-        # - name: JELLYSWARRM_PUBLIC_ADDRESS
-        #   value: "192.168.1.40"
         - name: JELLYSWARRM_INCLUDE_SERVER_NAME_IN_MEDIA
           value: "false"
         ports:
         - containerPort: 3000
           name: http
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
