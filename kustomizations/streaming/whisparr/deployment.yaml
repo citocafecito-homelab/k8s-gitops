@@ -56,6 +56,8 @@ spec:
           mountPath: /downloads
         - name: media
           mountPath: /media
+        - name: latteam
+          mountPath: /LatTeam
       nodeSelector:
         kubernetes.io/hostname: castillo
       securityContext:
@@ -71,4 +73,12 @@ spec:
       - name: media
         hostPath:
           path: /media
+          type: DirectoryOrCreate
+      - name: config
+        hostPath:
+          path: /mnt/qbittorrent
+          type: DirectoryOrCreate
+      - name: latteam
+        hostPath:
+          path: /media/multimedia/LatTeam
           type: DirectoryOrCreate
