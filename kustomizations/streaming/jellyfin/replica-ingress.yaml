@@ -4,7 +4,6 @@ metadata:
   name: jellyfin-replica
   namespace: streaming
 spec:
-  ingressClassName: traefik
   rules:
   - host: replicafix.lan
     http:
