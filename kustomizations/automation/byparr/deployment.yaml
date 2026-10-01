@@ -45,17 +45,29 @@ spec:
             cpu: 50m
             memory: 256Mi
           limits:
-            cpu: 1
-            memory: 1.5Gi
+            cpu: 2
+            memory: 3Gi
         volumeMounts:
         - name: dshm
           mountPath: /dev/shm
+        - name: tmp-dir
+          mountPath: /tmp
+        - name: cache-dir
+          mountPath: /cache
       tolerations:
-      - key: node-role.kubernetes.io/control-plane
+      - key: node-role.control-plane
         operator: Exists
         effect: NoSchedule
       volumes:
       - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 1Gi
+      - name: tmp-dir
+        emptyDir:
+          medium: Memory
+          sizeLimit: 1Gi
+      - name: cache-dir
         emptyDir:
           medium: Memory
           sizeLimit: 512Mi
