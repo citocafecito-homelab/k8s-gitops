@@ -11,7 +11,7 @@ resources:
 - mosquitto
 - matter
 - ring-mqtt
-- eddie
+# - eddie 
 
 # No devices
 # - zwave 
