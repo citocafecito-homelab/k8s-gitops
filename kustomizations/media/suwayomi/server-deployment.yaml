@@ -29,7 +29,7 @@ spec:
       enableServiceLinks: false
       containers:
       - name: suwayomi
-        image: ghcr.io/suwayomi/suwayomi-server:preview
+        image: ghcr.io/suwayomi/suwayomi-server:stable
         ports:
         - containerPort: 4567
         - containerPort: 8181
@@ -50,7 +50,7 @@ spec:
           runAsUser: 1000
           capabilities:
             drop:
-            - ALL
+            - ALL 
         volumeMounts:
         - name: suwayomi-storage
           mountPath: /home/suwayomi/.local/share/Tachidesk/downloads
