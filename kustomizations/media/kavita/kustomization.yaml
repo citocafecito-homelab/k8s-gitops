@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
 # Kapowarr (Manager)
+- kapowarr-config.yaml
 - kapowarr-deployment.yaml
 - kapowarr-sv.yaml
 - kapowarr-ingress.yaml
