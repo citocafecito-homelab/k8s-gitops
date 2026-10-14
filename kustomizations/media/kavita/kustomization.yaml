@@ -2,6 +2,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+# Kapowarr (Manager)
+- kapowarr-deployment.yaml
+- kapowarr-sv.yaml
+- kapowarr-ingress.yaml
+
 # Server
 - server-deployment.yaml
 - server-svc.yaml
