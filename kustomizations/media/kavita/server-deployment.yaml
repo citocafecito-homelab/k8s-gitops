@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich
+  labels:
+    tier: disposable
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich
+      app.kubernetes.io/name: immich
+  template:
+    metadata:
+      labels:
+        app: immich
+        app.kubernetes.io/name: immich
+      annotations:
+        app.kubernetes.io/documentation: "https://wiki.kavitareader.com"
+        app.kubernetes.io/repo: "https://github.com/Kareadita/Kavita"
+        app.kubernetes.io/installation: "https://wiki.kavitareader.com/installation/docker"
+    spec:
+      containers:
+      - name: immich
+        image: ghcr.io/immich-app/immich-server:release
+        ports:
+        - containerPort: 5000
+        env:
+        - name: TZ
+          value: "America/Bogota"
+        volumeMounts:
+        - mountPath: /kavita/config
+          name: config
+        - mountPath: /kavita/storage/manga
+          name: storage
+          subPath: manga
+        - mountPath: /kavita/storage/comics
+          name: storage
+          subPath: comics
+        - mountPath: /kavita/storage/books
+          name: storage
+          subPath: books
+      nodeSelector:
+        kubernetes.io/hostname: catimore
+      volumes:
+      - name: storage
+        hostPath:
+          path: /mnt/kavita/storage
+          type: DirectoryOrCreate
+      - name: config
+        hostPath:
+          path: /mnt/kavita/config
+          type: DirectoryOrCreate
