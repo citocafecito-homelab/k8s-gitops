@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kapowarr
+  labels:
+    tier: disposable
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kapowarr
+      app.kubernetes.io/name: kapowarr
+  template:
+    metadata:
+      labels:
+        app: kapowarr
+        app.kubernetes.io/name: kapowarr
+      annotations:
+        app.kubernetes.io/documentation: ""
+        app.kubernetes.io/repo: ""
+        app.kubernetes.io/installation: "https://casvt.github.io/Kapowarr/installation/docker/#example"
+    spec:
+      containers:
+      - name: kapowarr
+        image: mrcas/kapowarr:latest
+        ports:
+        - containerPort: 5656
+        envFrom:
+        - configMapRef:
+            name: kapowarr-config
+        volumeMounts:
+        - mountPath: /app/db
+          name: config
+        - mountPath: /comics
+          subPath: comics
+          name: storage
+        - mountPath: /books
+          subPath: books
+          name: storage
+        - mountPath: /manga
+          subPath: manga
+          name: storage
+      nodeSelector:
+        kubernetes.io/hostname: catimore
+      volumes:
+      - name: storage
+        hostPath:
+          path: /mnt/kavita/storage
+      - name: config
+        hostPath:
+          path: /mnt/kapowarr
+          type: DirectoryOrCreate
