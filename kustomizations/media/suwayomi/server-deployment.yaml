@@ -30,6 +30,13 @@ spec:
       containers:
       - name: suwayomi
         image: ghcr.io/suwayomi/suwayomi-server:stable
+        command: ["tini", "--", "sh", "-c"]
+        args:
+          - |
+            if [ -f /vault/secrets/AUTH_USERNAME ]; then
+              export AUTH_USERNAME="$(cat /vault/secrets/AUTH_USERNAME)"
+            fi
+            exec /home/suwayomi/startup_script.sh
         ports:
         - containerPort: 4567
         - containerPort: 8181
@@ -64,9 +71,6 @@ spec:
         - name: suwayomi-storage
           mountPath: /home/suwayomi/.local/share/Tachidesk/local
           subPath: local
-        - name: suwayomi-storage
-          mountPath: /home/suwayomi/.local/share/Tachidesk/settings
-          subPath: settings
         - name: suwayomi-cache
           mountPath: /home/suwayomi/.local/share/Tachidesk/cache
       nodeSelector:
