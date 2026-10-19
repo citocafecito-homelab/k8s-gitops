@@ -1,0 +1,121 @@
+# One worker per GPU node. Jellyfin reaches the workers through the
+# ffmpeg-workers Service (service.yaml).
+#
+# Needs a Secret with the token clients must send:
+#   kubectl create secret generic grpc-ffmpeg --from-literal=VALID_TOKEN=<token>
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ffmpeg-worker
+spec:
+  revisionHistoryLimit: 3
+
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ffmpeg-worker
+
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ffmpeg-worker
+        app.kubernetes.io/example: https://github.com/CrystalNET-org/grpc-ffmpeg/blob/main/example_deployment/kubernetes/DaemonSet.yaml
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/path: '/metrics'
+        prometheus.io/port: '8080'
+    spec:
+      terminationGracePeriodSeconds: 15
+      nodeSelector:
+        gpu: intel
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+
+      containers:
+      - name: ffmpeg-worker
+        image: ghcr.io/crystalnet-org/ffmpeg-worker:8.1.3-7.8
+        env:
+          - name: VALID_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: grpc-ffmpeg
+                key: VALID_TOKEN
+          - name: MAX_FFMPEG_WORKERS
+            value: "10"
+
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          limits:
+            cpu: "2"
+            memory: 4Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsGroup: 64710
+          runAsNonRoot: true
+          runAsUser: 64710
+        ports:
+        - name: grpc
+          containerPort: 50051
+          protocol: TCP
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        startupProbe:
+          tcpSocket:
+            port: grpc
+          periodSeconds: 10
+          failureThreshold: 20
+        livenessProbe:
+          tcpSocket:
+            port: grpc
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 3
+        # Mount everything Jellyfin's ffmpeg reads or writes at the same paths
+        # as in the Jellyfin container: the media library, Jellyfin's cache
+        # (including transcodes) and Jellyfin's temp directory (image
+        # extraction, trickplay). Mount the cache volume's "temp" directory at
+        # /tmp/jellyfin in the Jellyfin container as well.
+        volumeMounts:
+        - name: media
+          mountPath: /media
+          readOnly: true
+        - name: cache
+          mountPath: /cache
+        - name: cache
+          mountPath: /tmp/jellyfin
+          subPath: temp
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: media
+        persistentVolumeClaim:
+          claimName: media
+      - name: cache
+        persistentVolumeClaim:
+          claimName: jellyfin-cache
+      - name: tmp
+        emptyDir:
+          medium: Memory
+          sizeLimit: 1Gi

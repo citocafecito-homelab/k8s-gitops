@@ -3,6 +3,13 @@ kind: Deployment
 metadata:
   name: jellyfin
   namespace: streaming
+  labels:
+    app: jellyfin
+    app.kubernetes.io/name: jellyfin
+    app.kubernetes.io/part-of: streaming-stack
+    homelab.local/volume-multimedia: attached
+    homelab.local/volume-multimedia2: attached
+    homelab.local/volume-music: attached
 spec:
   replicas: 1
   selector:
@@ -12,16 +19,11 @@ spec:
   strategy:
     type: Recreate
   template:
-    metadata:
-      labels:
-        app: jellyfin
-        app.kubernetes.io/name: jellyfin
-        app.kubernetes.io/part-of: streaming-stack
     spec:
       enableServiceLinks: false
       containers:
       - name: jellyfin
-        image: jellyfin/jellyfin:latest
+        image: jellyfin/jellyfin:12
         env:
         - name: LIBVA_DRIVER_NAME
           value: "iHD"
@@ -107,6 +109,7 @@ spec:
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
+        runAsNonRoot: true
         fsGroup: 1000
         # Group id (992) can be found running 
         # getent group render | cut -d: -f3
@@ -119,10 +122,6 @@ spec:
         emptyDir:
           medium: Memory
           sizeLimit: 512Mi
-      # - name: transcodes
-      #   emptyDir:
-      #     medium: Memory
-      #     sizeLimit: 4Gi
       - name: config
         hostPath:
           path: /mnt/jellyfin

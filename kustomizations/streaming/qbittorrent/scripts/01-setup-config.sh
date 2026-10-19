@@ -6,7 +6,7 @@ echo "[CUSTOM-INIT] Configurando qBittorrent..."
 
 CONF_DIR="/config/qBittorrent"
 CONF_FILE="${CONF_DIR}/qBittorrent.conf"
-PORT_FILE="/config/qBittorrent/gluetun/forwarded_port"
+PORT_FILE="${CONF_DIR}/forwarded_port"
 
 mkdir -p "$CONF_DIR"
 

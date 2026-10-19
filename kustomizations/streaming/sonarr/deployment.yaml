@@ -6,6 +6,7 @@ metadata:
     app: sonarr
     app.kubernetes.io/name: sonarr
     app.kubernetes.io/part-of: streaming-stack
+    app.kubernetes.io/volume-downloads: attached
     tier: disposable
 spec:
   replicas: 1

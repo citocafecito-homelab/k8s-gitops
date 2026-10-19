@@ -5,8 +5,9 @@ source /scripts/ntfy.sh
 
 echo "[CUSTOM-INIT] Configurando Transmission..."
 
-JSON_FILE="/config/settings.json"
-PORT_FILE="/config/forwarded_port"
+CONF_DIR="/config"
+JSON_FILE="${CONFIG_DIR}/settings.json"
+PORT_FILE="${CONFIG_DIR}/forwarded_port"
 
 # Asegurar que la carpeta exista y que haya un JSON válido de base
 mkdir -p /config

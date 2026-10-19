@@ -6,6 +6,8 @@ metadata:
     app: whisparr
     app.kubernetes.io/name: whisparr
     app.kubernetes.io/part-of: streaming-stack
+    app.kubernetes.io/volume-downloads: attached
+    app.kubernetes.io/volume-multimedia: attached
     tier: disposable
 spec:
   replicas: 1
