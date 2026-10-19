@@ -7,9 +7,9 @@ metadata:
     app: jellyfin
     app.kubernetes.io/name: jellyfin
     app.kubernetes.io/part-of: streaming-stack
-    homelab.local/volume-multimedia: attached
-    homelab.local/volume-multimedia2: attached
-    homelab.local/volume-music: attached
+    app.kubernetes.io/volume-multimedia: attached
+    app.kubernetes.io/volume-multimedia2: attached
+    app.kubernetes.io/volume-music: attached
 spec:
   replicas: 1
   selector:

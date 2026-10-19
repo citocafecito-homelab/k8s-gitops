@@ -9,16 +9,13 @@ metadata:
   name: ffmpeg-worker
 spec:
   revisionHistoryLimit: 3
-
   selector:
     matchLabels:
       app.kubernetes.io/name: ffmpeg-worker
-
   updateStrategy:
     rollingUpdate:
       maxUnavailable: 1
     type: RollingUpdate
-
   template:
     metadata:
       labels:
