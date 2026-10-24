@@ -105,7 +105,7 @@ spec:
         - name: downloads
           mountPath: /downloads
       nodeSelector:
-        kubernetes.io/hostname: catimore
+        kubernetes.io/hostname: catuai
       securityContext:
         fsGroup: 1000
       volumes:
