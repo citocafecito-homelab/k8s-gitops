@@ -38,6 +38,8 @@ spec:
           mountPath: /media/multimedia2
         - name: media
           mountPath: /series
+        - name: media-uhd
+          mountPath: /series/uhd
         - name: downloads
           mountPath: /downloads
         resources:
@@ -69,7 +71,7 @@ spec:
           type: DirectoryOrCreate
       - name: media
         hostPath:
-          path: /media/series
+          path: /media/multimedia/series
           type: DirectoryOrCreate
       - name: media-uhd
         hostPath:
