@@ -76,10 +76,6 @@ spec:
         hostPath:
           path: /media
           type: DirectoryOrCreate
-      - name: config
-        hostPath:
-          path: /mnt/qbittorrent
-          type: DirectoryOrCreate
       - name: latteam
         hostPath:
           path: /media/multimedia/LatTeam
