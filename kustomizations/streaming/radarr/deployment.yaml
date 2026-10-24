@@ -59,6 +59,10 @@ spec:
           mountPath: /downloads
         - name: media
           mountPath: /media
+        - name: media-uhd
+          mountPath: /media/multimedia2
+        - name: thunderflix
+          mountPath: /media/thunderflix
       nodeSelector:
         kubernetes.io/hostname: castillo
       securityContext:
@@ -73,5 +77,13 @@ spec:
           claimName: downloads-pvc
       - name: media
         hostPath:
-          path: /media
+          path: /media/multimedia/movies
+          type: DirectoryOrCreate
+      - name: media-uhd
+        hostPath:
+          path: /media/multimedia2
+          type: DirectoryOrCreate
+      - name: thunderflix
+        hostPath:
+          path: /media/thunderflix
           type: DirectoryOrCreate

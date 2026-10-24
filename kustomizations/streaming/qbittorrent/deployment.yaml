@@ -87,8 +87,10 @@ spec:
               subPath: 01-setup-config.sh
             - name: scripts
               mountPath: /scripts
-            - name: downloads
-              mountPath: /downloads
+            - name: radarr
+              mountPath: /downloads/radarr
+            - name: sonarr
+              mountPath: /downloads/tv-sonarr
             - name: latteam
               mountPath: /LatTeam
       nodeSelector:
@@ -109,10 +111,15 @@ spec:
                   name: qbittorrent-scripts
               - configMap:
                   name: shared-scripts
-        - name: downloads
-          persistentVolumeClaim:
-            claimName: downloads-pvc
+        - name: sonarr
+          hostPath:
+            path: /media/multimedia/series/sonarr
+            type: DirectoryOrCreate
+        - name: radarr
+          hostPath:
+            path: /media/multimedia/movies/radarr
+            type: DirectoryOrCreate
         - name: latteam
           hostPath:
-            path: /media/multimedia/LatTeam
+            path: /media/multimedia/movies/LatTeam
             type: DirectoryOrCreate
