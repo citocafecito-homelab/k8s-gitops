@@ -57,10 +57,10 @@ spec:
           mountPath: /config
         - name: downloads
           mountPath: /downloads
-        - name: media
-          mountPath: /media
+        - name: movies
+          mountPath: /movies
         - name: media-uhd
-          mountPath: /media/multimedia2
+          mountPath: /movies-uhd
         - name: thunderflix
           mountPath: /media/thunderflix
       nodeSelector:
@@ -75,7 +75,7 @@ spec:
       - name: downloads
         persistentVolumeClaim:
           claimName: downloads-pvc
-      - name: media
+      - name: movies
         hostPath:
           path: /media/multimedia/movies
           type: DirectoryOrCreate
