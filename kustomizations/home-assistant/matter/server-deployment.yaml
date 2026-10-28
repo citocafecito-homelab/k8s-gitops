@@ -24,7 +24,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: matter
-        image: ghcr.io/matter-js/matterjs-server:latest
+        image: ghcr.io/matter-js/matterjs-server:1.5
         env:
         - name: PRODUCTION_MODE
           value: "true"
