@@ -49,7 +49,6 @@ spec:
       containers:
       - name: avahi
         image: ydkn/avahi:latest
-        # Sobrescribimos el entrypoint para evitar que corra el script sed
         command: ["avahi-daemon"]
         args: ["-f", "/etc/avahi/avahi-daemon.conf"]
         securityContext:
