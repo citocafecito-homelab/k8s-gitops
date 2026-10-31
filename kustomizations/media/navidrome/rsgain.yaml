@@ -26,9 +26,8 @@ spec:
             - name: music
               mountPath: /music
           nodeSelector:
-            kubernetes.io/hostname: caturra
+            kubernetes.io/hostname: catimore
           volumes:
           - name: music
-            hostPath:
-              path: /mnt/music
-              type: DirectoryOrCreate
+            persistentVolumeClaim:
+              claimName: music-pvc

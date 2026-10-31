@@ -110,7 +110,7 @@ spec:
           claimName: music-assistant-pvc
       - name: music
         hostPath:
-          path: /mnt/music
+          path: /media/music
       - name: tmp
         emptyDir:
           medium: Memory

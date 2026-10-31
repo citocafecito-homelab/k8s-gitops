@@ -1,4 +1,4 @@
-# find /mnt/music -type f -name "*.mp3" -exec bpm-tag -f {} \;
+# find /media/music -type f -name "*.mp3" -exec bpm-tag -f {} \;
 apiVersion: apps/v1
 kind: Deployment
 metadata:

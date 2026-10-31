@@ -36,7 +36,7 @@ spec:
       volumes:
       - name: music
         hostPath:
-          path: /mnt/music
+          path: /media/music
           type: Directory
 ---
 apiVersion: v1

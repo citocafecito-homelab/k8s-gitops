@@ -65,7 +65,7 @@ spec:
         - name: music 
           mountPath: /music
       nodeSelector:
-        kubernetes.io/hostname: caturra
+        kubernetes.io/hostname: catimore
       securityContext:
         fsGroup: 1000
       volumes:
@@ -82,5 +82,5 @@ spec:
           defaultMode: 0755
       - name: music
         hostPath:
-          path: /mnt/music
+          path: /media/music
           type: DirectoryOrCreate

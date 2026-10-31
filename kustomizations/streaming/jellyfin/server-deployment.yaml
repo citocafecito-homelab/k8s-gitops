@@ -138,7 +138,7 @@ spec:
           type: DirectoryOrCreate
       - name: music
         hostPath:
-          path: /mnt/music
+          path: /media/music
       - name: playlists
         configMap:
           name: shared-playlists
