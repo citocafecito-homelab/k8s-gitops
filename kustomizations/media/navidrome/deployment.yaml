@@ -62,7 +62,7 @@ spec:
           mountPath: /htdocs/docker-entrypoint.sh
           subPath: docker-entrypoint.sh
       nodeSelector:
-        kubernetes.io/hostname: caturra
+        kubernetes.io/hostname: catimore
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
