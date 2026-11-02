@@ -23,6 +23,7 @@ spec:
     spec:
       automountServiceAccountToken: true
       enableServiceLinks: false
+      serviceAccountName: linkwarden
       containers:
       - name: linkwarden
         image: ghcr.io/linkwarden/linkwarden:latest

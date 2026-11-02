@@ -31,6 +31,7 @@ spec:
     spec:
       automountServiceAccountToken: true
       enableServiceLinks: false
+      serviceAccountName: linkwarden
       initContainers:
       - name: prisma-migrate
         image: ghcr.io/linkwarden/linkwarden:latest
