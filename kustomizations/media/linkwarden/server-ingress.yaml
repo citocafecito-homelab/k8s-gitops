@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: linkwarden
+spec:
+  ingressClassName: cloudflare-tunnel
+  rules:
+  - host: linkwarden.citocafecito.work
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: linkwarden
+              port:
+                number: 80

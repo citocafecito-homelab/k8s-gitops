@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: linkwarden-postgresql
+spec:
+  serviceName: linkwarden-postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: linkwarden-postgresql
+      app.kubernetes.io/name: linkwarden-postgresql
+  template:
+    metadata:
+      labels:
+        app: linkwarden-postgresql
+        app.kubernetes.io/name: linkwarden-postgresql
+        app.kubernetes.io/part-of: linkwarden
+    spec:
+      serviceAccountName: linkwarden
+      containers:
+      - name: postgres
+        image: postgres:18
+        ports:
+        - containerPort: 5432
+        envFrom:
+        - configMapRef:
+            name: linkwarden-database
+        volumeMounts:
+        - name: linkwarden-postgresql-storage
+          mountPath: /var/lib/postgresql
+        livenessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "linkwarden" ]
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "pg_isready", "-U", "linkwarden" ]
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 2000
+        runAsNonRoot: true
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      volumes:
+      - name: linkwarden-postgresql-storage
+        persistentVolumeClaim:
+          claimName: linkwarden-postgresql-pvc

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linkwarden-web
+  labels:
+    app: linkwarden-web
+    app.kubernetes.io/name: linkwarden-web
+    app.kubernetes.io/part-of: linkwarden
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: linkwarden-web
+      app.kubernetes.io/name: linkwarden-web
+  template:
+    metadata:
+      labels:
+        app: linkwarden-web
+        app.kubernetes.io/name: linkwarden-web
+        app.kubernetes.io/part-of: linkwarden
+      annotations:
+        app.kubernetes.io/documentation: "https://github.com/linkwarden/linkwarden"
+    spec:
+      automountServiceAccountToken: true
+      enableServiceLinks: false
+      containers:
+      - name: linkwarden
+        image: ghcr.io/linkwarden/linkwarden:latest
+        command:
+        - "sh"
+        - "-c"
+        - "cd /data/apps/web && exec next start"
+        envFrom:
+        - configMapRef:
+            name: linkwarden-web-config
+        ports:
+        - name: https
+          containerPort: 443
+        resources:
+          requests:
+            cpu: 40m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 2000
+        runAsNonRoot: true
