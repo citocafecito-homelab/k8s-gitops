@@ -4,12 +4,13 @@ metadata:
   name: linkwarden-pv
 spec:
   capacity:
-    storage: 5Gi
+    storage: "5Gi"
   accessModes:
-    - ReadWriteMany
-  nfs:
-    server: 192.168.1.10
+  - ReadWriteOnce
+  hostPath:
     path: /mnt/linkwarden
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

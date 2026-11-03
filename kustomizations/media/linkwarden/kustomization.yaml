@@ -3,6 +3,8 @@ kind: Kustomization
 
 resources:
 - sa.yaml
+- pvc.yaml
+- config.yaml
 
 # Database (Postgresql)
 - database-pv.yaml
@@ -10,14 +12,10 @@ resources:
 - database-deployment.yaml
 - database-svc.yaml
 
-# Web (linkwarden)
-- web-config.yaml
-- web-deployment.yaml
-- web-svc.yaml
-
-# Server (linkwarden)
-- server-config.yaml
-- server-pvc.yaml
+# Server
 - server-deployment.yaml
-- server-svc.yaml
 - server-ingress.yaml
+
+# Worker
+- worker-deployment.yaml
+- worker-svc.yaml

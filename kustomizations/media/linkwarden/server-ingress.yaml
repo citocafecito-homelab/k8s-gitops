@@ -14,4 +14,11 @@ spec:
             service:
               name: linkwarden
               port:
-                number: 80
+                number: 3000
+        # - path: /api
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: linkwarden
+        #       port:
+        #         number: 3000
