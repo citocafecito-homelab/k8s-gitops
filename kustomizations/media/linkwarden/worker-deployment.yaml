@@ -27,9 +27,6 @@ spec:
           {{- with secret "secret/data/linkwarden" -}}
           export SPACES_KEY="{{ .Data.data.S3_ACCESS_KEY_ID }}"
           export SPACES_SECRET="{{ .Data.data.S3_SECRET_ACCESS_KEY }}"
-
-          export S3_ACCESS_KEY_ID="{{ .Data.data.S3_ACCESS_KEY_ID }}"
-          export S3_SECRET_ACCESS_KEY="{{ .Data.data.S3_SECRET_ACCESS_KEY }}"
           {{- end -}}
     spec:
       automountServiceAccountToken: true

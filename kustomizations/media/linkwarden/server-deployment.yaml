@@ -26,12 +26,8 @@ spec:
         vault.hashicorp.com/agent-inject-template-environment.env: |
           {{- with secret "secret/data/linkwarden" -}}
           NEXTAUTH_SECRET="{{ .Data.data.NEXTAUTH_SECRET }}"
-
           SPACES_KEY="{{ .Data.data.S3_ACCESS_KEY_ID }}"
           SPACES_SECRET="{{ .Data.data.S3_SECRET_ACCESS_KEY }}"
-
-          S3_ACCESS_KEY_ID="{{ .Data.data.S3_ACCESS_KEY_ID }}"
-          S3_SECRET_ACCESS_KEY="{{ .Data.data.S3_SECRET_ACCESS_KEY }}"
           {{- end -}}
     spec:
       automountServiceAccountToken: true
