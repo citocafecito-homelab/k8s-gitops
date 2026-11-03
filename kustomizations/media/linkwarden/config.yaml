@@ -3,17 +3,18 @@ kind: ConfigMap
 metadata:
   name: linkwarden-config
 data:
+  # see https://github.com/linkwarden/linkwarden/blob/main/.env.sample
+  DOTENV_PATH: "/vault/secrets/environment.env"
+
   # Nextjs
   NEXTAUTH_URL: "https://linkwarden.citocafecito.work/api/v1/auth"
+  NEXT_PUBLIC_DISABLE_REGISTRATION: "true"
 
-  # General
-  DISABLE_BROWSER: "true"
-  
   # Database
   DATABASE_URL: "postgresql://linkwarden:1K5OpmK2KkFm3ZKZWqAOjpv7O3T0Bw@linkwarden-postgresql.media.svc.cluster.local:5432/linkwarden"
   
   # S3 / Garage
   SPACES_REGION: "garage"
-  SPACES_BUCKET_NAMESPACES_BUCKET_NAME: "linkwarden"
-  SPACES_ENDPOINT: "https://garage.storage.svc.cluster.local:3900"
+  SPACES_BUCKET_NAME: "linkwarden"
+  SPACES_ENDPOINT: "http://garage.storage.svc.cluster.local:3900"
   SPACES_FORCE_PATH_STYLE: "true"

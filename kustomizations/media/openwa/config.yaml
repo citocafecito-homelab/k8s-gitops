@@ -49,7 +49,7 @@ data:
 
   # Storage
   STORAGE_TYPE: "s3"
-  S3_ENDPOINT: http://garage.storage.svc.cluster.local:3900
+  S3_ENDPOINT: "http://garage.storage.svc.cluster.local:3900"
   S3_BUCKET: "openwa"
   S3_REGION: "garage"
   S3_FORCE_PATH_STYLE: "true"
