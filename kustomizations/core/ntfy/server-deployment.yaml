@@ -22,11 +22,15 @@ spec:
           {{- with secret "secret/data/ntfy" -}}
           listen-http: ":80"
           base-url: "https://ntfy.citocafecito.work"
-          cache-file: ""
+          
           database-url: "postgres://ntfy:8LycKt1iv79Uzyq3V1am@ntfy-postgresql.core.svc.cluster.local:5432/ntfy?sslmode=disable"
+          
           attachment-cache-dir: "s3://{{ .Data.data.S3_USER }}:{{ .Data.data.S3_PASSWORD }}@ntfy?region=garage&endpoint=http://garage.storage.svc.cluster.local:3900&disable_http2=true"
           attachment-file-size-limit: "15M"
           attachment-expiry-duration: "3h"
+
+          web-root: "disable"
+
           auth-default-access: "deny-all"
           auth-users:
             - "{{ .Data.data.ADMIN_USER }}:{{ .Data.data.ADMIN_PASSWORD }}:admin"
