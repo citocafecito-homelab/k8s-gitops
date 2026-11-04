@@ -57,7 +57,7 @@ spec:
       volumes:
       - name: music
         hostPath:
-          path: /mnt/music
+          path: /media/music
           type: DirectoryOrCreate
       - name: config
         hostPath:

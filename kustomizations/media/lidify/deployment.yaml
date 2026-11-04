@@ -62,5 +62,5 @@ spec:
             type: File
         - name: music
           hostPath:
-            path: /mnt/music
+            path: /media/music
           
