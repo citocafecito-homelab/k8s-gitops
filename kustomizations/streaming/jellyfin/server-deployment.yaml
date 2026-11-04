@@ -27,7 +27,8 @@ spec:
       enableServiceLinks: false
       containers:
       - name: jellyfin
-        image: jellyfin/jellyfin:12
+        image: jellyfin/jellyfin:12.4
+        imagePullPolicy: IfNotPresent
         env:
         - name: LIBVA_DRIVER_NAME
           value: "iHD"
@@ -54,7 +55,7 @@ spec:
             cpu: "1"
             memory: "2Gi"
           limits:
-            cpu: "2"
+            cpu: "4"
             memory: "4Gi"
         securityContext:
           privileged: true
@@ -137,7 +138,8 @@ spec:
           path: /media
           type: DirectoryOrCreate
       - name: music
-        hostPath:
+        nfs:
+          server: 192.168.1.13
           path: /media/music
       - name: playlists
         configMap:
