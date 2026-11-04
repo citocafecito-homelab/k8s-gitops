@@ -45,9 +45,12 @@ spec:
         image: binwiederhier/ntfy
         args: ["serve", "-c", "/vault/secrets/server.yml"]
         resources:
+          requests:
+            memory: "32Mi"
+            cpu: "10m"
           limits:
-            memory: "128Mi"
-            cpu: "200m"
+            memory: "64Mi"
+            cpu: "100m"
         ports:
         - containerPort: 80
           name: http
