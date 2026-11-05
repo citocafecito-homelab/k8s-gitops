@@ -35,8 +35,11 @@ spec:
           protocol: TCP
         resources:
           requests:
-            cpu: "50m"
-            memory: "128Mi"
+            cpu: "10m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "256Mi"
         volumeMounts:
         - name: localtime
           mountPath: /etc/localtime
