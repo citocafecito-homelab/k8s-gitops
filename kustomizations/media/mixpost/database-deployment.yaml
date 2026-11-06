@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mixpost-mysql
+  namespace: media
+  labels:
+    app: mixpost-mysql
+    app.kubernetes.io/name: mixpost-mysql
+    app.kubernetes.io/part-of: mixpost
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mixpost-mysql
+      app.kubernetes.io/name: mixpost-mysql
+  serviceName: mixpost-mysql
+  template:
+    metadata:
+      labels:
+        app: mixpost-mysql
+        app.kubernetes.io/name: mixpost-mysql
+        app.kubernetes.io/part-of: mixpost
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:9
+        envFrom:
+        - configMapRef:
+            name: mixpost-database
+        ports:
+        - containerPort: 3306
+        resources:
+          requests:
+            cpu: 5m
+            memory: 64Mi
+        livenessProbe:
+          exec:
+            command: [ "mysqladmin", "ping", "-h", "localhost" ]
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "mysqladmin", "ping", "-h", "localhost" ]
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 3
+        volumeMounts:
+        - name: mixpost-mysql
+          mountPath: /var/lib/mysql
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      volumes:
+      - name: mixpost-mysql
+        persistentVolumeClaim:
+          claimName: mixpost-mysql-pvc

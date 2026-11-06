@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mixpost-valkey
+  labels:
+    app: mixpost-valkey
+    app.kubernetes.io/name: mixpost-valkey
+    app.kubernetes.io/part-of: mixpost
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mixpost-valkey
+      app.kubernetes.io/name: mixpost-valkey
+  template:
+    metadata:
+      labels:
+        app: mixpost-valkey
+        app.kubernetes.io/name: mixpost-valkey
+        app.kubernetes.io/part-of: mixpost
+    spec:
+      containers:
+      - name: valkey
+        image: valkey/valkey:latest
+        args:
+          - "--save"
+          - ""
+          - "--appendonly"
+          - "no"
+        ports:
+        - containerPort: 6379
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+          limits:
+            cpu: 50m
+            memory: 128Mi
