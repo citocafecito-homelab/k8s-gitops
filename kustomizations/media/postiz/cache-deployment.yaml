@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postiz-valkey
+  labels:
+    app: postiz-valkey
+    app.kubernetes.io/name: postiz-valkey
+    app.kubernetes.io/part-of: postiz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postiz-valkey
+      app.kubernetes.io/name: postiz-valkey
+  template:
+    metadata:
+      labels:
+        app: postiz-valkey
+        app.kubernetes.io/name: postiz-valkey
+        app.kubernetes.io/part-of: postiz
+    spec:
+      containers:
+      - name: valkey
+        image: valkey/valkey:latest
+        args:
+          - "--save"
+          - ""
+          - "--appendonly"
+          - "no"
+        ports:
+        - containerPort: 6379
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+          limits:
+            cpu: 50m
+            memory: 128Mi

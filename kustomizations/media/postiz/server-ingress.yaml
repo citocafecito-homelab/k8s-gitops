@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: postiz
+spec:
+  ingressClassName: cloudflare-tunnel
+  rules:
+  - host: postiz.citocafecito.work
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: postiz
+              port:
+                number: 80

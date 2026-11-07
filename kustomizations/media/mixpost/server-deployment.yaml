@@ -44,7 +44,7 @@ spec:
             set -a
             . /vault/secrets/secrets
             set +a
-            exec start.sh
+            exec /usr/local/bin/start.sh
         env:
         - name: DB_HOST
           valueFrom:

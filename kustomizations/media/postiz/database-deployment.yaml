@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postiz-mysql
+  namespace: media
+  labels:
+    app: postiz-mysql
+    app.kubernetes.io/name: postiz-mysql
+    app.kubernetes.io/part-of: postiz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postiz-mysql
+      app.kubernetes.io/name: postiz-mysql
+  serviceName: postiz-mysql
+  template:
+    metadata:
+      labels:
+        app: postiz-mysql
+        app.kubernetes.io/name: postiz-mysql
+        app.kubernetes.io/part-of: postiz
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:9
+        envFrom:
+        - configMapRef:
+            name: postiz-database
+        ports:
+        - containerPort: 3306
+        resources:
+          requests:
+            cpu: 5m
+            memory: 64Mi
+        livenessProbe:
+          exec:
+            command: [ "mysqladmin", "ping", "-h", "localhost" ]
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "mysqladmin", "ping", "-h", "localhost" ]
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 3
+        volumeMounts:
+        - name: postiz-mysql
+          mountPath: /var/lib/mysql
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      volumes:
+      - name: postiz-mysql
+        persistentVolumeClaim:
+          claimName: postiz-mysql-pvc

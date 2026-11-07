@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postiz-config
+data:
+  TZ: "America/Bogota"
+  APP_DOMAIN: "postiz.citocafecito.work"
+  APP_URL: "https://postiz.citocafecito.work"
+  APP_TIMEZONE: "America/Bogota"
+  SSL_EMAIL: "admin@postiz.citocafecito.work"
+
+  # Application (Configuración general no sensible)
+  postiz_DISK: "s3"
+
+  # Horizon worker
+  HORIZON_PREFIX: "postiz_horizon:"
+
+  # Cache (Valkey)
+  CACHE_PREFIX: "postiz_cache_"
+  REDIS_HOST: "postiz-valkey"
+  REDIS_PORT: "6379"
+  REDIS_PREFIX: "postiz_database_"
+
+  # Database (MySQL)
+  DB_HOST: "postiz-mysql"
+
+  # S3 / Garage (Configuración general no sensible)
+  AWS_DEFAULT_REGION: "garage"
+  AWS_BUCKET: "postiz"
+  AWS_ENDPOINT: "http://garage.storage.svc.cluster.local:3900"
+  AWS_USE_PATH_STYLE_ENDPOINT: "true"
+
+  # Mailer (Configuración general no sensible)
+  # MAIL_MAILER=${INPUT_MAIL_HOST:+smtp}
+  # MAIL_MAILER=${MAIL_MAILER:-smtp}
+  # MAIL_HOST=${INPUT_MAIL_HOST}
+  # MAIL_PORT=${INPUT_MAIL_PORT}
+  # MAIL_USERNAME=${INPUT_MAIL_USER}
+  # MAIL_PASSWORD=${INPUT_MAIL_PASS}
+  # MAIL_ENCRYPTION=${INPUT_MAIL_ENCRYPTION}
+  # MAIL_FROM_ADDRESS="${INPUT_MAIL_FROM}"
+  # MAIL_FROM_NAME="${INPUT_MAIL_FROM_NAME}"

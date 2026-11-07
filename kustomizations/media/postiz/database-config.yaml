@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postiz-database
+  namespace: media
+data:
+  MYSQL_DATABASE: "postiz"
+  MYSQL_USER: "postiz"
+  MYSQL_ROOT_PASSWORD: "postiz"
+  MYSQL_PASSWORD: "postiz"
+  MYSQL_HOST: "postiz-mysql"
