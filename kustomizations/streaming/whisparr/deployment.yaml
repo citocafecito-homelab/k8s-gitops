@@ -35,8 +35,11 @@ spec:
             name: streaming-stack-config
         resources:
           requests:
-            memory: 64Mi
             cpu: 5m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 512Mi
         livenessProbe:
           tcpSocket:
             port: 6969
