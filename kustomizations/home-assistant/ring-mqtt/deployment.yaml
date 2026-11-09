@@ -67,11 +67,11 @@ spec:
           mountPath: /data
         resources:
           requests:
-            cpu: 100m
-            memory: 256Mi
+            cpu: "10m"
+            memory: "256Mi"
           limits:
-            cpu: 500m
-            memory: 512Mi
+            cpu: "500m"
+            memory: "512Mi"
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000

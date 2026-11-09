@@ -8,10 +8,8 @@ homeassistant:
   packages: !include_dir_named packages
   media_dirs:
     audios: /config/www/audios
-    camaras: /config/www/camaras
-    records: /config/www/records
     snapshots: /config/www/snapshots
-    timbre: /config/www/timbre
+    frigate: /config/www/frigate
     
 default_config:
 

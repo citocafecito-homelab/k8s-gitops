@@ -83,7 +83,7 @@ spec:
           mountPath: /dev/dri
           readOnly: false
         - name: media
-          mountPath: /media/frigate
+          mountPath: /media
         - name: localtime
           mountPath: /etc/localtime
           readOnly: true
@@ -91,12 +91,16 @@ spec:
           mountPath: /etc/timezone
           readOnly: true
       nodeSelector:
-        kubernetes.io/hostname: catimore
+        kubernetes.io/hostname: catuai
       securityContext:
         runAsUser: 0
         runAsNonRoot: false
-        fsGroup: 107
+        fsGroup: 1000
         supplementalGroups: [44, 104, 107, 992]
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
       volumes:
       - name: dshm
         emptyDir:
@@ -118,4 +122,5 @@ spec:
           path: /etc/timezone
           type: FileOrCreate
       - name: media
-        emptyDir: {}
+        hostPath:
+          path: /media/downloads/recordings
