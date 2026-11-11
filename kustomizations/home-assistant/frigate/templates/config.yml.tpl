@@ -61,19 +61,19 @@ cameras:
       enabled: {{ if ne (index $cam "record") nil }}{{ $cam.record }}{{ else }}true{{ end }}
       retain:
         days: 7
-        mode: motion
+        mode: active
       events:
         required_zones: []
         pre_capture: 10
         post_capture: 10
         retain:
           default: 30
-          mode: motion
+          mode: active
 
     objects:
       track:
-        {{- if $cam.track_objects }}
-        {{- range $cam.track_objects }}
+        {{- if $cam.objects }}
+        {{- range $cam.objects }}
         - {{ . }}
         {{- end }}
         {{- else }}
