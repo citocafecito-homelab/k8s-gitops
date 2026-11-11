@@ -32,8 +32,6 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
-        - name: legacy
-          mountPath: /media/multimedia
         - name: media-uhd
           mountPath: /media/multimedia2
         - name: media
@@ -76,10 +74,6 @@ spec:
       - name: media-uhd
         hostPath:
           path: /media/multimedia2
-          type: DirectoryOrCreate
-      - name: legacy
-        hostPath:
-          path: /media/multimedia/movies
           type: DirectoryOrCreate
       - name: downloads
         persistentVolumeClaim:

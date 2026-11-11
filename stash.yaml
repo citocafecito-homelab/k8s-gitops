@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stash
+  namespace: streaming
+  labels:
+    app: stash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stash
+  template:
+    metadata:
+      labels:
+        app: stash
+    spec:
+      containers:
+      - name: stash
+        image: stashapp/stash:latest
+        ports:
+        - containerPort: 9999
+        env:
+        - name: STASH_STASH
+          value: "/data/"
+        - name: STASH_GENERATED
+          value: "/generated/"
+        - name: STASH_METADATA
+          value: "/metadata/"
+        - name: STASH_CACHE
+          value: "/cache/"
+        - name: STASH_PORT
+          value: "9999"
+        - name: TZ
+          value: "Etc/UTC"
+        resources:
+          limits:
+            cpu: "2"
+            memory: 2Gi
+          requests:
+            cpu: "500m"
+            memory: 1Gi
+        volumeMounts:
+        - name: config
+          mountPath: /root/.stash
+        - name: data
+          mountPath: /data
+        - name: metadata
+          mountPath: /metadata
+        - name: cache
+          mountPath: /cache
+        - name: blobs
+          mountPath: /blobs
+        - name: generated
+          mountPath: /generated
+        - name: media
+          mountPath: /media
+      nodeSelector:
+        kubernetes.io/hostname: catimore
+      volumes:
+      - name: config
+        hostPath:
+          path: /mnt/stash/config
+      - name: data
+        hostPath:
+          path: /mnt/stash/data
+      - name: metadata
+        hostPath:
+          path: /mnt/stash/metadata
+      - name: cache
+        hostPath:
+          path: /mnt/stash/cache
+      - name: blobs
+        hostPath:
+          path: /mnt/stash/blobs
+      - name: generated
+        hostPath:
+          path: /mnt/stash/generated
+      - name: media
+        hostPath:
+          path: /media/multimedia
+          type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stash
+  namespace: streaming
+spec:
+  selector:
+    app: stash
+  ports:
+  - port: 9999
+    targetPort: 9999
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: stash
+  namespace: streaming
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: stash.lan
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+            service:
+              name: stash
+              port:
+                number: 9999

@@ -19,23 +19,6 @@ spec:
       containers:
       - name: postgres
         image: postgres:17
-        args:
-          - "-c"
-          - "max_connections=100"
-          - "-c"
-          - "idle_in_transaction_session_timeout=120000"
-          - "-c"
-          - "tcp_keepalives_idle=120"
-          - "-c"
-          - "tcp_keepalives_interval=60"
-          - "-c"
-          - "tcp_keepalives_count=6"
-          - "-c"
-          - "statement_timeout=0"
-          - "-c"
-          - "shared_buffers=256MB"
-          - "-c"
-          - "work_mem=16MB"
         ports:
         - containerPort: 5432
         envFrom:
@@ -58,11 +41,8 @@ spec:
           failureThreshold: 3
         resources:
           requests:
-            cpu: "5m"
+            cpu: "10m"
             memory: "128Mi"
-          limits:
-            cpu: "50m"
-            memory: "1Gi"
       nodeSelector:
         kubernetes.io/hostname: catuai
       tolerations:

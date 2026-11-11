@@ -26,7 +26,7 @@ spec:
       automountServiceAccountToken: true
       containers:
       - name: frigate
-        image: ghcr.io/blakeblackshear/frigate:stable-rocm
+        image: ghcr.io/blakeblackshear/frigate:stable
         imagePullPolicy: IfNotPresent
         command:
         - /bin/bash
@@ -38,8 +38,18 @@ spec:
         env:
         - name: TZ
           value: "America/Bogota"
-        - name: LIBVA_DRIVER_NAME
-          value: "radeonsi"
+        - name: "LIBVA_DRIVER_NAME"
+          value: "ihd"
+        - name: "GST_VAAPI_ALL_DRIVERS"
+          value: "1"
+        - name: LIBVA_DRIVERS_PATH
+          value: "/usr/lib/x86_64-linux-gnu/dri"
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: "America/Bogota"
         resources:
           limits:
             cpu: "2"
@@ -63,19 +73,8 @@ spec:
           protocol: UDP
         securityContext:
           privileged: true
-          capabilities:
-            drop:
-            - ALL
-            add:
-            - CAP_PERFMON
-            - CHOWN
-            - DAC_OVERRIDE
-            - FOWNER
-            - SETGID
-            - SETUID
-            - SYS_ADMIN
         volumeMounts:
-        - name: dshm
+        - name: shm
           mountPath: /dev/shm
         - name: cache
           mountPath: /tmp/cache
@@ -93,8 +92,6 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: catuai
       securityContext:
-        runAsUser: 0
-        runAsNonRoot: false
         fsGroup: 1000
         supplementalGroups: [44, 104, 107, 992]
       tolerations:
@@ -102,7 +99,7 @@ spec:
         operator: Exists
         effect: NoSchedule
       volumes:
-      - name: dshm
+      - name: shm
         emptyDir:
           medium: Memory
           sizeLimit: 512Mi

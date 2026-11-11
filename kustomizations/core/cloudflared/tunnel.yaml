@@ -31,19 +31,12 @@ spec:
             name: metrics
           resources:
             requests:
-              cpu: 50m
-              memory: 64Mi
+              cpu: "1m"
+              memory: "128Mi"
             limits:
-              cpu: 200m
-              memory: 128Mi
+              cpu: "100m"
+              memory: "256Mi"
           securityContext:
             capabilities:
               add:
                 - NET_RAW
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
-        operator: "Exists"
-        effect: "NoSchedule"
