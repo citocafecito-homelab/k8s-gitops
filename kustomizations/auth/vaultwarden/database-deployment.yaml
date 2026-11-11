@@ -14,40 +14,41 @@ spec:
       labels:
         app: vaultwarden-postgresql
         app.kubernetes.io/name: vaultwarden-postgresql
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-inject-secret-password: "secret/data/vaultwarden"
+        vault.hashicorp.com/agent-inject-template-password: |
+          {{- with secret "secret/data/fusionauth" -}}
+          {{ .Data.data.DATABASE_NAME | writeToFile "/vault/secrets/user" "vault" "vault" "0644" }}
+          {{ .Data.data.DATABASE_USERNAME | writeToFile "/vault/secrets/database" "vault" "vault" "0644" }}
+          {{ .Data.data.DATABASE_PASSWORD | writeToFile "/vault/secrets/password" "vault" "vault" "0644" }}
+          {{- end -}}
     spec:
       containers:
       - name: postgres
-        image: postgres:15
+        image: postgres:18
         ports:
         - containerPort: 5432
         env:
         - name: POSTGRES_DB
-          valueFrom:
-            configMapKeyRef:
-              name: vaultwarden-config
-              key: DATABASE_NAME
+          value: "/vault/secrets/database"
         - name: POSTGRES_USER
-          valueFrom:
-            configMapKeyRef:
-              name: vaultwarden-config
-              key: DATABASE_USERNAME
+          value: "/vault/secrets/user"
         - name: POSTGRES_PASSWORD
-          valueFrom:
-            configMapKeyRef:
-              name: vaultwarden-config
-              key: DATABASE_PASSWORD
+          value: "/vault/secrets/password"
         volumeMounts:
         - name: vaultwarden-postgresql-storage
           mountPath: /var/lib/postgresql/data
         livenessProbe:
           exec:
-            command: [ "pg_isready", "-U", "vaultwarden" ]
+            command: [ "pg_isready", "-U", "$(cat /vault/secrets/user)" ]
           initialDelaySeconds: 20
           periodSeconds: 30
           failureThreshold: 3
         readinessProbe:
           exec:
-            command: [ "pg_isready", "-U", "vaultwarden" ]
+            command: [ "pg_isready", "-U", "$(cat /vault/secrets/user)" ]
           initialDelaySeconds: 10
           periodSeconds: 15
           failureThreshold: 3

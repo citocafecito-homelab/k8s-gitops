@@ -14,10 +14,19 @@ spec:
       labels:
         app: fusionauth-postgresql
         app.kubernetes.io/name: fusionauth-postgresql
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-inject-secret-password: "secret/data/fusionauth"
+        vault.hashicorp.com/agent-inject-template-fusionauth: |
+          {{- with secret "secret/data/fusionauth" -}}
+          {{ .Data.data.DATABASE_USERNAME | writeToFile "/vault/secrets/AUTH_USERNAME" "vault" "vault" "0644" }}
+          {{ .Data.data.DATABASE_PASSWORD | writeToFile "/vault/secrets/AUTH_PASSWORD" "vault" "vault" "0644" }}
+          {{- end -}}
     spec:
       containers:
       - name: postgres
-        image: postgres:16-bookworm
+        image: postgres:18
         ports:
         - containerPort: 5432
         env:
@@ -31,23 +40,20 @@ spec:
             configMapKeyRef:
               name: fusionauth-database
               key: DATABASE_USERNAME
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            configMapKeyRef:
-              name: fusionauth-database
-              key: DATABASE_PASSWORD
+        - name: POSTGRES_PASSWORD_FILE
+          value: /vault/secrets/password
         volumeMounts:
         - name: fusionauth-postgresql-storage
-          mountPath: /var/lib/postgresql/data
+          mountPath: /var/lib/postgresql
         livenessProbe:
           exec:
-            command: [ "pg_isready", "-U", "fusionauth" ]
+            command: [ "pg_isready", "-U", "$POSTGRES_USER" ]
           initialDelaySeconds: 20
           periodSeconds: 30
           failureThreshold: 3
         readinessProbe:
           exec:
-            command: [ "pg_isready", "-U", "fusionauth" ]
+            command: [ "pg_isready", "-U", "$POSTGRES_USER" ]
           initialDelaySeconds: 10
           periodSeconds: 15
           failureThreshold: 3
