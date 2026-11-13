@@ -15,42 +15,75 @@ spec:
         app: linkwarden-postgresql
         app.kubernetes.io/name: linkwarden-postgresql
         app.kubernetes.io/part-of: linkwarden
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-inject-secret-linkwarden: "secret/data/linkwarden"
+        vault.hashicorp.com/agent-inject-template-linkwarden: |
+          {{- with secret "secret/data/linkwarden" -}}
+          {{ .Data.data.DATABASE_NAME | writeToFile "/vault/secrets/database" "vault" "vault" "0644" }}
+          {{ .Data.data.DATABASE_USERNAME | writeToFile "/vault/secrets/username" "vault" "vault" "0644" }}
+          {{ .Data.data.DATABASE_PASSWORD | writeToFile "/vault/secrets/password" "vault" "vault" "0644" }}
+          {{- end -}}
     spec:
+      enableServiceLinks: false
       serviceAccountName: linkwarden
       containers:
       - name: postgres
         image: postgres:18
         ports:
         - containerPort: 5432
-        envFrom:
-        - configMapRef:
-            name: linkwarden-database
-        volumeMounts:
-        - name: linkwarden-postgresql-storage
-          mountPath: /var/lib/postgresql
+        env:
+        - name: PGSOCKET_DIR
+          value: /tmp
+        - name: POSTGRES_DB_FILE
+          value: /vault/secrets/database
+        - name: POSTGRES_USER_FILE
+          value: /vault/secrets/username
+        - name: POSTGRES_PASSWORD_FILE
+          value: /vault/secrets/password
         livenessProbe:
           exec:
-            command: [ "pg_isready", "-U", "linkwarden" ]
+            command: ["sh", "-c", "pg_isready -U $(cat /vault/secrets/username)"]
           initialDelaySeconds: 20
           periodSeconds: 30
           failureThreshold: 3
         readinessProbe:
           exec:
-            command: [ "pg_isready", "-U", "linkwarden" ]
+            command: ["sh", "-c", "pg_isready -U $(cat /vault/secrets/username)"]
           initialDelaySeconds: 10
           periodSeconds: 15
           failureThreshold: 3
         resources:
           requests:
-            cpu: 50m
-            memory: 128Mi
+            cpu: 10m
+            memory: 64Mi
+        securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            capabilities:
+              drop:
+              - ALL
+        volumeMounts:
+        - name: storage
+          mountPath: /var/lib/postgresql
       nodeSelector:
         kubernetes.io/hostname: catuai
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       tolerations:
       - key: node-role.kubernetes.io/control-plane
         operator: Exists
         effect: NoSchedule
       volumes:
-      - name: linkwarden-postgresql-storage
+      - name: storage
         persistentVolumeClaim:
           claimName: linkwarden-postgresql-pvc

@@ -8,9 +8,6 @@ data:
   NEXTAUTH_URL: "https://linkwarden.citocafecito.work/api/v1/auth"
   NEXT_PUBLIC_DISABLE_REGISTRATION: "true"
 
-  # Database
-  DATABASE_URL: "postgresql://linkwarden:1K5OpmK2KkFm3ZKZWqAOjpv7O3T0Bw@linkwarden-postgresql.media.svc.cluster.local:5432/linkwarden"
-
   # Mantenemos también las de SPACES por compatibilidad si algún otro componente las usa
   SPACES_REGION: "garage"
   SPACES_BUCKET_NAME: "linkwarden"

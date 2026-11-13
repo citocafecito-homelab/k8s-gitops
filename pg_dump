@@ -14,3 +14,20 @@ yt-dlp --playlist-start 11 --playlist-end 20 --cookies www.youtube.com_cookies.t
 
 
 kubectl exec -it immich-postgresql-0 -n media -c postgres -- env PGPASSWORD="" psql -U postgres -d postgres
+
+
+Pendientes por migrar para postgresql. Pendientes los de MySQL para luego
+
+namespace: media
+1. [OK] Linkwarden
+2. OpenWA
+3. Suwayomi
+4. Wikijs (opcional)
+
+namespace: monitoring
+5. Kite
+6. Reactive Resume
+
+namespace: streaming
+7. jellystat
+8. Dispatcharr

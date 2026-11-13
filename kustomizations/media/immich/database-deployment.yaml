@@ -34,14 +34,16 @@ spec:
           ports:
             - containerPort: 5432
           env:
-            - name: PGSOCKET_DIR
-              value: /tmp
-            - name: POSTGRES_DB_FILE
-              value: /vault/secrets/database
-            - name: POSTGRES_USER_FILE
-              value: /vault/secrets/username
-            - name: POSTGRES_PASSWORD_FILE
-              value: /vault/secrets/password
+          - name: TZ
+            value: "America/Bogota"
+          - name: PGSOCKET_DIR
+            value: /tmp
+          - name: POSTGRES_DB_FILE
+            value: /vault/secrets/database
+          - name: POSTGRES_USER_FILE
+            value: /vault/secrets/username
+          - name: POSTGRES_PASSWORD_FILE
+            value: /vault/secrets/password
           livenessProbe:
             exec:
               command: ["sh", "-c", "pg_isready -U $(cat /vault/secrets/username)"]
@@ -56,11 +58,11 @@ spec:
             failureThreshold: 3
           resources:
             requests:
-              cpu: "50m"
+              cpu: "10m"
               memory: "512Mi"
             limits:
-              cpu: "500m"
-              memory: "2Gi"
+              cpu: "100m"
+              memory: "1Gi"
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false
@@ -69,7 +71,7 @@ spec:
             runAsNonRoot: true
             capabilities:
               drop:
-                - ALL
+              - ALL
           volumeMounts:
             - name: dshm
               mountPath: /dev/shm
