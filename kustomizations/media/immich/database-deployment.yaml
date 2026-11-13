@@ -14,47 +14,85 @@ spec:
       labels:
         app: immich-postgresql
         app.kubernetes.io/name: immich-postgresql
+        app.kubernetes.io/part-of: immich
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-inject-secret-immich: "secret/data/immich"
+        vault.hashicorp.com/agent-inject-template-immich: |
+          {{- with secret "secret/data/immich" -}}
+          {{ .Data.data.DATABASE_NAME | writeToFile "/vault/secrets/database" "vault" "vault" "0644" }}
+          {{ .Data.data.DATABASE_USERNAME | writeToFile "/vault/secrets/username" "vault" "vault" "0644" }}
+          {{ .Data.data.DATABASE_PASSWORD | writeToFile "/vault/secrets/password" "vault" "vault" "0644" }}
+          {{- end -}}
     spec:
+      enableServiceLinks: false
+      serviceAccountName: immich
       containers:
-      - name: postgres
-        image: ghcr.io/immich-app/postgres:17-vectorchord0.5.3
-        ports:
-        - containerPort: 5432
-        envFrom:
-        - configMapRef:
-            name: immich-database
-        volumeMounts:
-        - name: dshm
-          mountPath: /dev/shm
-        - name: immich-postgresql-storage
-          mountPath: /var/lib/postgresql/data
-        livenessProbe:
-          exec:
-            command: [ "pg_isready", "-U", "immich" ]
-          initialDelaySeconds: 20
-          periodSeconds: 30
-          failureThreshold: 3
-        readinessProbe:
-          exec:
-            command: [ "pg_isready", "-U", "immich" ]
-          initialDelaySeconds: 10
-          periodSeconds: 15
-          failureThreshold: 3
-        resources:
-          requests:
-            cpu: "50m"
-            memory: "256Mi"
+        - name: postgres
+          image: ghcr.io/immich-app/postgres:18-vectorchord1.1.1
+          ports:
+            - containerPort: 5432
+          env:
+            - name: PGSOCKET_DIR
+              value: /tmp
+            - name: POSTGRES_DB_FILE
+              value: /vault/secrets/database
+            - name: POSTGRES_USER_FILE
+              value: /vault/secrets/username
+            - name: POSTGRES_PASSWORD_FILE
+              value: /vault/secrets/password
+          livenessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -U $(cat /vault/secrets/username)"]
+            initialDelaySeconds: 20
+            periodSeconds: 30
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -U $(cat /vault/secrets/username)"]
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "2Gi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: dshm
+              mountPath: /dev/shm
+            - name: immich-postgresql-storage
+              mountPath: /var/lib/postgresql
       nodeSelector:
         kubernetes.io/hostname: catuai
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       tolerations:
-      - key: node-role.kubernetes.io/control-plane
-        operator: Exists
-        effect: NoSchedule
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
       volumes:
-      - name: dshm
-        emptyDir:
-          medium: Memory
-          sizeLimit: 1Gi
-      - name: immich-postgresql-storage
-        persistentVolumeClaim:
-          claimName: immich-postgresql-pvc
+        - name: dshm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Gi
+        - name: immich-postgresql-storage
+          persistentVolumeClaim:
+            claimName: immich-postgresql-pvc

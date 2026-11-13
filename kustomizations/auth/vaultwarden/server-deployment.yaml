@@ -7,26 +7,41 @@ spec:
   selector:
     matchLabels:
       app: vaultwarden
+      app.kubernetes.io/name: vaultwarden
+      app.kubernetes.io/part-of: vaultwarden
   template:
     metadata:
       labels:
         app: vaultwarden
+        app.kubernetes.io/name: vaultwarden
+        app.kubernetes.io/part-of: vaultwarden
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-inject-secret-vaultwarden.env: "secret/data/vaultwarden"
+        vault.hashicorp.com/agent-inject-template-vaultwarden.env: |
+          {{- with secret "secret/data/vaultwarden" -}}
+            DATABASE_URL="postgresql://{{ .Data.data.DATABASE_USERNAME }}:{{ .Data.data.DATABASE_PASSWORD }}@vaultwarden-postgresql:5432/{{ .Data.data.DATABASE_NAME }}"
+            PUSH_INSTALLATION_ID="{{ .Data.data.PUSH_INSTALLATION_ID }}"
+            PUSH_INSTALLATION_KEY="{{ .Data.data.PUSH_INSTALLATION_KEY }}"
+            
+            SMTP_HOST="{{ .Data.data.SMTP_HOST }}"
+            SMTP_PORT="{{ .Data.data.SMTP_PORT }}"
+            SMTP_USERNAME="{{ .Data.data.SMTP_USERNAME }}"
+            SMTP_PASSWORD="{{ .Data.data.SMTP_PASSWORD }}"
+          {{- end -}}
     spec:
+      enableServiceLinks: false
+      serviceAccountName: vaultwarden
       containers:
       - name: vaultwarden
         image: vaultwarden/server:latest
         env:
-        - name: DATABASE_URL
-          valueFrom:
-            configMapKeyRef:
-              name: vaultwarden-config
-              key: DATABASE_URL
-        - name: DOMAIN
-          value: "https://passwords.citocafecito.work"
-        - name: SIGNUPS_ALLOWED
-          value: "false"
-        - name: IP_HEADER
-          value: "CF-Connecting-IP"
+        - name: ENV_FILE
+          value: /vault/secrets/vaultwarden.env
+        envFrom:
+        - configMapRef:
+            name: vaultwarden-config
         ports:
         - containerPort: 80
           name: http

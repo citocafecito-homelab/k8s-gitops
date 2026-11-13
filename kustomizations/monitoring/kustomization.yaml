@@ -5,7 +5,8 @@ resources:
 - daemonsets/glances.yaml
 - daemonsets/filebrowser.yaml
 - kite
-- directory
+# No needed for now
+# - directory
 - redisinsight.yaml
 
 namespace: monitoring

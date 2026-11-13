@@ -23,7 +23,7 @@ spec:
           listen-http: ":80"
           base-url: "https://ntfy.citocafecito.work"
           
-          database-url: "postgres://ntfy:8LycKt1iv79Uzyq3V1am@ntfy-postgresql.core.svc.cluster.local:5432/ntfy?sslmode=disable"
+          database-url: "postgresql://{{ .Data.data.DATABASE_USERNAME }}:{{ .Data.data.DATABASE_PASSWORD }}@ntfy-postgresql:5432/{{ .Data.data.DATABASE_NAME }}"
           
           attachment-cache-dir: "s3://{{ .Data.data.S3_USER }}:{{ .Data.data.S3_PASSWORD }}@ntfy?region=garage&endpoint=http://garage.storage.svc.cluster.local:3900&disable_http2=true"
           attachment-file-size-limit: "15M"
