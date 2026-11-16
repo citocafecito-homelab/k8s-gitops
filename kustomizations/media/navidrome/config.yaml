@@ -16,6 +16,7 @@ data:
   ND_TRANSCODINGCACHESIZE: "10GB"
 
   # --- Biblioteca y Escaneo ---
+  ND_Musicfolder: "/music/hmanzur,/music/jasa1999"
   ND_AUTOIMPORTPLAYLISTS: "true"
   ND_LYRICSPRIORITY: "nd-lyrics,lrc,embedded"
   ND_PLAYLISTSPATH: "playlists"

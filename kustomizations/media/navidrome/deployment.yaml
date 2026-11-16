@@ -27,11 +27,11 @@ spec:
           name: http
         resources:
           requests:
-            cpu: 50m
+            cpu: 1m
             memory: 128Mi
           limits:
-            cpu: 500m
-            memory: 1Gi
+            cpu: 50m
+            memory: 512Mi
         envFrom:
         - configMapRef:
             name: navidrome-config
