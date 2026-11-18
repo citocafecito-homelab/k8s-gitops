@@ -19,6 +19,20 @@ spec:
         app.kubernetes.io/name: navidrome
     spec:
       enableServiceLinks: false
+      initContainers:
+      - name: init-playlist-dirs
+        image: busybox:1.36
+        command:
+          - sh
+          - -c
+          - |
+            mkdir -p /music/jasa1999/playlists
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+        volumeMounts:
+          - name: music
+            mountPath: /music
       containers:
       - name: navidrome
         image: deluan/navidrome:latest
@@ -27,10 +41,10 @@ spec:
           name: http
         resources:
           requests:
-            cpu: 1m
+            cpu: "5m"
             memory: 128Mi
           limits:
-            cpu: 50m
+            cpu: "1"
             memory: 512Mi
         envFrom:
         - configMapRef:
@@ -58,9 +72,12 @@ spec:
         - name: music
           mountPath: /music
           readOnly: true
-        - name: playlists
-          mountPath: /htdocs/docker-entrypoint.sh
-          subPath: docker-entrypoint.sh
+        - name: hmanzur-playlists
+          mountPath: /music/hmanzur/playlists
+          readOnly: false
+        - name: jasa1999-playlists
+          mountPath: /music/jasa1999/playlists
+          readOnly: false
       nodeSelector:
         kubernetes.io/hostname: catimore
       securityContext:
@@ -83,6 +100,9 @@ spec:
       - name: music
         persistentVolumeClaim:
           claimName: music-pvc
-      - name: playlists
+      - name: hmanzur-playlists
         configMap:
-          name: shared-playlists
+          name: hmanzur-playlists
+      - name: jasa1999-playlists
+        configMap:
+          name: jasa1999-playlists

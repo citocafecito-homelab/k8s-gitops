@@ -7,8 +7,8 @@ data:
   INVITATION_ORG_NAME: "CitoCafeCito"
   DATABASE_TYPE: POSTGRESQL
   PUSH_ENABLED: "true"
-  SIGNUPS_ALLOWED: ""
-  SIGNUPS_VERIFY: ""
+  SIGNUPS_ALLOWED: "false"
+  SIGNUPS_VERIFY: "false"
   INVITATIONS_ALLOWED: "true"
   IP_HEADER: "CF-Connecting-IP"
   SMTP_FROM: "vaultwarden@citocafecito.work"

@@ -4,6 +4,7 @@ metadata:
   name: navidrome-config
 data:
   # --- Configuración General y UI ---
+  ND_ENFORCENONROOTUSER: "true"
   ND_DEFAULTLANGUAGE: "es"
   ND_DEFAULTTHEME: "Spotify-ish"
   ND_ENABLEGRAVATAR: "true"
@@ -16,7 +17,7 @@ data:
   ND_TRANSCODINGCACHESIZE: "10GB"
 
   # --- Biblioteca y Escaneo ---
-  ND_Musicfolder: "/music/hmanzur,/music/jasa1999"
+  ND_MUSICFOLDER: "/music/hmanzur"
   ND_AUTOIMPORTPLAYLISTS: "true"
   ND_LYRICSPRIORITY: "nd-lyrics,lrc,embedded"
   ND_PLAYLISTSPATH: "playlists"
