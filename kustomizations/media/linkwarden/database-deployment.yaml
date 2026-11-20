@@ -9,6 +9,7 @@ spec:
     matchLabels:
       app: linkwarden-postgresql
       app.kubernetes.io/name: linkwarden-postgresql
+      app.kubernetes.io/part-of: linkwarden
   template:
     metadata:
       labels:
