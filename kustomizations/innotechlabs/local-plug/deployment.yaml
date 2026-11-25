@@ -33,7 +33,7 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
           - name: http
-            containerPort: 8080
+            containerPort: 3000
           resources:
             requests:
               cpu: 50m
@@ -41,3 +41,10 @@ spec:
             limits:
               cpu: 100m
               memory: 512Mi
+          volumeMounts:
+          - name: localplug-data
+            mountPath: /app/data
+      volumes:
+        - name: localplug-data
+          hostPath:
+            path: /mnt/localplug

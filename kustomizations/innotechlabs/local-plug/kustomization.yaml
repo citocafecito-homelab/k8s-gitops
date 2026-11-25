@@ -3,6 +3,6 @@ kind: Kustomization
 
 resources:
 - sa.yaml
-- deoployment.yaml
+- deployment.yaml
 - svc.yaml
 - ingress.yaml

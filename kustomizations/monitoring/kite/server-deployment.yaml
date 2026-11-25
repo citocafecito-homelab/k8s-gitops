@@ -60,14 +60,14 @@ spec:
             limits:
               cpu: 100m
               memory: 512Mi
-          volumeMounts:
-          - name: shell
-            mountPath: /tools
+          # volumeMounts:
+          # - name: shell
+          #   mountPath: /tools
       volumes:
-        - name: shell
-          image:
-            reference: busybox:1.36
-            pullPolicy: IfNotPresent
+        # - name: shell
+        #   image:
+        #     reference: busybox:1.36
+        #     pullPolicy: IfNotPresent
       #     securityContext:
       #       allowPrivilegeEscalation: false
       #       capabilities:
