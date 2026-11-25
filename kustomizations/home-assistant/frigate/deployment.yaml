@@ -51,12 +51,12 @@ spec:
         - name: TZ
           value: "America/Bogota"
         resources:
-          limits:
-            cpu: "2"
-            memory: 2Gi
           requests:
             cpu: "500m"
             memory: 1Gi
+          limits:
+            cpu: "2"
+            memory: 4Gi
         ports:
         - name: http
           containerPort: 5000

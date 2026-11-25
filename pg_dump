@@ -1,0 +1,33 @@
+1. Create backup
+pg_dump -U $(cat /vault/secrets/username) -d $(cat /vault/secrets/database) -Fc -f backup_pg_migration.dump
+
+2. Restore Backup
+pg_restore -U $(cat /vault/secrets/username) -d $(cat /vault/secrets/database) -v backup_pg_migration.dump
+
+3. Only if the password changes
+
+kubectl exec -it statefulset-0 -n namespace -- psql -U 
+
+ALTER USER user WITH PASSWORD '';
+
+yt-dlp --playlist-start 11 --playlist-end 20 --cookies www.youtube.com_cookies.txt  https://www.youtube.com/playlist?list=PLCHczc0wdeEhvkm2kU8BmLWv74Op-2bXF -t mkv
+
+
+kubectl exec -it immich-postgresql-0 -n media -c postgres -- env PGPASSWORD="" psql -U postgres -d postgres
+
+
+Pendientes por migrar para postgresql. Pendientes los de MySQL para luego
+
+namespace: media
+1. [OK] Linkwarden
+2. OpenWA
+3. Suwayomi
+4. Wikijs (opcional)
+
+namespace: monitoring
+5. Kite
+6. Reactive Resume
+
+namespace: streaming
+7. jellystat
+8. Dispatcharr

@@ -15,12 +15,26 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: kite
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-extra-secret: "kite-templates"
+        vault.hashicorp.com/agent-inject-secret-config.yml: "secret/data/kite"
+        vault.hashicorp.com/agent-inject-template-file-config.yml: "/vault/custom/config.yml.tpl"
+        vault.hashicorp.com/agent-inject-secret-database: "secret/data/kite"
+        vault.hashicorp.com/agent-inject-template-database: |
+          {{- with secret "secret/data/kite" -}}
+          postgres://{{ .Data.data.DATABASE_USERNAME }}:{{ .Data.data.DATABASE_PASSWORD }}@kite-postgresql:5432/{{ .Data.data.DATABASE_NAME }}?sslmode=disable
+          {{- end }}
     spec:
       serviceAccountName: kite
       containers:
         - name: kite
-          image: ghcr.io/kite-org/kite:v0.17.0
-          imagePullPolicy: Always
+          image: ghcr.io/kite-org/kite:v0.18.0
+          imagePullPolicy: IfNotPresent
+          # command: ["/tools/sh", "-c"]
+          # args:
+          #   - "export DB_DSN=$(cat /vault/secrets/database) && exec /app/kite"
           ports:
           - name: http
             containerPort: 8080
@@ -47,13 +61,19 @@ spec:
               cpu: 100m
               memory: 512Mi
           volumeMounts:
-          - name: config-volume
-            mountPath: /app/config.yaml
-            subPath: config.yaml
+          - name: shell
+            mountPath: /tools
       volumes:
-      - name: config-volume
-        configMap:
-          name: kite-config
-          items:
-            - key: config.yaml
-              path: config.yaml
+        - name: shell
+          image:
+            reference: busybox:1.36
+            pullPolicy: IfNotPresent
+      #     securityContext:
+      #       allowPrivilegeEscalation: false
+      #       capabilities:
+      #         drop: ["ALL"]
+      # securityContext:
+      #   runAsNonRoot: true
+      #   runAsUser: 1000
+      #   runAsGroup: 1000
+      #   fsGroup: 1000

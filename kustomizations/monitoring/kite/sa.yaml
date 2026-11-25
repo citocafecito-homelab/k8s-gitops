@@ -3,3 +3,4 @@ apiVersion: v1
 metadata:
   name: kite
   namespace: monitoring
+automountServiceAccountToken: true

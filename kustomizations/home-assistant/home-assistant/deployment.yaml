@@ -17,97 +17,112 @@ spec:
         app: home-assistant
         app.kubernetes.io/name: home-assistant
     spec:
-      containers:
-        - name: home-assistant
-          image: ghcr.io/home-assistant/home-assistant:2026.11
-          imagePullPolicy: IfNotPresent
-          env:
-            - name: TZ
-              value: "America/Bogota"
-          ports:
-            - containerPort: 8123
-          securityContext:
-            privileged: true
-            capabilities:
-              add:
-                - NET_ADMIN
-                - NET_RAW
-                - SYS_ADMIN
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "1Gi"
-            limits:
-              cpu: "1.5"
-              memory: "3Gi"
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 8123
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 6
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 8123
-            initialDelaySeconds: 60
-            periodSeconds: 30
-            timeoutSeconds: 5
-            failureThreshold: 6
-          volumeMounts:
-            - name: config
-              mountPath: /config
-            - name: ha-secrets
-              mountPath: /config/secrets.yaml
-              subPath: secrets.yaml
-              readOnly: true
-            - name: ha-configmap
-              mountPath: /config/configuration.yaml
-              subPath: configuration.yaml
-            - name: ha-packages
-              mountPath: /config/packages
-              readOnly: true
-            - name: dbus-socket
-              mountPath: /var/run/dbus
-              readOnly: true
-            - name: zigbee
-              mountPath: /dev/ttyUSB0
-            - name: zwave
-              mountPath: /dev/ttyUSB1
-            - name: recordings
-              mountPath: /config/www/frigate
       dnsPolicy: ClusterFirstWithHostNet
+      enableServiceLinks: false
       hostNetwork: true
+      containers:
+      - name: home-assistant
+        image: ghcr.io/home-assistant/home-assistant:2026.11
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: TZ
+          value: "America/Bogota"
+        # - name: PUID
+        #   value: "1000"
+        # - name: GUID
+        #   value: "1000"
+        ports:
+        - containerPort: 8123
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8123
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8123
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 6
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "1Gi"
+          limits:
+            cpu: "1.5"
+            memory: "3Gi"
+        securityContext:
+          privileged: true
+          # allowPrivilegeEscalation: false
+          # readOnlyRootFilesystem: true
+          capabilities:
+            add:
+            - NET_ADMIN
+            - NET_RAW
+            - SYS_ADMIN
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: ha-secrets
+          mountPath: /config/secrets.yaml
+          subPath: secrets.yaml
+          readOnly: true
+        - name: ha-configmap
+          mountPath: /config/configuration.yaml
+          subPath: configuration.yaml
+        - name: ha-packages
+          mountPath: /config/packages
+          readOnly: true
+        - name: dbus-socket
+          mountPath: /var/run/dbus
+          readOnly: true
+        - name: zigbee
+          mountPath: /dev/ttyUSB0
+        - name: zwave
+          mountPath: /dev/ttyUSB1
+        - name: recordings
+          mountPath: /config/www/frigate
+        - name: backups
+          mountPath: /config/backups
       nodeSelector:
         kubernetes.io/hostname: caturra
+      # securityContext:
+      #   fsGroup: 0
       volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: home-assistant-config
-        - name: ha-secrets
-          secret:
-            secretName: homeassistant-secrets
-        - name: ha-configmap
-          configMap:
-            name: home-assistant-config
-        - name: ha-packages
-          configMap:
-            name: home-assistant-packages
-        - name: dbus-socket
-          hostPath:
-            path: /var/run/dbus
-            type: Directory
-        - name: zigbee
-          hostPath:
-            path: /dev/serial/by-id/usb-Silicon_Labs_CP2105_Dual_USB_to_UART_Bridge_Controller_017084DF-if00-port0
-            type: CharDevice
-        - name: zwave
-          hostPath:
-            path: /dev/serial/by-id/usb-Silicon_Labs_CP2105_Dual_USB_to_UART_Bridge_Controller_017084DF-if01-port0
-            type: CharDevice
-        - name: recordings
-          hostPath:
-            path: /media/downloads/recordings
-            type: DirectoryOrCreate
+      - name: config
+        persistentVolumeClaim:
+          claimName: home-assistant-config
+      - name: ha-secrets
+        secret:
+          secretName: homeassistant-secrets
+      - name: ha-configmap
+        configMap:
+          name: home-assistant-config
+      - name: ha-packages
+        configMap:
+          name: home-assistant-packages
+      - name: dbus-socket
+        hostPath:
+          path: /var/run/dbus
+          type: Directory
+      - name: zigbee
+        hostPath:
+          path: /dev/serial/by-id/usb-Silicon_Labs_CP2105_Dual_USB_to_UART_Bridge_Controller_017084DF-if00-port0
+          type: CharDevice
+      - name: zwave
+        hostPath:
+          path: /dev/serial/by-id/usb-Silicon_Labs_CP2105_Dual_USB_to_UART_Bridge_Controller_017084DF-if01-port0
+          type: CharDevice
+      - name: recordings
+        hostPath:
+          path: /media/downloads/recordings
+          type: DirectoryOrCreate
+      - name: backups
+        hostPath:
+          path: /media/downloads/backups/home-assistant
+          type: DirectoryOrCreate

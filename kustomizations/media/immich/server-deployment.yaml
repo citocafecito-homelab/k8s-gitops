@@ -15,33 +15,28 @@ spec:
       labels:
         app: immich
         app.kubernetes.io/name: immich
+        app.kubernetes.io/part-of: immich
       annotations:
-        app.kubernetes.io/documentation: "https://github.com/immich-app/immich/tree/main/deployment"
+        app.kubernetes.io/documentation: "https://github.com/immich-app/immich"
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-inject-secret-immich: "secret/data/immich"
+        vault.hashicorp.com/agent-inject-template-immich: |
+          {{- with secret "secret/data/immich" -}}
+          {{ printf "postgresql://%s:%s@immich-postgresql:5432/%s" .Data.data.DATABASE_USERNAME .Data.data.DATABASE_PASSWORD .Data.data.DATABASE_NAME | writeToFile "/vault/secrets/database" "vault" "vault" "0644"}}
+          {{- end -}}
     spec:
+      enableServiceLinks: false
+      serviceAccountName: immich
       containers:
       - name: immich
         image: ghcr.io/immich-app/immich-server:release
         ports:
         - containerPort: 2283
         env:
-        - name: DB_DATABASE_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: immich-database
-              key: POSTGRES_DB
-        - name: DB_USERNAME
-          valueFrom:
-            configMapKeyRef:
-              name: immich-database
-              key: POSTGRES_USER
-        - name: DB_PASSWORD
-          valueFrom:
-            configMapKeyRef:
-              name: immich-database
-              key: POSTGRES_PASSWORD
+        - name: DB_URL_FILE
+          value: "/vault/secrets/database"
         envFrom:
-        - configMapRef:
-            name: immich-database
         - configMapRef:
             name: immich-config
         resources:
