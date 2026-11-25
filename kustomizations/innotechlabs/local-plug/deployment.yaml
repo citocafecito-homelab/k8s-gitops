@@ -28,22 +28,38 @@ spec:
     spec:
       serviceAccountName: localplug
       containers:
-        - name: localplug
-          image: ghcr.io/innotechlabs01/localPlug:latest
-          imagePullPolicy: IfNotPresent
-          ports:
-          - name: http
-            containerPort: 3000
-          resources:
-            requests:
-              cpu: 50m
-              memory: 128Mi
-            limits:
-              cpu: 100m
-              memory: 512Mi
-          volumeMounts:
-          - name: localplug-data
-            mountPath: /app/data
+      - name: localplug
+        image: ghcr.io/innotechlabs01/localPlug:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 3000
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 100m
+            memory: 512Mi
+  
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: localplug-data
+          mountPath: /app/data
+        nodeSelector:
+          kubernetes.io/hostname: catimore
+        securityContext:
+          fsGroup: 1000
+          runAsUser: 1000
+          runAsGroup: 1000
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
       volumes:
         - name: localplug-data
           hostPath:
