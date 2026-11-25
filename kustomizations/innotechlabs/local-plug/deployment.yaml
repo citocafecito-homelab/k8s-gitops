@@ -50,8 +50,6 @@ spec:
         volumeMounts:
         - name: localplug-data
           mountPath: /app/data
-      imagePullSecrets:
-        - name: ghcr-secret
       nodeSelector:
         kubernetes.io/hostname: catimore
       securityContext:
