@@ -40,8 +40,7 @@ spec:
             memory: 128Mi
           limits:
             cpu: 100m
-            memory: 512Mi
-  
+            memory: 512
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: false
@@ -51,15 +50,17 @@ spec:
         volumeMounts:
         - name: localplug-data
           mountPath: /app/data
-        nodeSelector:
-          kubernetes.io/hostname: catimore
-        securityContext:
-          fsGroup: 1000
-          runAsUser: 1000
-          runAsGroup: 1000
-          runAsNonRoot: true
-          seccompProfile:
-            type: RuntimeDefault
+      imagePullSecrets:
+        - name: ghcr-secret
+      nodeSelector:
+        kubernetes.io/hostname: catimore
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       volumes:
         - name: localplug-data
           hostPath:
