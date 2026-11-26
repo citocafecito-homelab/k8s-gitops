@@ -1,20 +1,19 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: immich-postgresql
+  name: postgresql
 spec:
-  serviceName: immich-postgresql
+  serviceName: postgresql
   replicas: 1
   selector:
     matchLabels:
-      app: immich-postgresql
-      app.kubernetes.io/name: immich-postgresql
+      app: postgresql
+      app.kubernetes.io/name: postgresql
   template:
     metadata:
       labels:
-        app: immich-postgresql
-        app.kubernetes.io/name: immich-postgresql
-        app.kubernetes.io/part-of: immich
+        app: postgresql
+        app.kubernetes.io/name: postgresql
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "vault"
@@ -30,7 +29,7 @@ spec:
       serviceAccountName: immich
       containers:
         - name: postgres
-          image: ghcr.io/immich-app/postgres:18-vectorchord1.1.1
+          image: ghcr.io/app/postgres:18-vectorchord1.1.1
           ports:
             - containerPort: 5432
           env:
@@ -75,7 +74,7 @@ spec:
           volumeMounts:
             - name: dshm
               mountPath: /dev/shm
-            - name: immich-postgresql-storage
+            - name: postgresql-storage
               mountPath: /var/lib/postgresql
       nodeSelector:
         kubernetes.io/hostname: catuai
@@ -95,6 +94,6 @@ spec:
           emptyDir:
             medium: Memory
             sizeLimit: 1Gi
-        - name: immich-postgresql-storage
+        - name: postgresql-storage
           persistentVolumeClaim:
-            claimName: immich-postgresql-pvc
+            claimName: postgresql-pvc

@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: immich
+  name: server
 spec:
   ingressClassName: cloudflare-tunnel
   rules:
@@ -19,7 +19,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: immich-local
+  name: server-local
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:

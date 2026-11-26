@@ -1,7 +1,8 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: immich
+  name: server
   labels:
     tier: disposable
 spec:
@@ -15,7 +16,6 @@ spec:
       labels:
         app: immich
         app.kubernetes.io/name: immich
-        app.kubernetes.io/part-of: immich
       annotations:
         app.kubernetes.io/documentation: "https://github.com/immich-app/immich"
         vault.hashicorp.com/agent-inject: "true"

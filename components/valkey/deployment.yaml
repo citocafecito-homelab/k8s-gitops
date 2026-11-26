@@ -1,29 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: immich-valkey
+  name: valkey
   labels:
-    app: immich-valkey
+    app.kubernetes.io/name: valkey
+    app.kubernetes.io/component: cache
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: immich-valkey
+      app.kubernetes.io/name: valkey
   template:
     metadata:
       labels:
-        app: immich-valkey
+        app.kubernetes.io/name: valkey
+        app.kubernetes.io/component: cache
     spec:
       containers:
       - name: valkey
-        image: valkey/valkey:latest
+        image: valkey/valkey:9
         args:
           - "--save"
           - ""
           - "--appendonly"
           - "no"
         ports:
-        - containerPort: 6379
+          - containerPort: 6379
+            name: valkey
         resources:
           requests:
             cpu: 10m
