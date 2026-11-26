@@ -19,29 +19,25 @@ spec:
         # VPN Sidecar
         - name: gluetun
           image: qmcgaw/gluetun:latest
-          securityContext:
-            capabilities:
-              add:
-                - NET_ADMIN
           env:
-            - name: OPENVPN_USER
-              valueFrom:
-                secretKeyRef:
-                  name: pia-credentials
-                  key: VPN_SERVICE_USER
-            - name: OPENVPN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: pia-credentials
-                  key: VPN_SERVICE_PASSWORD
-            - name: API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: qbittorrent
-                  key: token
+          - name: OPENVPN_USER
+            valueFrom:
+              secretKeyRef:
+                name: pia-credentials
+                key: VPN_SERVICE_USER
+          - name: OPENVPN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: pia-credentials
+                key: VPN_SERVICE_PASSWORD
+          - name: API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: qbittorrent
+                key: token
           envFrom:
-            - configMapRef:
-                name: vpn-config
+          - configMapRef:
+              name: vpn-config
           resources:
             requests:
               cpu: 50m
@@ -49,13 +45,17 @@ spec:
             limits:
               cpu: 200m
               memory: 128Mi
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
           volumeMounts:
-            - name: config
-              mountPath: /config
-            - name: scripts
-              mountPath: /scripts
-            - name: tun
-              mountPath: /dev/net/tun
+          - name: config
+            mountPath: /config
+          - name: scripts
+            mountPath: /scripts
+          - name: tun
+            mountPath: /dev/net/tun
 
         # Torrent Downloader
         - name: qbittorrent

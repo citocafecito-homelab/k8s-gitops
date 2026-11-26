@@ -59,6 +59,8 @@ spec:
         volumeMounts:
         - name: localplug-data
           mountPath: /app/data
+        - name: localplug-cache
+          mountPath: /app/.next/cache
       nodeSelector:
         kubernetes.io/hostname: catimore
       securityContext:
@@ -72,3 +74,6 @@ spec:
         - name: localplug-data
           hostPath:
             path: /mnt/localplug
+        - name: localplug-cache
+          hostPath:
+            path: /mnt/localplug/cache
