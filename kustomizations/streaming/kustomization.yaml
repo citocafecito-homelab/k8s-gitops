@@ -5,6 +5,7 @@ namespace: streaming
 
 components:
   - ../../components/scripts
+  - ../../components/gluetun
 
 resources:
 - config.yaml
