@@ -1,6 +1,6 @@
 kind: ServiceAccount
 apiVersion: v1
 metadata:
-  name: kite
+  name: server
   namespace: monitoring
 automountServiceAccountToken: true
