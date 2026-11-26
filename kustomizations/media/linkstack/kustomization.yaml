@@ -6,6 +6,9 @@ components:
   - ../../../components/valkey
   - ../../../components/mysql
 
+configurations:
+  - kustomizeconfig.yaml
+  
 configMapGenerator:
   - name: app-config
     literals:
