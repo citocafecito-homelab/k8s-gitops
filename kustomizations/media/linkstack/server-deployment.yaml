@@ -1,23 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: linkstack
+  name: server
   labels:
-    app: linkstack
-    app.kubernetes.io/name: linkstack
-    app.kubernetes.io/part-of: linkstack
+    app: server
+    app.kubernetes.io/name: server
+    database-validated: "true"
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: linkstack
-      app.kubernetes.io/name: linkstack
+      app: server
+      app.kubernetes.io/name: server
   template:
     metadata:
       labels:
-        app: linkstack
-        app.kubernetes.io/name: linkstack
-        app.kubernetes.io/part-of: linkstack
+        app: server
+        app.kubernetes.io/name: server
       annotations:
         app.kubernetes.io/documentation: "https://github.com/LinkStackOrg/LinkStack"
         linkstack.io/docker: "https://github.com/LinkStackOrg/linkstack-docker"
@@ -29,26 +28,14 @@ spec:
           {{- with secret "secret/data/linkstack" -}}
           AWS_ACCESS_KEY_ID="{{ .Data.data.AWS_ACCESS_KEY_ID }}"
           AWS_SECRET_ACCESS_KEY="{{ .Data.data.AWS_SECRET_ACCESS_KEY }}"
+
+          # DB_DATABASE="{{ .Data.data.DB_DATABASE }}"
+          # DB_USERNAME="{{ .Data.data.DB_USERNAME }}"
+          # DB_PASSWORD="{{ .Data.data.DB_PASSWORD }}"
           {{- end -}}
     spec:
       automountServiceAccountToken: true
       enableServiceLinks: false
-      initContainers:
-      - name: validate-mysql-connection
-        image: mysql:9
-        command:
-          - sh
-          - -c
-          - |
-            echo "Intentando conectar a MySQL en ${MYSQL_HOST}..."
-            until mysqladmin ping -h "${MYSQL_HOST}" -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" --silent; do
-              echo "Esperando a que MySQL esté disponible..."
-              sleep 2
-            done
-            echo "Conexión a MySQL establecida exitosamente."
-        envFrom:
-        - configMapRef:
-            name: linkstack-database
       containers:
       - name: linkstack
         image: docker.io/linkstackorg/linkstack:latest

@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+    app.kubernetes.io/name: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+      app.kubernetes.io/name: mysql
+  serviceName: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+        app.kubernetes.io/name: mysql
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-inject-secret-database: "secret/data/placeholder"
+        vault.hashicorp.com/agent-inject-template-database: |
+          {{- with secret "secret/data/placeholder" -}}
+          {{ .Data.data.DATABASE_NAME | writeToFile "/vault/secrets/database" "vault" "vault" "0644" }}
+          {{ .Data.data.DATABASE_USERNAME | writeToFile "/vault/secrets/username" "vault" "vault" "0644" }}
+          {{ .Data.data.DATABASE_PASSWORD | writeToFile "/vault/secrets/password" "vault" "vault" "0644" }}
+          {{- end -}}
+    spec:
+      enableServiceLinks: false
+      serviceAccountName: mysql
+      containers:
+      - name: mysql
+        image: mysql:9
+        env: 
+        - name: MYSQL_DATABASE_FILE
+          value: /vault/secrets/database
+        - name: MYSQL_USER_FILE
+          value: /vault/secrets/username
+        - name: MYSQL_PASSWORD_FILE
+          value: /vault/secrets/password
+        ports:
+        - containerPort: 3306
+        resources:
+          requests:
+            cpu: 5m
+            memory: 64Mi
+        livenessProbe:
+          exec:
+            command: [ "mysqladmin", "ping", "-h", "localhost" ]
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: [ "mysqladmin", "ping", "-h", "localhost" ]
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 3
+        volumeMounts:
+        - name: mysql
+          mountPath: /var/lib/mysql
+      nodeSelector:
+        kubernetes.io/hostname: catuai
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      volumes:
+      - name: mysql
+        persistentVolumeClaim:
+          claimName: mysql-pvc

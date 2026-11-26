@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: linkstack-config
+  name: config
 data:
   TZ: "America/Bogota"
   APP_KEY: "base64:fMuiXz8wvkdTuTJhgseI8lluB1h2KPK4fthWsWA1fNk="
