@@ -27,7 +27,7 @@ spec:
           {{- end -}}
     spec:
       enableServiceLinks: false
-      serviceAccountName: immich
+      serviceAccountName: immich-sa
       containers:
       - name: immich
         image: ghcr.io/immich-app/immich-server:release

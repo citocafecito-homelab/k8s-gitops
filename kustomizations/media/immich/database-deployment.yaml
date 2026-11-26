@@ -26,7 +26,7 @@ spec:
           {{- end -}}
     spec:
       enableServiceLinks: false
-      serviceAccountName: immich
+      serviceAccountName: immich-sa
       containers:
         - name: postgres
           image: ghcr.io/app/postgres:18-vectorchord1.1.1
