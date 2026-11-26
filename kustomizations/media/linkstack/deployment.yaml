@@ -5,7 +5,7 @@ metadata:
   labels:
     app: server
     app.kubernetes.io/name: server
-    database-validated: "true"
+    wait-database: "true"
 spec:
   replicas: 2
   selector:
@@ -48,6 +48,17 @@ spec:
         envFrom:
         - configMapRef:
             name: linkstack-config
+        env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: database
+              key: DATABASE_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: database
+              key: DATABASE_PORT
         ports:
         - name: https
           containerPort: 443

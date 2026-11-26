@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: placeholder
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: wait-mysql-ready
+        image: mysql:9
+        command:
+          - sh
+          - -c
+          - |
+            echo "Esperando a que MySQL esté listo..."
+            HOST="${DB_HOST:-localhost}"
+            PORT="${DB_PORT:-3306}"
+
+            if [ -z "$HOST" ]; then
+              echo "DB_HOST no está definido, abortando"
+              exit 1
+            fi
+
+            until mysqladmin ping -h "$HOST" -P "$PORT" --silent; do
+              echo "MySQL no está listo todavía en $HOST:$PORT, esperando..."
+              sleep 5
+            done
+
+            echo "MySQL está listo en $HOST:$PORT"
+        envFrom:
+        - configMapRef:
+            name: database

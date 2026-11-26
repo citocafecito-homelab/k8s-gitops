@@ -19,3 +19,7 @@ nameReference:
   fieldSpecs:
     - kind: StatefulSet
       path: spec/hostPath/path
+- kind: Configmap
+  fieldSpecs:
+    - kind: Deployment
+      path: spec/template/spec/containers/envFrom/configMapRef/name

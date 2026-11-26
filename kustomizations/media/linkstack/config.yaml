@@ -1,6 +1,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: database
+data:
+  DATABASE_HOST: "linkstack-mysql.media.svc.cluster.local"
+  DATABASE_PORT: "3306"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: config
 data:
   TZ: "America/Bogota"
@@ -19,8 +27,6 @@ data:
   
   # Database
   DB_CONNECTION: "mysql"
-  DB_HOST: "linkstack-mysql.media.svc.cluster.local"
-  DB_PORT: "3306"
 
   # Session & Cache
   SESSION_DRIVER: "redis"
