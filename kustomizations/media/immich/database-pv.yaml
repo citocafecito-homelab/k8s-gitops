@@ -8,7 +8,7 @@ spec:
   accessModes:
   - ReadWriteOnce
   hostPath:
-    path: /mnt/postgresql
+    path: /mnt/immich-postgresql
   persistentVolumeReclaimPolicy: Retain
   storageClassName: ""
   volumeMode: Filesystem
