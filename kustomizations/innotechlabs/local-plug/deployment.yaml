@@ -29,18 +29,23 @@ spec:
       serviceAccountName: localplug
       containers:
       - name: localplug
-        image: ghcr.io/innotechlabs01/localPlug:latest
+        image: ghcr.io/innotechlabs01/localplug:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
           containerPort: 3000
+        env:
+        - name: GUID
+          value: "1000"
+        - name: UID
+          value: "1000"
         resources:
           requests:
             cpu: 50m
             memory: 128Mi
           limits:
             cpu: 100m
-            memory: 512
+            memory: 512Mi
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: false
