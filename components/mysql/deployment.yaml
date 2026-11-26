@@ -13,11 +13,11 @@ spec:
           - -c
           - |
             echo "Esperando a que MySQL esté listo..."
-            HOST="${DB_HOST:-localhost}"
-            PORT="${DB_PORT:-3306}"
+            HOST="${DATABASE_HOST:-localhost}"
+            PORT="${DATABASE_PORT:-3306}"
 
             if [ -z "$HOST" ]; then
-              echo "DB_HOST no está definido, abortando"
+              echo "DATABASE_HOST no está definido, abortando"
               exit 1
             fi
 
