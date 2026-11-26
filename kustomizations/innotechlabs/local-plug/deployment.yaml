@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: localplug
+  namespace: innotechlabs
+  labels:
+    app.kubernetes.io/name: localplug
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: localplug
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: localplug
+      annotations:
+        # vault.hashicorp.com/agent-inject: "true"
+        # vault.hashicorp.com/role: "vault"
+        # vault.hashicorp.com/agent-extra-secret: "kite-templates"
+        # vault.hashicorp.com/agent-inject-secret-config.yml: "secret/data/kite"
+        # vault.hashicorp.com/agent-inject-template-file-config.yml: "/vault/custom/config.yml.tpl"
+        # vault.hashicorp.com/agent-inject-secret-database: "secret/data/kite"
+        # vault.hashicorp.com/agent-inject-template-database: |
+        #   {{- with secret "secret/data/kite" -}}
+        #   postgres://{{ .Data.data.DATABASE_USERNAME }}:{{ .Data.data.DATABASE_PASSWORD }}@kite-postgresql:5432/{{ .Data.data.DATABASE_NAME }}?sslmode=disable
+        #   {{- end }}
+    spec:
+      serviceAccountName: localplug
+      containers:
+      - name: localplug
+        image: ghcr.io/innotechlabs01/localplug:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 3000
+        env:
+        - name: GUID
+          value: "1000"
+        - name: UID
+          value: "1000"
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 100m
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: localplug-data
+          mountPath: /app/data
+      nodeSelector:
+        kubernetes.io/hostname: catimore
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - name: localplug-data
+          hostPath:
+            path: /mnt/localplug
