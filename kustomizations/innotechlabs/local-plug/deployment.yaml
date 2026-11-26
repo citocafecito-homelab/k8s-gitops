@@ -26,7 +26,8 @@ spec:
         #   postgres://{{ .Data.data.DATABASE_USERNAME }}:{{ .Data.data.DATABASE_PASSWORD }}@kite-postgresql:5432/{{ .Data.data.DATABASE_NAME }}?sslmode=disable
         #   {{- end }}
     spec:
-      serviceAccountName: localplug
+      serviceAccountName: innotechlabs
+      enableServiceLinks: false
       containers:
       - name: localplug
         image: ghcr.io/innotechlabs01/localplug:latest
