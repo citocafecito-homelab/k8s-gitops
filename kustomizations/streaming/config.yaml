@@ -20,7 +20,7 @@ data:
   OPENVPN_PROTOCOL: "udp"
   PRIVATE_INTERNET_ACCESS_OPENVPN_ENCRYPTION_PRESET: "normal"
   # https://natchecker.com/blog/pia-port-forwarding
-  SERVER_REGIONS: "Switzerland,Netherlands,Canada,Germany"
+  # SERVER_REGIONS: "Switzerland,Netherlands,Canada,Germany"
 
   # https://github.com/qdm12/gluetun-wiki/blob/main/setup/advanced/vpn-port-forwarding.md
   PORT_FORWARD_ONLY: "true"

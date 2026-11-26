@@ -19,6 +19,7 @@ spec:
         # VPN Sidecar
         - name: gluetun
           image: qmcgaw/gluetun:latest
+          imagePullPolicy: IfNotPresent
           env:
           - name: OPENVPN_USER
             valueFrom:
@@ -52,6 +53,9 @@ spec:
           volumeMounts:
           - name: config
             mountPath: /config
+          - name: config
+            mountPath: /gluetun
+            subPath: gluetun
           - name: scripts
             mountPath: /scripts
           - name: tun
