@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: qbittorrent
+  labels:
+    vpn-enabled: "true"
 spec:
   replicas: 1
   selector:
@@ -16,87 +18,41 @@ spec:
         app.kubernetes.io/volume-downloads: attached
     spec:
       containers:
-        # VPN Sidecar
-        - name: gluetun
-          image: qmcgaw/gluetun:latest
-          imagePullPolicy: IfNotPresent
-          env:
-          - name: OPENVPN_USER
-            valueFrom:
-              secretKeyRef:
-                name: pia-credentials
-                key: VPN_SERVICE_USER
-          - name: OPENVPN_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: pia-credentials
-                key: VPN_SERVICE_PASSWORD
-          - name: API_KEY
-            valueFrom:
-              secretKeyRef:
-                name: qbittorrent
-                key: token
-          envFrom:
+      - name: qbittorrent
+        image: lscr.io/linuxserver/qbittorrent:latest
+        envFrom:
           - configMapRef:
-              name: vpn-config
-          resources:
-            requests:
-              cpu: 50m
-              memory: 64Mi
-            limits:
-              cpu: 200m
-              memory: 128Mi
-          securityContext:
-            capabilities:
-              add:
-                - NET_ADMIN
-          volumeMounts:
+              name: streaming-stack-config
+        env:
+          - name: WEBUI_PORT
+            value: "8080"
+          - name: TORRENTING_PORT
+            value: "6881"
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/bash", "/scripts/pod-pre-stop.sh"]
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          limits:
+            cpu: 2
+            memory: 2Gi
+        volumeMounts:
           - name: config
-            mountPath: /config
-          - name: config
-            mountPath: /gluetun
-            subPath: gluetun
+            mountPath: /config/qBittorrent
+          - name: scripts
+            mountPath: /custom-cont-init.d/01-setup-config.sh
+            subPath: 01-setup-config.sh
           - name: scripts
             mountPath: /scripts
-          - name: tun
-            mountPath: /dev/net/tun
-
-        # Torrent Downloader
-        - name: qbittorrent
-          image: lscr.io/linuxserver/qbittorrent:latest
-          envFrom:
-            - configMapRef:
-                name: streaming-stack-config
-          env:
-            - name: WEBUI_PORT
-              value: "8080"
-            - name: TORRENTING_PORT
-              value: "6881"
-          lifecycle:
-            preStop:
-              exec:
-                command: ["/bin/bash", "/scripts/pod-pre-stop.sh"]
-          resources:
-            requests:
-              cpu: 500m
-              memory: 512Mi
-            limits:
-              cpu: 2
-              memory: 2Gi
-          volumeMounts:
-            - name: config
-              mountPath: /config/qBittorrent
-            - name: scripts
-              mountPath: /custom-cont-init.d/01-setup-config.sh
-              subPath: 01-setup-config.sh
-            - name: scripts
-              mountPath: /scripts
-            - name: radarr
-              mountPath: /downloads/radarr
-            - name: sonarr
-              mountPath: /downloads/tv-sonarr
-            - name: latteam
-              mountPath: /LatTeam
+          - name: radarr
+            mountPath: /downloads/radarr
+          - name: sonarr
+            mountPath: /downloads/tv-sonarr
+          - name: latteam
+            mountPath: /LatTeam
       nodeSelector:
         kubernetes.io/hostname: catimore
       volumes:
