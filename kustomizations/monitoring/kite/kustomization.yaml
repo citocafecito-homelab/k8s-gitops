@@ -13,6 +13,11 @@ secretGenerator:
     files:
       - templates/config.yml.tpl
 
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: kite
+    includeSelectors: false
+
 resources:
 - sa.yaml
 - rbac.yaml
