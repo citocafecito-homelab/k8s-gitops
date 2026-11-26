@@ -31,51 +31,6 @@ spec:
       serviceAccountName: transmission
       
       containers:
-      # VPN Sidecar
-      - name: gluetun
-        image: qmcgaw/gluetun:latest
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: OPENVPN_USER
-          valueFrom:
-            secretKeyRef:
-              name: pia-credentials
-              key: VPN_SERVICE_USER
-        - name: OPENVPN_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: pia-credentials
-              key: VPN_SERVICE_PASSWORD
-        - name: API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: qbittorrent
-              key: token
-        envFrom:
-        - configMapRef:
-            name: vpn-config
-        resources:
-          requests:
-            cpu: 50m
-            memory: 64Mi
-          limits:
-            cpu: 200m
-            memory: 128Mi
-        securityContext:
-          capabilities:
-            add:
-              - NET_ADMIN
-        volumeMounts:
-        - name: config
-          mountPath: /config
-        - name: config
-          mountPath: /gluetun
-          subPath: gluetun
-        - name: scripts
-          mountPath: /scripts
-        - name: tun
-          mountPath: /dev/net/tun
-
       - name: transmission
         image: lscr.io/linuxserver/transmission:latest
         ports:
