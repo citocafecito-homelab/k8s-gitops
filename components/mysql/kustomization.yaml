@@ -1,13 +1,13 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
-patches:
-  - path: deployment.yaml
-    target:
-      group: apps
-      version: v1
-      kind: Deployment
-      labelSelector: database-validated=true
+# patches:
+#   - path: deployment.yaml
+#     target:
+#       group: apps
+#       version: v1
+#       kind: Deployment
+#       labelSelector: database-validated=true
 
 resources:
   - sa.yaml
