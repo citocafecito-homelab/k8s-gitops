@@ -12,11 +12,11 @@ labels:
     includeSelectors: false
 
 resources:
-- server-config.yaml
-- server-pvc.yaml
-- server-deployment.yaml
-- server-svc.yaml
-- server-ingress.yaml
+- config.yaml
+- pvc.yaml
+- deployment.yaml
+- svc.yaml
+- ingress.yaml
 
 patches:
   - target:
