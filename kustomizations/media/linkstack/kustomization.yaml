@@ -6,54 +6,42 @@ components:
   - ../../../components/valkey
   - ../../../components/mysql
 
-configurations:
-  - kustomizeconfig.yaml
-  
-configMapGenerator:
-  - name: app-config
-    literals:
-      - APP_NAME=linkstack
-    options:
-      disableNameSuffixHash: true
-
 labels:
   - pairs:
       app.kubernetes.io/part-of: linkstack
     includeSelectors: false
-    includeTemplates: true
 
 resources:
-# Database (Postgresql)
-# - database-pv.yaml
-# - database-config.yaml
-# - database-deployment.yaml
-# - database-svc.yaml
-
-# Cache (Valkey)
-# - cache-deployment.yaml
-# - cache-svc.yaml
-
-# Server (LinkStack)
 - server-config.yaml
 - server-pvc.yaml
 - server-deployment.yaml
 - server-svc.yaml
 - server-ingress.yaml
 
-replacements:
-  - source:
-      kind: ConfigMap
-      name: app-config
-      fieldPath: data.APP_NAME
-    targets:
-      - select:
-          group: apps
-          version: v1
-          kind: StatefulSet
-          name: mysql
-        fieldPaths:
-          - spec.template.metadata.annotations.[vault.hashicorp.com/agent-inject-secret-database]
-          - spec.template.metadata.annotations.[vault.hashicorp.com/agent-inject-template-database]
-        options:
-          delimiter: 'secret/data/'
-          index: 1
+patches:
+  - target:
+      kind: PersistentVolume
+      name: mysql-pv
+    patch: |-
+      - op: replace
+        path: /spec/hostPath/path
+        value: /mnt/linkstack-mysql
+
+  - target:
+      group: apps
+      version: v1
+      kind: StatefulSet
+      name: mysql
+    patch: |-
+      - op: replace
+        path: /spec/template/metadata/annotations/vault.hashicorp.com~1agent-inject-secret-database
+        value: "secret/data/linkstack"
+      - op: replace
+        path: /spec/template/metadata/annotations/vault.hashicorp.com~1agent-inject-template-database
+        value: |-
+          {{- with secret "secret/data/linkstack" -}}
+          {{ .Data.data.DATABASE_NAME | writeToFile "/vault/secrets/database" "vault" "vault" "0644" }}
+          {{ .Data.data.DATABASE_USERNAME | writeToFile "/vault/secrets/username" "vault" "vault" "0644" }}
+          {{ .Data.data.DATABASE_PASSWORD | writeToFile "/vault/secrets/password" "vault" "vault" "0644" }}
+          {{- end -}}
+

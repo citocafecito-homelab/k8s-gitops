@@ -29,7 +29,7 @@ spec:
           {{- end -}}
     spec:
       enableServiceLinks: false
-      serviceAccount: mysql
+      serviceAccountName: mysql
       containers:
       - name: mysql
         image: mysql:9

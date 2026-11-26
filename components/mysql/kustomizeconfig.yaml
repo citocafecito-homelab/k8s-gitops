@@ -1,0 +1,21 @@
+nameReference:
+- kind: PersistentVolume
+  version: v1
+  fieldSpecs:
+    - kind: PersistentVolumeClaim
+      version: v1
+      path: spec/volumeName
+- kind: ServiceAccount
+  fieldSpecs:
+    - kind: StatefulSet
+      path: spec/template/spec/serviceAccountName
+    - kind: StatefulSet
+      path: spec/template/spec/serviceAccount
+- kind: ServiceAccount
+  fieldSpecs:
+    - kind: StatefulSet
+      path: spec/serviceName
+- kind: PersistentVolume
+  fieldSpecs:
+    - kind: StatefulSet
+      path: spec/hostPath/path

@@ -9,6 +9,9 @@ kind: Component
 #       kind: Deployment
 #       labelSelector: database-validated=true
 
+configurations:
+  - kustomizeconfig.yaml
+
 resources:
   - sa.yaml
   - pv.yaml
