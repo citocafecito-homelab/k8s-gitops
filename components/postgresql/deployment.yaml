@@ -1,4 +1,3 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -7,17 +6,5 @@ spec:
   template:
     spec:
       initContainers:
-      - name: validate-connection
-        image: mysql:9
-        command:
-          - sh
-          - -c
-          - |
-            echo "Intentando conectar a MySQL en ${MYSQL_HOST}..."
-            until mysqladmin ping -h "${MYSQL_HOST}" -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" --silent; do
-              echo "Esperando a que MySQL esté disponible..."
-              sleep 2
-            done
-            echo "Conexión a MySQL establecida exitosamente."
-        envFrom:
+      - name: wait-psql-ready
         

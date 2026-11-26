@@ -10,18 +10,5 @@ spec:
   hostPath:
     path: /mnt/postgresql
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: ""
+  storageClassName: manual
   volumeMode: Filesystem
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: postgresql-pvc
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: "5Gi"
-  storageClassName: ""
-  volumeName: postgresql-pv

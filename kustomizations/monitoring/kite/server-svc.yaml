@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: kite
+  name: server
   namespace: monitoring
 spec:
   ports:
@@ -10,5 +10,5 @@ spec:
       port: 8080
       targetPort: http
   selector:
-    app.kubernetes.io/name: kite
+    app.kubernetes.io/name: server
   type: ClusterIP

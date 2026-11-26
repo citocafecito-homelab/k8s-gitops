@@ -1,16 +1,16 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kite-database
-data:
-  POSTGRES_DB: "kite"
-  POSTGRES_USER: "kite"
-  POSTGRES_PASSWORD: "3TOUjcOx40Yi"
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: kite-config
+  name: database
+data:
+  DATABASE_HOST: "linkstack-mysql.media.svc.cluster.local"
+  DATABASE_PORT: "3306"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
 data:
   # Global
   # ENABLE_ANALYTICS: "true"

@@ -1,11 +1,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namePrefix: kite-
+
+components:
+  - ../../../components/postgresql
 
 generatorOptions:
   disableNameSuffixHash: true
   
 secretGenerator:
-  - name: kite-templates
+  - name: templates
     files:
       - templates/config.yml.tpl
 
@@ -15,9 +19,9 @@ resources:
 - config.yaml
 
 # Postgresql
-- database-pv.yaml
-- database-deployment.yaml
-- database-svc.yaml
+# - database-pv.yaml
+# - database-deployment.yaml
+# - database-svc.yaml
 
 # Kite
 - server-deployment.yaml
