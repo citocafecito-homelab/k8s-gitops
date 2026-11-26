@@ -10,5 +10,5 @@ spec:
   hostPath:
     path: /mnt/mysql
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: ""
+  storageClassName: manual
   volumeMode: Filesystem

@@ -9,5 +9,5 @@ spec:
   resources:
     requests:
       storage: "5Gi"
-  storageClassName: ""
+  storageClassName: manual
   volumeName: mysql-pv
