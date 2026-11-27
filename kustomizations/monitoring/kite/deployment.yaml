@@ -16,7 +16,6 @@ spec:
       labels:
         app.kubernetes.io/name: server
         tier: disposable
-    metadata:
       # annotations:
       #   vault.hashicorp.com/agent-inject: "true"
       #   vault.hashicorp.com/role: "vault"
