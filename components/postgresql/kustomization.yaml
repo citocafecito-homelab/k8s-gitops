@@ -9,8 +9,8 @@ patches:
       kind: Deployment
       labelSelector: wait-database=true
 
-configurations:
-  - kustomizeconfig.yaml
+# configurations:
+#   - kustomizeconfig.yaml
 
 resources:
   - sa.yaml
