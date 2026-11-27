@@ -23,15 +23,10 @@ resources:
 - rbac.yaml
 - config.yaml
 
-# Postgresql
-# - database-pv.yaml
-# - database-deployment.yaml
-# - database-svc.yaml
-
 # Kite
-- server-deployment.yaml
-- server-svc.yaml
-- server-ingress.yaml
+- deployment.yaml
+- svc.yaml
+- ingress.yaml
 
 patches:
   - target:
