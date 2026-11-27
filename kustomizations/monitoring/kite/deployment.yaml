@@ -16,12 +16,12 @@ spec:
       labels:
         app.kubernetes.io/name: server
         tier: disposable
-      # annotations:
-      #   vault.hashicorp.com/agent-inject: "true"
-      #   vault.hashicorp.com/role: "vault"
-      #   vault.hashicorp.com/agent-extra-secret: "kite-templates"
-      #   vault.hashicorp.com/agent-inject-secret-config.yml: "secret/data/kite"
-      #   vault.hashicorp.com/agent-inject-template-file-config.yml: "/vault/custom/config.yml.tpl"
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault"
+        vault.hashicorp.com/agent-extra-secret: "kite-templates"
+        vault.hashicorp.com/agent-inject-secret-config.yml: "secret/data/kite"
+        vault.hashicorp.com/agent-inject-template-file-config.yml: "/vault/custom/config.yml.tpl"
       #   vault.hashicorp.com/agent-inject-secret-database: "secret/data/kite"
       #   vault.hashicorp.com/agent-inject-template-database: |
       #     {{- with secret "secret/data/kite" -}}
