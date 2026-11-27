@@ -13,14 +13,9 @@ metadata:
   name: config
 data:
   # Global
-  # ENABLE_ANALYTICS: "true"
-  # ANONYMOUS_USER_ENABLED: "true"
+  ENABLE_ANALYTICS: "false"
   KITE_CONFIG_FILE: "/vault/secrets/config.yml"
-  
+    
   # Database
   # see https://kite.zzde.me/faq#persistence-issues
   DB_TYPE: "postgres"
-  DB_DSN: "postgres://kite:3TOUjcOx40Yi@kite-postgresql:5432/kite?sslmode=disable"
-
-  # Networking
-  # TRUSTED_PROXIES: "10.244.0.0/16,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.1,::1"
