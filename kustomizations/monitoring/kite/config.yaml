@@ -13,6 +13,7 @@ metadata:
   name: config
 data:
   # Global
+  HOST: "https://kite.citocafecito.work"
   ENABLE_ANALYTICS: "false"
   KITE_CONFIG_FILE: "/vault/secrets/config.yml"
     

@@ -1,37 +1,36 @@
 {{- with secret "secret/data/kite" -}}
 superUser:
-  username: "admin"
-  password: "admin"
+  username: "{{ .Data.data.ADMIN_USERNAME }}"
+  password: "{{ .Data.data.ADMIN_PASSWORD }}"
 
 clusters:
   - name: citocafecito
     inCluster: true
     description: "Citocafecito In Cluster setup"
     default: true
-    prometheusURL: "http://prometheus-k8s.monitoring.svc.cluster.local:9090"
+    prometheusURL: "http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090"
 
-# oauth:
-#   - name: google
-#     clientId: "xxx.apps.googleusercontent.com"
-#     clientSecret: "client-secret-value"
-#     issuer: "https://accounts.google.com"
-#     scopes: "openid,profile,email"
-#     usernameClaim: "email"
-#     groupsClaim: "groups"
-#     enabled: true
+oauth:
+  - name: google
+    clientId: "{{ .Data.data.OAUTH_GOOGLE_CLIENT_ID }}"
+    clientSecret: "{{ .Data.data.OAUTH_GOOGLE_CLIENT_SECRET }}"
+    issuer: "https://accounts.google.com"
+    scopes: "openid,profile,email"
+    usernameClaim: "email"
+    groupsClaim: ""
+    enabled: true
 
-# ldap:
-#   enabled: true
-#   serverUrl: "ldaps://ldap.example.com:636"
-#   bindDn: "cn=svc-kite,ou=services,dc=example,dc=com"
-#   bindPassword: "bind-password"
-#   userBaseDn: "ou=users,dc=example,dc=com"
-#   userFilter: "(uid=%s)"
-#   usernameAttribute: "uid"
-#   displayNameAttribute: "cn"
-#   groupBaseDn: "ou=groups,dc=example,dc=com"
-#   groupFilter: "(member=%s)"
-#   groupNameAttribute: "cn"
+  - name: github
+    clientId: "{{ .Data.data.OAUTH_GITHUB_CLIENT_ID }}"
+    clientSecret: "{{ .Data.data.OAUTH_GITHUB_CLIENT_SECRET }}"
+    authUrl: "https://github.com/login/oauth/authorize"
+    tokenUrl: "https://github.com/login/oauth/access_token"
+    userInfoUrl: "https://api.github.com/user"
+    scopes: "read:user,user:email,read:org"
+    usernameClaim: "login"
+    groupsClaim: "groups"
+    allowedGroups: "citocafecito-homelab"
+
 
 # ai:
 #   enabled: true
@@ -41,34 +40,20 @@ clusters:
 #   baseUrl: "https://api.openai.com/v1"
 #   maxTokens: 16384
 
-# rbac:
-#   roles:
-#     - name: admin
-#       description: "Administrator role with full access"
-#       clusters: ["*"]
-#       namespaces: ["*"]
-#       resources: ["*"]
-#       verbs: ["*"]
-#     - name: viewer
-#       description: "Read-only access"
-#       clusters: ["*"]
-#       namespaces: ["*"]
-#       resources: ["*"]
-#       verbs: ["get", "log"]
-#     - name: dev-team
-#       description: "Development team access"
-#       clusters: ["dev-*", "staging-*"]
-#       namespaces: ["*"]
-#       resources: ["*"]
-#       verbs: ["get", "create", "update", "delete", "log"]
-#   roleMapping:
-#     - name: admin
-#       users: ["alice", "bob"]
-#       oidcGroups: ["platform-admins"]
-#     - name: viewer
-#       users: ["*"]
-#     - name: dev-team
-#       oidcGroups: ["developers"]
+rbac:
+  {{- with secret "secret/data/kite/rbac-roles" }}
+  roles:
+  {{- range $name, $role := .Data.data }}
+    - name: {{ $name }}
+      description: "{{ $role.description }}"
+      clusters: {{ $role.clusters | toJSON }}
+      namespaces: {{ $role.namespaces | toJSON }}
+      resources: {{ $role.resources | toJSON }}
+      verbs: {{ $role.verbs | toJSON }}
+  {{- end }}
+  {{- end }}
+  roleMapping:
+    - name: admin
+      users: ["alice", "bob"]
+      oidcGroups: ["platform-admins"]
 {{- end }}
-
-
