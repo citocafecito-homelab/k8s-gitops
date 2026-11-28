@@ -52,8 +52,13 @@ rbac:
       verbs: {{ $role.verbs | toJSON }}
   {{- end }}
   {{- end }}
+  
+  {{- with secret "secret/data/kite/rbac-mapping" }}
   roleMapping:
-    - name: admin
-      users: ["alice", "bob"]
-      oidcGroups: ["platform-admins"]
+  {{- range $name, $map := .Data.data }}
+    - name: {{ $name }}
+      users: "{{ $map.users | toJSON }}"
+      oidcGroups: {{ $map.groups | toJSON }}
+  {{- end }}
+  {{- end }}
 {{- end }}
