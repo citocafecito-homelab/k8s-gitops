@@ -29,7 +29,7 @@ spec:
       enableServiceLinks: false
       containers:
       - name: localplug
-        image: ghcr.io/innotechlabs01/localplug:latest
+        image: ghcr.io/innotechlabs01/localplug:beta-46183092085
         imagePullPolicy: IfNotPresent
         command:
         - node
